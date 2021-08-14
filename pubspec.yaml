@@ -13,6 +13,7 @@ dependencies:
   flutter_dotenv: ^5.0.2
   flutter_mobx: ^2.0.2
   flutter_modular: ^3.3.1
+  flutter_svg: ^0.22.0
   mobx: ^2.0.4
   parse_server_sdk_flutter: ^3.1.0
 
@@ -33,6 +34,7 @@ flutter:
     - assets/images/escrevendo_pc.png
     - assets/images/mulher_exibindo_manequim.png
     - assets/images/mulher_mexendo_mural.png
+    - assets/images/empty_produtos.svg
 
   fonts:
     - family: Lexend
