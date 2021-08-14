@@ -10,9 +10,11 @@ dependencies:
   flutter:
     sdk: flutter
   cupertino_icons: ^1.0.3
+  flutter_dotenv: ^5.0.2
   flutter_mobx: ^2.0.2
   flutter_modular: ^3.3.1
   mobx: ^2.0.4
+  parse_server_sdk_flutter: ^3.1.0
 
 
 dev_dependencies:
@@ -25,6 +27,7 @@ flutter:
   uses-material-design: true
 
   assets:
+    - .env
     - assets/images/logo.png
     - assets/images/garota_tirando_selfie.png
     - assets/images/escrevendo_pc.png
