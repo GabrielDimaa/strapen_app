@@ -1,7 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.strapen_app.strapen_app">
    <application
-        android:label="strapen_app"
+        android:label="Strapen"
         android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"

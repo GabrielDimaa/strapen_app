@@ -13,6 +13,13 @@ class SplashPage extends StatefulWidget {
 
 class _SplashPageState extends ModularState<SplashPage, SplashController> {
   @override
+  void initState() {
+    super.initState();
+
+    controller.load();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Column(
@@ -27,7 +34,7 @@ class _SplashPageState extends ModularState<SplashPage, SplashController> {
           const VerticalSizedBox(),
           Text(
             "Strapen",
-            style: Theme.of(context).textTheme.headline4!.copyWith(color: AppColors.primary),
+            style: Theme.of(context).textTheme.headline5!.copyWith(color: AppColors.primary),
             textAlign: TextAlign.center,
           ),
         ],
