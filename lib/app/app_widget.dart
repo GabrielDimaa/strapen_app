@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:strapen_app/app/shared/components/padding/padding_button.dart';
+import 'package:strapen_app/app/shared/components/text_input/outline_input_default.dart';
 
 class AppWidget extends StatelessWidget {
   @override
@@ -14,6 +15,8 @@ class AppWidget extends StatelessWidget {
         primaryColorDark: AppColors.primaryDark,
         primaryColorLight: AppColors.secondary,
         scaffoldBackgroundColor: AppColors.background,
+        hintColor: Colors.grey[400],
+        colorScheme: Theme.of(context).colorScheme.copyWith(primary: AppColors.primary),
         textSelectionTheme: TextSelectionThemeData(
           cursorColor: AppColors.primary,
         ),
@@ -23,9 +26,9 @@ class AppWidget extends StatelessWidget {
           headline3: TextStyle(color: Colors.white, fontSize: 42, fontWeight: FontWeight.w500, fontFamily: 'Lexend'),
           headline4: TextStyle(color: Colors.white, fontSize: 46, fontWeight: FontWeight.w600, fontFamily: 'Lexend'),
           headline5: TextStyle(color: Colors.white, fontSize: 50, fontWeight: FontWeight.w500, fontFamily: 'Lexend'),
-          bodyText1: TextStyle(color: Colors.grey, fontSize: 14, fontWeight: FontWeight.w400, fontFamily: 'Lexend'),
+          bodyText1: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w400, fontFamily: 'Lexend'),
           bodyText2: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500, fontFamily: 'Lexend'),
-          button: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.w500, fontFamily: 'Lexend'),
+          button: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500, fontFamily: 'Lexend'),
         ),
         iconTheme: IconThemeData(
           color: Colors.white,
@@ -61,6 +64,12 @@ class AppWidget extends StatelessWidget {
           style: TextButton.styleFrom(
             primary: AppColors.primary,
           ),
+        ),
+        dividerTheme: DividerThemeData(space: 0),
+        inputDecorationTheme: InputDecorationTheme(
+          contentPadding: EdgeInsets.symmetric(vertical: 18, horizontal: 20),
+          enabledBorder: OutlineInputDefault(),
+          focusedBorder: OutlineInputDefault(),
         ),
       ),
     ).modular();

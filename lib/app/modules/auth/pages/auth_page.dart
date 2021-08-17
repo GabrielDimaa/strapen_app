@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:strapen_app/app/app_widget.dart';
+import 'package:strapen_app/app/modules/auth/controllers/auth_controller.dart';
 import 'package:strapen_app/app/shared/components/button/elevated_button_default.dart';
 import 'package:strapen_app/app/shared/components/padding/padding_scaffold.dart';
 import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
+import 'package:strapen_app/app/shared/components/text_input/text_input_default.dart';
 
 class AuthPage extends StatefulWidget {
   const AuthPage({Key? key}) : super(key: key);
@@ -11,9 +15,9 @@ class AuthPage extends StatefulWidget {
   _AuthPageState createState() => _AuthPageState();
 }
 
-class _AuthPageState extends State<AuthPage> {
-  final double height = 170;
-  final double padding = 20;
+class _AuthPageState extends ModularState<AuthPage, AuthController> {
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _senhaController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +33,7 @@ class _AuthPageState extends State<AuthPage> {
                   _header(),
                   Text(
                     "Strapen",
-                    style: textTheme.headline5!.copyWith(color: AppColors.primary, fontSize: 40),
+                    style: textTheme.headline2!.copyWith(color: AppColors.primary),
                     textAlign: TextAlign.center,
                   ),
                   Padding(
@@ -38,30 +42,59 @@ class _AuthPageState extends State<AuthPage> {
                       children: [
                         Text(
                           "Faça login agora para assistir ou criar Lives com seu catálogo de produtos.",
-                          style: textTheme.bodyText2!.copyWith(fontSize: 18),
+                          style: textTheme.bodyText2,
                         ),
-                        const VerticalSizedBox(),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: Text(
-                            "Esqueceu a senha?",
-                            style: textTheme.bodyText2!.copyWith(fontSize: 14),
+                        const VerticalSizedBox(2),
+                        Form(
+                          child: Column(
+                            children: [
+                              TextInputDefault(
+                                controller: _emailController,
+                                label: "E-mail",
+                                prefixIcon: Icon(Icons.email, color: Colors.grey[200]),
+                              ),
+                              const VerticalSizedBox(1.5),
+                              Observer(
+                                builder: (_) => TextInputDefault(
+                                  controller: _senhaController,
+                                  obscureText: controller.visible,
+                                  label: "Senha",
+                                  prefixIcon: Icon(Icons.lock, color: Colors.grey[200]),
+                                  sufixIcon: IconButton(
+                                    onPressed: () => controller.setVisible(!controller.visible),
+                                    icon: Icon(
+                                      controller.visible ? Icons.visibility : Icons.visibility_off,
+                                      color: Colors.grey[200],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                        const VerticalSizedBox(),
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: TextButton(
+                            child: Text(
+                              "Esqueceu a senha?",
+                              style: textTheme.bodyText2!.copyWith(fontSize: 14),
+                            ),
+                            onPressed: controller.esqueceuSenha,
+                          ),
+                        ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text("Não possui uma conta?"),
+                            Text("Não possui uma conta?", style: textTheme.bodyText2!.copyWith(fontSize: 14)),
                             TextButton(
-                              onPressed: () {},
                               child: Text(
                                 "Registrar-se",
-                                style: textTheme.bodyText2!.copyWith(
+                                style: textTheme.bodyText1!.copyWith(
                                   color: AppColors.primary,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
+                              onPressed: controller.registrar,
                             )
                           ],
                         ),
@@ -80,7 +113,7 @@ class _AuthPageState extends State<AuthPage> {
             ),
             child: ElevatedButtonDefault(
               child: Text("Entrar"),
-              onPressed: () {},
+              onPressed: controller.login,
             ),
           ),
         ],
@@ -89,16 +122,23 @@ class _AuthPageState extends State<AuthPage> {
   }
 
   Widget _header() {
+    final double height = 260;
+    final double padding = 20;
+    final double image = 120;
+
     return SizedBox(
-      height: (height * 2) - (padding * 1.5),
+      height: height,
       child: Stack(
         alignment: Alignment.topCenter,
         children: [
           Container(
-            height: height,
+            height: height - image,
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(26),
               color: AppColors.primary,
+              borderRadius: BorderRadius.only(
+                bottomLeft: Radius.circular(26),
+                bottomRight: Radius.circular(26),
+              ),
             ),
           ),
           Positioned(
@@ -114,8 +154,8 @@ class _AuthPageState extends State<AuthPage> {
                 padding: EdgeInsets.only(top: padding),
                 child: Image.asset(
                   "assets/images/logo.png",
-                  width: 118,
-                  height: 118,
+                  width: image,
+                  height: image,
                 ),
               ),
             ),

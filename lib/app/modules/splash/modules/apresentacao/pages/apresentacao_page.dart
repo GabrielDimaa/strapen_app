@@ -3,7 +3,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:strapen_app/app/app_widget.dart';
 import 'package:strapen_app/app/modules/splash/modules/apresentacao/controllers/apresentacao_controller.dart';
 import 'package:strapen_app/app/shared/components/button/elevated_button_default.dart';
-import 'package:strapen_app/app/shared/components/images/vetor.dart';
+import 'package:strapen_app/app/shared/components/image/vetor.dart';
 import 'package:strapen_app/app/shared/components/padding/padding_scaffold.dart';
 import 'package:strapen_app/app/shared/components/scaffold/scaffold_gradiente.dart';
 import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
