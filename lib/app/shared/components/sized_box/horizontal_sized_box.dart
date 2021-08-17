@@ -5,5 +5,5 @@ class HorizontalSizedBox extends SizedBox {
 
   const HorizontalSizedBox([qtd = 1])
       : assert(qtd > 0),
-        super(height: space * qtd);
+        super(width: space * qtd);
 }

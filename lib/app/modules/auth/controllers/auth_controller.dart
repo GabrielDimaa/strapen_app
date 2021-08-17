@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'package:strapen_app/app/shared/interfaces/default_controller_interface.dart';
+import 'package:strapen_app/app/shared/routes/routes.dart';
 
 part 'auth_controller.g.dart';
 
@@ -37,7 +38,5 @@ abstract class _AuthController with Store implements IDefaultController {
   void esqueceuSenha() {}
 
   @action
-  void registrar() {
-    //Modular.to.pushNamed()
-  }
+  void registrar() => Modular.to.pushNamed(AUTH_ROUTE + REGISTRO_ROUTE);
 }
