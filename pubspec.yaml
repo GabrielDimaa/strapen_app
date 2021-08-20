@@ -9,11 +9,16 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  brasil_fields: ^1.1.4
   cupertino_icons: ^1.0.3
   flutter_dotenv: ^5.0.2
   flutter_mobx: ^2.0.2
   flutter_modular: ^3.3.1
   flutter_svg: ^0.22.0
+  intl: ^0.17.0
   mobx: ^2.0.4
   parse_server_sdk_flutter: ^3.1.0
 

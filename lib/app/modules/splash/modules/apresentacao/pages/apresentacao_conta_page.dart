@@ -44,7 +44,7 @@ class _ApresentacaoContaPageState extends State<ApresentacaoContaPage> {
             const VerticalSizedBox(),
             OutlinedButtonDefault(
               child: Text("Registrar-se"),
-              onPressed: controller.toNextApresentacao,
+              onPressed: controller.toRegistro,
             ),
           ],
         ),

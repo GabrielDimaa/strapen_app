@@ -7,6 +7,7 @@ import 'package:strapen_app/app/shared/components/button/elevated_button_default
 import 'package:strapen_app/app/shared/components/padding/padding_scaffold.dart';
 import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
 import 'package:strapen_app/app/shared/components/text_input/text_input_default.dart';
+import 'package:strapen_app/app/shared/components/widgets/text_field_senha.dart';
 
 class AuthPage extends StatefulWidget {
   const AuthPage({Key? key}) : super(key: key);
@@ -55,18 +56,11 @@ class _AuthPageState extends ModularState<AuthPage, AuthController> {
                               ),
                               const VerticalSizedBox(1.5),
                               Observer(
-                                builder: (_) => TextInputDefault(
+                                builder: (_) => TextFieldSenha(
                                   controller: _senhaController,
-                                  obscureText: controller.visible,
-                                  label: "Senha",
-                                  prefixIcon: Icon(Icons.lock, color: Colors.grey[200]),
-                                  sufixIcon: IconButton(
-                                    onPressed: () => controller.setVisible(!controller.visible),
-                                    icon: Icon(
-                                      controller.visible ? Icons.visibility : Icons.visibility_off,
-                                      color: Colors.grey[200],
-                                    ),
-                                  ),
+                                  visible: controller.visible,
+                                  onSaved: (value) {},
+                                  onPressed: () => controller.setVisible(!controller.visible),
                                 ),
                               ),
                             ],

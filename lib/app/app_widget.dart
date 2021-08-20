@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:strapen_app/app/shared/components/padding/padding_button.dart';
 import 'package:strapen_app/app/shared/components/text_input/outline_input_default.dart';
+import 'package:strapen_app/app/shared/components/text_input/outline_input_error.dart';
 
 class AppWidget extends StatelessWidget {
   @override
@@ -16,7 +18,11 @@ class AppWidget extends StatelessWidget {
         primaryColorLight: AppColors.secondary,
         scaffoldBackgroundColor: AppColors.background,
         hintColor: Colors.grey[400],
-        colorScheme: Theme.of(context).colorScheme.copyWith(primary: AppColors.primary),
+        colorScheme: ColorScheme.dark(
+          primary: AppColors.primary,
+          onPrimary: Colors.white,
+          surface: AppColors.primary,
+        ),
         textSelectionTheme: TextSelectionThemeData(
           cursorColor: AppColors.primary,
         ),
@@ -37,7 +43,7 @@ class AppWidget extends StatelessWidget {
         appBarTheme: AppBarTheme(
           elevation: 0,
           centerTitle: true,
-          backgroundColor: AppColors.background,
+          backgroundColor: Colors.transparent,
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
@@ -70,8 +76,26 @@ class AppWidget extends StatelessWidget {
           contentPadding: EdgeInsets.symmetric(vertical: 18, horizontal: 20),
           enabledBorder: OutlineInputDefault(),
           focusedBorder: OutlineInputDefault(),
+          errorBorder: OutlineInputError(),
+          focusedErrorBorder: OutlineInputError(),
+          errorStyle: TextStyle(color: AppColors.error),
+        ),
+        dialogTheme: DialogTheme(
+          backgroundColor: AppColors.background,
+          contentTextStyle: TextStyle(color: Colors.white, fontSize: 16),
+          elevation: 8,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+        ),
+        radioTheme: RadioThemeData(
+          splashRadius: 16,
         ),
       ),
+      localizationsDelegates: [
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+      ],
+      supportedLocales: [const Locale('pt', 'BR')],
     ).modular();
   }
 }

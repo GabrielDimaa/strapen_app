@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:strapen_app/app/app_widget.dart';
 
 class TextInputDefault extends StatelessWidget {
   final TextEditingController controller;
@@ -14,10 +15,11 @@ class TextInputDefault extends StatelessWidget {
   final Color? colorStyle;
   final bool? enabled;
   final List<TextInputFormatter>? inputFormatters;
-  final String Function(String?)? validator;
+  final String? Function(String?)? validator;
   final String label;
   final Widget? prefixIcon;
   final Widget? sufixIcon;
+  final String? prefixText;
 
   const TextInputDefault({
     required this.controller,
@@ -36,6 +38,7 @@ class TextInputDefault extends StatelessWidget {
     required this.label,
     this.prefixIcon,
     this.sufixIcon,
+    this.prefixText,
   });
 
   @override
@@ -57,6 +60,8 @@ class TextInputDefault extends StatelessWidget {
       validator: validator,
       decoration: InputDecoration(
         labelText: label,
+        prefixText: prefixText,
+        prefixStyle: TextStyle(color: AppColors.primary),
         prefixIcon: prefixIcon != null ? Padding(
           padding: const EdgeInsets.only(left: 8),
           child: prefixIcon,

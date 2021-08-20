@@ -9,50 +9,47 @@ import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.d
 import 'package:strapen_app/app/shared/components/text_input/text_input_default.dart';
 import 'package:strapen_app/app/shared/extensions/string_extension.dart';
 
-class RegistroPage2 extends StatefulWidget {
+class RegistroPage3 extends StatefulWidget {
   @override
-  _RegistroPage2State createState() => _RegistroPage2State();
+  _RegistroPage3State createState() => _RegistroPage3State();
 }
 
-class _RegistroPage2State extends State<RegistroPage2> {
+class _RegistroPage3State extends State<RegistroPage3> {
   GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final RegistroController controller = Modular.get<RegistroController>();
 
-  final TextEditingController _telefone = TextEditingController();
-  final TextEditingController _email = TextEditingController();
+  final TextEditingController _cep = TextEditingController();
+  final TextEditingController _cidade = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return RegistroWidget(
-      title: "Conte-nos suas informações para contato!",
-      subtitle: "Preencha os campos com um número de telefone e endereço de e-mail válido.",
+      title: "Nos diga seu endereço!",
+      subtitle: "Informe a cidade e CEP que você vive.",
       children: [
         Form(
           key: _formKey,
           child: Column(
             children: [
               TextInputDefault(
-                controller: _email,
-                label: "E-mail",
-                keyboardType: TextInputType.emailAddress,
-                validator: InputEmailValidator().validate,
-                prefixIcon: Icon(Icons.email, color: Colors.grey[200]),
-                onSaved: controller.userStore.setEmail,
-              ),
-              const VerticalSizedBox(2),
-              TextInputDefault(
-                controller: _telefone,
-                label: "Telefone",
-                keyboardType: TextInputType.phone,
-                validator: InputTelefoneValidator().validate,
-                prefixIcon: Icon(Icons.contact_phone, color: Colors.grey[200]),
+                controller: _cep,
+                label: "CEP",
+                keyboardType: TextInputType.number,
+                validator: InputCepValidator().validate,
                 onSaved: (String? value) {
-                  controller.userStore.setTelefone(value.extrairNum());
+                  controller.userStore.setCep(value.extrairNum());
                 },
                 inputFormatters: [
                   FilteringTextInputFormatter.digitsOnly,
-                  TelefoneInputFormatter(),
+                  CepInputFormatter()
                 ],
+              ),
+              const VerticalSizedBox(2),
+              TextInputDefault(
+                controller: _cidade,
+                label: "Cidade",
+                validator: InputValidatorDefault().validate,
+                onSaved: controller.userStore.setCidade,
               ),
             ],
           ),
@@ -61,7 +58,7 @@ class _RegistroPage2State extends State<RegistroPage2> {
       onPressed: () async => await controller.onSavedForm(
         context,
         _formKey,
-        () async => await controller.nextPage(3),
+        () async => await controller.nextPage(4),
       ),
     );
   }
