@@ -4,10 +4,12 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:strapen_app/app/shared/components/padding/padding_button.dart';
 import 'package:strapen_app/app/shared/components/text_input/outline_input_default.dart';
 import 'package:strapen_app/app/shared/components/text_input/outline_input_error.dart';
+import 'package:strapen_app/app/shared/config/modo_retrato.dart';
 
-class AppWidget extends StatelessWidget {
+class AppWidget extends StatelessWidget with ModoRetratoLess {
   @override
   Widget build(BuildContext context) {
+    super.build(context);
     return MaterialApp(
       title: 'Strapen',
       debugShowCheckedModeBanner: false,
