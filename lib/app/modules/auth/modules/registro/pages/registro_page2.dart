@@ -18,8 +18,10 @@ class _RegistroPage2State extends State<RegistroPage2> {
   final RegistroController controller = Modular.get<RegistroController>();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _telefone = TextEditingController();
-  final TextEditingController _email = TextEditingController();
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _telefoneController = TextEditingController();
+  final FocusNode _emailFocus = FocusNode();
+  final FocusNode _telefoneFocus = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -31,21 +33,31 @@ class _RegistroPage2State extends State<RegistroPage2> {
           key: _formKey,
           child: Column(
             children: [
-              TextInputDefault(
-                controller: _email,
-                label: "E-mail",
+              TextFormField(
+                decoration: InputDecorationDefault(
+                  label: "E-mail",
+                  prefixIcon: Icon(Icons.email, color: Colors.grey[200]),
+                ),
+                controller: _emailController,
                 keyboardType: TextInputType.emailAddress,
                 validator: InputEmailValidator().validate,
-                prefixIcon: Icon(Icons.email, color: Colors.grey[200]),
+                textInputAction: TextInputAction.next,
                 onSaved: controller.userStore.setEmail,
+                focusNode: _emailFocus,
+                onFieldSubmitted: (_) => controller.focusChange(context, _emailFocus, _telefoneFocus),
               ),
               const VerticalSizedBox(2),
-              TextInputDefault(
-                controller: _telefone,
-                label: "Telefone",
+              TextFormField(
+                decoration: InputDecorationDefault(
+                  label: "Telefone",
+                  prefixIcon: Icon(Icons.contact_phone, color: Colors.grey[200]),
+                ),
+                controller: _telefoneController,
                 keyboardType: TextInputType.phone,
                 validator: InputTelefoneValidator().validate,
-                prefixIcon: Icon(Icons.contact_phone, color: Colors.grey[200]),
+                textInputAction: TextInputAction.done,
+                focusNode: _telefoneFocus,
+                onFieldSubmitted: (_) => _telefoneFocus.unfocus(),
                 onSaved: (String? value) {
                   controller.userStore.setTelefone(value.extrairNum());
                 },
@@ -68,8 +80,10 @@ class _RegistroPage2State extends State<RegistroPage2> {
 
   @override
   void dispose() {
-    _telefone.dispose();
-    _email.dispose();
+    _telefoneController.dispose();
+    _emailController.dispose();
+    _telefoneFocus.dispose();
+    _emailFocus.dispose();
     super.dispose();
   }
 }

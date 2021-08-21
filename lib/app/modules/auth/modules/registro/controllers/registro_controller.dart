@@ -60,6 +60,12 @@ abstract class _RegistroController with Store {
   }
 
   @action
+  void focusChange(BuildContext context, FocusNode currentFocus, FocusNode nextFocus) {
+    currentFocus.unfocus();
+    FocusScope.of(context).requestFocus(nextFocus);
+  }
+
+  @action
   Future<void> nextPage(int page) async {
     await Modular.to.pushNamed(AUTH_ROUTE + REGISTRO_ROUTE + REGISTRO_ROUTE + page.toString());
   }

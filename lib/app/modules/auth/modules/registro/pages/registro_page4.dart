@@ -21,7 +21,8 @@ class _RegistroPage4State extends State<RegistroPage4> {
   final RegistroController controller = Modular.get<RegistroController>();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _cpfCnpj = TextEditingController();
+  final TextEditingController _cpfCnpjController = TextEditingController();
+  final FocusNode _cpfCnpjFocus = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -36,48 +37,47 @@ class _RegistroPage4State extends State<RegistroPage4> {
               Row(
                 mainAxisSize: MainAxisSize.max,
                 children: [
-                  Observer(
-                    builder: (_) {
-                      void Function() onTap = () {
-                        controller.setIsCpf(true);
-                        _cpfCnpj.clear();
-                      };
+                  Observer(builder: (_) {
+                    void Function() onTap = () {
+                      controller.setIsCpf(true);
+                      _cpfCnpjController.clear();
+                    };
 
-                      return RadioButtonWidget(
-                        title: "CPF",
-                        onTap: onTap,
-                        onChaged: (bool? value) => onTap.call(),
-                        value: controller.isCpf,
-                        groupValue: true,
-                      );
-                    }
-                  ),
+                    return RadioButtonWidget(
+                      title: "CPF",
+                      onTap: onTap,
+                      onChaged: (bool? value) => onTap.call(),
+                      value: controller.isCpf,
+                      groupValue: true,
+                    );
+                  }),
                   const HorizontalSizedBox(2),
-                  Observer(
-                    builder: (_) {
-                      void Function() onTap = () {
-                        controller.setIsCpf(false);
-                        _cpfCnpj.clear();
-                      };
+                  Observer(builder: (_) {
+                    void Function() onTap = () {
+                      controller.setIsCpf(false);
+                      _cpfCnpjController.clear();
+                    };
 
-                      return RadioButtonWidget(
-                        title: "CNPJ",
-                        onTap: onTap,
-                        onChaged: (bool? value) => onTap.call(),
-                        value: controller.isCpf,
-                        groupValue: false,
-                      );
-                    }
-                  ),
+                    return RadioButtonWidget(
+                      title: "CNPJ",
+                      onTap: onTap,
+                      onChaged: (bool? value) => onTap.call(),
+                      value: controller.isCpf,
+                      groupValue: false,
+                    );
+                  }),
                 ],
               ),
               const VerticalSizedBox(),
               Observer(
-                builder: (_) => TextInputDefault(
-                  controller: _cpfCnpj,
-                  label: controller.isCpf ? "CPF" : "CNPJ",
+                builder: (_) => TextFormField(
+                  decoration: InputDecorationDefault(label: controller.isCpf ? "CPF" : "CNPJ"),
+                  controller: _cpfCnpjController,
                   keyboardType: TextInputType.number,
                   validator: InputCpfCnpjValidator(isCnpj: !controller.isCpf).validate,
+                  textInputAction: TextInputAction.done,
+                  focusNode: _cpfCnpjFocus,
+                  onFieldSubmitted: (_) => _cpfCnpjFocus.unfocus(),
                   onSaved: (String? value) {
                     controller.userStore.setCpfCnpj(value.extrairNum());
                   },
@@ -101,7 +101,8 @@ class _RegistroPage4State extends State<RegistroPage4> {
 
   @override
   void dispose() {
-    _cpfCnpj.dispose();
+    _cpfCnpjController.dispose();
+    _cpfCnpjFocus.dispose();
     super.dispose();
   }
 }

@@ -14,7 +14,8 @@ class _RegistroPage5State extends State<RegistroPage5> {
   final RegistroController controller = Modular.get<RegistroController>();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _nomeUsuario = TextEditingController();
+  final TextEditingController _nomeUsuarioController = TextEditingController();
+  final FocusNode _nomeUsuarioFocus = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -24,10 +25,15 @@ class _RegistroPage5State extends State<RegistroPage5> {
       children: [
         Form(
           key: _formKey,
-          child: TextInputDefault(
-            controller: _nomeUsuario,
-            label: "Nome de usuário",
-            prefixText: "@",
+          child: TextFormField(
+            decoration: InputDecorationDefault(
+              label: "Nome de usuário",
+              prefixText: "@",
+            ),
+            controller: _nomeUsuarioController,
+            textInputAction: TextInputAction.done,
+            focusNode: _nomeUsuarioFocus,
+            onFieldSubmitted: (_) => _nomeUsuarioFocus.unfocus(),
             validator: InputUserNameValidator().validate,
             onSaved: (String? value) => controller.userStore.setUserName(value),
           ),
@@ -43,7 +49,8 @@ class _RegistroPage5State extends State<RegistroPage5> {
 
   @override
   void dispose() {
-    _nomeUsuario.dispose();
+    _nomeUsuarioController.dispose();
+    _nomeUsuarioFocus.dispose();
     super.dispose();
   }
 }

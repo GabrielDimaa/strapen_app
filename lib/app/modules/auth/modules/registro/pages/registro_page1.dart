@@ -18,8 +18,9 @@ class _RegistroPage1State extends State<RegistroPage1> {
   final RegistroController controller = Modular.get<RegistroController>();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _nome = TextEditingController();
-  final TextEditingController _dataNascimento = TextEditingController();
+  final TextEditingController _nomeController = TextEditingController();
+  final TextEditingController _dataNascimentoController = TextEditingController();
+  final FocusNode _nomeFocus = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -31,44 +32,51 @@ class _RegistroPage1State extends State<RegistroPage1> {
           key: _formKey,
           child: Column(
             children: [
-              TextInputDefault(
-                controller: _nome,
-                label: "Nome completo",
+              TextFormField(
+                decoration: InputDecorationDefault(
+                  label: "Nome completo",
+                ),
+                controller: _nomeController,
                 validator: InputValidatorDefault().validate,
                 keyboardType: TextInputType.name,
+                textInputAction: TextInputAction.done,
                 onSaved: controller.userStore.setNome,
+                focusNode: _nomeFocus,
+                onFieldSubmitted: (_) => _nomeFocus.unfocus(),
               ),
               const VerticalSizedBox(2),
               Observer(
                 builder: (_) {
                   bool clear = false;
-                  return TextInputDefault(
-                    controller: _dataNascimento,
-                    label: "Data de nascimento",
+                  return TextFormField(
+                    decoration: InputDecorationDefault(
+                      label: "Data de nascimento",
+                      sufixIcon: Visibility(
+                        visible: controller.userStore.dataNascimento != null,
+                        child: IconButton(
+                          icon: Icon(Icons.cancel_outlined, color: Colors.grey[200]),
+                          onPressed: () {
+                            _dataNascimentoController.clear();
+                            controller.userStore.setDataNascimento(null);
+                            clear = true;
+                          },
+                        ),
+                      ),
+                    ),
+                    controller: _dataNascimentoController,
                     readOnly: true,
                     validator: InputDateValidator().validate,
                     onTap: () async {
                       if (!clear) {
                         DateTime? date = await CupertinoDate.show(context);
                         if (date != null) {
-                          _dataNascimento.text = date.formated;
+                          _dataNascimentoController.text = date.formated;
                           controller.userStore.setDataNascimento(date);
                         }
                       } else {
                         clear = false;
                       }
                     },
-                    sufixIcon: Visibility(
-                      visible: controller.userStore.dataNascimento != null,
-                      child: IconButton(
-                        icon: Icon(Icons.cancel_outlined, color: Colors.grey[200]),
-                        onPressed: () {
-                          _dataNascimento.clear();
-                          controller.userStore.setDataNascimento(null);
-                          clear = true;
-                        },
-                      ),
-                    ),
                   );
                 },
               ),
@@ -90,8 +98,9 @@ class _RegistroPage1State extends State<RegistroPage1> {
 
   @override
   void dispose() {
-    _nome.dispose();
-    _dataNascimento.dispose();
+    _nomeController.dispose();
+    _dataNascimentoController.dispose();
+    _nomeFocus.dispose();
     super.dispose();
   }
 }

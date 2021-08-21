@@ -4,6 +4,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:strapen_app/app/app_widget.dart';
 import 'package:strapen_app/app/modules/auth/controllers/auth_controller.dart';
 import 'package:strapen_app/app/shared/components/button/elevated_button_default.dart';
+import 'package:strapen_app/app/shared/components/form/validator.dart';
 import 'package:strapen_app/app/shared/components/padding/padding_scaffold.dart';
 import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
 import 'package:strapen_app/app/shared/components/text_input/text_input_default.dart';
@@ -19,6 +20,8 @@ class AuthPage extends StatefulWidget {
 class _AuthPageState extends ModularState<AuthPage, AuthController> {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _senhaController = TextEditingController();
+  final FocusNode _emailFocus = FocusNode();
+  final FocusNode _senhaFocus = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -49,16 +52,30 @@ class _AuthPageState extends ModularState<AuthPage, AuthController> {
                         Form(
                           child: Column(
                             children: [
-                              TextInputDefault(
+                              TextFormField(
+                                decoration: InputDecorationDefault(
+                                  label: "E-mail",
+                                  prefixIcon: Icon(Icons.email, color: Colors.grey[200]),
+                                ),
                                 controller: _emailController,
-                                label: "E-mail",
-                                prefixIcon: Icon(Icons.email, color: Colors.grey[200]),
+                                keyboardType: TextInputType.emailAddress,
+                                validator: InputEmailValidator().validate,
+                                //onSaved: controller.userStore.setEmail,
+                                textInputAction: TextInputAction.next,
+                                focusNode: _emailFocus,
+                                onFieldSubmitted: (_) {
+                                  _emailFocus.unfocus();
+                                  FocusScope.of(context).requestFocus(_senhaFocus);
+                                },
                               ),
                               const VerticalSizedBox(1.5),
                               Observer(
                                 builder: (_) => TextFieldSenha(
                                   controller: _senhaController,
                                   visible: controller.visible,
+                                  focusNode: _senhaFocus,
+                                  textInputAction: TextInputAction.done,
+                                  onFieldSubmitted: (_) => _senhaFocus.unfocus(),
                                   onSaved: (value) {},
                                   onPressed: () => controller.setVisible(!controller.visible),
                                 ),
@@ -163,6 +180,8 @@ class _AuthPageState extends ModularState<AuthPage, AuthController> {
   void dispose() {
     _emailController.dispose();
     _senhaController.dispose();
+    _emailFocus.dispose();
+    _senhaFocus.dispose();
     super.dispose();
   }
 }

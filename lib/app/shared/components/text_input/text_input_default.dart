@@ -1,76 +1,32 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:strapen_app/app/app_widget.dart';
 
-class TextInputDefault extends StatelessWidget {
-  final TextEditingController controller;
-  final String? initialValue;
-  final TextInputType? keyboardType;
-  final bool autoFocus;
-  final bool readOnly;
-  final bool obscureText;
-  final void Function(String)? onChanged;
-  final VoidCallback? onTap;
-  final void Function(String?)? onSaved;
-  final Color? colorStyle;
-  final bool? enabled;
-  final List<TextInputFormatter>? inputFormatters;
-  final String? Function(String?)? validator;
+class InputDecorationDefault extends InputDecoration {
   final String label;
+  final String? prefixText;
   final Widget? prefixIcon;
   final Widget? sufixIcon;
-  final String? prefixText;
 
-  const TextInputDefault({
-    required this.controller,
-    this.initialValue,
-    this.keyboardType,
-    this.autoFocus = false,
-    this.readOnly = false,
-    this.obscureText = false,
-    this.onChanged,
-    this.onTap,
-    this.onSaved,
-    this.colorStyle,
-    this.enabled,
-    this.inputFormatters,
-    this.validator,
+  InputDecorationDefault({
     required this.label,
+    this.prefixText,
     this.prefixIcon,
     this.sufixIcon,
-    this.prefixText,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      controller: controller,
-      initialValue: initialValue,
-      keyboardType: keyboardType,
-      autofocus: autoFocus,
-      obscureText: obscureText,
-      readOnly: readOnly,
-      onChanged: onChanged,
-      onTap: onTap,
-      onSaved: onSaved,
-      cursorColor: colorStyle,
-      enabled: enabled,
-      inputFormatters: inputFormatters,
-      style: TextStyle(color: Colors.white, fontSize: 16),
-      validator: validator,
-      decoration: InputDecoration(
-        labelText: label,
-        prefixText: prefixText,
-        prefixStyle: TextStyle(color: AppColors.primary),
-        prefixIcon: prefixIcon != null ? Padding(
-          padding: const EdgeInsets.only(left: 8),
-          child: prefixIcon,
-        ) : null,
-        suffixIcon: sufixIcon != null ? Padding(
-          padding: const EdgeInsets.only(right: 8),
-          child: sufixIcon,
-        ) : null,
-      ),
-    );
-  }
+  }) : super(
+    labelText: label,
+    prefixText: prefixText,
+    prefixStyle: TextStyle(color: AppColors.primary),
+    prefixIcon: prefixIcon != null
+        ? Padding(
+            padding: const EdgeInsets.only(left: 8),
+            child: prefixIcon,
+          )
+        : null,
+    suffixIcon: sufixIcon != null
+        ? Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: sufixIcon,
+          )
+        : null,
+  );
 }

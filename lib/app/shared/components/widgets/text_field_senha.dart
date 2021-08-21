@@ -9,6 +9,9 @@ class TextFieldSenha extends StatelessWidget {
   final String label;
   final String? Function(String?)? validator;
   final Function(String)? onChanged;
+  final FocusNode? focusNode;
+  final Function(String)? onFieldSubmitted;
+  final TextInputAction? textInputAction;
 
   const TextFieldSenha({
     required this.controller,
@@ -18,25 +21,33 @@ class TextFieldSenha extends StatelessWidget {
     this.label = "Senha",
     this.validator,
     this.onChanged,
+    this.focusNode,
+    this.onFieldSubmitted,
+    this.textInputAction,
   });
 
   @override
   Widget build(BuildContext context) {
-    return TextInputDefault(
+    return TextFormField(
+      decoration: InputDecorationDefault(
+        label: label,
+        prefixIcon: Icon(Icons.lock, color: Colors.grey[200]),
+        sufixIcon: IconButton(
+          onPressed: onPressed,
+          icon: Icon(
+            !visible ? Icons.visibility : Icons.visibility_off,
+            color: Colors.grey[200],
+          ),
+        ),
+      ),
       controller: controller,
       obscureText: !visible,
-      label: label,
-      prefixIcon: Icon(Icons.lock, color: Colors.grey[200]),
       validator: validator,
       onSaved: onSaved,
       onChanged: onChanged,
-      sufixIcon: IconButton(
-        onPressed: onPressed,
-        icon: Icon(
-          !visible ? Icons.visibility : Icons.visibility_off,
-          color: Colors.grey[200],
-        ),
-      ),
+      focusNode: focusNode,
+      onFieldSubmitted: onFieldSubmitted,
+      textInputAction: textInputAction,
     );
   }
 }

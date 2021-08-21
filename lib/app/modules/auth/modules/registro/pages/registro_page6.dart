@@ -18,8 +18,10 @@ class _RegistroPage6State extends State<RegistroPage6> {
   final RegistroController controller = Modular.get<RegistroController>();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _senha = TextEditingController();
-  final TextEditingController _confirmarSenha = TextEditingController();
+  final TextEditingController _senhaController = TextEditingController();
+  final TextEditingController _confirmarSenhaController = TextEditingController();
+  final FocusNode _senhaFocus = FocusNode();
+  final FocusNode _confirmarSenhaFocus = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -33,9 +35,12 @@ class _RegistroPage6State extends State<RegistroPage6> {
             children: [
               Observer(
                 builder: (_) => TextFieldSenha(
-                  controller: _senha,
+                  controller: _senhaController,
                   visible: controller.visibleSenha,
                   validator: InputSenhaValidator().validate,
+                  textInputAction: TextInputAction.next,
+                  focusNode: _senhaFocus,
+                  onFieldSubmitted: (_) => controller.focusChange(context, _senhaFocus, _confirmarSenhaFocus),
                   onPressed: () => controller.setVisibleSenha(!controller.visibleSenha),
                   onSaved: controller.userStore.setSenha,
                 ),
@@ -43,9 +48,12 @@ class _RegistroPage6State extends State<RegistroPage6> {
               const VerticalSizedBox(2),
               Observer(
                 builder: (_) => TextFieldSenha(
-                  controller: _confirmarSenha,
+                  controller: _confirmarSenhaController,
                   visible: controller.visibleConfirmarSenha,
                   validator: InputSenhaValidator().validate,
+                  textInputAction: TextInputAction.done,
+                  focusNode: _confirmarSenhaFocus,
+                  onFieldSubmitted: (_) => _confirmarSenhaFocus.unfocus(),
                   onPressed: () => controller.setVisibleConfirmarSenha(!controller.visibleConfirmarSenha),
                   onSaved: controller.userStore.setConfirmarSenha,
                   onChanged: (String value) => controller.setShowErrorEqualsSenha(false),
@@ -56,11 +64,14 @@ class _RegistroPage6State extends State<RegistroPage6> {
               Observer(
                 builder: (_) => Visibility(
                   visible: controller.showErrorEqualsSenha,
-                  child: Align(
-                    alignment: Alignment.centerLeft,
-                    child: Text(
-                      "As senhas não conferem!",
-                      style: Theme.of(context).textTheme.bodyText1!.copyWith(color: AppColors.error),
+                  child: Padding(
+                    padding: const EdgeInsets.only(left: 8.0),
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        "As senhas não conferem!",
+                        style: Theme.of(context).textTheme.bodyText1!.copyWith(color: AppColors.error),
+                      ),
                     ),
                   ),
                 ),
@@ -86,8 +97,10 @@ class _RegistroPage6State extends State<RegistroPage6> {
 
   @override
   void dispose() {
-    _senha.dispose();
-    _confirmarSenha.dispose();
+    _senhaController.dispose();
+    _confirmarSenhaController.dispose();
+    _senhaFocus.dispose();
+    _confirmarSenhaFocus.dispose();
     super.dispose();
   }
 }

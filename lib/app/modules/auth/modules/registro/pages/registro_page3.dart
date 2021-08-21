@@ -18,8 +18,10 @@ class _RegistroPage3State extends State<RegistroPage3> {
   final RegistroController controller = Modular.get<RegistroController>();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _cep = TextEditingController();
-  final TextEditingController _cidade = TextEditingController();
+  final TextEditingController _cepController = TextEditingController();
+  final TextEditingController _cidadeController = TextEditingController();
+  final FocusNode _cepFocus = FocusNode();
+  final FocusNode _cidadeFocus = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -31,25 +33,33 @@ class _RegistroPage3State extends State<RegistroPage3> {
           key: _formKey,
           child: Column(
             children: [
-              TextInputDefault(
-                controller: _cep,
-                label: "CEP",
+              TextFormField(
+                decoration: InputDecorationDefault(
+                  label: "CEP",
+                ),
+                controller: _cepController,
                 keyboardType: TextInputType.number,
                 validator: InputCepValidator().validate,
+                textInputAction: TextInputAction.next,
+                focusNode: _cepFocus,
+                onFieldSubmitted: (_) => controller.focusChange(context, _cepFocus, _cidadeFocus),
                 onSaved: (String? value) {
                   controller.userStore.setCep(value.extrairNum());
                 },
                 inputFormatters: [
                   FilteringTextInputFormatter.digitsOnly,
-                  CepInputFormatter()
+                  CepInputFormatter(),
                 ],
               ),
               const VerticalSizedBox(2),
-              TextInputDefault(
-                controller: _cidade,
-                label: "Cidade",
+              TextFormField(
+                decoration: InputDecorationDefault(label: "Cidade"),
+                controller: _cidadeController,
                 validator: InputValidatorDefault().validate,
                 onSaved: controller.userStore.setCidade,
+                textInputAction: TextInputAction.done,
+                focusNode: _cidadeFocus,
+                onFieldSubmitted: (_) => _cidadeFocus.unfocus(),
               ),
             ],
           ),
@@ -65,8 +75,10 @@ class _RegistroPage3State extends State<RegistroPage3> {
 
   @override
   void dispose() {
-    _cep.dispose();
-    _cidade.dispose();
+    _cepController.dispose();
+    _cidadeController.dispose();
+    _cepFocus.dispose();
+    _cidadeFocus.dispose();
     super.dispose();
   }
 }
