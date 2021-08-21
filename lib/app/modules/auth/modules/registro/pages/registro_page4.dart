@@ -20,7 +20,7 @@ class RegistroPage4 extends StatefulWidget {
 class _RegistroPage4State extends State<RegistroPage4> {
   final RegistroController controller = Modular.get<RegistroController>();
 
-  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _cpfCnpj = TextEditingController();
 
   @override

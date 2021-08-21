@@ -65,6 +65,8 @@ class UserRepository implements IUserRepository {
   @override
   Future<UserModel> save(UserModel model) async {
     try {
+      final String senha = model.senha!;
+
       validate(model);
 
       ParseUser user = toParseObject(model);
@@ -80,7 +82,7 @@ class UserRepository implements IUserRepository {
           model.id,
           model.username,
           model.email,
-          model.senha,
+          senha,
           parse.get<String>("sessionToken"),
         ),
       );

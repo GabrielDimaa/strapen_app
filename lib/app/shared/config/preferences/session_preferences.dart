@@ -10,10 +10,12 @@ abstract class ISessionPreferences {
 }
 
 class SessionPreferences implements ISessionPreferences {
-  SharedPreferences? sharedPreferences;
+  SharedPreferences? _sharedPreferences;
 
   SessionPreferences() {
-    SharedPreferences.getInstance().then((value) => sharedPreferences = value);
+    SharedPreferences.getInstance().then((value) {
+      _sharedPreferences = value;
+    });
   }
 
   static const String _userId = "userId";
@@ -24,30 +26,30 @@ class SessionPreferences implements ISessionPreferences {
 
   @override
   void save(SessionPreferencesModel dto) {
-    sharedPreferences!.setString(_userId, dto.userId!);
-    sharedPreferences!.setString(_username, dto.username!);
-    sharedPreferences!.setString(_email, dto.email!);
-    sharedPreferences!.setString(_senha, dto.senha!);
-    sharedPreferences!.setString(_sessionToken, dto.sessionToken!);
+    _sharedPreferences!.setString(_userId, dto.userId!);
+    _sharedPreferences!.setString(_username, dto.username!);
+    _sharedPreferences!.setString(_email, dto.email!);
+    _sharedPreferences!.setString(_senha, dto.senha!);
+    _sharedPreferences!.setString(_sessionToken, dto.sessionToken!);
   }
 
   @override
   SessionPreferencesModel get() {
     return SessionPreferencesModel(
-      sharedPreferences!.getString(_userId),
-      sharedPreferences!.getString(_username),
-      sharedPreferences!.getString(_email),
-      sharedPreferences!.getString(_senha),
-      sharedPreferences!.getString(_sessionToken),
+      _sharedPreferences!.getString(_userId),
+      _sharedPreferences!.getString(_username),
+      _sharedPreferences!.getString(_email),
+      _sharedPreferences!.getString(_senha),
+      _sharedPreferences!.getString(_sessionToken),
     );
   }
 
   @override
   void delete() {
-    sharedPreferences!.remove(_userId);
-    sharedPreferences!.remove(_username);
-    sharedPreferences!.remove(_email);
-    sharedPreferences!.remove(_senha);
-    sharedPreferences!.remove(_sessionToken);
+    _sharedPreferences!.remove(_userId);
+    _sharedPreferences!.remove(_username);
+    _sharedPreferences!.remove(_email);
+    _sharedPreferences!.remove(_senha);
+    _sharedPreferences!.remove(_sessionToken);
   }
 }

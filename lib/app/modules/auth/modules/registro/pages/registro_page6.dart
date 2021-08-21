@@ -17,7 +17,7 @@ class RegistroPage6 extends StatefulWidget {
 class _RegistroPage6State extends State<RegistroPage6> {
   final RegistroController controller = Modular.get<RegistroController>();
 
-  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _senha = TextEditingController();
   final TextEditingController _confirmarSenha = TextEditingController();
 
