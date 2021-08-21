@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:strapen_app/app/modules/auth/modules/registro/controllers/registro_controller.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/app_bar_default.dart';
 import 'package:strapen_app/app/shared/components/button/elevated_button_default.dart';
+import 'package:strapen_app/app/shared/components/loading/linear_loading.dart';
 import 'package:strapen_app/app/shared/components/padding/padding_scaffold.dart';
 import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
 
@@ -23,6 +27,7 @@ class RegistroWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final RegistroController controller = Modular.get<RegistroController>();
     final TextTheme textTheme = Theme.of(context).textTheme;
     return Scaffold(
       appBar: AppBarDefault(),
@@ -47,7 +52,16 @@ class RegistroWidget extends StatelessWidget {
                       textAlign: TextAlign.start,
                       style: textTheme.headline1,
                     ),
-                    const VerticalSizedBox(3),
+                    const VerticalSizedBox(2),
+                    Observer(
+                      builder: (_) {
+                        if (controller.loading)
+                          return LinearLoading();
+                        else
+                          return Container(height: 1);
+                      },
+                    ),
+                    const VerticalSizedBox(2),
                     Column(
                       children: children,
                     ),
@@ -64,9 +78,11 @@ class RegistroWidget extends StatelessWidget {
                 ],
               ),
             ),
-            ElevatedButtonDefault(
-              child: Text(descriptionButton ?? "Avançar"),
-              onPressed: onPressed,
+            Observer(
+              builder: (_) => ElevatedButtonDefault(
+                child: Text(descriptionButton ?? "Avançar"),
+                onPressed: !controller.loading ? onPressed : null,
+              ),
             ),
           ],
         ),

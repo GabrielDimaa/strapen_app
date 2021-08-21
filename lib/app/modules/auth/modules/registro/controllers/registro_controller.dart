@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'package:strapen_app/app/modules/user/factories/user_factory.dart';
+import 'package:strapen_app/app/modules/user/models/user_model.dart';
 import 'package:strapen_app/app/modules/user/repositories/user_repository_interface.dart';
 import 'package:strapen_app/app/modules/user/stores/user_store.dart';
 import 'package:strapen_app/app/shared/components/dialog/error_dialog.dart';
@@ -57,7 +58,6 @@ abstract class _RegistroController with Store {
 
         if (userStore.equalsSenha)
           onPressed.call();
-
       }
     } catch (e) {
       ErrorDialog.show(context: context, content: e.toString());
@@ -87,9 +87,23 @@ abstract class _RegistroController with Store {
 
   @action
   Future<void> finalizarCadastro() async {
-    await _userRepository.save(userStore.toModel());
+    try {
+      setLoading(true);
+
+      UserModel model = userStore.toModel();
+      model = await _userRepository.save(model);
+
+      userStore.id = model.id;
+
+      Modular.to.navigate(AUTH_ROUTE + REGISTRO_ROUTE + REGISTRO_CONCLUIDO_ROUTE);
+    } finally {
+      setLoading(false);
+    }
   }
 
   @action
   void toAuth() => Modular.to.navigate(AUTH_ROUTE);
+
+  @action
+  void toHome() => Modular.to.navigate(HOME_ROUTE);
 }

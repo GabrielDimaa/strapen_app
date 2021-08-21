@@ -7,7 +7,7 @@ class ErrorDialog extends StatefulWidget {
 
   const ErrorDialog({required BuildContext context, required this.content, this.actions});
 
-  static show({
+  static DialogDefault show({
     required BuildContext context,
     required String content,
     String? title,

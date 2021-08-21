@@ -1,6 +1,7 @@
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:strapen_app/app/modules/auth/modules/registro/components/registro_widget.dart';
 import 'package:strapen_app/app/modules/auth/modules/registro/controllers/registro_controller.dart';
@@ -41,33 +42,39 @@ class _RegistroPage3State extends State<RegistroPage3> {
           key: _formKey,
           child: Column(
             children: [
-              TextFormField(
-                decoration: InputDecorationDefault(
-                  label: "CEP",
+              Observer(
+                builder: (_) => TextFormField(
+                  decoration: InputDecorationDefault(
+                    label: "CEP",
+                  ),
+                  controller: _cepController,
+                  keyboardType: TextInputType.number,
+                  validator: InputCepValidator().validate,
+                  enabled: !controller.loading,
+                  textInputAction: TextInputAction.next,
+                  focusNode: _cepFocus,
+                  onFieldSubmitted: (_) => controller.focusChange(context, _cepFocus, _cidadeFocus),
+                  onSaved: (String? value) {
+                    controller.userStore.setCep(value.extrairNum());
+                  },
+                  inputFormatters: [
+                    FilteringTextInputFormatter.digitsOnly,
+                    CepInputFormatter(),
+                  ],
                 ),
-                controller: _cepController,
-                keyboardType: TextInputType.number,
-                validator: InputCepValidator().validate,
-                textInputAction: TextInputAction.next,
-                focusNode: _cepFocus,
-                onFieldSubmitted: (_) => controller.focusChange(context, _cepFocus, _cidadeFocus),
-                onSaved: (String? value) {
-                  controller.userStore.setCep(value.extrairNum());
-                },
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                  CepInputFormatter(),
-                ],
               ),
               const VerticalSizedBox(2),
-              TextFormField(
-                decoration: InputDecorationDefault(label: "Cidade"),
-                controller: _cidadeController,
-                validator: InputValidatorDefault().validate,
-                onSaved: controller.userStore.setCidade,
-                textInputAction: TextInputAction.done,
-                focusNode: _cidadeFocus,
-                onFieldSubmitted: (_) => _cidadeFocus.unfocus(),
+              Observer(
+                builder: (_) => TextFormField(
+                  decoration: InputDecorationDefault(label: "Cidade"),
+                  controller: _cidadeController,
+                  validator: InputValidatorDefault().validate,
+                  enabled: !controller.loading,
+                  onSaved: controller.userStore.setCidade,
+                  textInputAction: TextInputAction.done,
+                  focusNode: _cidadeFocus,
+                  onFieldSubmitted: (_) => _cidadeFocus.unfocus(),
+                ),
               ),
             ],
           ),

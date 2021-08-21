@@ -33,17 +33,20 @@ class _RegistroPage1State extends State<RegistroPage1> {
           key: _formKey,
           child: Column(
             children: [
-              TextFormField(
-                decoration: InputDecorationDefault(
-                  label: "Nome completo",
+              Observer(
+                builder: (_) => TextFormField(
+                  decoration: InputDecorationDefault(
+                    label: "Nome completo",
+                  ),
+                  controller: _nomeController,
+                  validator: InputValidatorDefault().validate,
+                  keyboardType: TextInputType.name,
+                  enabled: !controller.loading,
+                  textInputAction: TextInputAction.done,
+                  onSaved: controller.userStore.setNome,
+                  focusNode: _nomeFocus,
+                  onFieldSubmitted: (_) => _nomeFocus.unfocus(),
                 ),
-                controller: _nomeController,
-                validator: InputValidatorDefault().validate,
-                keyboardType: TextInputType.name,
-                textInputAction: TextInputAction.done,
-                onSaved: controller.userStore.setNome,
-                focusNode: _nomeFocus,
-                onFieldSubmitted: (_) => _nomeFocus.unfocus(),
               ),
               const VerticalSizedBox(2),
               Observer(
@@ -66,6 +69,7 @@ class _RegistroPage1State extends State<RegistroPage1> {
                     ),
                     controller: _dataNascimentoController,
                     readOnly: true,
+                    enabled: !controller.loading,
                     validator: InputDateValidator().validate,
                     focusNode: _dataNascimentoFocus,
                     onTap: () async {

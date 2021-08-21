@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class RadioButtonWidget extends StatelessWidget {
-  final VoidCallback onTap;
-  final Function(bool?) onChaged;
+  final VoidCallback? onTap;
+  final Function(bool?)? onChaged;
   final bool value;
   final bool groupValue;
   final String title;

@@ -12,3 +12,5 @@ const String REGISTRO4_ROUTE = "/registro4";
 const String REGISTRO5_ROUTE = "/registro5";
 const String REGISTRO6_ROUTE = "/registro6";
 const String REGISTRO_CONCLUIDO_ROUTE = "/registro_concluido";
+
+const String HOME_ROUTE = "/home";

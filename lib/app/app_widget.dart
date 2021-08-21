@@ -3,6 +3,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:strapen_app/app/shared/components/padding/padding_button.dart';
 import 'package:strapen_app/app/shared/components/text_input/outline_input_default.dart';
+import 'package:strapen_app/app/shared/components/text_input/outline_input_disable.dart';
 import 'package:strapen_app/app/shared/components/text_input/outline_input_error.dart';
 import 'package:strapen_app/app/shared/config/modo_retrato.dart';
 
@@ -78,6 +79,7 @@ class AppWidget extends StatelessWidget with ModoRetratoLess {
           contentPadding: EdgeInsets.symmetric(vertical: 18, horizontal: 20),
           enabledBorder: OutlineInputDefault(),
           focusedBorder: OutlineInputDefault(),
+          disabledBorder: OutlineInputDisable(),
           errorBorder: OutlineInputError(),
           focusedErrorBorder: OutlineInputError(),
           errorStyle: TextStyle(color: AppColors.error),

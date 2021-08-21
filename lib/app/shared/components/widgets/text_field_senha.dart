@@ -4,6 +4,7 @@ import 'package:strapen_app/app/shared/components/text_input/text_input_default.
 class TextFieldSenha extends StatelessWidget {
   final TextEditingController controller;
   final bool visible;
+  final bool? enabled;
   final void Function() onPressed;
   final Function(String?)? onSaved;
   final String label;
@@ -16,6 +17,7 @@ class TextFieldSenha extends StatelessWidget {
   const TextFieldSenha({
     required this.controller,
     required this.visible,
+    this.enabled,
     required this.onPressed,
     required this.onSaved,
     this.label = "Senha",
@@ -42,6 +44,7 @@ class TextFieldSenha extends StatelessWidget {
       ),
       controller: controller,
       obscureText: !visible,
+      enabled: enabled,
       validator: validator,
       onSaved: onSaved,
       onChanged: onChanged,

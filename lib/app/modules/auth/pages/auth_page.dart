@@ -52,27 +52,31 @@ class _AuthPageState extends ModularState<AuthPage, AuthController> {
                         Form(
                           child: Column(
                             children: [
-                              TextFormField(
-                                decoration: InputDecorationDefault(
-                                  label: "E-mail",
-                                  prefixIcon: Icon(Icons.email, color: Colors.grey[200]),
+                              Observer(
+                                builder: (_) => TextFormField(
+                                  decoration: InputDecorationDefault(
+                                    label: "E-mail",
+                                    prefixIcon: Icon(Icons.email, color: Colors.grey[200]),
+                                  ),
+                                  controller: _emailController,
+                                  keyboardType: TextInputType.emailAddress,
+                                  validator: InputEmailValidator().validate,
+                                  enabled: !controller.loading,
+                                  //onSaved: controller.userStore.setEmail,
+                                  textInputAction: TextInputAction.next,
+                                  focusNode: _emailFocus,
+                                  onFieldSubmitted: (_) {
+                                    _emailFocus.unfocus();
+                                    FocusScope.of(context).requestFocus(_senhaFocus);
+                                  },
                                 ),
-                                controller: _emailController,
-                                keyboardType: TextInputType.emailAddress,
-                                validator: InputEmailValidator().validate,
-                                //onSaved: controller.userStore.setEmail,
-                                textInputAction: TextInputAction.next,
-                                focusNode: _emailFocus,
-                                onFieldSubmitted: (_) {
-                                  _emailFocus.unfocus();
-                                  FocusScope.of(context).requestFocus(_senhaFocus);
-                                },
                               ),
                               const VerticalSizedBox(1.5),
                               Observer(
                                 builder: (_) => TextFieldSenha(
                                   controller: _senhaController,
                                   visible: controller.visible,
+                                  enabled: !controller.loading,
                                   focusNode: _senhaFocus,
                                   textInputAction: TextInputAction.done,
                                   onFieldSubmitted: (_) => _senhaFocus.unfocus(),
