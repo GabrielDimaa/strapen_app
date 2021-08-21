@@ -21,6 +21,7 @@ class _RegistroPage1State extends State<RegistroPage1> {
   final TextEditingController _nomeController = TextEditingController();
   final TextEditingController _dataNascimentoController = TextEditingController();
   final FocusNode _nomeFocus = FocusNode();
+  final FocusNode _dataNascimentoFocus = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -66,6 +67,7 @@ class _RegistroPage1State extends State<RegistroPage1> {
                     controller: _dataNascimentoController,
                     readOnly: true,
                     validator: InputDateValidator().validate,
+                    focusNode: _dataNascimentoFocus,
                     onTap: () async {
                       if (!clear) {
                         DateTime? date = await CupertinoDate.show(context);
@@ -84,11 +86,16 @@ class _RegistroPage1State extends State<RegistroPage1> {
           ),
         ),
       ],
-      onPressed: () async => await controller.onSavedForm(
-        context,
-        _formKey,
-        () async => await controller.nextPage(2),
-      ),
+      onPressed: () async {
+        _nomeFocus.unfocus();
+        _dataNascimentoFocus.unfocus();
+
+        await controller.onSavedForm(
+          context,
+          _formKey,
+          () async => await controller.nextPage(2),
+        );
+      },
       extraButton: TextButton(
         child: Text("Já tenho uma conta"),
         onPressed: controller.toAuth,
@@ -101,6 +108,7 @@ class _RegistroPage1State extends State<RegistroPage1> {
     _nomeController.dispose();
     _dataNascimentoController.dispose();
     _nomeFocus.dispose();
+    _dataNascimentoFocus.dispose();
     super.dispose();
   }
 }

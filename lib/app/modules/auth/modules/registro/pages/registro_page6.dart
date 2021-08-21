@@ -63,7 +63,7 @@ class _RegistroPage6State extends State<RegistroPage6> {
               const VerticalSizedBox(1),
               Observer(
                 builder: (_) => Visibility(
-                  visible: controller.showErrorEqualsSenha,
+                  visible: !controller.userStore.equalsSenha,
                   child: Padding(
                     padding: const EdgeInsets.only(left: 8.0),
                     child: Align(
@@ -81,17 +81,22 @@ class _RegistroPage6State extends State<RegistroPage6> {
         ),
       ],
       descriptionButton: "Finalizar cadastro",
-      onPressed: () async => await controller.onSavedForm(
-        context,
-        _formKey,
-        () async {
-          try {
-            await controller.finalizarCadastro();
-          } catch (e) {
-            ErrorDialog.show(context: context, content: e.toString());
-          }
-        }
-      ),
+      onPressed: () async {
+        _senhaFocus.unfocus();
+        _confirmarSenhaFocus.unfocus();
+
+        await controller.onSavedForm(
+          context,
+          _formKey,
+              () async {
+            try {
+              await controller.finalizarCadastro();
+            } catch (e) {
+              ErrorDialog.show(context: context, content: e.toString());
+            }
+          },
+        );
+      }
     );
   }
 

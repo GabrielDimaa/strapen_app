@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:strapen_app/app/modules/auth/modules/registro/components/registro_widget.dart';
 import 'package:strapen_app/app/modules/auth/modules/registro/controllers/registro_controller.dart';
+import 'package:strapen_app/app/modules/user/constants/columns.dart';
+import 'package:strapen_app/app/shared/components/dialog/error_dialog.dart';
 import 'package:strapen_app/app/shared/components/form/validator.dart';
 import 'package:strapen_app/app/shared/components/text_input/text_input_default.dart';
 
@@ -14,8 +16,15 @@ class _RegistroPage5State extends State<RegistroPage5> {
   final RegistroController controller = Modular.get<RegistroController>();
 
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _nomeUsuarioController = TextEditingController();
-  final FocusNode _nomeUsuarioFocus = FocusNode();
+  final TextEditingController _usernameController = TextEditingController();
+  final FocusNode _usernameFocus = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+
+    _usernameController.text = controller.userStore.username ?? "";
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -30,27 +39,38 @@ class _RegistroPage5State extends State<RegistroPage5> {
               label: "Nome de usuário",
               prefixText: "@",
             ),
-            controller: _nomeUsuarioController,
+            controller: _usernameController,
             textInputAction: TextInputAction.done,
-            focusNode: _nomeUsuarioFocus,
-            onFieldSubmitted: (_) => _nomeUsuarioFocus.unfocus(),
+            focusNode: _usernameFocus,
+            onFieldSubmitted: (_) => _usernameFocus.unfocus(),
             validator: InputUserNameValidator().validate,
             onSaved: (String? value) => controller.userStore.setUserName(value),
           ),
         ),
       ],
-      onPressed: () async => await controller.onSavedForm(
-        context,
-        _formKey,
-        () async => await controller.nextPage(6),
-      ),
+      onPressed: () async {
+        _usernameFocus.unfocus();
+
+        await controller.onSavedForm(context, _formKey, () async {
+          try {
+            await controller.existsData(
+              USERNAME_COLUMN,
+              _usernameController.text,
+              "Nome de usuário já está em uso.",
+            );
+            await controller.nextPage(6);
+          } catch (e) {
+            ErrorDialog.show(context: context, content: e.toString());
+          }
+        });
+      }
     );
   }
 
   @override
   void dispose() {
-    _nomeUsuarioController.dispose();
-    _nomeUsuarioFocus.dispose();
+    _usernameController.dispose();
+    _usernameFocus.dispose();
     super.dispose();
   }
 }

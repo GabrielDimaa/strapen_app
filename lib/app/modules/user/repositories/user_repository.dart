@@ -89,7 +89,25 @@ class UserRepository implements IUserRepository {
 
       return model;
     } catch (e) {
-      throw Exception(e.toString());
+      throw Exception(e);
+    }
+  }
+
+  @override
+  Future<bool> existsData(String column, String data, String messageError) async {
+    try {
+      final QueryBuilder<ParseObject> query = QueryBuilder(ParseUser.forQuery());
+      query..whereEqualTo(column, data);
+
+      final ParseResponse response = await query.query();
+
+      if (!response.success) throw Exception(ParseErrorsUtils.get(response.statusCode));
+
+      if ((response.results?.length ?? 0) > 0) throw Exception(messageError);
+
+      return false;
+    } catch (e) {
+      throw Exception(e);
     }
   }
 }

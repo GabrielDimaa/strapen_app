@@ -24,6 +24,14 @@ class _RegistroPage3State extends State<RegistroPage3> {
   final FocusNode _cidadeFocus = FocusNode();
 
   @override
+  void initState() {
+    super.initState();
+
+    _cepController.text = controller.userStore.cep ?? "";
+    _cidadeController.text = controller.userStore.cidade ?? "";
+  }
+
+  @override
   Widget build(BuildContext context) {
     return RegistroWidget(
       title: "Nos diga seu endereço!",
@@ -65,11 +73,16 @@ class _RegistroPage3State extends State<RegistroPage3> {
           ),
         ),
       ],
-      onPressed: () async => await controller.onSavedForm(
-        context,
-        _formKey,
-        () async => await controller.nextPage(4),
-      ),
+      onPressed: () async {
+        _cepFocus.unfocus();
+        _cidadeFocus.unfocus();
+
+        await controller.onSavedForm(
+          context,
+          _formKey,
+          () async => await controller.nextPage(4),
+        );
+      },
     );
   }
 

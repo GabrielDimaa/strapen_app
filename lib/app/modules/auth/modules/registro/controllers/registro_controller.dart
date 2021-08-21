@@ -20,6 +20,9 @@ abstract class _RegistroController with Store {
   UserStore userStore = UserFactory.novo();
 
   @observable
+  bool loading = false;
+
+  @observable
   bool isCpf = true;
 
   @observable
@@ -44,15 +47,17 @@ abstract class _RegistroController with Store {
   void setShowErrorEqualsSenha(bool value) => showErrorEqualsSenha = value;
 
   @action
+  void setLoading(bool value) => loading = value;
+
+  @action
   Future<void> onSavedForm(BuildContext context, GlobalKey<FormState> formKey, VoidCallback onPressed) async {
     try {
       if (formKey.currentState!.validate()) {
         formKey.currentState!.save();
 
-        if (!userStore.equalsSenha)
-          setShowErrorEqualsSenha(true);
-        else
+        if (userStore.equalsSenha)
           onPressed.call();
+
       }
     } catch (e) {
       ErrorDialog.show(context: context, content: e.toString());
@@ -63,6 +68,16 @@ abstract class _RegistroController with Store {
   void focusChange(BuildContext context, FocusNode currentFocus, FocusNode nextFocus) {
     currentFocus.unfocus();
     FocusScope.of(context).requestFocus(nextFocus);
+  }
+
+  @action
+  Future<void> existsData(String column, String data, String messageError) async {
+    try {
+      setLoading(true);
+      await _userRepository.existsData(column, data, messageError);
+    } finally {
+      setLoading(false);
+    }
   }
 
   @action

@@ -4,6 +4,8 @@ import 'package:flutter/services.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:strapen_app/app/modules/auth/modules/registro/components/registro_widget.dart';
 import 'package:strapen_app/app/modules/auth/modules/registro/controllers/registro_controller.dart';
+import 'package:strapen_app/app/modules/user/constants/columns.dart';
+import 'package:strapen_app/app/shared/components/dialog/error_dialog.dart';
 import 'package:strapen_app/app/shared/components/form/validator.dart';
 import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
 import 'package:strapen_app/app/shared/components/text_input/text_input_default.dart';
@@ -22,6 +24,14 @@ class _RegistroPage2State extends State<RegistroPage2> {
   final TextEditingController _telefoneController = TextEditingController();
   final FocusNode _emailFocus = FocusNode();
   final FocusNode _telefoneFocus = FocusNode();
+
+  @override
+  void initState() {
+    super.initState();
+
+    _emailController.text = controller.userStore.email ?? "";
+    _telefoneController.text = controller.userStore.telefone ?? "";
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -70,11 +80,29 @@ class _RegistroPage2State extends State<RegistroPage2> {
           ),
         ),
       ],
-      onPressed: () async => await controller.onSavedForm(
-        context,
-        _formKey,
-        () async => await controller.nextPage(3),
-      ),
+      onPressed: () async {
+        _emailFocus.unfocus();
+        _telefoneFocus.unfocus();
+
+        await controller.onSavedForm(context, _formKey, () async {
+          try {
+            await controller.existsData(
+              EMAIL_COLUMN,
+              _emailController.text,
+              "Já existe esse e-mail cadastrado no Strapen.",
+            );
+            await controller.existsData(
+              TELEFONE_COLUMN,
+              _telefoneController.text.extrairNum(),
+              "Já existe esse número de telefone cadastrado no Strapen.",
+            );
+
+            await controller.nextPage(3);
+          } catch (e) {
+            ErrorDialog.show(context: context, content: e.toString());
+          }
+        });
+      }
     );
   }
 
