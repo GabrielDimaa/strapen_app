@@ -1,14 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:intl/intl.dart';
 import 'package:strapen_app/app/app_widget.dart';
 import 'package:strapen_app/app/modules/auth/modules/registro/components/registro_widget.dart';
 import 'package:strapen_app/app/modules/auth/modules/registro/controllers/registro_controller.dart';
+import 'package:strapen_app/app/shared/components/dialog/error_dialog.dart';
 import 'package:strapen_app/app/shared/components/form/validator.dart';
 import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
-import 'package:strapen_app/app/shared/components/text_input/text_input_default.dart';
 import 'package:strapen_app/app/shared/components/widgets/text_field_senha.dart';
 
 class RegistroPage6 extends StatefulWidget {
@@ -17,9 +15,9 @@ class RegistroPage6 extends StatefulWidget {
 }
 
 class _RegistroPage6State extends State<RegistroPage6> {
-  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final RegistroController controller = Modular.get<RegistroController>();
 
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _senha = TextEditingController();
   final TextEditingController _confirmarSenha = TextEditingController();
 
@@ -33,22 +31,26 @@ class _RegistroPage6State extends State<RegistroPage6> {
           key: _formKey,
           child: Column(
             children: [
-              TextFieldSenha(
-                controller: _senha,
-                visible: controller.visibleSenha,
-                validator: InputSenhaValidator().validate,
-                onPressed: () => controller.setVisibleSenha(!controller.visibleSenha),
-                onSaved: controller.userStore.setSenha,
+              Observer(
+                builder: (_) => TextFieldSenha(
+                  controller: _senha,
+                  visible: controller.visibleSenha,
+                  validator: InputSenhaValidator().validate,
+                  onPressed: () => controller.setVisibleSenha(!controller.visibleSenha),
+                  onSaved: controller.userStore.setSenha,
+                ),
               ),
               const VerticalSizedBox(2),
-              TextFieldSenha(
-                controller: _confirmarSenha,
-                visible: controller.visibleConfirmarSenha,
-                validator: InputSenhaValidator().validate,
-                onPressed: () => controller.setVisibleConfirmarSenha(!controller.visibleConfirmarSenha),
-                onSaved: controller.userStore.setConfirmarSenha,
-                onChanged: (String value) => controller.setShowErrorEqualsSenha(false),
-                label: "Confirmar senha",
+              Observer(
+                builder: (_) => TextFieldSenha(
+                  controller: _confirmarSenha,
+                  visible: controller.visibleConfirmarSenha,
+                  validator: InputSenhaValidator().validate,
+                  onPressed: () => controller.setVisibleConfirmarSenha(!controller.visibleConfirmarSenha),
+                  onSaved: controller.userStore.setConfirmarSenha,
+                  onChanged: (String value) => controller.setShowErrorEqualsSenha(false),
+                  label: "Confirmar senha",
+                ),
               ),
               const VerticalSizedBox(1),
               Observer(
@@ -71,8 +73,21 @@ class _RegistroPage6State extends State<RegistroPage6> {
       onPressed: () async => await controller.onSavedForm(
         context,
         _formKey,
-        () async => {},
+        () async {
+          try {
+            await controller.finalizarCadastro();
+          } catch (e) {
+            ErrorDialog.show(context: context, content: e.toString());
+          }
+        }
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _senha.dispose();
+    _confirmarSenha.dispose();
+    super.dispose();
   }
 }

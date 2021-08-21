@@ -4,7 +4,6 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:strapen_app/app/modules/auth/modules/registro/components/registro_widget.dart';
 import 'package:strapen_app/app/modules/auth/modules/registro/controllers/registro_controller.dart';
 import 'package:strapen_app/app/shared/components/date_picker/cupertino_date.dart';
-import 'package:strapen_app/app/shared/components/dialog/error_dialog.dart';
 import 'package:strapen_app/app/shared/components/form/validator.dart';
 import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
 import 'package:strapen_app/app/shared/components/text_input/text_input_default.dart';
@@ -21,18 +20,6 @@ class _RegistroPage1State extends State<RegistroPage1> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _nome = TextEditingController();
   final TextEditingController _dataNascimento = TextEditingController();
-
-  Future<void> _save() async {
-    try {
-      if (_formKey.currentState!.validate()) {
-        _formKey.currentState!.save();
-
-        await controller.nextPage(2);
-      }
-    } catch (e) {
-      ErrorDialog.show(context: context, content: e.toString());
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -99,5 +86,12 @@ class _RegistroPage1State extends State<RegistroPage1> {
         onPressed: controller.toAuth,
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _nome.dispose();
+    _dataNascimento.dispose();
+    super.dispose();
   }
 }

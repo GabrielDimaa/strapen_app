@@ -8,7 +8,7 @@ part 'user_store.g.dart';
 class UserStore = _UserStore with _$UserStore;
 
 abstract class _UserStore with Store {
-  int? id;
+  String? id;
 
   @observable
   String? nome;
@@ -26,7 +26,7 @@ abstract class _UserStore with Store {
   Uint8List? foto;
 
   @observable
-  String? userName;
+  String? username;
 
   @observable
   String? email;
@@ -62,7 +62,7 @@ abstract class _UserStore with Store {
   void setFoto(Uint8List? value) => foto = value;
 
   @action
-  void setUserName(String? value) => userName = value;
+  void setUserName(String? value) => username = value;
 
   @action
   void setEmail(String? value) => email = value;
@@ -92,7 +92,7 @@ abstract class _UserStore with Store {
     this.dataNascimento,
     this.cpfCnpj,
     this.foto,
-    this.userName,
+    this.username,
     this.email,
     this.telefone,
     this.cep,
@@ -108,7 +108,7 @@ abstract class _UserStore with Store {
       dataNascimento,
       cpfCnpj,
       foto,
-      userName,
+      username,
       email,
       telefone,
       cep,

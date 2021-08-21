@@ -24,7 +24,7 @@ class TextFieldSenha extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextInputDefault(
       controller: controller,
-      obscureText: visible,
+      obscureText: !visible,
       label: label,
       prefixIcon: Icon(Icons.lock, color: Colors.grey[200]),
       validator: validator,
@@ -33,7 +33,7 @@ class TextFieldSenha extends StatelessWidget {
       sufixIcon: IconButton(
         onPressed: onPressed,
         icon: Icon(
-          visible ? Icons.visibility : Icons.visibility_off,
+          !visible ? Icons.visibility : Icons.visibility_off,
           color: Colors.grey[200],
         ),
       ),

@@ -1,0 +1,52 @@
+abstract class ParseErrorsUtils {
+  static const Map<int, String> _error = {
+    -1: "Erro desconhecido",
+    1: "Erro Interno do Servidor.",
+    100: "Falha de conexão com o servidor.",
+    101: "Usuário/senha inválido.",
+    102: "Consulta inválida.",
+    103: "Nome da Classe inválida.",
+    104: "ID de objeto não encontrado.",
+    105: "Nome da chave inválida.",
+    106: "Ponteiro inválido.",
+    107: "JSON inválido.",
+    108: "Recurso indisponível.",
+    109: "Parse não inicializado.",
+    111: "Campo com tipo incorreto.",
+    112: "Canal inválido.",
+    115: "Push configurado incorretamente.",
+    116: "Objeto é muito grande.",
+    119: "Operação não é permitida para o Cliente.",
+    120: "Resultado não encontrado na cache.",
+    121: "Chave inválida em um JSON.",
+    122: "Nome de arquivo inválido.",
+    123: "ACL inválida.",
+    124: "Timeout.",
+    125: "E-mail inválido.",
+    137: "Valor duplicado para campo exclusivo.",
+    139: "Nome da função inválido.",
+    140: "Cota do aplicativo excedida.",
+    141: "Falha no script Cloudcode.",
+    142: "Falha na validação do Cloudcode.",
+    153: "Falha na exclusão do arquivo.",
+    155: "O aplicativo excedeu seu limite de solicitação.",
+    160: "Evento inválido.",
+    200: "Nome do usuário não foi preenchido.",
+    201: "Senha não foi preenchida.",
+    202: "E-mail informado já existe. Informe outro e-mail.",
+    203: "E-mail informado já existe. Informe outro e-mail.",
+    204: "E-mail não foi preenchido.",
+    205: "E-mail não está cadastrado.",
+    206: "Sessão inválida para alteração do usuário.",
+    207: "Usuário só pode ser criado via Signup.",
+    208: "A conta informada já está vinculada com outro usuário.",
+    209: "Sessão inválida.",
+    250: "Usuário não pode ser vinculado a uma conta porque o ID não foi localizado.",
+    251: "Usuário com conta vinculada está com sessão inválida.",
+    252: "Serviço que está sendo vinculado não é suportado."
+  };
+
+  static String? get(int error) {
+    return _error[error];
+  }
+}

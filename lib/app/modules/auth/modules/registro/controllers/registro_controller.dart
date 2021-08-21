@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'package:strapen_app/app/modules/user/factories/user_factory.dart';
+import 'package:strapen_app/app/modules/user/repositories/user_repository_interface.dart';
 import 'package:strapen_app/app/modules/user/stores/user_store.dart';
 import 'package:strapen_app/app/shared/components/dialog/error_dialog.dart';
 import 'package:strapen_app/app/shared/routes/routes.dart';
@@ -11,6 +12,10 @@ part 'registro_controller.g.dart';
 class RegistroController = _RegistroController with _$RegistroController;
 
 abstract class _RegistroController with Store {
+  final IUserRepository _userRepository;
+
+  _RegistroController(this._userRepository);
+
   @observable
   UserStore userStore = UserFactory.novo();
 
@@ -60,7 +65,9 @@ abstract class _RegistroController with Store {
   }
 
   @action
-  void finalizarCadastro() {}
+  Future<void> finalizarCadastro() async {
+    await _userRepository.save(userStore.toModel());
+  }
 
   @action
   void toAuth() => Modular.to.navigate(AUTH_ROUTE);

@@ -3,12 +3,14 @@ import 'package:strapen_app/app/app_controller.dart';
 import 'package:strapen_app/app/modules/auth/auth_module.dart';
 import 'package:strapen_app/app/modules/splash/modules/apresentacao/apresentacao_module.dart';
 import 'package:strapen_app/app/modules/splash/splash_module.dart';
+import 'package:strapen_app/app/shared/config/preferences/session_preferences.dart';
 import 'package:strapen_app/app/shared/routes/routes.dart';
 
 class AppModule extends Module {
   @override
   List<Bind> get binds => [
     Bind.singleton((i) => AppController()),
+    Bind.lazySingleton((i) => SessionPreferences()),
   ];
 
   @override

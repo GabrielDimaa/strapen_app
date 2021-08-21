@@ -18,9 +18,9 @@ class RegistroPage4 extends StatefulWidget {
 }
 
 class _RegistroPage4State extends State<RegistroPage4> {
-  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final RegistroController controller = Modular.get<RegistroController>();
 
+  GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _cpfCnpj = TextEditingController();
 
   @override
@@ -97,5 +97,11 @@ class _RegistroPage4State extends State<RegistroPage4> {
         () async => await controller.nextPage(5),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _cpfCnpj.dispose();
+    super.dispose();
   }
 }

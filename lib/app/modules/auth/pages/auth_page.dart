@@ -158,4 +158,11 @@ class _AuthPageState extends ModularState<AuthPage, AuthController> {
       ),
     );
   }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _senhaController.dispose();
+    super.dispose();
+  }
 }

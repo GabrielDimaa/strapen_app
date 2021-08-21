@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
 class UserModel {
-  int? id;
+  String? id;
 
   String? nome;
   String? descricao;
@@ -9,7 +9,7 @@ class UserModel {
   String? cpfCnpj;
   Uint8List? foto;
 
-  String? userName;
+  String? username;
   String? email;
   String? telefone;
 
@@ -25,7 +25,7 @@ class UserModel {
     this.dataNascimento,
     this.cpfCnpj,
     this.foto,
-    this.userName,
+    this.username,
     this.email,
     this.telefone,
     this.cep,

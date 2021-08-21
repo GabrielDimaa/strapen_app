@@ -142,12 +142,12 @@ packages:
     source: hosted
     version: "1.15.0"
   connectivity_plus:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: connectivity_plus
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.0.6"
+    version: "1.0.8"
   connectivity_plus_linux:
     dependency: transitive
     description:
@@ -619,7 +619,7 @@ packages:
     source: hosted
     version: "2.0.0+2"
   shared_preferences:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: shared_preferences
       url: "https://pub.dartlang.org"

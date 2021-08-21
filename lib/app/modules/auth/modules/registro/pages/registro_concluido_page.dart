@@ -31,7 +31,7 @@ class _RegistroConcluidoPageState extends State<RegistroConcluidoPage> {
                 ),
                 const VerticalSizedBox(2),
                 Text(
-                  "Você será redirecionado para tela de login, insira seus dados para concluir a autenticação.",
+                  "Você concluiu o cadastro de sua conta. Estamos preparando sua autenticação para o uso do Strapen.",
                   textAlign: TextAlign.start,
                   style: textTheme.headline1,
                 ),
@@ -41,7 +41,7 @@ class _RegistroConcluidoPageState extends State<RegistroConcluidoPage> {
             ),
           ),
           ElevatedButtonDefault(
-            child: Text("Fazer login"),
+            child: Text("Iniciar"),
             primary: Colors.white,
             onPrimary: AppColors.primary,
             onPressed: () {},

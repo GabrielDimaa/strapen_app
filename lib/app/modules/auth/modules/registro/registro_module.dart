@@ -7,12 +7,16 @@ import 'package:strapen_app/app/modules/auth/modules/registro/pages/registro_pag
 import 'package:strapen_app/app/modules/auth/modules/registro/pages/registro_page4.dart';
 import 'package:strapen_app/app/modules/auth/modules/registro/pages/registro_page5.dart';
 import 'package:strapen_app/app/modules/auth/modules/registro/pages/registro_page6.dart';
+import 'package:strapen_app/app/modules/user/repositories/user_repository.dart';
+import 'package:strapen_app/app/modules/user/repositories/user_repository_interface.dart';
+import 'package:strapen_app/app/shared/config/preferences/session_preferences.dart';
 import 'package:strapen_app/app/shared/routes/routes.dart';
 
 class RegistroModule extends Module {
   @override
   final List<Bind> binds = [
-    Bind((i) => RegistroController()),
+    Bind((i) => UserRepository(i.get<SessionPreferences>())),
+    Bind((i) => RegistroController(i.get<IUserRepository>())),
   ];
 
   @override
