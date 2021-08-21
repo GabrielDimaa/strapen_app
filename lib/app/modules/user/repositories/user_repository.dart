@@ -77,13 +77,14 @@ class UserRepository implements IUserRepository {
 
       model = toModel(parse);
 
-      _sharedPreferences.save(
+      await _sharedPreferences.save(
         SessionPreferencesModel(
           model.id,
           model.username,
           model.email,
           senha,
           parse.get<String>("sessionToken"),
+          true,
         ),
       );
 
