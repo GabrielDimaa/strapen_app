@@ -5,7 +5,6 @@ import 'package:strapen_app/app/app_widget.dart';
 import 'package:strapen_app/app/modules/auth/modules/registro/components/registro_widget.dart';
 import 'package:strapen_app/app/modules/auth/modules/registro/controllers/registro_controller.dart';
 import 'package:strapen_app/app/shared/components/dialog/error_dialog.dart';
-import 'package:strapen_app/app/shared/components/form/validator.dart';
 import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
 import 'package:strapen_app/app/shared/components/widgets/text_field_senha.dart';
 
@@ -37,7 +36,6 @@ class _RegistroPage6State extends State<RegistroPage6> {
                 builder: (_) => TextFieldSenha(
                   controller: _senhaController,
                   visible: controller.visibleSenha,
-                  validator: InputSenhaValidator().validate,
                   enabled: !controller.loading,
                   textInputAction: TextInputAction.next,
                   focusNode: _senhaFocus,
@@ -51,7 +49,6 @@ class _RegistroPage6State extends State<RegistroPage6> {
                 builder: (_) => TextFieldSenha(
                   controller: _confirmarSenhaController,
                   visible: controller.visibleConfirmarSenha,
-                  validator: InputSenhaValidator().validate,
                   enabled: !controller.loading,
                   textInputAction: TextInputAction.done,
                   focusNode: _confirmarSenhaFocus,

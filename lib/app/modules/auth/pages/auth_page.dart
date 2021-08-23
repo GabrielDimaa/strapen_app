@@ -4,6 +4,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:strapen_app/app/app_widget.dart';
 import 'package:strapen_app/app/modules/auth/controllers/auth_controller.dart';
 import 'package:strapen_app/app/shared/components/button/elevated_button_default.dart';
+import 'package:strapen_app/app/shared/components/dialog/error_dialog.dart';
 import 'package:strapen_app/app/shared/components/form/validator.dart';
 import 'package:strapen_app/app/shared/components/padding/padding_scaffold.dart';
 import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
@@ -18,6 +19,7 @@ class AuthPage extends StatefulWidget {
 }
 
 class _AuthPageState extends ModularState<AuthPage, AuthController> {
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _senhaController = TextEditingController();
   final FocusNode _emailFocus = FocusNode();
@@ -50,6 +52,7 @@ class _AuthPageState extends ModularState<AuthPage, AuthController> {
                         ),
                         const VerticalSizedBox(2),
                         Form(
+                          key: _formKey,
                           child: Column(
                             children: [
                               Observer(
@@ -62,7 +65,7 @@ class _AuthPageState extends ModularState<AuthPage, AuthController> {
                                   keyboardType: TextInputType.emailAddress,
                                   validator: InputEmailValidator().validate,
                                   enabled: !controller.loading,
-                                  //onSaved: controller.userStore.setEmail,
+                                  onSaved: controller.authStore.setEmail,
                                   textInputAction: TextInputAction.next,
                                   focusNode: _emailFocus,
                                   onFieldSubmitted: (_) {
@@ -80,7 +83,7 @@ class _AuthPageState extends ModularState<AuthPage, AuthController> {
                                   focusNode: _senhaFocus,
                                   textInputAction: TextInputAction.done,
                                   onFieldSubmitted: (_) => _senhaFocus.unfocus(),
-                                  onSaved: (value) {},
+                                  onSaved: controller.authStore.setSenha,
                                   onPressed: () => controller.setVisible(!controller.visible),
                                 ),
                               ),
@@ -128,7 +131,17 @@ class _AuthPageState extends ModularState<AuthPage, AuthController> {
             ),
             child: ElevatedButtonDefault(
               child: Text("Entrar"),
-              onPressed: controller.login,
+              onPressed: () async {
+                try {
+                  if (_formKey.currentState!.validate()) {
+                    _formKey.currentState!.save();
+
+                    await controller.login();
+                  }
+                } catch(e) {
+                  ErrorDialog.show(context: context, content: e.toString());
+                }
+              }
             ),
           ),
         ],

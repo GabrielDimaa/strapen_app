@@ -30,6 +30,8 @@ class SessionPreferences implements ISessionPreferences {
   Future<void> save(SessionPreferencesModel dto) async {
     await _checkPreferences();
 
+    await delete();
+
     _sharedPreferences!.setString(_userId, dto.userId!);
     _sharedPreferences!.setString(_username, dto.username!);
     _sharedPreferences!.setString(_email, dto.email!);

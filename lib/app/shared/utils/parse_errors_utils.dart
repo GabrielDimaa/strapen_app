@@ -3,7 +3,7 @@ abstract class ParseErrorsUtils {
     -1: "Erro desconhecido",
     1: "Erro Interno do Servidor.",
     100: "Falha de conexão com o servidor.",
-    101: "Usuário/senha inválido.",
+    101: "E-mail ou senha inválido.",
     102: "Consulta inválida.",
     103: "Nome da Classe inválida.",
     104: "ID de objeto não encontrado.",

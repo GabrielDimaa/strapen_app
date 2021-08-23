@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:strapen_app/app/shared/components/form/validator.dart';
 import 'package:strapen_app/app/shared/components/text_input/text_input_default.dart';
 
 class TextFieldSenha extends StatelessWidget {
@@ -8,7 +9,6 @@ class TextFieldSenha extends StatelessWidget {
   final void Function() onPressed;
   final Function(String?)? onSaved;
   final String label;
-  final String? Function(String?)? validator;
   final Function(String)? onChanged;
   final FocusNode? focusNode;
   final Function(String)? onFieldSubmitted;
@@ -21,7 +21,6 @@ class TextFieldSenha extends StatelessWidget {
     required this.onPressed,
     required this.onSaved,
     this.label = "Senha",
-    this.validator,
     this.onChanged,
     this.focusNode,
     this.onFieldSubmitted,
@@ -45,7 +44,7 @@ class TextFieldSenha extends StatelessWidget {
       controller: controller,
       obscureText: !visible,
       enabled: enabled,
-      validator: validator,
+      validator: InputSenhaValidator().validate,
       onSaved: onSaved,
       onChanged: onChanged,
       focusNode: focusNode,

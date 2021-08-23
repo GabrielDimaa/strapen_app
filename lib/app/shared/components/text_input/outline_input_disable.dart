@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import '../../../app_widget.dart';
-
 class OutlineInputDisable extends OutlineInputBorder {
   OutlineInputDisable()
       : super(

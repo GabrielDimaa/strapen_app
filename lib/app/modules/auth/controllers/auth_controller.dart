@@ -1,17 +1,23 @@
-import 'dart:ui';
-
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
-import 'package:strapen_app/app/shared/interfaces/default_controller_interface.dart';
+import 'package:strapen_app/app/app_controller.dart';
+import 'package:strapen_app/app/modules/auth/repository/auth_repository_interface.dart';
+import 'package:strapen_app/app/modules/auth/stores/auth_store.dart';
+import 'package:strapen_app/app/modules/user/models/user_model.dart';
 import 'package:strapen_app/app/shared/routes/routes.dart';
 
 part 'auth_controller.g.dart';
 
 class AuthController = _AuthController with _$AuthController;
 
-abstract class _AuthController with Store implements IDefaultController {
-  @override
-  VoidCallback? initPage;
+abstract class _AuthController with Store {
+  final IAuthRepository _authRepository;
+  final AppController _appController;
+
+  _AuthController(this._authRepository, this._appController);
+
+  @observable
+  AuthStore authStore = AuthStore(null, null, null);
 
   @observable
   bool loading = false;
@@ -19,20 +25,28 @@ abstract class _AuthController with Store implements IDefaultController {
   @observable
   bool visible = false;
 
-  @override
-  void setInitPage(VoidCallback function) => initPage = function;
-
   @action
   void setLoading(bool value) => loading = value;
 
   @action
   void setVisible(bool value) => visible = value;
 
-  @override
-  Future<void> load() async {}
-
   @action
-  void login() {}
+  Future<void> login() async {
+    try {
+      setLoading(true);
+
+      UserModel? userModel = await _authRepository.login(authStore.toModel());
+
+      if (userModel != null) {
+        _appController.setUserModel(userModel);
+
+        Modular.to.navigate(HOME_ROUTE);
+      }
+    } finally {
+      setLoading(false);
+    }
+  }
 
   @action
   void esqueceuSenha() {}

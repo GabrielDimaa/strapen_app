@@ -1,13 +1,21 @@
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:strapen_app/app/app_controller.dart';
 import 'package:strapen_app/app/modules/auth/controllers/auth_controller.dart';
 import 'package:strapen_app/app/modules/auth/modules/registro/registro_module.dart';
 import 'package:strapen_app/app/modules/auth/pages/auth_page.dart';
+import 'package:strapen_app/app/modules/auth/repository/auth_repository.dart';
+import 'package:strapen_app/app/modules/auth/repository/auth_repository_interface.dart';
+import 'package:strapen_app/app/modules/user/repositories/user_repository.dart';
+import 'package:strapen_app/app/modules/user/repositories/user_repository_interface.dart';
+import 'package:strapen_app/app/shared/config/preferences/session_preferences.dart';
 import 'package:strapen_app/app/shared/routes/routes.dart';
 
 class AuthModule extends Module {
   @override
   final List<Bind> binds = [
-    Bind((i) => AuthController()),
+    Bind((i) => UserRepository(i.get<SessionPreferences>())),
+    Bind((i) => AuthRepository(i.get<IUserRepository>(), i.get<SessionPreferences>())),
+    Bind((i) => AuthController(i.get<IAuthRepository>(), i.get<AppController>())),
   ];
 
   @override

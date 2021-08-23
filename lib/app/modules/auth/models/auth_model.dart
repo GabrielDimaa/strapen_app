@@ -1,9 +1,7 @@
 class AuthModel {
-  String username;
-  String email;
+  String? email;
+  String? senha;
+  String? sessionToken;
 
-  String senha;
-  String sessionToken;
-
-  AuthModel(this.username, this.email, this.senha, this.sessionToken);
+  AuthModel(this.email, this.senha, this.sessionToken);
 }

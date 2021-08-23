@@ -1,7 +1,7 @@
 const String ID_COLUMN = "objectId";
 const String NOME_COLUMN = "nome";
 const String EMAIL_COLUMN = "email";
-const String USERNAME_COLUMN = "username";
+const String USERNAME_COLUMN = "usernameApp";
 const String SENHA_COLUMN = "password";
 const String DATANASCIMENTO_COLUMN = "dataNascimento";
 const String CPFCNPJ_COLUMN = "cpfCnpj";

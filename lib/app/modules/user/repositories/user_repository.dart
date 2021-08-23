@@ -32,9 +32,10 @@ class UserRepository implements IUserRepository {
 
   @override
   ParseUser toParseObject(UserModel model) {
-    return ParseUser.createUser(model.username, model.senha, model.email)
+    return ParseUser.createUser(model.email, model.senha, model.email)
       ..set<String?>(ID_COLUMN, model.id)
       ..set<String>(NOME_COLUMN, model.nome!)
+      ..set<String>(USERNAME_COLUMN, model.username!)
       ..set<DateTime>(DATANASCIMENTO_COLUMN, model.dataNascimento!)
       ..set<String>(CPFCNPJ_COLUMN, model.cpfCnpj!)
       ..set<String>(TELEFONE_COLUMN, model.telefone!)
@@ -63,6 +64,20 @@ class UserRepository implements IUserRepository {
   }
 
   @override
+  Future<void> saveSession(UserModel model, String senha, String session) async {
+    await _sharedPreferences.save(
+      SessionPreferencesModel(
+        model.id,
+        model.username,
+        model.email,
+        senha,
+        session,
+        true,
+      ),
+    );
+  }
+
+  @override
   Future<UserModel> save(UserModel model) async {
     try {
       final String senha = model.senha!;
@@ -77,16 +92,7 @@ class UserRepository implements IUserRepository {
 
       model = toModel(parse);
 
-      await _sharedPreferences.save(
-        SessionPreferencesModel(
-          model.id,
-          model.username,
-          model.email,
-          senha,
-          parse.get<String>("sessionToken"),
-          true,
-        ),
-      );
+      await saveSession(model, senha, parse.get<String>("sessionToken")!);
 
       return model;
     } catch (e) {
