@@ -5,8 +5,6 @@ import 'package:strapen_app/app/modules/splash/controllers/splash_controller.dar
 import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
 
 class SplashPage extends StatefulWidget {
-  const SplashPage({Key? key}) : super(key: key);
-
   @override
   _SplashPageState createState() => _SplashPageState();
 }

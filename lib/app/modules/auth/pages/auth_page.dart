@@ -6,6 +6,7 @@ import 'package:strapen_app/app/modules/auth/controllers/auth_controller.dart';
 import 'package:strapen_app/app/shared/components/button/elevated_button_default.dart';
 import 'package:strapen_app/app/shared/components/dialog/error_dialog.dart';
 import 'package:strapen_app/app/shared/components/form/validator.dart';
+import 'package:strapen_app/app/shared/components/loading/linear_loading.dart';
 import 'package:strapen_app/app/shared/components/padding/padding_scaffold.dart';
 import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
 import 'package:strapen_app/app/shared/components/text_input/text_input_default.dart';
@@ -50,7 +51,16 @@ class _AuthPageState extends ModularState<AuthPage, AuthController> {
                           "Faça login agora para assistir ou criar Lives com seu catálogo de produtos.",
                           style: textTheme.bodyText2,
                         ),
-                        const VerticalSizedBox(2),
+                        const VerticalSizedBox(1.5),
+                        Observer(
+                          builder: (_) {
+                            if (controller.loading)
+                              return LinearLoading();
+                            else
+                              return Container(height: 1);
+                          },
+                        ),
+                        const VerticalSizedBox(1.5),
                         Form(
                           key: _formKey,
                           child: Column(

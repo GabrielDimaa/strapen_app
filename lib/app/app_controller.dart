@@ -35,10 +35,12 @@ abstract class _AppController with Store {
       if (isAberturaApp) {
         UserModel? userModel = await _authRepository.login(authModel);
 
-        if (userModel == null)
+        if (userModel == null) {
           Modular.to.navigate(AUTH_ROUTE);
-        else
+        } else {
           setUserModel(userModel);
+          Modular.to.navigate(HOME_ROUTE);
+        }
       } else {
         if (!await _authRepository.checkSession(authModel)) {
           Modular.to.navigate(AUTH_ROUTE);
