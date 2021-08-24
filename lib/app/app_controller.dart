@@ -39,7 +39,7 @@ abstract class _AppController with Store {
           Modular.to.navigate(AUTH_ROUTE);
         } else {
           setUserModel(userModel);
-          Modular.to.navigate(HOME_ROUTE);
+          Modular.to.navigate(START_ROUTE);
         }
       } else {
         if (!await _authRepository.checkSession(authModel)) {

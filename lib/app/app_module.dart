@@ -3,13 +3,12 @@ import 'package:strapen_app/app/app_controller.dart';
 import 'package:strapen_app/app/modules/auth/auth_module.dart';
 import 'package:strapen_app/app/modules/auth/repository/auth_repository.dart';
 import 'package:strapen_app/app/modules/auth/repository/auth_repository_interface.dart';
-import 'package:strapen_app/app/modules/home/home_module.dart';
-import 'package:strapen_app/app/modules/splash/modules/apresentacao/apresentacao_module.dart';
+import 'package:strapen_app/app/modules/splash/splash_module.dart';
+import 'package:strapen_app/app/modules/start/start_module.dart';
 import 'package:strapen_app/app/modules/user/repositories/user_repository.dart';
 import 'package:strapen_app/app/modules/user/repositories/user_repository_interface.dart';
 import 'package:strapen_app/app/shared/config/preferences/session_preferences.dart';
 import 'package:strapen_app/app/shared/routes/routes.dart';
-import 'modules/splash/splash_module.dart';
 
 class AppModule extends Module {
   @override
@@ -23,8 +22,8 @@ class AppModule extends Module {
   @override
   List<ModularRoute> get routes => [
     ModuleRoute(Modular.initialRoute, module: SplashModule()),
-    ModuleRoute(APRESENTACAO_ROUTE, module: ApresentacaoModule()),
+    //ModuleRoute(Modular.initialRoute, module: StartModule()),
     ModuleRoute(AUTH_ROUTE, module: AuthModule()),
-    ModuleRoute(HOME_ROUTE, module: HomeModule()),
+    ModuleRoute(START_ROUTE, module: StartModule()),
   ];
 }

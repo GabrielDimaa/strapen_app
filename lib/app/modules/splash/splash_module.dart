@@ -1,6 +1,5 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:strapen_app/app/app_controller.dart';
-import 'package:strapen_app/app/modules/home/home_module.dart';
 import 'package:strapen_app/app/modules/splash/controllers/splash_controller.dart';
 import 'package:strapen_app/app/modules/splash/modules/apresentacao/apresentacao_module.dart';
 import 'package:strapen_app/app/modules/splash/pages/splash_page.dart';
@@ -16,6 +15,5 @@ class SplashModule extends Module {
   final List<ModularRoute> routes = [
     ChildRoute(Modular.initialRoute, child: (_, args) => SplashPage()),
     ModuleRoute(APRESENTACAO_ROUTE, module: ApresentacaoModule()),
-    ModuleRoute(HOME_ROUTE, module: HomeModule()),
   ];
 }

@@ -41,7 +41,7 @@ abstract class _AuthController with Store {
       if (userModel != null) {
         _appController.setUserModel(userModel);
 
-        Modular.to.navigate(HOME_ROUTE);
+        Modular.to.navigate(START_ROUTE);
       }
     } finally {
       setLoading(false);

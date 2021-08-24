@@ -105,5 +105,5 @@ abstract class _RegistroController with Store {
   void toAuth() => Modular.to.navigate(AUTH_ROUTE);
 
   @action
-  void toHome() => Modular.to.navigate(HOME_ROUTE);
+  void toHome() => Modular.to.navigate(START_ROUTE);
 }

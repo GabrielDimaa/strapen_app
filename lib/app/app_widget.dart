@@ -93,6 +93,11 @@ class AppWidget extends StatelessWidget with ModoRetratoLess {
         radioTheme: RadioThemeData(
           splashRadius: 16,
         ),
+        bottomAppBarColor: AppColors.opaci,
+        bottomAppBarTheme: BottomAppBarTheme(
+          color: AppColors.opaci,
+          elevation: 22,
+        ),
       ),
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
@@ -115,7 +120,9 @@ abstract class AppColors {
 
   static Color get error => Color(0xFFDD403A);
 
-  static Color get opaci => Color(0x19D4D4D4);
+  static Color get primaryOpaci => Color(0xD72D4442);
+
+  static Color get opaci => Color(0xFF38393D);
 
   static List<Color> get gradiente => [Color(0xFF00CC99), Color(0xFF00A676)];
 }
