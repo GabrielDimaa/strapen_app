@@ -5,11 +5,13 @@ import 'package:strapen_app/app/shared/components/app_bar_default/back_button_de
 class AppBarDefault extends AppBar {
   final Widget? title;
   final bool centerTitle;
+  final Widget? leading;
   final List<Widget>? actions;
 
   AppBarDefault({
     this.title,
     this.centerTitle = true,
+    this.leading,
     this.actions,
   }) : super(
     leadingWidth: 90,
@@ -17,14 +19,14 @@ class AppBarDefault extends AppBar {
     title: title,
     centerTitle: centerTitle,
     backgroundColor: Colors.transparent,
-    actions: actions,
-    leading: Visibility(
-      visible: Modular.to.canPop(),
-      child: Row(
-        children: [
-          Expanded(child: BackButtonDefault()),
-        ],
-      ),
+    actions: actions?..add(const SizedBox(width: 20)),
+    leading: Row(
+      children: [
+        if (Modular.to.canPop())
+          Expanded(child: BackButtonDefault())
+        else if (leading != null)
+          leading
+      ],
     ),
   );
 }

@@ -16,7 +16,6 @@ class _StartPageState extends ModularState<StartPage, StartController> {
   @override
   void initState() {
     super.initState();
-
     controller.toInit();
   }
 

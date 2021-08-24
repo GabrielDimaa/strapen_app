@@ -41,6 +41,7 @@ flutter:
     - assets/images/escrevendo_pc.png
     - assets/images/mulher_exibindo_manequim.png
     - assets/images/mulher_mexendo_mural.png
+    - assets/images/test/avatar_test.png
     - assets/images/empty_produtos.svg
 
   fonts:

@@ -9,14 +9,16 @@ class BottomAppBarItem extends StatelessWidget {
 
   const BottomAppBarItem({required this.icon, required this.label, required this.ontap, required this.selected});
 
+  BorderRadius get borderRadius => BorderRadius.circular(12);
+
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      borderRadius: BorderRadius.circular(12),
+      borderRadius: borderRadius,
       onTap: ontap,
       child: Container(
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: borderRadius,
           color: selected ? AppColors.primaryOpaci : Colors.transparent,
         ),
         padding: const EdgeInsets.all(12),

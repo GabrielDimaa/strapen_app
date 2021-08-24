@@ -47,6 +47,13 @@ class AppWidget extends StatelessWidget with ModoRetratoLess {
           elevation: 0,
           centerTitle: true,
           backgroundColor: Colors.transparent,
+          textTheme: TextTheme(
+            headline6: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w500, fontFamily: 'Lexend'),
+          ),
+          iconTheme: IconThemeData(
+            color: AppColors.primary,
+            size: 22,
+          ),
         ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
@@ -122,7 +129,7 @@ abstract class AppColors {
 
   static Color get primaryOpaci => Color(0xD72D4442);
 
-  static Color get opaci => Color(0xFF38393D);
+  static Color get opaci => Color(0xFF323438);
 
   static List<Color> get gradiente => [Color(0xFF00CC99), Color(0xFF00A676)];
 }
