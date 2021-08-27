@@ -6,6 +6,7 @@ import 'package:strapen_app/app/shared/components/app_bar_default/app_bar_defaul
 import 'package:strapen_app/app/shared/components/fab_default/fab_default.dart';
 import 'package:strapen_app/app/shared/components/padding/padding_scaffold.dart';
 import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
+import 'package:strapen_app/app/shared/components/widgets/empty_list_widget.dart';
 
 class CatalogoListPage extends StatefulWidget {
   @override
@@ -26,13 +27,8 @@ class _CatalogoListPageState extends ModularState<CatalogoListPage, CatalogoList
       ),
       body: Padding(
         padding: const PaddingScaffold(),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            SvgPicture.asset("assets/images/empty_produtos.svg", height: 200,),
-            const VerticalSizedBox(2),
-            const Text("Sua lista está vazia. Crie um catálogo de produtos para ser exibido em uma Live."),
-          ],
+        child: EmptyListWidget(
+          message: "Sua lista está vazia. Crie um catálogo de produtos para ser exibido em uma Live.",
         ),
       ),
     );

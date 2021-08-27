@@ -119,7 +119,7 @@ class AppWidget extends StatelessWidget with ModoRetratoLess {
           color: AppColors.opaci,
           elevation: 4,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(22),
+            borderRadius: BorderRadius.circular(16),
           ),
         ),
       ),
