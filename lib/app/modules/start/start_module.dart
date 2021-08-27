@@ -1,5 +1,4 @@
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:strapen_app/app/modules/catalogo/catalogo_module.dart';
 import 'package:strapen_app/app/modules/catalogo/controllers/catalogo_list_controller.dart';
 import 'package:strapen_app/app/modules/catalogo/pages/catalogo_list_page.dart';
 import 'package:strapen_app/app/modules/configuracoes/configuracoes_module.dart';

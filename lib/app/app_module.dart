@@ -6,7 +6,6 @@ import 'package:strapen_app/app/modules/auth/repository/auth_repository.dart';
 import 'package:strapen_app/app/modules/auth/repository/auth_repository_interface.dart';
 import 'package:strapen_app/app/modules/catalogo/catalogo_module.dart';
 import 'package:strapen_app/app/modules/home/home_module.dart';
-import 'package:strapen_app/app/modules/splash/splash_module.dart';
 import 'package:strapen_app/app/modules/start/start_module.dart';
 import 'package:strapen_app/app/modules/user/repositories/user_repository.dart';
 import 'package:strapen_app/app/modules/user/repositories/user_repository_interface.dart';

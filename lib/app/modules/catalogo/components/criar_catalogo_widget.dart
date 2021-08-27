@@ -38,7 +38,7 @@ class _CriarCatalogoWidgetState extends State<CriarCatalogoWidget> {
                     onPressed: () async => await showTitle(context),
                     child: controller.catalogoStore.titulo.notIsNullOrEmpty()
                         ? Text(
-                            controller.catalogoStore.titulo! ?? "",
+                            controller.catalogoStore.titulo!,
                             style: style,
                           )
                         : null,

@@ -35,7 +35,7 @@ class _CatalogoCreatePageState extends ModularState<CatalogoCreatePage, Catalogo
         body: TabBarView(
           children: [
             CriarCatalogoWidget(),
-            Center(child: Text("It's rainy here")),
+            Center(child: Text("Ainda não implementado")),
           ],
         ),
       ),
