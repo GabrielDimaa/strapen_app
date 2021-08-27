@@ -1,6 +1,7 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:strapen_app/app/app_controller.dart';
 import 'package:strapen_app/app/modules/auth/controllers/auth_controller.dart';
+import 'package:strapen_app/app/modules/auth/modules/registro/constants/routes.dart';
 import 'package:strapen_app/app/modules/auth/modules/registro/registro_module.dart';
 import 'package:strapen_app/app/modules/auth/pages/auth_page.dart';
 import 'package:strapen_app/app/modules/auth/repository/auth_repository.dart';
@@ -8,7 +9,6 @@ import 'package:strapen_app/app/modules/auth/repository/auth_repository_interfac
 import 'package:strapen_app/app/modules/user/repositories/user_repository.dart';
 import 'package:strapen_app/app/modules/user/repositories/user_repository_interface.dart';
 import 'package:strapen_app/app/shared/config/preferences/session_preferences.dart';
-import 'package:strapen_app/app/shared/routes/routes.dart';
 
 class AuthModule extends Module {
   @override

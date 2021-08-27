@@ -1,9 +1,9 @@
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:strapen_app/app/modules/catalogo/constants/routes.dart';
 import 'package:strapen_app/app/modules/catalogo/controllers/catalogo_create_controller.dart';
 import 'package:strapen_app/app/modules/catalogo/controllers/catalogo_list_controller.dart';
 import 'package:strapen_app/app/modules/catalogo/pages/catalogo_create_page.dart';
 import 'package:strapen_app/app/modules/catalogo/pages/catalogo_list_page.dart';
-import 'package:strapen_app/app/shared/routes/routes.dart';
 
 class CatalogoModule extends Module {
   @override

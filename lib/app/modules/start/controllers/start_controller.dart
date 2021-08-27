@@ -1,7 +1,10 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
+import 'package:strapen_app/app/modules/catalogo/constants/routes.dart';
+import 'package:strapen_app/app/modules/configuracoes/constants/routes.dart';
+import 'package:strapen_app/app/modules/home/constants/routes.dart';
+import 'package:strapen_app/app/modules/produto/constants/routes.dart';
 import 'package:strapen_app/app/modules/start/constants/index_page.dart';
-import 'package:strapen_app/app/shared/routes/routes.dart';
 
 part 'start_controller.g.dart';
 

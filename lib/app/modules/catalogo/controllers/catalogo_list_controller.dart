@@ -1,6 +1,6 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
-import 'package:strapen_app/app/shared/routes/routes.dart';
+import 'package:strapen_app/app/modules/catalogo/constants/routes.dart';
 
 part 'catalogo_list_controller.g.dart';
 

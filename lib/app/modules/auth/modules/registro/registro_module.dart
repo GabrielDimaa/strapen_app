@@ -1,4 +1,5 @@
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:strapen_app/app/modules/auth/modules/registro/constants/routes.dart';
 import 'package:strapen_app/app/modules/auth/modules/registro/controllers/registro_controller.dart';
 import 'package:strapen_app/app/modules/auth/modules/registro/pages/registro_concluido_page.dart';
 import 'package:strapen_app/app/modules/auth/modules/registro/pages/registro_page1.dart';
@@ -10,7 +11,6 @@ import 'package:strapen_app/app/modules/auth/modules/registro/pages/registro_pag
 import 'package:strapen_app/app/modules/user/repositories/user_repository.dart';
 import 'package:strapen_app/app/modules/user/repositories/user_repository_interface.dart';
 import 'package:strapen_app/app/shared/config/preferences/session_preferences.dart';
-import 'package:strapen_app/app/shared/routes/routes.dart';
 
 class RegistroModule extends Module {
   @override

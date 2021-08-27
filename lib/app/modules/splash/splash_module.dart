@@ -2,8 +2,8 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:strapen_app/app/app_controller.dart';
 import 'package:strapen_app/app/modules/splash/controllers/splash_controller.dart';
 import 'package:strapen_app/app/modules/splash/modules/apresentacao/apresentacao_module.dart';
+import 'package:strapen_app/app/modules/splash/modules/apresentacao/constants/routes.dart';
 import 'package:strapen_app/app/modules/splash/pages/splash_page.dart';
-import 'package:strapen_app/app/shared/routes/routes.dart';
 
 class SplashModule extends Module {
   @override

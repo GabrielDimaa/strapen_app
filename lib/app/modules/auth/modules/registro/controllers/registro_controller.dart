@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
+import 'package:strapen_app/app/modules/auth/constants/routes.dart';
+import 'package:strapen_app/app/modules/auth/modules/registro/constants/routes.dart';
+import 'package:strapen_app/app/modules/start/constants/routes.dart';
 import 'package:strapen_app/app/modules/user/factories/user_factory.dart';
 import 'package:strapen_app/app/modules/user/models/user_model.dart';
 import 'package:strapen_app/app/modules/user/repositories/user_repository_interface.dart';
 import 'package:strapen_app/app/modules/user/stores/user_store.dart';
 import 'package:strapen_app/app/shared/components/dialog/error_dialog.dart';
-import 'package:strapen_app/app/shared/routes/routes.dart';
 
 part 'registro_controller.g.dart';
 

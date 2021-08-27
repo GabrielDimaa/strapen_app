@@ -1,0 +1,1 @@
+const String CONFIGURACOES_ROUTE = "/configuracoes";

@@ -1,0 +1,1 @@
+const String AUTH_ROUTE = "/auth";

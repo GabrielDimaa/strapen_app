@@ -1,8 +1,8 @@
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:strapen_app/app/modules/user/constants/routes.dart';
 import 'package:strapen_app/app/modules/user/pages/user_page.dart';
 import 'package:strapen_app/app/modules/user/repositories/user_repository.dart';
 import 'package:strapen_app/app/shared/config/preferences/session_preferences.dart';
-import 'package:strapen_app/app/shared/routes/routes.dart';
 
 class UserModule extends Module {
   @override

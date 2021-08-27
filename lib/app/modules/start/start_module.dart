@@ -1,12 +1,15 @@
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:strapen_app/app/modules/catalogo/constants/routes.dart';
 import 'package:strapen_app/app/modules/catalogo/controllers/catalogo_list_controller.dart';
 import 'package:strapen_app/app/modules/catalogo/pages/catalogo_list_page.dart';
 import 'package:strapen_app/app/modules/configuracoes/configuracoes_module.dart';
+import 'package:strapen_app/app/modules/configuracoes/constants/routes.dart';
+import 'package:strapen_app/app/modules/home/constants/routes.dart';
 import 'package:strapen_app/app/modules/home/home_module.dart';
+import 'package:strapen_app/app/modules/produto/constants/routes.dart';
 import 'package:strapen_app/app/modules/produto/produto_module.dart';
 import 'package:strapen_app/app/modules/start/controllers/start_controller.dart';
 import 'package:strapen_app/app/modules/start/pages/start_page.dart';
-import 'package:strapen_app/app/shared/routes/routes.dart';
 
 class StartModule extends Module {
   @override
