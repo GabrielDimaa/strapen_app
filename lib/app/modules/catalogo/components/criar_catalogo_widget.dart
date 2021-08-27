@@ -73,6 +73,12 @@ class _CriarCatalogoWidgetState extends State<CriarCatalogoWidget> {
                     children: [
                       ListTile(
                         contentPadding: EdgeInsets.all(0),
+                        leading: Padding(
+                          padding: const EdgeInsets.only(left: 6),
+                          child: CircleAvatar(
+                            backgroundImage: Image.asset("assets/images/test/avatar_test.png").image,
+                          ),
+                        ),
                         title: Text(
                           "Jaqueta de couro",
                           style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.grey.shade300),
