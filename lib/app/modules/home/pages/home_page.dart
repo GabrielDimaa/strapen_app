@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:strapen_app/app/app_widget.dart';
 import 'package:strapen_app/app/modules/home/components/action_app_bar_home.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/app_bar_default.dart';
-import 'package:strapen_app/app/shared/components/image/vetor.dart';
-import 'package:strapen_app/app/shared/components/sized_box/horizontal_sized_box.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -18,7 +16,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       appBar: AppBarDefault(
         title: Text("Home"),
-        leading: Padding(
+        leadingWidget: Padding(
           padding: const EdgeInsets.only(left: 12, top: 6, bottom: 6),
           child: CircleAvatar(
             radius: 50,
@@ -26,7 +24,7 @@ class _HomePageState extends State<HomePage> {
             backgroundImage: Image.asset("assets/images/test/avatar_test.png").image,
           ),
         ),
-        actions: [
+        actionsWidgets: [
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [

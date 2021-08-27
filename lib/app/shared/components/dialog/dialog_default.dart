@@ -6,16 +6,16 @@ class DialogDefault extends StatefulWidget {
   _DialogDefaultState createState() => _DialogDefaultState();
 
   final BuildContext context;
-  final Widget content;
+  final Widget? content;
   final Widget? title;
   final List<Widget>? actions;
 
-  const DialogDefault(
-    this.context,
+  const DialogDefault({
+    required this.context,
     this.content,
     this.title,
     this.actions,
-  );
+  });
 
   static show({
     required BuildContext context,
@@ -27,10 +27,10 @@ class DialogDefault extends StatefulWidget {
       context: context,
       builder: (context) {
         return DialogDefault(
-          context,
-          content,
-          title,
-          actions,
+          context: context,
+          content: content,
+          title: title,
+          actions: actions,
         );
       },
     );

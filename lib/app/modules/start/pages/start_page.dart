@@ -25,8 +25,7 @@ class _StartPageState extends ModularState<StartPage, StartController> {
       body: RouterOutlet(),
       bottomNavigationBar: Padding(
         padding: const MarginBottomAppBar(),
-        child: Observer(
-          builder: (_) => BottomAppBarDefault(
+        child: Observer(builder: (_) => BottomAppBarDefault(
             children: [
               BottomAppBarItem(
                 icon: Icons.home,
@@ -57,5 +56,10 @@ class _StartPageState extends ModularState<StartPage, StartController> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 }

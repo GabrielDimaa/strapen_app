@@ -20,6 +20,7 @@ const String HOME_ROUTE = "/home";
 const String PRODUTO_ROUTE = "/produto";
 
 const String CATALOGO_ROUTE = "/catalogo";
+const String CATALOGO_CREATE_ROUTE = "/catalogo_create";
 
 const String CONFIGURACOES_ROUTE = "/configuracoes";
 

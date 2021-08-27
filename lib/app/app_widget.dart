@@ -55,6 +55,10 @@ class AppWidget extends StatelessWidget with ModoRetratoLess {
             size: 22,
           ),
         ),
+        tabBarTheme: TabBarTheme(
+          labelColor: Colors.white,
+          labelStyle: TextStyle(color: Colors.white, fontSize: 16, fontWeight: FontWeight.w500, fontFamily: 'Lexend'),
+        ),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             primary: AppColors.primary,
@@ -105,6 +109,19 @@ class AppWidget extends StatelessWidget with ModoRetratoLess {
           color: AppColors.opaci,
           elevation: 22,
         ),
+        floatingActionButtonTheme: FloatingActionButtonThemeData(
+          elevation: 22,
+          backgroundColor: AppColors.primary,
+          foregroundColor: AppColors.secondary,
+          splashColor: AppColors.primaryDark,
+        ),
+        cardTheme: CardTheme(
+          color: AppColors.opaci,
+          elevation: 4,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(22),
+          ),
+        ),
       ),
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
@@ -129,7 +146,7 @@ abstract class AppColors {
 
   static Color get primaryOpaci => Color(0xD72D4442);
 
-  static Color get opaci => Color(0xFF323438);
+  static Color get opaci => Color(0xFF343639);
 
   static List<Color> get gradiente => [Color(0xFF00CC99), Color(0xFF00A676)];
 }

@@ -5,28 +5,36 @@ import 'package:strapen_app/app/shared/components/app_bar_default/back_button_de
 class AppBarDefault extends AppBar {
   final Widget? title;
   final bool centerTitle;
-  final Widget? leading;
-  final List<Widget>? actions;
+  final Widget? leadingWidget;
+  final List<Widget>? actionsWidgets;
+  final PreferredSizeWidget? bottomWidgets;
 
   AppBarDefault({
     this.title,
     this.centerTitle = true,
-    this.leading,
-    this.actions,
+    this.leadingWidget,
+    this.actionsWidgets,
+    this.bottomWidgets,
   }) : super(
     leadingWidth: 90,
-    toolbarHeight: 78,
+    toolbarHeight: bottomWidgets == null ? 78 : 126,
     title: title,
     centerTitle: centerTitle,
     backgroundColor: Colors.transparent,
-    actions: actions?..add(const SizedBox(width: 20)),
-    leading: Row(
+    bottom: bottomWidgets,
+    actions: [
+      if (actionsWidgets != null)
+        Row(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: actionsWidgets..add(const SizedBox(width: 20)),
+        ),
+    ],
+    leading: leadingWidget == null ? Row(
       children: [
+        const SizedBox(width: 20),
         if (Modular.to.canPop())
-          Expanded(child: BackButtonDefault())
-        else if (leading != null)
-          leading
+          BackButtonDefault()
       ],
-    ),
+    ) : leadingWidget,
   );
 }

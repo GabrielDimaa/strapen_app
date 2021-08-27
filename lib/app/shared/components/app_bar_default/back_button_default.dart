@@ -1,18 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:strapen_app/app/app_widget.dart';
+import 'package:strapen_app/app/shared/components/app_bar_default/widgets/circle_background_app_bar.dart';
 
-class BackButtonDefault extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      height: 48,
-      width: 48,
-      child: CircleAvatar(
-        backgroundColor: AppColors.opaci,
-        child: BackButton(
-          color: Colors.white,
-        ),
-      ),
-    );
-  }
+class BackButtonDefault extends CircleButtonAppBar {
+  BackButtonDefault() : super(
+    child: BackButton(
+      color: Colors.white,
+    ),
+  );
 }
