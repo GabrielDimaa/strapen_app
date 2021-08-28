@@ -3,8 +3,8 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:strapen_app/app/app_controller.dart';
 import 'package:strapen_app/app/modules/auth/auth_module.dart';
 import 'package:strapen_app/app/modules/auth/constants/routes.dart';
-import 'package:strapen_app/app/modules/auth/repository/auth_repository.dart';
-import 'package:strapen_app/app/modules/auth/repository/auth_repository_interface.dart';
+import 'package:strapen_app/app/modules/auth/repositories/auth_repository.dart';
+import 'package:strapen_app/app/modules/auth/repositories/iauth_repository.dart';
 import 'package:strapen_app/app/modules/catalogo/catalogo_module.dart';
 import 'package:strapen_app/app/modules/catalogo/constants/routes.dart';
 import 'package:strapen_app/app/modules/home/constants/routes.dart';
@@ -14,7 +14,7 @@ import 'package:strapen_app/app/modules/produto/produto_module.dart';
 import 'package:strapen_app/app/modules/start/constants/routes.dart';
 import 'package:strapen_app/app/modules/start/start_module.dart';
 import 'package:strapen_app/app/modules/user/repositories/user_repository.dart';
-import 'package:strapen_app/app/modules/user/repositories/user_repository_interface.dart';
+import 'package:strapen_app/app/modules/user/repositories/iuser_repository.dart';
 import 'package:strapen_app/app/shared/config/preferences/session_preferences.dart';
 
 class AppModule extends Module {

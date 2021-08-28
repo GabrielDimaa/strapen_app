@@ -6,7 +6,7 @@ import 'package:strapen_app/app/modules/auth/modules/registro/constants/routes.d
 import 'package:strapen_app/app/modules/start/constants/routes.dart';
 import 'package:strapen_app/app/modules/user/factories/user_factory.dart';
 import 'package:strapen_app/app/modules/user/models/user_model.dart';
-import 'package:strapen_app/app/modules/user/repositories/user_repository_interface.dart';
+import 'package:strapen_app/app/modules/user/repositories/iuser_repository.dart';
 import 'package:strapen_app/app/modules/user/stores/user_store.dart';
 import 'package:strapen_app/app/shared/components/dialog/error_dialog.dart';
 

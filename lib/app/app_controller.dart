@@ -1,7 +1,7 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'package:strapen_app/app/modules/auth/constants/routes.dart';
-import 'package:strapen_app/app/modules/auth/repository/auth_repository_interface.dart';
+import 'package:strapen_app/app/modules/auth/repositories/iauth_repository.dart';
 import 'package:strapen_app/app/modules/splash/modules/apresentacao/constants/routes.dart';
 import 'package:strapen_app/app/modules/start/constants/routes.dart';
 import 'package:strapen_app/app/modules/user/models/user_model.dart';

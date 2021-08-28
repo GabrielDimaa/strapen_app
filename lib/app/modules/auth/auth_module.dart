@@ -4,10 +4,10 @@ import 'package:strapen_app/app/modules/auth/controllers/auth_controller.dart';
 import 'package:strapen_app/app/modules/auth/modules/registro/constants/routes.dart';
 import 'package:strapen_app/app/modules/auth/modules/registro/registro_module.dart';
 import 'package:strapen_app/app/modules/auth/pages/auth_page.dart';
-import 'package:strapen_app/app/modules/auth/repository/auth_repository.dart';
-import 'package:strapen_app/app/modules/auth/repository/auth_repository_interface.dart';
+import 'package:strapen_app/app/modules/auth/repositories/auth_repository.dart';
+import 'package:strapen_app/app/modules/auth/repositories/iauth_repository.dart';
 import 'package:strapen_app/app/modules/user/repositories/user_repository.dart';
-import 'package:strapen_app/app/modules/user/repositories/user_repository_interface.dart';
+import 'package:strapen_app/app/modules/user/repositories/iuser_repository.dart';
 import 'package:strapen_app/app/shared/config/preferences/session_preferences.dart';
 
 class AuthModule extends Module {

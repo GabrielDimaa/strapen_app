@@ -1,8 +1,8 @@
 import 'package:parse_server_sdk/parse_server_sdk.dart';
 import 'package:strapen_app/app/modules/auth/models/auth_model.dart';
-import 'package:strapen_app/app/modules/auth/repository/auth_repository_interface.dart';
+import 'package:strapen_app/app/modules/auth/repositories/iauth_repository.dart';
 import 'package:strapen_app/app/modules/user/models/user_model.dart';
-import 'package:strapen_app/app/modules/user/repositories/user_repository_interface.dart';
+import 'package:strapen_app/app/modules/user/repositories/iuser_repository.dart';
 import 'package:strapen_app/app/shared/config/preferences/session_preferences.dart';
 import 'package:strapen_app/app/shared/extensions/string_extension.dart';
 import 'package:strapen_app/app/shared/utils/parse_errors_utils.dart';
