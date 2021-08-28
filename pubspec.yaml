@@ -19,10 +19,13 @@ dependencies:
   flutter_mobx: ^2.0.2
   flutter_modular: ^3.3.1
   flutter_svg: ^0.22.0
+  image_cropper: ^1.4.1
+  image_picker: ^0.8.3+3
   intl: ^0.17.0
   mobx: ^2.0.4
   parse_server_sdk_flutter: ^3.1.0
   shared_preferences: ^2.0.6
+  snapping_sheet: ^3.1.0
 
 
 dev_dependencies:

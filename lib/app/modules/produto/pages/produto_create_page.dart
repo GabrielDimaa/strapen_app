@@ -4,15 +4,17 @@ import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:strapen_app/app/app_widget.dart';
-import 'package:strapen_app/app/modules/produto/components/button_add_photo.dart';
-import 'package:strapen_app/app/modules/produto/components/empty_photo.dart';
+import 'package:strapen_app/app/modules/produto/components/photo.dart';
+import 'package:strapen_app/app/modules/produto/components/photo_miniature.dart';
 import 'package:strapen_app/app/modules/produto/controllers/produto_create_controller.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/app_bar_default.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/widgets/circle_background_app_bar.dart';
+import 'package:strapen_app/app/shared/components/bottom_sheet/bottom_sheet_image_picker.dart';
 import 'package:strapen_app/app/shared/components/button/elevated_button_default.dart';
 import 'package:strapen_app/app/shared/components/dialog/error_dialog.dart';
 import 'package:strapen_app/app/shared/components/form/validator.dart';
 import 'package:strapen_app/app/shared/components/padding/padding_scaffold.dart';
+import 'package:strapen_app/app/shared/components/sized_box/horizontal_sized_box.dart';
 import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
 import 'package:strapen_app/app/shared/components/text_input/text_input_default.dart';
 import 'package:strapen_app/app/shared/components/widgets/text_field_qtd.dart';
@@ -80,8 +82,11 @@ class _ProdutoCreatePageState extends ModularState<ProdutoCreatePage, ProdutoCre
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Photo(
-                      onTap: () {},
+                    Observer(
+                      builder: (_) => Photo(
+                        onTap: () async => await _showBottomSheet(),
+                        image: controller.produtoStore.fotos.isNotEmpty ? controller.produtoStore.fotos.first : null,
+                      ),
                     ),
                     const VerticalSizedBox(),
                     Text(
@@ -91,20 +96,29 @@ class _ProdutoCreatePageState extends ModularState<ProdutoCreatePage, ProdutoCre
                     const VerticalSizedBox(),
                     SingleChildScrollView(
                       scrollDirection: Axis.horizontal,
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          ButtonAddPhoto(
-                            onTap: () {},
-                          ),
-                        ]..addAll(
-                            list.map(
-                              (e) => CircleAvatar(
-                                backgroundImage: Image.asset("assets/images/test/avatar_test.png").image,
-                                radius: 38,
-                              ),
+                      child: Observer(
+                        builder: (_) => Row(
+                          mainAxisSize: MainAxisSize.max,
+                          children: [
+                            PhotoMiniature(
+                              onTap: () async => await _showBottomSheet(),
                             ),
-                          ),
+                          ]..addAll(
+                              controller.produtoStore.fotos
+                                  .map(
+                                    (e) => Row(
+                                      children: [
+                                        const HorizontalSizedBox(0.7),
+                                        PhotoMiniature(
+                                          image: Image.memory(e).image,
+                                          onTapRemove: () => controller.produtoStore.fotos.remove(e),
+                                        )
+                                      ],
+                                    ),
+                                  )
+                                  .toList(),
+                            ),
+                        ),
                       ),
                     ),
                     const VerticalSizedBox(2),
@@ -213,6 +227,16 @@ class _ProdutoCreatePageState extends ModularState<ProdutoCreatePage, ProdutoCre
   void _focusChange({required BuildContext context, required FocusNode currentFocus, FocusNode? nextFocus}) {
     currentFocus.unfocus();
     if (nextFocus != null) FocusScope.of(context).requestFocus(nextFocus);
+  }
+
+  Future<void> _showBottomSheet() async {
+    await showModalBottomSheet(
+      context: context,
+      builder: (_) => BottomSheetImagePicker(
+        onTapCamera: () async => await controller.getImagePicker(true),
+        onTapGaleria: () async => await controller.getImagePicker(false),
+      ),
+    );
   }
 
   @override

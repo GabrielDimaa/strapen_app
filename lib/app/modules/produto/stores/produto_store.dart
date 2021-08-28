@@ -43,7 +43,10 @@ abstract class _ProdutoStore with Store {
   void setDescricaoDetalhada(String? value) => descricaoDetalhada = value;
 
   @action
-  void setFotos(ObservableList<Uint8List> value) => fotos = value;
+  void setAllFotos(ObservableList<Uint8List> value) => fotos = value;
+
+  @action
+  void setFoto(Uint8List value) => fotos.add(value);
 
   @action
   void setQuantidade(int? value) => quantidade = value;
