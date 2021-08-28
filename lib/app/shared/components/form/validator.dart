@@ -143,3 +143,20 @@ class InputSenhaValidator implements IInputValidator {
     return null;
   }
 }
+
+class InputPrecoValidator implements IInputValidator {
+  @override
+  String messageError() => "Preço inválida!";
+
+  @override
+  String? validate(String? value) {
+    if (value.isNullOrEmpty()) return _messageErrorDefault;
+
+    double preco = double.parse(value.extrairNum());
+
+    if (preco <= 0)
+      return "O preço deve ser maior que um real.";
+
+    return null;
+  }
+}

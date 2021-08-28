@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:strapen_app/app/app_widget.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/back_button_default.dart';
 
 class AppBarDefault extends AppBar {
@@ -20,7 +21,7 @@ class AppBarDefault extends AppBar {
     toolbarHeight: bottomWidgets == null ? 78 : 126,
     title: title,
     centerTitle: centerTitle,
-    backgroundColor: Colors.transparent,
+    backgroundColor: AppColors.background,
     bottom: bottomWidgets,
     actions: [
       if (actionsWidgets != null)

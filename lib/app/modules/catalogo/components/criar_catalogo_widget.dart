@@ -153,7 +153,7 @@ class _CriarCatalogoWidgetState extends State<CriarCatalogoWidget> {
         Padding(
           padding: const MarginButtonWithoutScaffold(),
           child: ElevatedButtonDefault(
-            child: Text("Criar catálogo"),
+            child: Text("Salvar catálogo"),
             onPressed: () {},
           ),
         )
