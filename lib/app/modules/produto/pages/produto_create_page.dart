@@ -59,7 +59,6 @@ class _ProdutoCreatePageState extends ModularState<ProdutoCreatePage, ProdutoCre
   @override
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
-    List<int> list = [1, 2, 3, 4];
     return Scaffold(
       appBar: AppBarDefault(
         title: Text("Produto"),
