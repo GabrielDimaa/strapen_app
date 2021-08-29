@@ -60,7 +60,7 @@ class ProdutoRepository implements IProdutoRepository {
   }
 
   @override
-  Future<ProdutoModel> save(ProdutoModel model) async {
+  Future<ProdutoModel?> save(ProdutoModel model) async {
     try {
       validate(model);
 

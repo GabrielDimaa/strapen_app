@@ -48,9 +48,9 @@ abstract class _ProdutoCreateController with Store implements IDefaultController
       setLoading(true);
 
       produtoStore.setAnunciante(_appController.userModel);
-      ProdutoModel model = await _produtoRepository.save(produtoStore.toModel());
+      ProdutoModel? model = await _produtoRepository.save(produtoStore.toModel());
 
-      if (model.id != null)
+      if (model?.id != null)
         Modular.to.pop();
     } catch(_) {
       rethrow;
