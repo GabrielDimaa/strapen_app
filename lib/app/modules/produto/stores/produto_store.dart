@@ -10,7 +10,7 @@ class ProdutoStore = _ProdutoStore with _$ProdutoStore;
 
 abstract class _ProdutoStore with Store {
   @observable
-  int? id;
+  String? id;
 
   @observable
   String? descricao;
@@ -19,13 +19,13 @@ abstract class _ProdutoStore with Store {
   String? descricaoDetalhada;
 
   @observable
-  ObservableList<Uint8List> fotos = ObservableList<Uint8List>();
+  ObservableList<dynamic> fotos = ObservableList<dynamic>();
 
   @observable
-  int? quantidade;
+  int? quantidade = 1;
 
   @observable
-  double? valor;
+  double? preco;
 
   @observable
   UserModel? anunciante;
@@ -34,7 +34,7 @@ abstract class _ProdutoStore with Store {
   UserModel? userReserva;
 
   @action
-  void setId(int? value) => id = value;
+  void setId(String? value) => id = value;
 
   @action
   void setDescricao(String? value) => descricao = value;
@@ -43,16 +43,16 @@ abstract class _ProdutoStore with Store {
   void setDescricaoDetalhada(String? value) => descricaoDetalhada = value;
 
   @action
-  void setAllFotos(ObservableList<Uint8List> value) => fotos = value;
+  void setAllFotos(ObservableList<dynamic> value) => fotos = value;
 
   @action
-  void setFoto(Uint8List value) => fotos.add(value);
+  void setFoto(dynamic value) => fotos.add(value);
 
   @action
   void setQuantidade(int? value) => quantidade = value;
 
   @action
-  void setValor(double? value) => valor = value;
+  void setValor(double? value) => preco = value;
 
   @action
   void setAnunciante(UserModel? value) => anunciante = value;
@@ -66,7 +66,7 @@ abstract class _ProdutoStore with Store {
     this.descricaoDetalhada,
     this.fotos,
     this.quantidade,
-    this.valor,
+    this.preco,
     this.anunciante,
     this.userReserva,
   );
@@ -78,7 +78,7 @@ abstract class _ProdutoStore with Store {
       this.descricaoDetalhada,
       this.fotos,
       this.quantidade,
-      this.valor,
+      this.preco,
       this.anunciante,
       this.userReserva,
     );

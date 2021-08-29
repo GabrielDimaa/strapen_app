@@ -141,7 +141,7 @@ class _AuthPageState extends ModularState<AuthPage, AuthController> {
             ),
             child: ElevatedButtonDefault(
               child: Text("Entrar"),
-              onPressed: () async {
+              onPressed: !controller.loading ? () async {
                 try {
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
@@ -151,7 +151,7 @@ class _AuthPageState extends ModularState<AuthPage, AuthController> {
                 } catch(e) {
                   ErrorDialog.show(context: context, content: e.toString());
                 }
-              }
+              } : () {}
             ),
           ),
         ],

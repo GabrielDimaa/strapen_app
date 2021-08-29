@@ -1,11 +1,11 @@
-import 'dart:typed_data';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:strapen_app/app/app_widget.dart';
 
 class Photo extends StatelessWidget {
   final VoidCallback? onTap;
-  final Uint8List? image;
+  final File? image;
 
   Photo({this.onTap, this.image});
 
@@ -25,7 +25,7 @@ class Photo extends StatelessWidget {
           child: image != null
               ? ClipRRect(
                   borderRadius: _borderRadius,
-                  child: Image.memory(image!),
+                  child: Image.file(image!),
                 )
               : Padding(
                   padding: const EdgeInsets.all(16.0),

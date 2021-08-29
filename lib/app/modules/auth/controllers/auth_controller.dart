@@ -45,6 +45,8 @@ abstract class _AuthController with Store {
 
         Modular.to.navigate(START_ROUTE);
       }
+    } catch(_) {
+      rethrow;
     } finally {
       setLoading(false);
     }

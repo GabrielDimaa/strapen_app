@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -51,9 +53,9 @@ class _ProdutoCreatePageState extends ModularState<ProdutoCreatePage, ProdutoCre
 
   void _updateControllers() {
     _descricaoController.text = controller.produtoStore.descricao ?? "";
-    _descricaoDetalhadaController.text = controller.produtoStore.descricao ?? "";
-    _quantidadeController.text = controller.produtoStore.quantidade?.toString() ?? "1";
-    _precoController.text = controller.produtoStore.quantidade?.toString() ?? "";
+    _descricaoDetalhadaController.text = controller.produtoStore.descricaoDetalhada ?? "";
+    _quantidadeController.text = controller.produtoStore.quantidade.toString();
+    _precoController.text = controller.produtoStore.preco?.toString() ?? "";
   }
 
   @override
@@ -82,10 +84,16 @@ class _ProdutoCreatePageState extends ModularState<ProdutoCreatePage, ProdutoCre
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Observer(
-                      builder: (_) => Photo(
-                        onTap: () async => await _showBottomSheet(),
-                        image: controller.produtoStore.fotos.isNotEmpty ? controller.produtoStore.fotos.first : null,
-                      ),
+                      builder: (_) {
+                        File? image;
+                        if (controller.produtoStore.fotos.isNotEmpty)
+                          image = controller.produtoStore.fotos.first;
+
+                        return Photo(
+                          onTap: () async => await _showBottomSheet(),
+                          image: image,
+                        );
+                      }
                     ),
                     const VerticalSizedBox(),
                     Text(
@@ -109,7 +117,7 @@ class _ProdutoCreatePageState extends ModularState<ProdutoCreatePage, ProdutoCre
                                       children: [
                                         const HorizontalSizedBox(0.7),
                                         PhotoMiniature(
-                                          image: Image.memory(e).image,
+                                          image: Image.file(e).image,
                                           onTapRemove: () => controller.produtoStore.fotos.remove(e),
                                         )
                                       ],
@@ -168,7 +176,9 @@ class _ProdutoCreatePageState extends ModularState<ProdutoCreatePage, ProdutoCre
                               focusNode: _quantidadeFocus,
                               enabled: !controller.loading,
                               onChanged: (value) {
-                                if (value.isNotEmpty) controller.produtoStore.setQuantidade(int.parse(value));
+                                if (value.isNotEmpty) {
+                                    controller.produtoStore.setQuantidade(int.parse(value));
+                                }
                               },
                               onSubmitted: (_) => _focusChange(
                                 context: context,

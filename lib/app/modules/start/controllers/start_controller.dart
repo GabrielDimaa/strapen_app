@@ -5,6 +5,7 @@ import 'package:strapen_app/app/modules/configuracoes/constants/routes.dart';
 import 'package:strapen_app/app/modules/home/constants/routes.dart';
 import 'package:strapen_app/app/modules/produto/constants/routes.dart';
 import 'package:strapen_app/app/modules/start/constants/index_page.dart';
+import 'package:strapen_app/app/modules/start/constants/routes.dart';
 
 part 'start_controller.g.dart';
 
@@ -18,13 +19,13 @@ abstract class _StartController with Store {
   void setPage(int value) => page = value;
 
   @action
-  void toInit() => Modular.to.navigate(HOME_ROUTE);
+  void toInit() => Modular.to.navigate(START_ROUTE + HOME_ROUTE);
 
   @action
   void toHome() {
     if (page != HOME_PAGE) {
       setPage(HOME_PAGE);
-      Modular.to.navigate(HOME_ROUTE);
+      Modular.to.navigate(START_ROUTE + HOME_ROUTE);
     }
   }
 
@@ -32,7 +33,7 @@ abstract class _StartController with Store {
   void toProduto() {
     if (page != PRODUTO_PAGE) {
       setPage(PRODUTO_PAGE);
-      Modular.to.navigate(PRODUTO_ROUTE);
+      Modular.to.navigate(START_ROUTE + PRODUTO_ROUTE);
     }
   }
 
@@ -40,7 +41,7 @@ abstract class _StartController with Store {
   void toCatalogo() {
     if (page != CATALOGO_PAGE) {
       setPage(CATALOGO_PAGE);
-      Modular.to.navigate(CATALOGO_ROUTE);
+      Modular.to.navigate(START_ROUTE + CATALOGO_ROUTE);
     }
   }
 
@@ -48,7 +49,7 @@ abstract class _StartController with Store {
   void toConfiguracoes() {
     if (page != CONFIGURACOES_PAGE) {
       setPage(CONFIGURACOES_PAGE);
-      Modular.to.navigate(CONFIGURACOES_ROUTE);
+      Modular.to.navigate(START_ROUTE + CONFIGURACOES_ROUTE);
     }
   }
 }

@@ -3,15 +3,17 @@ import 'dart:typed_data';
 import 'package:strapen_app/app/modules/user/models/user_model.dart';
 
 class ProdutoModel {
-  int? id;
+  String? id;
 
   String? descricao;
   String? descricaoDetalhada;
 
-  List<Uint8List>? fotos;
+  //Definido como dynamic pois para salvar, será usado File
+  //E para exibir as fotos será usado String(Parse permite utilizar url para exibir imagens)
+  List<dynamic>? fotos;
 
   int? quantidade;
-  double? valor;
+  double? preco;
 
   UserModel? anunciante;
   UserModel? userReserva;
@@ -22,7 +24,7 @@ class ProdutoModel {
     this.descricaoDetalhada,
     this.fotos,
     this.quantidade,
-    this.valor,
+    this.preco,
     this.anunciante,
     this.userReserva,
   );

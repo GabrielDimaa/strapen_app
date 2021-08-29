@@ -8,7 +8,7 @@ abstract class ProdutoFactory {
       null,
       null,
       ObservableList(),
-      null,
+      1,
       null,
       null,
       null,

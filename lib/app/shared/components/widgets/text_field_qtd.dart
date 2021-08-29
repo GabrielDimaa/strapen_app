@@ -26,7 +26,11 @@ class TextFieldQtd extends StatelessWidget {
           color: AppColors.primaryOpaci,
           onTap: () {
             int currentQtd = int.parse(controller.text.isEmpty ? "1" : controller.text);
-            if (currentQtd > 1) controller.text = "${currentQtd - 1}";
+            if (currentQtd > 1) {
+              controller.text = "${currentQtd - 1}";
+              if (onChanged != null)
+                onChanged!.call(controller.text);
+            }
           },
         ),
         SizedBox(
@@ -59,6 +63,8 @@ class TextFieldQtd extends StatelessWidget {
           onTap: () {
             int currentQtd = int.parse(controller.text.isEmpty ? "0" : controller.text);
             controller.text = "${currentQtd + 1}";
+            if (onChanged != null)
+              onChanged!.call(controller.text);
           },
         ),
       ],
