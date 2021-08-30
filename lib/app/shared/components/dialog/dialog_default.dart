@@ -8,12 +8,14 @@ class DialogDefault extends StatefulWidget {
   final BuildContext context;
   final Widget? content;
   final Widget? title;
+  final String? labelButtonDefault;
   final List<Widget>? actions;
 
   const DialogDefault({
     required this.context,
     this.content,
     this.title,
+    this.labelButtonDefault,
     this.actions,
   });
 
@@ -21,6 +23,7 @@ class DialogDefault extends StatefulWidget {
     required BuildContext context,
     required Widget content,
     Widget? title,
+    String? labelButtonDefault,
     List<Widget>? actions,
   }) {
     return showDialog(
@@ -30,6 +33,7 @@ class DialogDefault extends StatefulWidget {
           context: context,
           content: content,
           title: title,
+          labelButtonDefault: labelButtonDefault,
           actions: actions,
         );
       },
@@ -50,7 +54,7 @@ class _DialogDefaultState extends State<DialogDefault> {
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              TextButton(onPressed: () => Modular.to.pop(), child: Text("Cancelar")),
+              TextButton(onPressed: () => Modular.to.pop(), child: Text(widget.labelButtonDefault ?? "Cancelar")),
             ]..addAll(widget.actions ?? []),
           ),
         ),

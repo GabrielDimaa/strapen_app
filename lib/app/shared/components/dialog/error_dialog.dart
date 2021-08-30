@@ -17,6 +17,7 @@ class ErrorDialog extends StatefulWidget {
       title: Text(title ?? "Algo deu errado..."),
       context: context,
       actions: actions,
+      labelButtonDefault: "Ok",
       content: ErrorDialog(
         context: context,
         content: content,
