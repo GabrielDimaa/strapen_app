@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:strapen_app/app/modules/user/models/user_model.dart';
 
 class ProdutoModel {

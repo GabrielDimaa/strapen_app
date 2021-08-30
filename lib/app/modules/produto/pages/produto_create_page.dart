@@ -20,7 +20,6 @@ import 'package:strapen_app/app/shared/components/sized_box/horizontal_sized_box
 import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
 import 'package:strapen_app/app/shared/components/text_input/text_input_default.dart';
 import 'package:strapen_app/app/shared/components/widgets/text_field_qtd.dart';
-import 'package:strapen_app/app/shared/extensions/string_extension.dart';
 
 class ProdutoCreatePage extends StatefulWidget {
   @override
@@ -139,6 +138,7 @@ class _ProdutoCreatePageState extends ModularState<ProdutoCreatePage, ProdutoCre
                               decoration: InputDecorationDefault(label: "Descrição"),
                               controller: _descricaoController,
                               validator: InputValidatorDefault().validate,
+                              textCapitalization: TextCapitalization.sentences,
                               textInputAction: TextInputAction.next,
                               focusNode: _descricaoFocus,
                               enabled: !controller.loading,
@@ -156,6 +156,7 @@ class _ProdutoCreatePageState extends ModularState<ProdutoCreatePage, ProdutoCre
                               decoration: InputDecorationDefault(label: "Descrição detalhada"),
                               controller: _descricaoDetalhadaController,
                               validator: InputValidatorDefault().validate,
+                              textCapitalization: TextCapitalization.sentences,
                               textInputAction: TextInputAction.next,
                               focusNode: _descricaoDetalhadaFocus,
                               enabled: !controller.loading,
@@ -198,7 +199,9 @@ class _ProdutoCreatePageState extends ModularState<ProdutoCreatePage, ProdutoCre
                               focusNode: _precoFocus,
                               onFieldSubmitted: (_) => _focusChange(context: context, currentFocus: _precoFocus),
                               enabled: !controller.loading,
-                              onSaved: (value) => controller.produtoStore.setValor(double.parse(value.extrairNum())),
+                              onSaved: (value) {
+                                controller.produtoStore.setValor(double.parse(value!.replaceAll(".", "").replaceAll(",", ".")));
+                              },
                               inputFormatters: [
                                 FilteringTextInputFormatter.digitsOnly,
                                 RealInputFormatter(centavos: true),

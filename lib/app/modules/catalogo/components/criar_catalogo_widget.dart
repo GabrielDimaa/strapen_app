@@ -177,6 +177,7 @@ class _CriarCatalogoWidgetState extends State<CriarCatalogoWidget> {
             TextField(
               decoration: InputDecorationDefault(label: 'Título'),
               controller: textController,
+              textCapitalization: TextCapitalization.sentences,
               autofocus: true,
             ),
           ],
@@ -210,6 +211,7 @@ class _CriarCatalogoWidgetState extends State<CriarCatalogoWidget> {
             TextField(
               decoration: InputDecorationDefault(label: 'Descrição'),
               controller: textController,
+              textCapitalization: TextCapitalization.sentences,
               autofocus: true,
             ),
           ],

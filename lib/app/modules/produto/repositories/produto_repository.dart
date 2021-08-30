@@ -4,16 +4,11 @@ import 'package:parse_server_sdk/parse_server_sdk.dart';
 import 'package:strapen_app/app/modules/produto/constants/columns.dart';
 import 'package:strapen_app/app/modules/produto/models/produto_model.dart';
 import 'package:strapen_app/app/modules/produto/repositories/iproduto_repository.dart';
-import 'package:strapen_app/app/modules/user/repositories/iuser_repository.dart';
-import 'package:strapen_app/app/modules/user/repositories/user_repository.dart';
+import 'package:strapen_app/app/modules/user/factories/user_factory.dart';
 import 'package:strapen_app/app/shared/extensions/string_extension.dart';
 import 'package:strapen_app/app/shared/utils/parse_errors_utils.dart';
 
 class ProdutoRepository implements IProdutoRepository {
-  final IUserRepository _userRepository;
-
-  ProdutoRepository(this._userRepository);
-
   @override
   String className() => "Produto";
 
@@ -54,8 +49,8 @@ class ProdutoRepository implements IProdutoRepository {
       e.get<List>(FOTOS_COLUMN)?.map((e) => e.url).toList(),
       e.get<int>(QUANTIDADE_COLUMN),
       e.get<double>(PRECO_COLUMN),
-      _userRepository.toModel(e.get(ANUNCIANTE_COLUMN)),
-      e.containsKey(USER_RESERVA_COLUMN) ? _userRepository.toModel(e.get(USER_RESERVA_COLUMN)) : null,
+      UserFactory.newModel()..id = e.get(ANUNCIANTE_COLUMN).get<String>(ID_COLUMN),
+      UserFactory.newModel()..id = e.get(USER_RESERVA_COLUMN).get<String>(ID_COLUMN),
     );
   }
 

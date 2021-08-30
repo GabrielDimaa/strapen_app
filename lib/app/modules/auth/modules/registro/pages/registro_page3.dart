@@ -69,6 +69,7 @@ class _RegistroPage3State extends State<RegistroPage3> {
                   decoration: InputDecorationDefault(label: "Cidade"),
                   controller: _cidadeController,
                   validator: InputValidatorDefault().validate,
+                  textCapitalization: TextCapitalization.sentences,
                   enabled: !controller.loading,
                   onSaved: controller.userStore.setCidade,
                   textInputAction: TextInputAction.done,

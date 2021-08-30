@@ -40,6 +40,7 @@ class _RegistroPage1State extends State<RegistroPage1> {
                   ),
                   controller: _nomeController,
                   validator: InputValidatorDefault().validate,
+                  textCapitalization: TextCapitalization.sentences,
                   keyboardType: TextInputType.name,
                   enabled: !controller.loading,
                   textInputAction: TextInputAction.done,

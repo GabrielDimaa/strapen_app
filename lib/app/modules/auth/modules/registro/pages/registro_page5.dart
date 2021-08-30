@@ -43,6 +43,7 @@ class _RegistroPage5State extends State<RegistroPage5> {
                 ),
                 controller: _usernameController,
                 textInputAction: TextInputAction.done,
+                textCapitalization: TextCapitalization.sentences,
                 enabled: !controller.loading,
                 focusNode: _usernameFocus,
                 onFieldSubmitted: (_) => _usernameFocus.unfocus(),

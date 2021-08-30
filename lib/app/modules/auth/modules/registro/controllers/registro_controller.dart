@@ -20,7 +20,7 @@ abstract class _RegistroController with Store {
   _RegistroController(this._userRepository);
 
   @observable
-  UserStore userStore = UserFactory.novo();
+  UserStore userStore = UserFactory.newStore();
 
   @observable
   bool loading = false;

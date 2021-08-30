@@ -7,7 +7,6 @@ import 'package:strapen_app/app/modules/produto/pages/produto_create_page.dart';
 import 'package:strapen_app/app/modules/produto/pages/produto_list_page.dart';
 import 'package:strapen_app/app/modules/produto/repositories/iproduto_repository.dart';
 import 'package:strapen_app/app/modules/produto/repositories/produto_repository.dart';
-import 'package:strapen_app/app/modules/user/repositories/iuser_repository.dart';
 import 'package:strapen_app/app/modules/user/repositories/user_repository.dart';
 import 'package:strapen_app/app/shared/config/preferences/session_preferences.dart';
 
@@ -15,7 +14,7 @@ class ProdutoModule extends Module {
   @override
   final List<Bind> binds = [
     Bind((i) => UserRepository(i.get<SessionPreferences>())),
-    Bind((i) => ProdutoRepository(i.get<IUserRepository>())),
+    Bind((i) => ProdutoRepository()),
     Bind((i) => ProdutoListController()),
     Bind((i) => ProdutoCreateController(i.get<IProdutoRepository>(), i.get<AppController>())),
   ];
