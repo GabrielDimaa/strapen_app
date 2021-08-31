@@ -67,7 +67,7 @@ class _CriarCatalogoWidgetState extends State<CriarCatalogoWidget> {
                 const VerticalSizedBox(),
                 CardAddWidget(
                   title: "Produtos",
-                  onPressed: () {},
+                  onPressed: () async => await controller.toCreateProduto(),
                   notEdit: true,
                   child: Column(
                     children: [

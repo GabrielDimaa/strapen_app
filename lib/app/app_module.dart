@@ -11,6 +11,7 @@ import 'package:strapen_app/app/modules/home/constants/routes.dart';
 import 'package:strapen_app/app/modules/home/home_module.dart';
 import 'package:strapen_app/app/modules/produto/constants/routes.dart';
 import 'package:strapen_app/app/modules/produto/produto_module.dart';
+import 'package:strapen_app/app/modules/splash/splash_module.dart';
 import 'package:strapen_app/app/modules/start/constants/routes.dart';
 import 'package:strapen_app/app/modules/start/start_module.dart';
 import 'package:strapen_app/app/modules/user/repositories/user_repository.dart';
@@ -29,8 +30,7 @@ class AppModule extends Module {
 
   @override
   List<ModularRoute> get routes => [
-    //ModuleRoute(Modular.initialRoute, module: SplashModule()),
-    ModuleRoute(Modular.initialRoute, module: StartModule()),
+    ModuleRoute(Modular.initialRoute, module: SplashModule()),
     ModuleRoute(AUTH_ROUTE, module: AuthModule()),
     ModuleRoute(START_ROUTE, module: StartModule()),
     ModuleRoute(HOME_ROUTE, module: HomeModule()),

@@ -3,7 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:strapen_app/app/app_widget.dart';
 import 'package:strapen_app/app/modules/produto/components/list_tile_widget.dart';
-import 'package:strapen_app/app/modules/produto/controllers/produto_list_controller.dart';
+import 'package:strapen_app/app/modules/produto/controllers/produto_reserva_list_controller.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/app_bar_default.dart';
 import 'package:strapen_app/app/shared/components/loading/circular_loading.dart';
 import 'package:strapen_app/app/shared/components/padding/padding_scaffold.dart';
@@ -11,12 +11,12 @@ import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.d
 import 'package:strapen_app/app/shared/components/widgets/empty_list_widget.dart';
 import 'package:strapen_app/app/shared/extensions/double_extension.dart';
 
-class ProdutoListPage extends StatefulWidget {
+class ProdutoReservaListPage extends StatefulWidget {
   @override
-  _ProdutoListPageState createState() => _ProdutoListPageState();
+  _ProdutoReservaListPageState createState() => _ProdutoReservaListPageState();
 }
 
-class _ProdutoListPageState extends ModularState<ProdutoListPage, ProdutoListController> {
+class _ProdutoReservaListPageState extends ModularState<ProdutoReservaListPage, ProdutoReservaListController> {
   @override
   void initState() {
     super.initState();
@@ -27,7 +27,7 @@ class _ProdutoListPageState extends ModularState<ProdutoListPage, ProdutoListCon
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
     return Scaffold(
-      appBar: AppBarDefault(title: Text("Produtos")),
+      appBar: AppBarDefault(title: Text("Reservas")),
       body: Padding(
         padding: const PaddingScaffold(),
         child: Column(
