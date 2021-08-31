@@ -3,7 +3,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:strapen_app/app/app_widget.dart';
 import 'package:strapen_app/app/modules/produto/components/list_tile_widget.dart';
-import 'package:strapen_app/app/modules/produto/controllers/produto_reserva_list_controller.dart';
+import 'package:strapen_app/app/modules/produto/controllers/produto_list_controller.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/app_bar_default.dart';
 import 'package:strapen_app/app/shared/components/loading/circular_loading.dart';
 import 'package:strapen_app/app/shared/components/padding/padding_scaffold.dart';
@@ -11,12 +11,12 @@ import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.d
 import 'package:strapen_app/app/shared/components/widgets/empty_list_widget.dart';
 import 'package:strapen_app/app/shared/extensions/double_extension.dart';
 
-class ProdutoReservaListPage extends StatefulWidget {
+class ProdutoListPage extends StatefulWidget {
   @override
-  _ProdutoReservaListPageState createState() => _ProdutoReservaListPageState();
+  _ProdutoListPageState createState() => _ProdutoListPageState();
 }
 
-class _ProdutoReservaListPageState extends ModularState<ProdutoReservaListPage, ProdutoReservaListController> {
+class _ProdutoListPageState extends ModularState<ProdutoListPage, ProdutoListController> {
   @override
   void initState() {
     super.initState();
@@ -27,12 +27,12 @@ class _ProdutoReservaListPageState extends ModularState<ProdutoReservaListPage, 
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
     return Scaffold(
-      appBar: AppBarDefault(title: Text("Reservas")),
+      appBar: AppBarDefault(title: Text("Produtos")),
       body: Padding(
         padding: const PaddingScaffold(),
         child: Column(
           children: [
-            const Text("Aqui você poderá visualizar todos os seus produtos que foram reservados em uma Live."),
+            const Text("Aqui você poderá visualizar todos os seus produtos disponíveis para adicionar nos catálogos."),
             const VerticalSizedBox(1),
             Expanded(
               child: Observer(builder: (_) {
@@ -41,7 +41,7 @@ class _ProdutoReservaListPageState extends ModularState<ProdutoReservaListPage, 
                 } else {
                   if (controller.produtos.isEmpty) {
                     return const EmptyListWidget(
-                      message: "Sua lista está vazia. Reserve produtos em Lives para aparecer aqui.",
+                      message: "Sua lista está vazia. Crie produtos para os catálogos para aparecer aqui.",
                     );
                   } else {
                     return ListView.builder(

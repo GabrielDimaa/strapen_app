@@ -30,6 +30,7 @@ class _ApresentacaoContaPageState extends State<ApresentacaoContaPage> {
               child: SingleChildScrollView(
                 child: Column(
                   children: [
+                    const VerticalSizedBox(2),
                     Text("Já possui uma conta?", style: Theme.of(context).textTheme.headline4),
                     const VerticalSizedBox(4),
                     const Vetor(path: "assets/images/escrevendo_pc.png"),

@@ -30,6 +30,7 @@ class _ApresentacaoPageState extends State<ApresentacaoPage> {
             child: SingleChildScrollView(
               child: Column(
                 children: [
+                  const VerticalSizedBox(2),
                   Text("Olá, seja bem-vindo ao Strapen", style: Theme.of(context).textTheme.headline4),
                   const VerticalSizedBox(4),
                   const Vetor(path: "assets/images/garota_tirando_selfie.png"),

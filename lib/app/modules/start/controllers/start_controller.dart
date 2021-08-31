@@ -33,7 +33,7 @@ abstract class _StartController with Store {
   void toProduto() {
     if (page != PRODUTO_PAGE) {
       setPage(PRODUTO_PAGE);
-      Modular.to.navigate(START_ROUTE + PRODUTO_ROUTE + PRODUTO_RESERVA_LIST_ROUTE);
+      Modular.to.navigate(START_ROUTE + PRODUTO_ROUTE);
     }
   }
 

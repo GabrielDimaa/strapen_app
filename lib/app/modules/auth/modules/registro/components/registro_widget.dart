@@ -41,6 +41,7 @@ class RegistroWidget extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    const VerticalSizedBox(),
                     Text(
                       title,
                       textAlign: TextAlign.start,
