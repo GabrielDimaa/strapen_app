@@ -28,7 +28,7 @@ class StartModule extends Module {
   final List<ModularRoute> routes = [
     ChildRoute(Modular.initialRoute, child: (_, args) => StartPage(), children: [
       ModuleRoute(HOME_ROUTE, module: HomeModule()),
-      ChildRoute(PRODUTO_ROUTE, child: (_, args) => ProdutoReservaListPage()),
+      ChildRoute(PRODUTO_ROUTE + PRODUTO_RESERVA_LIST_ROUTE, child: (_, args) => ProdutoReservaListPage()),
       ChildRoute(CATALOGO_ROUTE, child: (_, args) => CatalogoListPage()),
       ModuleRoute(CONFIGURACOES_ROUTE, module: ConfiguracoesModule()),
     ]),
