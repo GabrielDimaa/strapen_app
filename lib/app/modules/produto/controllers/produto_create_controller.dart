@@ -40,7 +40,14 @@ abstract class _ProdutoCreateController with Store implements IDefaultController
   void setInitPage(VoidCallback function) => initPage = function;
 
   @action
-  Future<void> load() async {}
+  Future<void> load() async {
+    try {
+      setLoading(true);
+    } finally {
+      initPage!.call();
+      setLoading(false);
+    }
+  }
 
   @action
   Future<void> save() async {

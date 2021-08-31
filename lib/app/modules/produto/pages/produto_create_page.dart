@@ -47,7 +47,8 @@ class _ProdutoCreatePageState extends ModularState<ProdutoCreatePage, ProdutoCre
   void initState() {
     super.initState();
 
-    _updateControllers();
+    controller.setInitPage(_updateControllers);
+    controller.load();
   }
 
   void _updateControllers() {

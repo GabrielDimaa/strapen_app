@@ -24,18 +24,9 @@ class ProdutoRepository implements IProdutoRepository {
 
   @override
   ParseObject toParseObject(ProdutoModel model) {
-    ParseObject parseObject = ParseObject(className())
-      ..set<String?>(ID_COLUMN, model.id)
-      ..set<String>(DESCRICAO_COLUMN, model.descricao!)
-      ..set<String>(DESCRICAO_DETALHADA_COLUMN, model.descricaoDetalhada!)
-      ..set<int>(QUANTIDADE_COLUMN, model.quantidade!)
-      ..set<double>(PRECO_COLUMN, model.preco!)
-      ..set<ParseUser>(ANUNCIANTE_COLUMN, ParseUser(null, null, null)
-        ..set(ID_COLUMN, model.anunciante!.id!));
+    ParseObject parseObject = ParseObject(className())..set<String?>(ID_COLUMN, model.id)..set<String>(DESCRICAO_COLUMN, model.descricao!)..set<String>(DESCRICAO_DETALHADA_COLUMN, model.descricaoDetalhada!)..set<int>(QUANTIDADE_COLUMN, model.quantidade!)..set<double>(PRECO_COLUMN, model.preco!)..set<ParseUser>(ANUNCIANTE_COLUMN, ParseUser(null, null, null)..set(ID_COLUMN, model.anunciante!.id!));
 
-    if (model.userReserva != null)
-      parseObject.set<ParseUser>(USER_RESERVA_COLUMN, ParseUser(null, null, null)
-        ..set(ID_COLUMN, model.userReserva!.id!));
+    if (model.userReserva != null) parseObject.set<ParseUser>(USER_RESERVA_COLUMN, ParseUser(null, null, null)..set(ID_COLUMN, model.userReserva!.id!));
 
     return parseObject;
   }
@@ -48,9 +39,9 @@ class ProdutoRepository implements IProdutoRepository {
       e.get<String>(DESCRICAO_DETALHADA_COLUMN),
       e.get<List>(FOTOS_COLUMN)?.map((e) => e.url).toList(),
       e.get<int>(QUANTIDADE_COLUMN),
-      e.get<double>(PRECO_COLUMN),
+      e.get(PRECO_COLUMN) is int ? e.get<int>(PRECO_COLUMN)?.toDouble() ?? null : e.get<double>(PRECO_COLUMN),
       UserFactory.newModel()..id = e.get(ANUNCIANTE_COLUMN).get<String>(ID_COLUMN),
-      UserFactory.newModel()..id = e.get(USER_RESERVA_COLUMN).get<String>(ID_COLUMN),
+      e.containsKey(USER_RESERVA_COLUMN) ? (UserFactory.newModel()..id = e.get(USER_RESERVA_COLUMN).get<String>(ID_COLUMN)) : null,
     );
   }
 
@@ -61,8 +52,7 @@ class ProdutoRepository implements IProdutoRepository {
 
       List<ParseFileBase> parseImages = await _saveImagens(model.fotos!);
 
-      ParseObject parseProduto = toParseObject(model)
-        ..set<List<ParseFileBase>>(FOTOS_COLUMN, parseImages);
+      ParseObject parseProduto = toParseObject(model)..set<List<ParseFileBase>>(FOTOS_COLUMN, parseImages);
 
       ParseResponse response = await parseProduto.save();
 
@@ -71,7 +61,30 @@ class ProdutoRepository implements IProdutoRepository {
 
       return toModel(parseResponse);
     } catch (e) {
-      throw Exception(e.toString());
+      throw Exception(e);
+    }
+  }
+
+  Future<List<ProdutoModel>?> getByUser(String? id) async {
+    try {
+      if (id == null) throw Exception("Houve um erro ao buscar seus produtos, tente novamente.\nSe o erro persistir, reinicie o aplicativo.");
+
+      QueryBuilder query = QueryBuilder<ParseObject>(ParseObject(className()))
+        ..whereEqualTo(
+          ANUNCIANTE_COLUMN,
+          (ParseUser(null, null, null)..set(ID_COLUMN, id)).toPointer(),
+        );
+
+      ParseResponse response = await query.query();
+
+      if (!response.success) throw Exception(ParseErrorsUtils.get(response.statusCode));
+      List<ParseObject>? parseResponse = response.results as List<ParseObject>?;
+
+      List<ProdutoModel> produtos = parseResponse?.map((e) => toModel(e)).toList() ?? [];
+
+      return produtos;
+    } catch (e) {
+      throw Exception(e);
     }
   }
 
@@ -85,7 +98,7 @@ class ProdutoRepository implements IProdutoRepository {
           ParseFile parseFile = ParseFile(foto, name: "image$count");
 
           ParseResponse response = await parseFile.save();
-          if(!response.success) throw Exception(ParseErrorsUtils.get(response.statusCode));
+          if (!response.success) throw Exception(ParseErrorsUtils.get(response.statusCode));
 
           parseImagens.add(parseFile);
         } else {
@@ -100,7 +113,7 @@ class ProdutoRepository implements IProdutoRepository {
       }
 
       return parseImagens;
-    } catch(e) {
+    } catch (e) {
       throw Exception(e);
     }
   }
