@@ -24,7 +24,16 @@ class ProdutoRepository implements IProdutoRepository {
 
   @override
   ParseObject toParseObject(ProdutoModel model) {
-    ParseObject parseObject = ParseObject(className())..set<String?>(ID_COLUMN, model.id)..set<String>(DESCRICAO_COLUMN, model.descricao!)..set<String>(DESCRICAO_DETALHADA_COLUMN, model.descricaoDetalhada!)..set<int>(QUANTIDADE_COLUMN, model.quantidade!)..set<double>(PRECO_COLUMN, model.preco!)..set<ParseUser>(ANUNCIANTE_COLUMN, ParseUser(null, null, null)..set(ID_COLUMN, model.anunciante!.id!));
+    ParseObject parseObject = ParseObject(className())
+      ..set<String?>(ID_COLUMN, model.id)
+      ..set<String>(DESCRICAO_COLUMN, model.descricao!)
+      ..set<String>(DESCRICAO_DETALHADA_COLUMN, model.descricaoDetalhada!)
+      ..set<int>(QUANTIDADE_COLUMN, model.quantidade!)
+      ..set<double>(PRECO_COLUMN, model.preco!)
+      ..set<ParseUser>(
+        ANUNCIANTE_COLUMN,
+        ParseUser(null, null, null)..set(ID_COLUMN, model.anunciante!.id!),
+      );
 
     if (model.userReserva != null) parseObject.set<ParseUser>(USER_RESERVA_COLUMN, ParseUser(null, null, null)..set(ID_COLUMN, model.userReserva!.id!));
 

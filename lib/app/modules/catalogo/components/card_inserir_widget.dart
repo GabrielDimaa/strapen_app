@@ -7,9 +7,8 @@ class CardAddWidget extends StatelessWidget {
   final String title;
   final VoidCallback onPressed;
   final Widget? child;
-  final bool notEdit;
 
-  const CardAddWidget({required this.title, required this.onPressed, this.child, this.notEdit = false});
+  const CardAddWidget({required this.title, required this.onPressed, this.child});
 
   @override
   Widget build(BuildContext context) {
@@ -30,9 +29,9 @@ class CardAddWidget extends StatelessWidget {
                   onPressed: onPressed,
                   child: Row(
                     children: [
-                      Text(child != null && !notEdit ? "Editar" : "Inserir", style: style.copyWith(color: AppColors.primary)),
+                      Text(child != null ? "Editar" : "Inserir", style: style.copyWith(color: AppColors.primary)),
                       const HorizontalSizedBox(),
-                      Icon(child != null && !notEdit ? Icons.edit_outlined : Icons.add_circle_outline, color: AppColors.primary),
+                      Icon(child != null ? Icons.edit_outlined : Icons.add_circle_outline, color: AppColors.primary),
                     ],
                   ),
                 ),

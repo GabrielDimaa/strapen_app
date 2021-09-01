@@ -25,8 +25,8 @@ class DialogDefault extends StatefulWidget {
     Widget? title,
     String? labelButtonDefault,
     List<Widget>? actions,
-  }) {
-    return showDialog(
+  }) async {
+    return await showDialog(
       context: context,
       builder: (context) {
         return DialogDefault(

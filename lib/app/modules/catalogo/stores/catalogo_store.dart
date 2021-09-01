@@ -1,6 +1,5 @@
-import 'dart:typed_data';
-
 import 'package:mobx/mobx.dart';
+import 'package:strapen_app/app/modules/produto/models/produto_model.dart';
 import 'package:strapen_app/app/modules/user/models/user_model.dart';
 
 part 'catalogo_store.g.dart';
@@ -8,7 +7,7 @@ part 'catalogo_store.g.dart';
 class CatalogoStore = _CatalogoStore with _$CatalogoStore;
 
 abstract class _CatalogoStore with Store {
-  int? id;
+  String? id;
 
   @observable
   String? titulo;
@@ -17,13 +16,16 @@ abstract class _CatalogoStore with Store {
   String? descricao;
 
   @observable
-  Uint8List? foto;
+  dynamic foto;
 
   @observable
   DateTime? dataCriado;
 
   @observable
   UserModel? user;
+
+  @observable
+  ObservableList<ProdutoModel>? produtos;
 
   @action
   void setTitulo(String? value) => titulo = value;
@@ -32,13 +34,16 @@ abstract class _CatalogoStore with Store {
   void setDescricao(String? value) => descricao = value;
 
   @action
-  void setFoto(Uint8List? value) => foto = value;
+  void setFoto(dynamic value) => foto = value;
 
   @action
   void setDataCriado(DateTime? value) => dataCriado = value;
 
   @action
   void setUser(UserModel? value) => user = value;
+
+  @action
+  void setProdutos(ObservableList<ProdutoModel>? value) => produtos = value;
 
   _CatalogoStore(
     this.id,
@@ -47,5 +52,6 @@ abstract class _CatalogoStore with Store {
     this.foto,
     this.dataCriado,
     this.user,
+    this.produtos,
   );
 }

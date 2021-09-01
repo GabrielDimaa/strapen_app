@@ -3,16 +3,14 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:image_cropper/image_cropper.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:mobx/mobx.dart';
 import 'package:strapen_app/app/app_controller.dart';
-import 'package:strapen_app/app/app_widget.dart';
 import 'package:strapen_app/app/modules/produto/factories/produto_factory.dart';
 import 'package:strapen_app/app/modules/produto/models/produto_model.dart';
 import 'package:strapen_app/app/modules/produto/repositories/iproduto_repository.dart';
 import 'package:strapen_app/app/modules/produto/stores/produto_store.dart';
 import 'package:strapen_app/app/shared/interfaces/default_controller_interface.dart';
+import 'package:strapen_app/app/shared/utils/image_picker.dart';
 
 part 'produto_create_controller.g.dart';
 
@@ -68,33 +66,10 @@ abstract class _ProdutoCreateController with Store implements IDefaultController
 
   @action
   Future<void> getImagePicker(bool isCamera) async {
-    final ImagePicker picker = ImagePicker();
-    XFile? image;
-
-    if (isCamera)
-      image = await picker.pickImage(source: ImageSource.camera);
-    else
-      image = await picker.pickImage(source: ImageSource.gallery);
-
+    File? image = await ImagePickerUtils.getImagePicker(isCamera);
     if (image == null) return;
 
-    File? cropImage = await ImageCropper.cropImage(
-      sourcePath: image.path,
-      aspectRatio: CropAspectRatio(ratioX: 1, ratioY: 1),
-      androidUiSettings: AndroidUiSettings(
-        toolbarWidgetColor: Colors.white,
-        toolbarColor: AppColors.background,
-        statusBarColor: AppColors.background,
-        backgroundColor: AppColors.background,
-        dimmedLayerColor: AppColors.background,
-        activeControlsWidgetColor: AppColors.primary,
-      ),
-    );
-
-    if (cropImage == null) return;
-
-    produtoStore.setFoto(cropImage);
-
+    produtoStore.setFoto(image);
     Modular.to.pop();
   }
 }

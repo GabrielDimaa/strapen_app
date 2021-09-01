@@ -9,6 +9,7 @@ abstract class CatalogoFactory {
       null,
       null,
       null,
+      null,
     );
   }
 }

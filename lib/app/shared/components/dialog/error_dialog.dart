@@ -7,13 +7,13 @@ class ErrorDialog extends StatefulWidget {
 
   const ErrorDialog({required BuildContext context, required this.content, this.actions});
 
-  static DialogDefault show({
+  static Future<void> show({
     required BuildContext context,
     required String content,
     String? title,
     List<Widget>? actions,
-  }) {
-    return DialogDefault.show(
+  }) async {
+    return await DialogDefault.show(
       title: Text(title ?? "Algo deu errado..."),
       context: context,
       actions: actions,

@@ -4,6 +4,8 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:strapen_app/app/app_widget.dart';
 import 'package:strapen_app/app/modules/catalogo/components/card_inserir_widget.dart';
 import 'package:strapen_app/app/modules/catalogo/controllers/catalogo_create_controller.dart';
+import 'package:strapen_app/app/modules/produto/models/produto_model.dart';
+import 'package:strapen_app/app/shared/components/bottom_sheet/bottom_sheet_image_picker.dart';
 import 'package:strapen_app/app/shared/components/button/elevated_button_default.dart';
 import 'package:strapen_app/app/shared/components/dialog/dialog_default.dart';
 import 'package:strapen_app/app/shared/components/padding/magin_button_without_scaffold.dart';
@@ -48,7 +50,17 @@ class _CriarCatalogoWidgetState extends State<CriarCatalogoWidget> {
                 Observer(
                   builder: (_) => CardAddWidget(
                     title: "Foto",
-                    onPressed: () {},
+                    onPressed: () async => await _showBottomSheet(),
+                    child: controller.catalogoStore.foto != null
+                        ? ClipRRect(
+                            borderRadius: BorderRadius.circular(16),
+                            child: Image.file(
+                              controller.catalogoStore.foto,
+                              height: 126,
+                              width: 126,
+                            ),
+                          )
+                        : null,
                   ),
                 ),
                 const VerticalSizedBox(),
@@ -65,85 +77,15 @@ class _CriarCatalogoWidgetState extends State<CriarCatalogoWidget> {
                   ),
                 ),
                 const VerticalSizedBox(),
-                CardAddWidget(
-                  title: "Produtos",
-                  onPressed: () async => await controller.toCreateProduto(),
-                  notEdit: true,
-                  child: Column(
-                    children: [
-                      ListTile(
-                        contentPadding: EdgeInsets.all(0),
-                        leading: Padding(
-                          padding: const EdgeInsets.only(left: 6),
-                          child: CircleAvatar(
-                            backgroundImage: Image.asset("assets/images/test/avatar_test.png").image,
-                          ),
-                        ),
-                        title: Text(
-                          "Jaqueta de couro",
-                          style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.grey.shade300),
-                        ),
-                        onTap: () {},
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            IconButton(
-                              padding: EdgeInsets.all(0),
-                              onPressed: () {},
-                              icon: Icon(
-                                Icons.delete_outline,
-                                color: AppColors.error,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      ListTile(
-                        contentPadding: EdgeInsets.all(0),
-                        title: Text(
-                          "Jaqueta de couro",
-                          style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.grey.shade300),
-                        ),
-                        onTap: () {},
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            IconButton(
-                              padding: EdgeInsets.all(0),
-                              onPressed: () {},
-                              icon: Icon(
-                                Icons.delete_outline,
-                                color: AppColors.error,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                      ListTile(
-                        contentPadding: EdgeInsets.all(0),
-                        title: Text(
-                          "Jaqueta de couro",
-                          style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.grey.shade300),
-                        ),
-                        onTap: () {},
-                        trailing: Row(
-                          mainAxisSize: MainAxisSize.min,
-                          mainAxisAlignment: MainAxisAlignment.end,
-                          children: [
-                            IconButton(
-                              padding: EdgeInsets.all(0),
-                              onPressed: () {},
-                              icon: Icon(
-                                Icons.delete_outline,
-                                color: AppColors.error,
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
+                Observer(
+                  builder: (_) => CardAddWidget(
+                    title: "Produtos",
+                    onPressed: () async => await controller.inserirProdutos(),
+                    child: controller.catalogoStore.produtos?.isNotEmpty ?? false
+                        ? Column(
+                            children: controller.catalogoStore.produtos!.map((e) => _produtoTile(e)).toList(),
+                          )
+                        : null,
                   ),
                 ),
               ],
@@ -223,6 +165,48 @@ class _CriarCatalogoWidgetState extends State<CriarCatalogoWidget> {
               controller.catalogoStore.setDescricao(textController.text);
               Modular.to.pop();
             },
+          ),
+        ],
+      ),
+    );
+  }
+
+  Future<void> _showBottomSheet() async {
+    await showModalBottomSheet(
+      context: context,
+      builder: (_) => BottomSheetImagePicker(
+        onTapCamera: () async => await controller.getImagePicker(true),
+        onTapGaleria: () async => await controller.getImagePicker(false),
+      ),
+    );
+  }
+
+  Widget _produtoTile(ProdutoModel prod) {
+    return ListTile(
+      contentPadding: EdgeInsets.all(0),
+      leading: Padding(
+        padding: const EdgeInsets.only(left: 6),
+        child: CircleAvatar(
+          backgroundImage: Image.network(prod.fotos!.first).image,
+        ),
+      ),
+      title: Text(
+        prod.descricao!,
+        style: Theme.of(context).textTheme.bodyText1!.copyWith(color: Colors.grey.shade300),
+      ),
+      trailing: Row(
+        mainAxisSize: MainAxisSize.min,
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          IconButton(
+            padding: EdgeInsets.all(0),
+            onPressed: () {
+              controller.catalogoStore.produtos!.remove(prod);
+            },
+            icon: Icon(
+              Icons.delete_outline,
+              color: AppColors.error,
+            ),
           ),
         ],
       ),
