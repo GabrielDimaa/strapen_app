@@ -92,6 +92,30 @@ class CatalogoRepository implements ICatalogoRepository {
     }
   }
 
+  @override
+  Future<List<CatalogoModel>?> getByUser(String? id) async {
+    try {
+      if (id == null) throw Exception("Houve um erro ao buscar seus catálogo, tente novamente.\nSe o erro persistir, reinicie o aplicativo.");
+
+      QueryBuilder query = QueryBuilder<ParseObject>(ParseObject(className()))
+        ..whereEqualTo(
+          USER_COLUMN,
+          (ParseUser(null, null, null)..set(ID_COLUMN, id)).toPointer(),
+        );
+
+      ParseResponse response = await query.query();
+
+      if (!response.success) throw Exception(ParseErrorsUtils.get(response.statusCode));
+      List<ParseObject>? parseResponse = response.results as List<ParseObject>?;
+
+      List<CatalogoModel> catalogos = parseResponse?.map((e) => toModel(e)).toList() ?? [];
+
+      return catalogos;
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
   Future<List<ParseFileBase>> _saveImagem(dynamic foto) async {
     final List<ParseFileBase>? parseImagem;
 

@@ -41,13 +41,13 @@ class _CatalogoInserirProdutosPageState extends ModularState<CatalogoInserirProd
             child: Text("Selecione os produtos que serão exibidos no catálogo."),
           ),
           Expanded(
-            child: Observer(
-              builder: (_) {
-                if (!controller.loading) {
-                  if (controller.produtos.isNotEmpty) {
-                    return Padding(
-                      padding: const PaddingList(),
-                      child: ListView.builder(
+            child: Padding(
+              padding: const PaddingList(),
+              child: Observer(
+                builder: (_) {
+                  if (!controller.loading) {
+                    if (controller.produtos.isNotEmpty) {
+                      return ListView.builder(
                         itemCount: controller.produtos.length,
                         itemBuilder: (_, i) {
                           final ProdutoModel prod = controller.produtos[i];
@@ -88,19 +88,19 @@ class _CatalogoInserirProdutosPageState extends ModularState<CatalogoInserirProd
                             ),
                           );
                         },
-                      ),
-                    );
+                      );
+                    } else {
+                      return Center(
+                        child: EmptyListWidget(
+                          message: "Crie produtos para adicionar no seu novo catálogo.",
+                        ),
+                      );
+                    }
                   } else {
-                    return Center(
-                      child: EmptyListWidget(
-                        message: "Crie produtos para adicionar no seu novo catálogo.",
-                      ),
-                    );
+                    return const CircularLoading();
                   }
-                } else {
-                  return const CircularLoading();
-                }
-              },
+                },
+              ),
             ),
           ),
           Padding(

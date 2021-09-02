@@ -1,10 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:strapen_app/app/app_widget.dart';
 import 'package:strapen_app/app/modules/catalogo/controllers/catalogo_list_controller.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/app_bar_default.dart';
 import 'package:strapen_app/app/shared/components/fab_default/fab_default.dart';
-import 'package:strapen_app/app/shared/components/padding/padding_scaffold.dart';
+import 'package:strapen_app/app/shared/components/loading/circular_loading.dart';
+import 'package:strapen_app/app/shared/components/padding/padding_list.dart';
+import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
+import 'package:strapen_app/app/shared/extensions/datetime_extension.dart';
 import 'package:strapen_app/app/shared/components/widgets/empty_list_widget.dart';
+import 'package:strapen_app/app/shared/components/widgets/list_tile_widget.dart';
 
 class CatalogoListPage extends StatefulWidget {
   @override
@@ -13,7 +19,14 @@ class CatalogoListPage extends StatefulWidget {
 
 class _CatalogoListPageState extends ModularState<CatalogoListPage, CatalogoListController> {
   @override
+  void initState() {
+    super.initState();
+    controller.load();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final TextTheme textTheme = Theme.of(context).textTheme;
     return Scaffold(
       appBar: AppBarDefault(title: Text("Catálogos")),
       floatingActionButton: Padding(
@@ -23,12 +36,50 @@ class _CatalogoListPageState extends ModularState<CatalogoListPage, CatalogoList
           icon: Icons.add_circle_outline,
         ),
       ),
-      body: Padding(
-        padding: const PaddingScaffold(),
-        child: EmptyListWidget(
-          message: "Sua lista está vazia. Crie um catálogo de produtos para ser exibido em uma Live.",
-        ),
+      body: Column(
+        children: [
+          Expanded(
+            child: Padding(
+              padding: const PaddingList(),
+              child: Observer(builder: (_) {
+                if (controller.loading) {
+                  return const CircularLoading();
+                } else {
+                  if (controller.catalogos.isEmpty) {
+                    return const EmptyListWidget(
+                      message: "Sua lista está vazia. Crie catálogos para serem exibidos nas Lives.",
+                    );
+                  } else {
+                    return ListView.builder(
+                      itemCount: controller.catalogos.length,
+                      itemBuilder: (_, i) {
+                        final cat = controller.catalogos[i];
+                        return ListTileWidget(
+                          leadingImage: Image.network(cat.foto, height: 64, width: 64),
+                          title: Text(cat.titulo!),
+                          subtitle: Column(
+                            children: [
+                              Text(
+                                cat.dataCriado!.formated,
+                                style: textTheme.bodyText2!.copyWith(color: AppColors.primary),
+                              ),
+                            ],
+                          ),
+                          onTap: () {},
+                        );
+                      }
+                    );
+                  }
+                }
+              }),
+            ),
+          ),
+        ],
       ),
     );
   }
 }
+
+// EmptyListWidget(
+// message: "Sua lista está vazia. Crie um catálogo de produtos para ser exibido em uma Live.",
+// ),

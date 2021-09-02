@@ -6,4 +6,5 @@ abstract class ICatalogoRepository implements IRepository<CatalogoModel> {
 
   Future<CatalogoModel> save(CatalogoModel model);
   Future<void> saveProdutosCatalogo(CatalogoModel model);
+  Future<List<CatalogoModel>?> getByUser(String? id);
 }

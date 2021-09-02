@@ -38,7 +38,7 @@ class _CriarCatalogoWidgetState extends State<CriarCatalogoWidget> {
                 Observer(
                   builder: (_) => CardAddWidget(
                     title: "Título",
-                    onPressed: () async => await showTitle(context),
+                    onPressed: () async => await _showTitle(context),
                     child: controller.catalogoStore.titulo.notIsNullOrEmpty()
                         ? Text(
                             controller.catalogoStore.titulo!,
@@ -68,7 +68,7 @@ class _CriarCatalogoWidgetState extends State<CriarCatalogoWidget> {
                 Observer(
                   builder: (_) => CardAddWidget(
                     title: "Descrição",
-                    onPressed: () async => await showDescricao(context),
+                    onPressed: () async => await _showDescricao(context),
                     child: controller.catalogoStore.descricao.notIsNullOrEmpty()
                         ? Text(
                             controller.catalogoStore.descricao!,
@@ -110,7 +110,7 @@ class _CriarCatalogoWidgetState extends State<CriarCatalogoWidget> {
     );
   }
 
-  Future<void> showTitle(BuildContext context) async {
+  Future<void> _showTitle(BuildContext context) async {
     final TextEditingController textController = TextEditingController();
     textController.text = controller.catalogoStore.titulo ?? "";
 
@@ -144,7 +144,7 @@ class _CriarCatalogoWidgetState extends State<CriarCatalogoWidget> {
     );
   }
 
-  Future<void> showDescricao(BuildContext context) async {
+  Future<void> _showDescricao(BuildContext context) async {
     final TextEditingController textController = TextEditingController();
     textController.text = controller.catalogoStore.descricao ?? "";
 

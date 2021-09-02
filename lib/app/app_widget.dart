@@ -117,7 +117,7 @@ class AppWidget extends StatelessWidget with ModoRetratoLess {
         ),
         cardTheme: CardTheme(
           color: AppColors.opaci,
-          elevation: 4,
+          elevation: 2,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(16),
           ),

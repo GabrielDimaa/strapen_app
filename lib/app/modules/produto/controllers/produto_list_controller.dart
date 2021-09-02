@@ -12,7 +12,7 @@ part 'produto_list_controller.g.dart';
 
 class ProdutoListController = _ProdutoListController with _$ProdutoListController;
 
-abstract class _ProdutoListController with Store implements IDefaultController {
+abstract class _ProdutoListController with Store {
   final IProdutoRepository _produtoRepository;
   final AppController _appController;
 
@@ -24,14 +24,8 @@ abstract class _ProdutoListController with Store implements IDefaultController {
   @observable
   bool loading = false;
 
-  @override
-  VoidCallback? initPage;
-
   @action
   void setLoading(bool value) => loading = value;
-
-  @override
-  void setInitPage(VoidCallback function) => initPage = function;
 
   @action
   Future<void> load() async {

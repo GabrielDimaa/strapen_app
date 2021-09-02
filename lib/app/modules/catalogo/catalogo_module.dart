@@ -17,7 +17,7 @@ class CatalogoModule extends Module {
   final List<Bind> binds = [
     Bind((i) => ProdutoRepository()),
     Bind((i) => CatalogoRepository()),
-    Bind((i) => CatalogoListController()),
+    Bind((i) => CatalogoListController(i.get<ICatalogoRepository>(), i.get<AppController>())),
     Bind((i) => CatalogoCreateController(i.get<ICatalogoRepository>(), i.get<AppController>())),
     Bind((i) => CatalogoInserirProdutosController(i.get<CatalogoCreateController>(), i.get<IProdutoRepository>())),
   ];
