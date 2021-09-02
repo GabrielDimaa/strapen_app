@@ -25,17 +25,17 @@ class ProdutoRepository implements IProdutoRepository {
   @override
   ParseObject toParseObject(ProdutoModel model) {
     ParseObject parseObject = ParseObject(className())
-      ..set<String?>(ID_COLUMN, model.id)
-      ..set<String>(DESCRICAO_COLUMN, model.descricao!)
-      ..set<String>(DESCRICAO_DETALHADA_COLUMN, model.descricaoDetalhada!)
-      ..set<int>(QUANTIDADE_COLUMN, model.quantidade!)
-      ..set<double>(PRECO_COLUMN, model.preco!)
+      ..set<String?>(PRODUTO_ID_COLUMN, model.id)
+      ..set<String>(PRODUTO_DESCRICAO_COLUMN, model.descricao!)
+      ..set<String>(PRODUTO_DESCRICAO_DETALHADA_COLUMN, model.descricaoDetalhada!)
+      ..set<int>(PRODUTO_QUANTIDADE_COLUMN, model.quantidade!)
+      ..set<double>(PRODUTO_PRECO_COLUMN, model.preco!)
       ..set<ParseUser>(
-        ANUNCIANTE_COLUMN,
-        ParseUser(null, null, null)..set(ID_COLUMN, model.anunciante!.id!),
+        PRODUTO_ANUNCIANTE_COLUMN,
+        ParseUser(null, null, null)..set(PRODUTO_ID_COLUMN, model.anunciante!.id!),
       );
 
-    if (model.userReserva != null) parseObject.set<ParseUser>(USER_RESERVA_COLUMN, ParseUser(null, null, null)..set(ID_COLUMN, model.userReserva!.id!));
+    if (model.userReserva != null) parseObject.set<ParseUser>(PRODUTO_USER_RESERVA_COLUMN, ParseUser(null, null, null)..set(PRODUTO_ID_COLUMN, model.userReserva!.id!));
 
     return parseObject;
   }
@@ -43,14 +43,14 @@ class ProdutoRepository implements IProdutoRepository {
   @override
   ProdutoModel toModel(ParseObject e) {
     return ProdutoModel(
-      e.get<String>(ID_COLUMN),
-      e.get<String>(DESCRICAO_COLUMN),
-      e.get<String>(DESCRICAO_DETALHADA_COLUMN),
-      e.get<List>(FOTOS_COLUMN)?.map((e) => e.url).toList(),
-      e.get<int>(QUANTIDADE_COLUMN),
-      e.get(PRECO_COLUMN) is int ? e.get<int>(PRECO_COLUMN)?.toDouble() ?? null : e.get<double>(PRECO_COLUMN),
-      UserFactory.newModel()..id = e.get(ANUNCIANTE_COLUMN).get<String>(ID_COLUMN),
-      e.containsKey(USER_RESERVA_COLUMN) ? (UserFactory.newModel()..id = e.get(USER_RESERVA_COLUMN).get<String>(ID_COLUMN)) : null,
+      e.get<String>(PRODUTO_ID_COLUMN),
+      e.get<String>(PRODUTO_DESCRICAO_COLUMN),
+      e.get<String>(PRODUTO_DESCRICAO_DETALHADA_COLUMN),
+      e.get<List>(PRODUTO_FOTOS_COLUMN)?.map((e) => e.url).toList(),
+      e.get<int>(PRODUTO_QUANTIDADE_COLUMN),
+      e.get(PRODUTO_PRECO_COLUMN) is int ? e.get<int>(PRODUTO_PRECO_COLUMN)?.toDouble() ?? null : e.get<double>(PRODUTO_PRECO_COLUMN),
+      UserFactory.newModel()..id = e.get(PRODUTO_ANUNCIANTE_COLUMN).get<String>(PRODUTO_ID_COLUMN),
+      e.containsKey(PRODUTO_USER_RESERVA_COLUMN) ? (UserFactory.newModel()..id = e.get(PRODUTO_USER_RESERVA_COLUMN).get<String>(PRODUTO_ID_COLUMN)) : null,
     );
   }
 
@@ -61,7 +61,7 @@ class ProdutoRepository implements IProdutoRepository {
 
       List<ParseFileBase> parseImages = await _saveImagens(model.fotos!);
 
-      ParseObject parseProduto = toParseObject(model)..set<List<ParseFileBase>>(FOTOS_COLUMN, parseImages);
+      ParseObject parseProduto = toParseObject(model)..set<List<ParseFileBase>>(PRODUTO_FOTOS_COLUMN, parseImages);
 
       ParseResponse response = await parseProduto.save();
 
@@ -80,8 +80,8 @@ class ProdutoRepository implements IProdutoRepository {
 
       QueryBuilder query = QueryBuilder<ParseObject>(ParseObject(className()))
         ..whereEqualTo(
-          ANUNCIANTE_COLUMN,
-          (ParseUser(null, null, null)..set(ID_COLUMN, id)).toPointer(),
+          PRODUTO_ANUNCIANTE_COLUMN,
+          (ParseUser(null, null, null)..set(PRODUTO_ID_COLUMN, id)).toPointer(),
         );
 
       ParseResponse response = await query.query();

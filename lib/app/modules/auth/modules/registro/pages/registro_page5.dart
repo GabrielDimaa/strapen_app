@@ -59,7 +59,7 @@ class _RegistroPage5State extends State<RegistroPage5> {
           await controller.onSavedForm(context, _formKey, () async {
             try {
               await controller.existsData(
-                USERNAME_COLUMN,
+                USER_USERNAME_COLUMN,
                 _usernameController.text,
                 "Nome de usuário já está em uso.",
               );

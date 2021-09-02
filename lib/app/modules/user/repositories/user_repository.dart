@@ -33,32 +33,32 @@ class UserRepository implements IUserRepository {
   @override
   ParseUser toParseObject(UserModel model) {
     return ParseUser.createUser(model.email, model.senha, model.email)
-      ..set<String?>(ID_COLUMN, model.id)
-      ..set<String>(NOME_COLUMN, model.nome!)
-      ..set<String>(USERNAME_COLUMN, model.username!)
-      ..set<DateTime>(DATANASCIMENTO_COLUMN, model.dataNascimento!)
-      ..set<String>(CPFCNPJ_COLUMN, model.cpfCnpj!)
-      ..set<String>(TELEFONE_COLUMN, model.telefone!)
-      ..set<String?>(DESCRICAO_COLUMN, model.descricao)
-      ..set<String>(CEP_COLUMN, model.cep!)
-      ..set<String>(CIDADE_COLUMN, model.cidade!)
-      ..set<Uint8List?>(FOTO_COLUMN, model.foto);
+      ..set<String?>(USER_ID_COLUMN, model.id)
+      ..set<String>(USER_NOME_COLUMN, model.nome!)
+      ..set<String>(USER_USERNAME_COLUMN, model.username!)
+      ..set<DateTime>(USER_DATANASCIMENTO_COLUMN, model.dataNascimento!)
+      ..set<String>(USER_CPFCNPJ_COLUMN, model.cpfCnpj!)
+      ..set<String>(USER_TELEFONE_COLUMN, model.telefone!)
+      ..set<String?>(USER_DESCRICAO_COLUMN, model.descricao)
+      ..set<String>(USER_CEP_COLUMN, model.cep!)
+      ..set<String>(USER_CIDADE_COLUMN, model.cidade!)
+      ..set<Uint8List?>(USER_FOTO_COLUMN, model.foto);
   }
 
   @override
   UserModel toModel(ParseObject e) {
     return UserModel(
-      e.get<String>(ID_COLUMN),
-      e.get<String>(NOME_COLUMN),
-      e.get<String?>(DESCRICAO_COLUMN),
-      e.get<DateTime>(DATANASCIMENTO_COLUMN),
-      e.get<String>(CPFCNPJ_COLUMN),
-      e.get<Uint8List?>(FOTO_COLUMN),
-      e.get<String>(USERNAME_COLUMN),
-      e.get<String>(EMAIL_COLUMN),
-      e.get<String>(TELEFONE_COLUMN),
-      e.get<String>(CEP_COLUMN),
-      e.get<String>(CIDADE_COLUMN),
+      e.get<String>(USER_ID_COLUMN),
+      e.get<String>(USER_NOME_COLUMN),
+      e.get<String?>(USER_DESCRICAO_COLUMN),
+      e.get<DateTime>(USER_DATANASCIMENTO_COLUMN),
+      e.get<String>(USER_CPFCNPJ_COLUMN),
+      e.get<Uint8List?>(USER_FOTO_COLUMN),
+      e.get<String>(USER_USERNAME_COLUMN),
+      e.get<String>(USER_EMAIL_COLUMN),
+      e.get<String>(USER_TELEFONE_COLUMN),
+      e.get<String>(USER_CEP_COLUMN),
+      e.get<String>(USER_CIDADE_COLUMN),
       null,
     );
   }

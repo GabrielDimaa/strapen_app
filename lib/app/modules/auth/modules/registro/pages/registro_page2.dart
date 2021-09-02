@@ -94,12 +94,12 @@ class _RegistroPage2State extends State<RegistroPage2> {
           await controller.onSavedForm(context, _formKey, () async {
             try {
               await controller.existsData(
-                EMAIL_COLUMN,
+                USER_EMAIL_COLUMN,
                 _emailController.text,
                 "Já existe esse e-mail cadastrado no Strapen.",
               );
               await controller.existsData(
-                TELEFONE_COLUMN,
+                USER_TELEFONE_COLUMN,
                 _telefoneController.text.extrairNum(),
                 "Já existe esse número de telefone cadastrado no Strapen.",
               );

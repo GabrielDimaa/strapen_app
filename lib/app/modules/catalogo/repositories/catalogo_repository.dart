@@ -28,12 +28,12 @@ class CatalogoRepository implements ICatalogoRepository {
   @override
   ParseObject toParseObject(CatalogoModel model) {
     ParseObject parseObject = ParseObject(className())
-      ..set<String?>(ID_COLUMN, model.id)
-      ..set<String>(TITULO_COLUMN, model.titulo!)
-      ..set<String>(DESCRICAO_COLUMN, model.descricao!)
+      ..set<String?>(CATALOGO_ID_COLUMN, model.id)
+      ..set<String>(CATALOGO_TITULO_COLUMN, model.titulo!)
+      ..set<String>(CATALOGO_DESCRICAO_COLUMN, model.descricao!)
       ..set<ParseUser>(
-        USER_COLUMN,
-        ParseUser(null, null, null)..set(ID_COLUMN, model.user!.id!),
+        CATALOGO_USER_COLUMN,
+        ParseUser(null, null, null)..set(CATALOGO_ID_COLUMN, model.user!.id!),
       );
 
     return parseObject;
@@ -42,13 +42,13 @@ class CatalogoRepository implements ICatalogoRepository {
   @override
   CatalogoModel toModel(ParseObject e) {
     return CatalogoModel(
-      e.get<String>(ID_COLUMN),
-      e.get<DateTime>(DATA_CRIADO_COLUMN),
-      e.get<String>(TITULO_COLUMN),
-      e.get<String>(DESCRICAO_COLUMN),
-      e.get<List>(FOTO_COLUMN)?.first.url,
+      e.get<String>(CATALOGO_ID_COLUMN),
+      e.get<DateTime>(CATALOGO_DATA_CRIADO_COLUMN),
+      e.get<String>(CATALOGO_TITULO_COLUMN),
+      e.get<String>(CATALOGO_DESCRICAO_COLUMN),
+      e.get<List>(CATALOGO_FOTO_COLUMN)?.first.url,
       null,
-      UserFactory.newModel()..id = e.get(USER_COLUMN).get<String>(ID_COLUMN),
+      UserFactory.newModel()..id = e.get(CATALOGO_USER_COLUMN).get<String>(CATALOGO_ID_COLUMN),
     );
   }
 
@@ -60,7 +60,7 @@ class CatalogoRepository implements ICatalogoRepository {
       List<ParseFileBase> parseImagem = await _saveImagem(model.foto!);
 
       ParseObject parseCatalogo = toParseObject(model);
-      parseCatalogo..set<List<ParseFileBase>>(FOTO_COLUMN, parseImagem);
+      parseCatalogo..set<List<ParseFileBase>>(CATALOGO_FOTO_COLUMN, parseImagem);
 
       ParseResponse response = await parseCatalogo.save();
 
@@ -85,8 +85,8 @@ class CatalogoRepository implements ICatalogoRepository {
   Future<void> saveProdutosCatalogo(CatalogoModel model) async {
     for (var it in model.produtos!) {
       ParseObject parseObject = ParseObject(classNameRelation())
-        ..set<ParseObject>(PRODUTO_COLUMN, ParseObject(ProdutoRepository().className())..set(ID_COLUMN, it.id))
-        ..set<ParseObject>(CATALOGO_COLUMN, ParseObject(className())..set(ID_COLUMN, model.id));
+        ..set<ParseObject>(CATALOGO_PRODUTO_COLUMN, ParseObject(ProdutoRepository().className())..set(CATALOGO_ID_COLUMN, it.id))
+        ..set<ParseObject>(CATALOGO_COLUMN, ParseObject(className())..set(CATALOGO_ID_COLUMN, model.id));
 
       await parseObject.save();
     }
@@ -99,8 +99,8 @@ class CatalogoRepository implements ICatalogoRepository {
 
       QueryBuilder query = QueryBuilder<ParseObject>(ParseObject(className()))
         ..whereEqualTo(
-          USER_COLUMN,
-          (ParseUser(null, null, null)..set(ID_COLUMN, id)).toPointer(),
+          CATALOGO_USER_COLUMN,
+          (ParseUser(null, null, null)..set(CATALOGO_ID_COLUMN, id)).toPointer(),
         );
 
       ParseResponse response = await query.query();

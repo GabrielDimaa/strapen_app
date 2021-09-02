@@ -107,7 +107,7 @@ class _RegistroPage4State extends State<RegistroPage4> {
         await controller.onSavedForm(context, _formKey, () async {
           try {
             await controller.existsData(
-              CPFCNPJ_COLUMN,
+              USER_CPFCNPJ_COLUMN,
               _cpfCnpjController.text.extrairNum(),
               "Já existe esse ${controller.isCpf ? "CPF" : "CNPJ"} cadastrado no Strapen.",
             );
