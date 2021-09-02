@@ -7,6 +7,8 @@ import 'package:strapen_app/app/modules/catalogo/controllers/catalogo_list_contr
 import 'package:strapen_app/app/modules/catalogo/pages/catalogo_create_page.dart';
 import 'package:strapen_app/app/modules/catalogo/pages/catalogo_inserir_produtos.dart';
 import 'package:strapen_app/app/modules/catalogo/pages/catalogo_list_page.dart';
+import 'package:strapen_app/app/modules/catalogo/repositories/catalogo_repository.dart';
+import 'package:strapen_app/app/modules/catalogo/repositories/icatalogo_repository.dart';
 import 'package:strapen_app/app/modules/produto/repositories/iproduto_repository.dart';
 import 'package:strapen_app/app/modules/produto/repositories/produto_repository.dart';
 
@@ -14,8 +16,9 @@ class CatalogoModule extends Module {
   @override
   final List<Bind> binds = [
     Bind((i) => ProdutoRepository()),
+    Bind((i) => CatalogoRepository()),
     Bind((i) => CatalogoListController()),
-    Bind((i) => CatalogoCreateController(i.get<AppController>())),
+    Bind((i) => CatalogoCreateController(i.get<ICatalogoRepository>(), i.get<AppController>())),
     Bind((i) => CatalogoInserirProdutosController(i.get<CatalogoCreateController>(), i.get<IProdutoRepository>())),
   ];
 

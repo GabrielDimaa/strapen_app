@@ -1,4 +1,5 @@
 import 'package:mobx/mobx.dart';
+import 'package:strapen_app/app/modules/catalogo/models/catalogo_model.dart';
 import 'package:strapen_app/app/modules/produto/models/produto_model.dart';
 import 'package:strapen_app/app/modules/user/models/user_model.dart';
 
@@ -54,4 +55,16 @@ abstract class _CatalogoStore with Store {
     this.user,
     this.produtos,
   );
+
+  CatalogoModel toModel() {
+    return CatalogoModel(
+      this.id,
+      this.dataCriado,
+      this.titulo,
+      this.descricao,
+      this.foto,
+      this.produtos,
+      this.user,
+    );
+  }
 }

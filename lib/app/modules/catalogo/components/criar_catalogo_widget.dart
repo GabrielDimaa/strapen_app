@@ -8,6 +8,7 @@ import 'package:strapen_app/app/modules/produto/models/produto_model.dart';
 import 'package:strapen_app/app/shared/components/bottom_sheet/bottom_sheet_image_picker.dart';
 import 'package:strapen_app/app/shared/components/button/elevated_button_default.dart';
 import 'package:strapen_app/app/shared/components/dialog/dialog_default.dart';
+import 'package:strapen_app/app/shared/components/dialog/error_dialog.dart';
 import 'package:strapen_app/app/shared/components/padding/magin_button_without_scaffold.dart';
 import 'package:strapen_app/app/shared/components/padding/padding_scaffold.dart';
 import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
@@ -96,7 +97,13 @@ class _CriarCatalogoWidgetState extends State<CriarCatalogoWidget> {
           padding: const MarginButtonWithoutScaffold(),
           child: ElevatedButtonDefault(
             child: Text("Salvar catálogo"),
-            onPressed: () {},
+            onPressed: () async {
+              try {
+                await controller.save(context);
+              } catch(e) {
+                ErrorDialog.show(context: context, content: e.toString());
+              }
+            },
           ),
         )
       ],

@@ -9,6 +9,8 @@ import 'package:strapen_app/app/modules/produto/factories/produto_factory.dart';
 import 'package:strapen_app/app/modules/produto/models/produto_model.dart';
 import 'package:strapen_app/app/modules/produto/repositories/iproduto_repository.dart';
 import 'package:strapen_app/app/modules/produto/stores/produto_store.dart';
+import 'package:strapen_app/app/shared/components/dialog/dialog_default.dart';
+import 'package:strapen_app/app/shared/components/dialog/loading_dialog.dart';
 import 'package:strapen_app/app/shared/interfaces/default_controller_interface.dart';
 import 'package:strapen_app/app/shared/utils/image_picker.dart';
 
@@ -48,16 +50,19 @@ abstract class _ProdutoCreateController with Store implements IDefaultController
   }
 
   @action
-  Future<void> save() async {
+  Future<void> save(BuildContext context) async {
     try {
       setLoading(true);
 
-      produtoStore.setAnunciante(_appController.userModel);
-      ProdutoModel? model = await _produtoRepository.save(produtoStore.toModel());
+      await LoadingDialog.show(context, "Salvando produto...", () async {
+        produtoStore.setAnunciante(_appController.userModel);
+        ProdutoModel? model = await _produtoRepository.save(produtoStore.toModel());
 
-      if (model?.id != null)
-        Modular.to.pop();
-    } catch(_) {
+        setLoading(false);
+
+        if (model?.id != null) Modular.to.pop(model!);
+      });
+    } catch (_) {
       rethrow;
     } finally {
       setLoading(false);

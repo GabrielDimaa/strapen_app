@@ -224,7 +224,7 @@ class _ProdutoCreatePageState extends ModularState<ProdutoCreatePage, ProdutoCre
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
 
-                    await controller.save();
+                    await controller.save(context);
                   }
                 } catch (e) {
                   ErrorDialog.show(context: context, content: e.toString());

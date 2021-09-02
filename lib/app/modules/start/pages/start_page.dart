@@ -35,7 +35,7 @@ class _StartPageState extends ModularState<StartPage, StartController> {
               ),
               BottomAppBarItem(
                 icon: Icons.shopping_basket,
-                label: "Reservas",
+                label: "Produtos",
                 ontap: controller.toProduto,
                 selected: controller.page == PRODUTO_PAGE,
               ),

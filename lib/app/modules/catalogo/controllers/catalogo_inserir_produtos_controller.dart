@@ -33,7 +33,7 @@ abstract class _CatalogoInserirProdutosController with Store {
   void addProdutosSelected(ProdutoModel value) => produtosSelected.add(value);
 
   @action
-  void removeProdutosSelected(ProdutoModel value) => produtosSelected.remove(value);
+  void removeProdutosSelected(ProdutoModel value) => produtosSelected.removeWhere((e) => e.id == value.id);
 
   @action
   Future<void> load() async {
