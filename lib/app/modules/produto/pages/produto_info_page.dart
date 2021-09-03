@@ -9,6 +9,10 @@ import 'package:strapen_app/app/modules/produto/factories/produto_factory.dart';
 import 'package:strapen_app/app/modules/produto/models/produto_model.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/app_bar_default.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/widgets/circle_background_app_bar.dart';
+import 'package:strapen_app/app/shared/components/button/elevated_button_default.dart';
+import 'package:strapen_app/app/shared/components/padding/padding_scaffold.dart';
+import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
+import 'package:strapen_app/app/shared/extensions/double_extension.dart';
 
 class ProdutoInfoPage extends StatefulWidget {
   final ProdutoModel model;
@@ -28,6 +32,9 @@ class _ProdutoInfoPageState extends ModularState<ProdutoInfoPage, ProdutoInfoCon
 
   @override
   Widget build(BuildContext context) {
+    final TextTheme textTheme = Theme.of(context).textTheme;
+    double height = MediaQuery.of(context).size.width + 66;
+
     return Scaffold(
       body: SnappingSheet(
         child: Stack(
@@ -38,29 +45,15 @@ class _ProdutoInfoPageState extends ModularState<ProdutoInfoPage, ProdutoInfoCon
                   builder: (_) => CarouselSlider(
                     options: CarouselOptions(
                       autoPlay: controller.produtoStore!.fotos.length > 1,
+                      scrollPhysics: controller.produtoStore!.fotos.length <= 1 ? NeverScrollableScrollPhysics() : null,
                       viewportFraction: 1,
                       aspectRatio: 1,
-                      autoPlayInterval: const Duration(seconds: 8),
+                      autoPlayInterval: const Duration(seconds: 10),
                       onPageChanged: (index, _) => controller.setCurrentImage(index),
                     ),
                     items: controller.produtoStore!.fotos.map((e) {
                       return Image.network(e);
                     }).toList(),
-                  ),
-                ),
-                Observer(
-                  builder: (_) => Positioned(
-                    bottom: 24,
-                    left: 0,
-                    right: 0,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: controller.produtoStore!.fotos.asMap().entries.map((e) {
-                        return Observer(
-                          builder: (_) => _itemIndicator(e.key == controller.currentImage),
-                        );
-                      }).toList(),
-                    ),
                   ),
                 ),
               ],
@@ -83,18 +76,99 @@ class _ProdutoInfoPageState extends ModularState<ProdutoInfoPage, ProdutoInfoCon
             ),
           ],
         ),
+        initialSnappingPosition: _snapPositionPixel(height),
+        lockOverflowDrag: true,
         snappingPositions: [
-          SnappingPosition.factor(
-            grabbingContentOffset: GrabbingContentOffset.bottom,
-            snappingCurve: Curves.fastOutSlowIn,
-            snappingDuration: Duration(seconds: 1),
-            positionFactor: 0.5,
-          ),
+          _snapPositionFactor(0.7),
+          _snapPositionFactor(0.8),
+          _snapPositionPixel(height),
         ],
         sheetBelow: SnappingSheetContent(
           draggable: true,
-          child: Container(
-            color: Colors.white,
+          child: Column(
+            mainAxisSize: MainAxisSize.max,
+            children: [
+              Observer(
+                builder: (_) => Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: controller.produtoStore!.fotos.asMap().entries.map((e) {
+                    return Observer(
+                      builder: (_) => _itemIndicator(e.key == controller.currentImage),
+                    );
+                  }).toList(),
+                ),
+              ),
+              const VerticalSizedBox(1),
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: AppColors.background,
+                    borderRadius: BorderRadius.only(
+                      topLeft: Radius.circular(44),
+                      topRight: Radius.circular(44),
+                    ),
+                  ),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: [
+                      const VerticalSizedBox(2),
+                      Align(
+                        alignment: Alignment.center,
+                        child: Container(
+                          height: 5,
+                          width: 50,
+                          decoration: BoxDecoration(
+                            color: AppColors.secondary,
+                            borderRadius: BorderRadius.circular(100),
+                          ),
+                        ),
+                      ),
+                      const VerticalSizedBox(4),
+                      Expanded(
+                        child: ListView(
+                          padding: const PaddingScaffold(),
+                          children: [
+                            Text(
+                              controller.produtoStore!.descricao!,
+                              style: textTheme.headline1!.copyWith(fontWeight: FontWeight.w600),
+                            ),
+                            const VerticalSizedBox(),
+                            Text(
+                              "${controller.produtoStore!.quantidade!} ${controller.produtoStore!.quantidade! > 1 ? "unidades" : "unidade"}",
+                              style: textTheme.bodyText1!.copyWith(color: Colors.grey, fontSize: 12),
+                            ),
+                            const VerticalSizedBox(0.3),
+                            Text(
+                              controller.produtoStore!.preco!.formatReal(),
+                              style: textTheme.bodyText2!.copyWith(color: AppColors.primary, fontSize: 18),
+                            ),
+                            const VerticalSizedBox(2.5),
+                            const Divider(),
+                            const VerticalSizedBox(2.5),
+                            Text(
+                              "Descrição do produto",
+                              style: textTheme.bodyText2!.copyWith(color: AppColors.primary, fontWeight: FontWeight.w600),
+                            ),
+                            const VerticalSizedBox(),
+                            Text(
+                              controller.produtoStore!.descricaoDetalhada!,
+                              style: textTheme.bodyText2!.copyWith(fontSize: 14, fontWeight: FontWeight.w400),
+                            ),
+                            const VerticalSizedBox(2.5),
+                            const Divider(),
+                            _tileNavigation(label: "Reserva", onTap: () {}),
+                            const Divider(),
+                            _tileNavigation(label: "Catálogo", onTap: () {}),
+                            const Divider(),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
@@ -109,6 +183,39 @@ class _ProdutoInfoPageState extends ModularState<ProdutoInfoPage, ProdutoInfoCon
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(100),
         color: selected ? AppColors.primary : Colors.grey,
+      ),
+    );
+  }
+
+  SnappingPosition _snapPositionFactor(double positionFactor) {
+    return SnappingPosition.factor(
+      grabbingContentOffset: GrabbingContentOffset.bottom,
+      snappingCurve: Curves.fastOutSlowIn,
+      snappingDuration: Duration(milliseconds: 500),
+      positionFactor: positionFactor,
+    );
+  }
+
+  SnappingPosition _snapPositionPixel(double pixel) {
+    return SnappingPosition.pixels(
+      grabbingContentOffset: GrabbingContentOffset.top,
+      snappingCurve: Curves.fastOutSlowIn,
+      snappingDuration: Duration(milliseconds: 500),
+      positionPixels: pixel,
+    );
+  }
+
+  Widget _tileNavigation({required String label, required VoidCallback onTap}) {
+    return Material(
+      color: Colors.transparent,
+      child: ListTile(
+        title: Text(label),
+        onTap: () {},
+        contentPadding: const EdgeInsets.all(0),
+        trailing: const Icon(
+          Icons.arrow_forward_ios,
+          size: 16,
+        ),
       ),
     );
   }
