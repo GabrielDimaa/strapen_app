@@ -26,7 +26,7 @@ abstract class _CatalogoCreateController with Store implements IDefaultControlle
   _CatalogoCreateController(this._catalogoRepository, this.appController);
 
   @observable
-  CatalogoStore catalogoStore = CatalogoFactory.novo();
+  CatalogoStore catalogoStore = CatalogoFactory.newStore();
 
   @observable
   bool loading = false;

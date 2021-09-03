@@ -41,8 +41,14 @@ abstract class _ProdutoListController with Store {
   }
 
   @action
-  Future<void> toCreateProduto() async {
+  Future<void> toProdutoCreate() async {
     await Modular.to.pushNamed(PRODUTO_ROUTE + PRODUTO_CREATE_ROUTE);
+    await load();
+  }
+
+  @action
+  Future<void> toProdutoInfo(ProdutoModel model) async {
+    await Modular.to.pushNamed(PRODUTO_ROUTE + PRODUTO_INFO_ROUTE, arguments: model);
     await load();
   }
 }

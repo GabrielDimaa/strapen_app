@@ -9,6 +9,8 @@ class AppBarDefault extends AppBar {
   final Widget? leadingWidget;
   final List<Widget>? actionsWidgets;
   final PreferredSizeWidget? bottomWidgets;
+  final Color? backgroundColor;
+  final Color? backgroundColorBackButton;
 
   AppBarDefault({
     this.title,
@@ -16,12 +18,14 @@ class AppBarDefault extends AppBar {
     this.leadingWidget,
     this.actionsWidgets,
     this.bottomWidgets,
+    this.backgroundColor,
+    this.backgroundColorBackButton,
   }) : super(
     leadingWidth: 90,
     toolbarHeight: bottomWidgets == null ? 78 : 126,
     title: title,
     centerTitle: centerTitle,
-    backgroundColor: AppColors.background,
+    backgroundColor: backgroundColor ?? AppColors.background,
     bottom: bottomWidgets,
     actions: [
       if (actionsWidgets != null)
@@ -34,7 +38,7 @@ class AppBarDefault extends AppBar {
       children: [
         const SizedBox(width: 20),
         if (Modular.to.canPop())
-          BackButtonDefault()
+          BackButtonDefault(backgroundColor: backgroundColorBackButton)
       ],
     ) : leadingWidget,
   );

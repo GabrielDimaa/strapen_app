@@ -25,7 +25,7 @@ abstract class _ProdutoCreateController with Store implements IDefaultController
   _ProdutoCreateController(this._produtoRepository, this._appController);
 
   @observable
-  ProdutoStore produtoStore = ProdutoFactory.novo();
+  ProdutoStore produtoStore = ProdutoFactory.newStore();
 
   @observable
   bool loading = false;

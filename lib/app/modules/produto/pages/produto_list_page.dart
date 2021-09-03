@@ -33,7 +33,7 @@ class _ProdutoListPageState extends ModularState<ProdutoListPage, ProdutoListCon
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(right: 8),
         child: FABDefault(
-          onPressed: () async => await controller.toCreateProduto(),
+          onPressed: () async => await controller.toProdutoCreate(),
           icon: Icons.add_circle_outline,
         ),
       ),
@@ -61,6 +61,7 @@ class _ProdutoListPageState extends ModularState<ProdutoListPage, ProdutoListCon
                       itemBuilder: (_, i) {
                         final prod = controller.produtos[i];
                         return ListTileWidget(
+                          onTap: () async => await controller.toProdutoInfo(prod),
                           leadingImage: Image.network(prod.fotos!.first, height: 64, width: 64,),
                           title: Text(prod.descricao!),
                           subtitle: Column(
@@ -76,7 +77,6 @@ class _ProdutoListPageState extends ModularState<ProdutoListPage, ProdutoListCon
                               ),
                             ],
                           ),
-                          onTap: () {},
                         );
                       },
                     );
