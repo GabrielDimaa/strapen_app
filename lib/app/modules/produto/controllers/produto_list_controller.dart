@@ -1,4 +1,3 @@
-import 'dart:ui';
 
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
@@ -6,7 +5,6 @@ import 'package:strapen_app/app/app_controller.dart';
 import 'package:strapen_app/app/modules/produto/constants/routes.dart';
 import 'package:strapen_app/app/modules/produto/models/produto_model.dart';
 import 'package:strapen_app/app/modules/produto/repositories/iproduto_repository.dart';
-import 'package:strapen_app/app/shared/interfaces/default_controller_interface.dart';
 
 part 'produto_list_controller.g.dart';
 

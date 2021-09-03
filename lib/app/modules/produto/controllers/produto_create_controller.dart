@@ -9,7 +9,6 @@ import 'package:strapen_app/app/modules/produto/factories/produto_factory.dart';
 import 'package:strapen_app/app/modules/produto/models/produto_model.dart';
 import 'package:strapen_app/app/modules/produto/repositories/iproduto_repository.dart';
 import 'package:strapen_app/app/modules/produto/stores/produto_store.dart';
-import 'package:strapen_app/app/shared/components/dialog/dialog_default.dart';
 import 'package:strapen_app/app/shared/components/dialog/loading_dialog.dart';
 import 'package:strapen_app/app/shared/interfaces/default_controller_interface.dart';
 import 'package:strapen_app/app/shared/utils/image_picker.dart';

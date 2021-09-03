@@ -7,10 +7,9 @@ import 'package:strapen_app/app/shared/components/app_bar_default/app_bar_defaul
 import 'package:strapen_app/app/shared/components/fab_default/fab_default.dart';
 import 'package:strapen_app/app/shared/components/loading/circular_loading.dart';
 import 'package:strapen_app/app/shared/components/padding/padding_list.dart';
-import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
-import 'package:strapen_app/app/shared/extensions/datetime_extension.dart';
 import 'package:strapen_app/app/shared/components/widgets/empty_list_widget.dart';
 import 'package:strapen_app/app/shared/components/widgets/list_tile_widget.dart';
+import 'package:strapen_app/app/shared/extensions/datetime_extension.dart';
 
 class CatalogoListPage extends StatefulWidget {
   @override
