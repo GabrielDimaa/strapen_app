@@ -43,7 +43,6 @@ class _ProdutoListPageState extends ModularState<ProdutoListPage, ProdutoListCon
             padding: const PaddingScaffold(),
             child: const Text("Aqui você poderá visualizar todos os seus produtos disponíveis para adicionar nos catálogos."),
           ),
-          const VerticalSizedBox(1),
           Expanded(
             child: Padding(
               padding: const PaddingList(),
@@ -65,6 +64,7 @@ class _ProdutoListPageState extends ModularState<ProdutoListPage, ProdutoListCon
                           leadingImage: Image.network(prod.fotos!.first, height: 64, width: 64,),
                           title: Text(prod.descricao!),
                           subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
                                 "${prod.quantidade!} ${prod.quantidade! > 1 ? "unidades" : "unidade"}",
