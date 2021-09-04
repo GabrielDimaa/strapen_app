@@ -31,7 +31,7 @@ class _CatalogoListPageState extends ModularState<CatalogoListPage, CatalogoList
       floatingActionButton: Padding(
         padding: const EdgeInsets.only(right: 8),
         child: FABDefault(
-          onPressed: () async => await controller.toCreateCatalogo(),
+          onPressed: () async => await controller.toCatalogoCreate(),
           icon: Icons.add_circle_outline,
         ),
       ),
@@ -56,6 +56,7 @@ class _CatalogoListPageState extends ModularState<CatalogoListPage, CatalogoList
                         return ListTileWidget(
                           leadingImage: Image.network(cat.foto, height: 64, width: 64),
                           title: Text(cat.titulo!),
+                          onTap: () async => await controller.toCatalogoInfo(cat),
                           subtitle: Column(
                             children: [
                               Text(
@@ -64,7 +65,6 @@ class _CatalogoListPageState extends ModularState<CatalogoListPage, CatalogoList
                               ),
                             ],
                           ),
-                          onTap: () {},
                         );
                       }
                     );

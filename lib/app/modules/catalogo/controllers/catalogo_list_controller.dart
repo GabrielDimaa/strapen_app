@@ -38,7 +38,14 @@ abstract class _CatalogoListController with Store {
   }
 
   @action
-  Future<void> toCreateCatalogo() async {
+  Future<void> toCatalogoCreate() async {
     await Modular.to.pushNamed(CATALOGO_ROUTE + CATALOGO_CREATE_ROUTE);
+    await load();
+  }
+
+  @action
+  Future<void> toCatalogoInfo(CatalogoModel model) async {
+    await Modular.to.pushNamed(CATALOGO_ROUTE + CATALOGO_INFO_ROUTE, arguments: model);
+    await load();
   }
 }

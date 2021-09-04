@@ -10,7 +10,7 @@ import 'package:strapen_app/app/shared/extensions/string_extension.dart';
 import 'package:strapen_app/app/shared/utils/parse_errors_utils.dart';
 
 class UserRepository implements IUserRepository {
-  final SessionPreferences _sharedPreferences;
+  final SessionPreferences? _sharedPreferences;
 
   UserRepository(this._sharedPreferences);
 
@@ -65,7 +65,7 @@ class UserRepository implements IUserRepository {
 
   @override
   Future<void> saveSession(UserModel model, String senha, String session) async {
-    await _sharedPreferences.save(
+    await _sharedPreferences!.save(
       SessionPreferencesModel(
         model.id,
         model.username,

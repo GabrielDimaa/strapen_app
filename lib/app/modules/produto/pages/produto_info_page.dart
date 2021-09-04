@@ -35,6 +35,7 @@ class _ProdutoInfoPageState extends ModularState<ProdutoInfoPage, ProdutoInfoCon
     double height = MediaQuery.of(context).size.width + 66;
 
     return Scaffold(
+      backgroundColor: AppColors.background.withOpacity(0.6),
       body: SnappingSheet(
         child: Stack(
           children: [
@@ -152,7 +153,7 @@ class _ProdutoInfoPageState extends ModularState<ProdutoInfoPage, ProdutoInfoCon
                             const VerticalSizedBox(),
                             Text(
                               controller.produtoStore!.descricaoDetalhada!,
-                              style: textTheme.bodyText2!.copyWith(fontSize: 14, fontWeight: FontWeight.w400),
+                              style: textTheme.bodyText1,
                             ),
                             const VerticalSizedBox(2.5),
                             const Divider(),

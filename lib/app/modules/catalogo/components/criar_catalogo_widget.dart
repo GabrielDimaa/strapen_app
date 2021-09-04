@@ -162,6 +162,7 @@ class _CriarCatalogoWidgetState extends State<CriarCatalogoWidget> {
               controller: textController,
               textCapitalization: TextCapitalization.sentences,
               autofocus: true,
+              maxLines: 4,
             ),
           ],
         ),

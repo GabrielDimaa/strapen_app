@@ -1,11 +1,14 @@
 import 'dart:io';
 
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:strapen_app/app/modules/catalogo/constants/columns.dart';
 import 'package:strapen_app/app/modules/catalogo/models/catalogo_model.dart';
 import 'package:strapen_app/app/modules/catalogo/repositories/icatalogo_repository.dart';
+import 'package:strapen_app/app/modules/produto/models/produto_model.dart';
 import 'package:strapen_app/app/modules/produto/repositories/produto_repository.dart';
 import 'package:strapen_app/app/modules/user/factories/user_factory.dart';
+import 'package:strapen_app/app/modules/user/repositories/user_repository.dart';
 import 'package:strapen_app/app/shared/extensions/string_extension.dart';
 import 'package:strapen_app/app/shared/utils/parse_errors_utils.dart';
 
@@ -31,10 +34,7 @@ class CatalogoRepository implements ICatalogoRepository {
       ..set<String?>(CATALOGO_ID_COLUMN, model.id)
       ..set<String>(CATALOGO_TITULO_COLUMN, model.titulo!)
       ..set<String>(CATALOGO_DESCRICAO_COLUMN, model.descricao!)
-      ..set<ParseUser>(
-        CATALOGO_USER_COLUMN,
-        ParseUser(null, null, null)..set(CATALOGO_ID_COLUMN, model.user!.id!),
-      );
+      ..set<ParseUser>(CATALOGO_USER_COLUMN, ParseUser(null, null, null)..set(CATALOGO_ID_COLUMN, model.user!.id!));
 
     return parseObject;
   }
@@ -48,7 +48,7 @@ class CatalogoRepository implements ICatalogoRepository {
       e.get<String>(CATALOGO_DESCRICAO_COLUMN),
       e.get<List>(CATALOGO_FOTO_COLUMN)?.first.url,
       null,
-      UserFactory.newModel()..id = e.get(CATALOGO_USER_COLUMN).get<String>(CATALOGO_ID_COLUMN),
+      UserRepository(null).toModel(e.get(CATALOGO_USER_COLUMN))
     );
   }
 
@@ -76,7 +76,7 @@ class CatalogoRepository implements ICatalogoRepository {
       });
 
       return model;
-    } catch(e) {
+    } catch (e) {
       throw Exception(e);
     }
   }
@@ -93,15 +93,14 @@ class CatalogoRepository implements ICatalogoRepository {
   }
 
   @override
-  Future<List<CatalogoModel>?> getByUser(String? id) async {
+  Future<List<CatalogoModel>?> getByUser(String? idUser) async {
     try {
-      if (id == null) throw Exception("Houve um erro ao buscar seus catálogo, tente novamente.\nSe o erro persistir, reinicie o aplicativo.");
+      if (idUser == null) throw Exception("Houve um erro ao buscar seus catálogo, tente novamente.\nSe o erro persistir, reinicie o aplicativo.");
 
       QueryBuilder query = QueryBuilder<ParseObject>(ParseObject(className()))
-        ..whereEqualTo(
-          CATALOGO_USER_COLUMN,
-          (ParseUser(null, null, null)..set(CATALOGO_ID_COLUMN, id)).toPointer(),
-        );
+        ..whereEqualTo(CATALOGO_USER_COLUMN, (ParseUser(null, null, null)
+          ..set(CATALOGO_ID_COLUMN, idUser)).toPointer())
+        ..includeObject([CATALOGO_USER_COLUMN]);
 
       ParseResponse response = await query.query();
 
@@ -112,6 +111,59 @@ class CatalogoRepository implements ICatalogoRepository {
 
       return catalogos;
     } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  @override
+  Future<CatalogoModel> getByIdCatalogo(String? id) async {
+    try {
+      if (id == null) throw Exception("Houve um erro, tente novamente.\nSe o erro persistir, reinicie o aplicativo.");
+
+      QueryBuilder query = QueryBuilder<ParseObject>(ParseObject(className()))
+        ..whereEqualTo(CATALOGO_ID_COLUMN, id)
+        ..includeObject([CATALOGO_USER_COLUMN]);
+
+      ParseResponse response = await query.query();
+
+      if (!response.success) throw Exception(ParseErrorsUtils.get(response.statusCode));
+      ParseObject? parseResponse = (response.results as List<ParseObject>?)?.first;
+
+      if (parseResponse == null)
+        throw Exception("Houve um erro ao buscar o catálogo.");
+
+      CatalogoModel model = toModel(parseResponse);
+      model.produtos = await getProdutosCatalogo(model.id);
+
+      return model;
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  @override
+  Future<List<ProdutoModel>> getProdutosCatalogo(String? idCatalogo) async {
+    try {
+      if (idCatalogo == null) throw Exception("Houve um erro, tente novamente.\nSe o erro persistir, reinicie o aplicativo.");
+
+      QueryBuilder query = QueryBuilder<ParseObject>(ParseObject(classNameRelation()))
+        ..whereEqualTo(CATALOGO_COLUMN, (ParseObject(className())..set(CATALOGO_ID_COLUMN, idCatalogo)).toPointer())
+        ..includeObject([CATALOGO_PRODUTO_COLUMN]);
+
+      ParseResponse response = await query.query();
+
+      if (!response.success) throw Exception(ParseErrorsUtils.get(response.statusCode));
+      List<ParseObject>? listParse = response.results as List<ParseObject>?;
+
+      List<ProdutoModel> produtos = listParse?.map((e) {
+        return ProdutoRepository().toModel(e.get(CATALOGO_PRODUTO_COLUMN));
+      }).toList() ?? [];
+
+      if (produtos.isEmpty)
+        throw Exception("Houve um erro ao buscar os produtos do catálogo.");
+
+      return produtos;
+    } catch(e) {
       throw Exception(e);
     }
   }
