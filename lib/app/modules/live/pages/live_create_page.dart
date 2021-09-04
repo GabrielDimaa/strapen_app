@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:strapen_app/app/app_widget.dart';
+import 'package:strapen_app/app/modules/catalogo/models/catalogo_model.dart';
 import 'package:strapen_app/app/modules/live/controllers/live_create_controller.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/app_bar_default.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/widgets/circle_background_app_bar.dart';
@@ -9,6 +11,8 @@ import 'package:strapen_app/app/shared/components/padding/magin_button_without_s
 import 'package:strapen_app/app/shared/components/padding/padding_scaffold.dart';
 import 'package:strapen_app/app/shared/components/sized_box/horizontal_sized_box.dart';
 import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
+import 'package:strapen_app/app/shared/components/widgets/catalogo_grid_tile.dart';
+import 'package:strapen_app/app/shared/extensions/datetime_extension.dart';
 
 class LiveCreatePage extends StatefulWidget {
   @override
@@ -35,6 +39,7 @@ class _LiveCreatePageState extends ModularState<LiveCreatePage, LiveCreateContro
                 Padding(
                   padding: const PaddingScaffold(),
                   child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       const VerticalSizedBox(20),
                       Row(
@@ -44,15 +49,49 @@ class _LiveCreatePageState extends ModularState<LiveCreatePage, LiveCreateContro
                           Text("Catálogos", style: textTheme.headline1!.copyWith(fontWeight: FontWeight.w600)),
                           TextButton(
                             onPressed: () async => await controller.inserirCatalogos(),
-                            child: Row(
-                              children: [
-                                Text("Inserir", style: textTheme.bodyText2!.copyWith(color: AppColors.primary, fontSize: 18)),
-                                const HorizontalSizedBox(),
-                                Icon(Icons.add_circle_outline, color: AppColors.primary),
-                              ],
+                            child: Observer(
+                              builder: (_) {
+                                bool edit = controller.catalogos.length > 0;
+                                return Row(
+                                  children: [
+                                    Text(
+                                      edit ? "Editar" : "Inserir",
+                                      style: textTheme.bodyText2!.copyWith(color: AppColors.primary, fontSize: 18),
+                                    ),
+                                    const HorizontalSizedBox(),
+                                    Icon(
+                                      edit ? Icons.edit : Icons.add_circle_outline,
+                                      color: AppColors.primary,
+                                    ),
+                                  ],
+                                );
+                              },
                             ),
                           ),
                         ],
+                      ),
+                      const VerticalSizedBox(),
+                      Expanded(
+                        child: Observer(
+                          builder: (_) => GridView.builder(
+                            padding: const EdgeInsets.all(0),
+                            itemCount: controller.catalogos.length,
+                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 2,
+                              crossAxisSpacing: 12,
+                              mainAxisSpacing: 12,
+                              childAspectRatio: 0.68,
+                            ),
+                            itemBuilder: (_, i) {
+                              final CatalogoModel cat = controller.catalogos[i];
+                              return CatalogoGridTile(
+                                image: cat.foto,
+                                title: cat.descricao!,
+                                subtitle: cat.dataCriado!.formated,
+                              );
+                            },
+                          ),
+                        ),
                       ),
                     ],
                   ),
