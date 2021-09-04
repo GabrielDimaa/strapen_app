@@ -9,6 +9,8 @@ import 'package:strapen_app/app/modules/catalogo/catalogo_module.dart';
 import 'package:strapen_app/app/modules/catalogo/constants/routes.dart';
 import 'package:strapen_app/app/modules/home/constants/routes.dart';
 import 'package:strapen_app/app/modules/home/home_module.dart';
+import 'package:strapen_app/app/modules/live/constants/routes.dart';
+import 'package:strapen_app/app/modules/live/live_module.dart';
 import 'package:strapen_app/app/modules/produto/constants/routes.dart';
 import 'package:strapen_app/app/modules/produto/produto_module.dart';
 import 'package:strapen_app/app/modules/splash/splash_module.dart';
@@ -36,5 +38,6 @@ class AppModule extends Module {
     ModuleRoute(HOME_ROUTE, module: HomeModule()),
     ModuleRoute(CATALOGO_ROUTE, module: CatalogoModule()),
     ModuleRoute(PRODUTO_ROUTE, module: ProdutoModule()),
+    ModuleRoute(LIVE_ROUTE, module: LiveModule()),
   ];
 }

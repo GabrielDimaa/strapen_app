@@ -43,7 +43,7 @@ abstract class _CatalogoInserirProdutosController with Store {
       List<ProdutoModel>? lista = await _produtoRepository.getByUser(_catalogoController.appController.userModel?.id);
 
       if (lista != null)
-        setProdutos(lista.toList().asObservable());
+        setProdutos(lista.asObservable());
 
       produtosSelected = _catalogoController.catalogoStore.produtos ?? ObservableList<ProdutoModel>();
     } finally {

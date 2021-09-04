@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:strapen_app/app/app_widget.dart';
 import 'package:strapen_app/app/modules/home/components/action_app_bar_home.dart';
+import 'package:strapen_app/app/modules/home/controllers/home_controller.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/app_bar_default.dart';
 
 class HomePage extends StatefulWidget {
@@ -10,7 +12,7 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _HomePageState extends ModularState<HomePage, HomeController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -35,7 +37,7 @@ class _HomePageState extends State<HomePage> {
               const SizedBox(width: 6),
               ActionAppBarHome(
                 icon: Icons.shop,
-                onTap: (){},
+                onTap: () async => await controller.toCreateLive(),
               ),
             ],
           ),

@@ -1,13 +1,11 @@
 import 'dart:io';
 
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:strapen_app/app/modules/catalogo/constants/columns.dart';
 import 'package:strapen_app/app/modules/catalogo/models/catalogo_model.dart';
 import 'package:strapen_app/app/modules/catalogo/repositories/icatalogo_repository.dart';
 import 'package:strapen_app/app/modules/produto/models/produto_model.dart';
 import 'package:strapen_app/app/modules/produto/repositories/produto_repository.dart';
-import 'package:strapen_app/app/modules/user/factories/user_factory.dart';
 import 'package:strapen_app/app/modules/user/repositories/user_repository.dart';
 import 'package:strapen_app/app/shared/extensions/string_extension.dart';
 import 'package:strapen_app/app/shared/utils/parse_errors_utils.dart';

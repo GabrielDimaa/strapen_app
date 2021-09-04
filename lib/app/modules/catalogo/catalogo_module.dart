@@ -7,7 +7,7 @@ import 'package:strapen_app/app/modules/catalogo/controllers/catalogo_inserir_pr
 import 'package:strapen_app/app/modules/catalogo/controllers/catalogo_list_controller.dart';
 import 'package:strapen_app/app/modules/catalogo/pages/catalogo_create_page.dart';
 import 'package:strapen_app/app/modules/catalogo/pages/catalogo_info_page.dart';
-import 'package:strapen_app/app/modules/catalogo/pages/catalogo_inserir_produtos.dart';
+import 'package:strapen_app/app/modules/catalogo/pages/catalogo_inserir_produtos_page.dart';
 import 'package:strapen_app/app/modules/catalogo/pages/catalogo_list_page.dart';
 import 'package:strapen_app/app/modules/catalogo/repositories/catalogo_repository.dart';
 import 'package:strapen_app/app/modules/catalogo/repositories/icatalogo_repository.dart';

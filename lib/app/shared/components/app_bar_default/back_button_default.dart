@@ -3,11 +3,12 @@ import 'package:strapen_app/app/shared/components/app_bar_default/widgets/circle
 
 class BackButtonDefault extends CircleButtonAppBar {
   final Color? backgroundColor;
+  final Color? iconColor;
 
-  BackButtonDefault({this.backgroundColor}) : super(
+  BackButtonDefault({this.backgroundColor, this.iconColor}) : super(
     color: backgroundColor,
     child: BackButton(
-      color: Colors.white,
+      color: iconColor ?? Colors.white,
     ),
   );
 }
