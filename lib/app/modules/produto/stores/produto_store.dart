@@ -28,9 +28,6 @@ abstract class _ProdutoStore with Store {
   @observable
   UserModel? anunciante;
 
-  @observable
-  UserModel? userReserva;
-
   @action
   void setId(String? value) => id = value;
 
@@ -55,9 +52,6 @@ abstract class _ProdutoStore with Store {
   @action
   void setAnunciante(UserModel? value) => anunciante = value;
 
-  @action
-  void setUserReserva(UserModel? value) => userReserva = value;
-
   _ProdutoStore(
     this.id,
     this.descricao,
@@ -66,7 +60,6 @@ abstract class _ProdutoStore with Store {
     this.quantidade,
     this.preco,
     this.anunciante,
-    this.userReserva,
   );
 
   ProdutoModel toModel() {
@@ -78,7 +71,6 @@ abstract class _ProdutoStore with Store {
       this.quantidade,
       this.preco,
       this.anunciante,
-      this.userReserva,
     );
   }
 }

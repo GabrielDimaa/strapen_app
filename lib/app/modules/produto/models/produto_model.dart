@@ -14,7 +14,6 @@ class ProdutoModel {
   double? preco;
 
   UserModel? anunciante;
-  UserModel? userReserva;
 
   ProdutoModel(
     this.id,
@@ -24,6 +23,5 @@ class ProdutoModel {
     this.quantidade,
     this.preco,
     this.anunciante,
-    this.userReserva,
   );
 }

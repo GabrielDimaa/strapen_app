@@ -12,7 +12,6 @@ abstract class ProdutoFactory {
       model.quantidade,
       model.preco,
       model.anunciante,
-      model.userReserva,
     );
   }
   
@@ -23,7 +22,6 @@ abstract class ProdutoFactory {
       null,
       ObservableList(),
       1,
-      null,
       null,
       null,
     );

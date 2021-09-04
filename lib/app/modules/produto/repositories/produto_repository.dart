@@ -35,8 +35,6 @@ class ProdutoRepository implements IProdutoRepository {
         ParseUser(null, null, null)..set(PRODUTO_ID_COLUMN, model.anunciante!.id!),
       );
 
-    if (model.userReserva != null) parseObject.set<ParseUser>(PRODUTO_USER_RESERVA_COLUMN, ParseUser(null, null, null)..set(PRODUTO_ID_COLUMN, model.userReserva!.id!));
-
     return parseObject;
   }
 
@@ -50,7 +48,6 @@ class ProdutoRepository implements IProdutoRepository {
       e.get<int>(PRODUTO_QUANTIDADE_COLUMN),
       e.get(PRODUTO_PRECO_COLUMN) is int ? e.get<int>(PRODUTO_PRECO_COLUMN)?.toDouble() ?? null : e.get<double>(PRODUTO_PRECO_COLUMN),
       UserFactory.newModel()..id = e.get(PRODUTO_ANUNCIANTE_COLUMN).get<String>(PRODUTO_ID_COLUMN),
-      e.containsKey(PRODUTO_USER_RESERVA_COLUMN) ? (UserFactory.newModel()..id = e.get(PRODUTO_USER_RESERVA_COLUMN).get<String>(PRODUTO_ID_COLUMN)) : null,
     );
   }
 
