@@ -32,13 +32,13 @@ abstract class _LiveCreateController with Store {
   void setLoading(bool value) => loading = value;
 
   @action
-  Future<void> load({BuildContext? context}) async {
+  Future<void> load({required BuildContext context}) async {
     try {
       setLoading(true);
 
       await cameraStore.initCamera();
     } catch (e) {
-      ErrorDialog.show(context: context!, content: e.toString());
+      ErrorDialog.show(context: context, content: e.toString());
     } finally {
       setLoading(false);
     }

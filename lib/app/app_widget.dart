@@ -107,7 +107,6 @@ class AppWidget extends StatelessWidget with ModoRetratoLess {
         bottomAppBarColor: AppColors.opaci,
         bottomAppBarTheme: BottomAppBarTheme(
           color: AppColors.opaci,
-          elevation: 22,
         ),
         floatingActionButtonTheme: FloatingActionButtonThemeData(
           elevation: 22,
