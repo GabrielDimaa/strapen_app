@@ -35,7 +35,6 @@ class CatalogoGridTile extends StatelessWidget {
                     softWrap: false,
                     style: textTheme.bodyText2!.copyWith(
                       color: AppColors.primary,
-                      fontSize: 18,
                       fontWeight: FontWeight.w600,
                     ),
                   ),

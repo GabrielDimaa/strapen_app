@@ -1,6 +1,7 @@
 name: strapen_app
 description: Strapen um aplicativo para gerenciamento de Live Shop.
 version: 1.0.0+1
+publish_to: none
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
@@ -28,6 +29,10 @@ dependencies:
   shared_preferences: ^2.0.6
   snapping_sheet: ^3.1.0
 
+  camera_with_rtmp:
+    git:
+      url: git@github.com:GabrielDimaa/flutter_rtmppublisher.git
+      ref: master
 
 dev_dependencies:
   build_runner: ^2.1.1
