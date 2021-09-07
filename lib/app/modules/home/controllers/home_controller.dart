@@ -20,7 +20,7 @@ abstract class _HomeController with Store {
     if (sessionModel.isFirstLive) {
       Modular.to.pushNamed(LIVE_ROUTE + LIVE_PRIMEIRA_ROUTE);
     } else {
-      Modular.to.pushNamed(LIVE_ROUTE);
+      Modular.to.pushNamed(LIVE_ROUTE + LIVE_CREATE_ROUTE);
     }
   }
 }

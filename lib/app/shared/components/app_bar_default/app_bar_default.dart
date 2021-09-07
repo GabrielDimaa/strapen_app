@@ -12,6 +12,7 @@ class AppBarDefault extends AppBar {
   final Color? backgroundColor;
   final Color? backgroundColorBackButton;
   final Color? iconColor;
+  final double? leadingWidth;
 
   AppBarDefault({
     this.title,
@@ -22,8 +23,9 @@ class AppBarDefault extends AppBar {
     this.backgroundColor,
     this.backgroundColorBackButton,
     this.iconColor,
+    this.leadingWidth,
   }) : super(
-    leadingWidth: 90,
+    leadingWidth: leadingWidth ?? 90,
     toolbarHeight: bottomWidgets == null ? 78 : 126,
     title: title,
     centerTitle: centerTitle,

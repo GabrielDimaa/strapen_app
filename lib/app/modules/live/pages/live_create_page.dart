@@ -63,7 +63,8 @@ class _LiveCreatePageState extends ModularState<LiveCreatePage, LiveCreateContro
                                     ),
                                   );
                                 } else {
-                                  return ClipRect(
+                                  return ClipRRect(
+                                    borderRadius: BorderRadius.circular(36),
                                     child: FittedBox(
                                       fit: BoxFit.fitWidth,
                                       child: SizedBox(
@@ -200,9 +201,9 @@ class _LiveCreatePageState extends ModularState<LiveCreatePage, LiveCreateContro
   }
 
   @override
-  void dispose() {
+  void dispose() async {
     if (controller.cameraStore.cameraController != null)
-      controller.cameraStore.cameraController!.dispose();
+      await controller.cameraStore.cameraController!.dispose();
     super.dispose();
   }
 }

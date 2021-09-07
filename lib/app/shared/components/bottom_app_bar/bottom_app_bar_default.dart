@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:strapen_app/app/app_widget.dart';
 
 class BottomAppBarDefault extends StatelessWidget {
   final List<Widget> children;

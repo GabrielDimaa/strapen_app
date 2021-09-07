@@ -50,7 +50,7 @@ class LivePrimeiraPage extends StatelessWidget {
             primary: Colors.white,
             onPrimary: AppColors.primary,
             onPressed: () {
-              Modular.to.popAndPushNamed(LIVE_ROUTE);
+              Modular.to.popAndPushNamed(LIVE_ROUTE + LIVE_CREATE_ROUTE);
             },
           ),
         ],
