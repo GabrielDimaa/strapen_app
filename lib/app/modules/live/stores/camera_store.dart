@@ -6,6 +6,8 @@ part 'camera_store.g.dart';
 class CameraStore = _CameraStore with _$CameraStore;
 
 abstract class _CameraStore with Store {
+  _CameraStore();
+
   @observable
   CameraController? cameraController;
 
@@ -34,16 +36,21 @@ abstract class _CameraStore with Store {
   bool get hasBackAndFront => hasBack && hasFront;
 
   @action
-  Future<void> initCamera() async {
+  Future<void> initCamera({CameraLensDirection? direction}) async {
     if (cameraController != null) await cameraController!.dispose();
 
+    //Pega todas as câmeras que o dispositivo tem
+    //Ex: frontal, traseira, externa...
     List<CameraDescription> listCameras = await availableCameras();
 
     if (listCameras.isEmpty) throw Exception("Você precisa ter uma câmera habilitada!");
 
     setCameras(listCameras.asObservable());
 
-    if (cameras.any((e) => e.lensDirection == CameraLensDirection.back))
+    //Seta a câmera traseira ou a que foi passado por parâmetro para o primeiro preview, caso exista.
+    if (direction != null && cameras.any((e) => e.lensDirection == direction))
+      setCurrentCamera(cameras.firstWhere((e) => e.lensDirection == direction));
+    else if (cameras.any((e) => e.lensDirection == CameraLensDirection.back))
       setCurrentCamera(cameras.firstWhere((e) => e.lensDirection == CameraLensDirection.back));
     else
       setCurrentCamera(cameras.first);
@@ -77,6 +84,4 @@ abstract class _CameraStore with Store {
       androidUseOpenGL: true,
     );
   }
-
-  _CameraStore();
 }

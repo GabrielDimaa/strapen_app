@@ -55,6 +55,6 @@ abstract class _LiveCreateController with Store {
       throw Exception("Selecione pelo menos um catálogo para exibir na Live.");
 
     //Modular.to.navigate(LIVE_ROUTE, arguments: cameraStore);
-    Modular.to.navigate(LIVE_ROUTE, arguments: cameraStore);
+    Modular.to.navigate(LIVE_ROUTE, arguments: cameraStore.currentCamera!.lensDirection);
   }
 }

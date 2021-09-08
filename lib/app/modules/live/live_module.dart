@@ -22,7 +22,7 @@ class LiveModule extends Module {
 
   @override
   final List<ModularRoute> routes = [
-    ChildRoute(Modular.initialRoute, child: (_, args) => LivePage(cameraStore: args.data)),
+    ChildRoute(Modular.initialRoute, child: (_, args) => LivePage(cameraDirection: args.data)),
     ChildRoute(LIVE_CREATE_ROUTE, child: (_, args) => LiveCreatePage()),
     ChildRoute(LIVE_PRIMEIRA_ROUTE, child: (_, args) => LivePrimeiraPage()),
     ChildRoute(LIVE_INSERIR_CATALOGO_ROUTE, child: (_, args) => LiveInserirCatalogosPage()),

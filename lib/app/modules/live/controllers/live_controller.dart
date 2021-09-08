@@ -1,3 +1,4 @@
+import 'package:camera_with_rtmp/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:mobx/mobx.dart';
 import 'package:strapen_app/app/modules/live/stores/camera_store.dart';
@@ -18,11 +19,11 @@ abstract class _LiveController with Store {
   void setLoading(bool value) => loading = value;
 
   @action
-  Future<void> load({required BuildContext context}) async {
+  Future<void> load({required BuildContext context, required CameraLensDirection direction}) async {
     try {
       setLoading(true);
 
-      await cameraStore.initCamera();
+      await cameraStore.initCamera(direction: direction);
     } catch(e) {
       ErrorDialog.show(context: context, content: e.toString());
     } finally {

@@ -115,27 +115,43 @@ class _LiveCreatePageState extends ModularState<LiveCreatePage, LiveCreateContro
                                   ),
                                   const VerticalSizedBox(),
                                   Expanded(
-                                    child: Observer(
-                                      builder: (_) => GridView.builder(
-                                        shrinkWrap: true,
-                                        padding: EdgeInsets.all(0),
-                                        itemCount: controller.catalogos.length,
-                                        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                                          crossAxisCount: 2,
-                                          crossAxisSpacing: 12,
-                                          mainAxisSpacing: 12,
-                                          childAspectRatio: 0.68,
-                                        ),
-                                        itemBuilder: (_, i) {
-                                          final CatalogoModel cat = controller.catalogos[i];
-                                          return CatalogoGridTile(
-                                            image: cat.foto,
-                                            title: cat.descricao!,
-                                            subtitle: cat.dataCriado!.formated,
-                                          );
-                                        },
-                                      ),
-                                    ),
+                                    child: Observer(builder: (_) {
+                                      if (controller.catalogos.isNotEmpty) {
+                                        return GridView.builder(
+                                          shrinkWrap: true,
+                                          padding: EdgeInsets.all(0),
+                                          itemCount: controller.catalogos.length,
+                                          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                                            crossAxisCount: 2,
+                                            crossAxisSpacing: 12,
+                                            mainAxisSpacing: 12,
+                                            childAspectRatio: 0.68,
+                                          ),
+                                          itemBuilder: (_, i) {
+                                            final CatalogoModel cat = controller.catalogos[i];
+                                            return CatalogoGridTile(
+                                              image: cat.foto,
+                                              title: cat.descricao!,
+                                              subtitle: cat.dataCriado!.formated,
+                                            );
+                                          },
+                                        );
+                                      } else {
+                                        return Center(
+                                          child: Row(
+                                            mainAxisAlignment: MainAxisAlignment.center,
+                                            children: [
+                                              Icon(Icons.assignment_late_outlined),
+                                              const HorizontalSizedBox(),
+                                              Text(
+                                                "Nem um catálogo inserido!",
+                                                style: textTheme.bodyText1,
+                                              ),
+                                            ],
+                                          ),
+                                        );
+                                      }
+                                    }),
                                   ),
                                 ],
                               ),
@@ -165,9 +181,7 @@ class _LiveCreatePageState extends ModularState<LiveCreatePage, LiveCreateContro
                                 },
                                 child: Observer(
                                   builder: (_) => Icon(
-                                    controller.cameraStore.currentCamera?.lensDirection == CameraLensDirection.front
-                                      ? Icons.camera_rear
-                                      : Icons.camera_front,
+                                    controller.cameraStore.currentCamera?.lensDirection == CameraLensDirection.front ? Icons.camera_rear : Icons.camera_front,
                                     color: Colors.white,
                                   ),
                                 ),
@@ -186,7 +200,7 @@ class _LiveCreatePageState extends ModularState<LiveCreatePage, LiveCreateContro
                     onPressed: () async {
                       try {
                         await controller.initLive();
-                      } catch(e) {
+                      } catch (e) {
                         ErrorDialog.show(context: context, content: e.toString());
                       }
                     },
@@ -202,8 +216,6 @@ class _LiveCreatePageState extends ModularState<LiveCreatePage, LiveCreateContro
 
   @override
   void dispose() async {
-    if (controller.cameraStore.cameraController != null)
-      await controller.cameraStore.cameraController!.dispose();
     super.dispose();
   }
 }
