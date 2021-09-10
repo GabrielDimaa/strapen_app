@@ -17,6 +17,7 @@ dependencies:
   carousel_slider: ^4.0.0
   connectivity_plus: ^1.0.8
   cupertino_icons: ^1.0.3
+  dio: ^4.0.0
   flutter_dotenv: ^5.0.2
   flutter_mobx: ^2.0.2
   flutter_modular: ^3.3.1
@@ -51,6 +52,7 @@ flutter:
     - assets/images/mulher_exibindo_manequim.png
     - assets/images/mulher_mexendo_mural.png
     - assets/images/test/avatar_test.png
+    - assets/images/concluido.png
     - assets/images/empty_produtos.svg
 
   fonts:

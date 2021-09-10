@@ -30,6 +30,9 @@ class _LivePageState extends ModularState<LivePage, LiveController> {
 
   @override
   Widget build(BuildContext context) {
+    final TextTheme textTheme = Theme.of(context).textTheme;
+    final double size = MediaQuery.of(context).size.width;
+
     return Scaffold(
       body: SafeArea(
         child: Observer(
@@ -42,9 +45,37 @@ class _LivePageState extends ModularState<LivePage, LiveController> {
                 children: [
                   Stack(
                     children: [
-                      AspectRatio(
-                        aspectRatio: controller.cameraStore.cameraController!.value.aspectRatio,
-                        child: CameraPreview(controller.cameraStore.cameraController!),
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height / 2,
+                        width: size,
+                        child: Observer(
+                          builder: (_) {
+                            if (!(controller.cameraStore.cameraController?.value.isInitialized ?? false)) {
+                              return Center(
+                                child: Text(
+                                  "Permita o Strapen acessar sua câmera para iniciar a Live.",
+                                  style: textTheme.bodyText2,
+                                  textAlign: TextAlign.center,
+                                ),
+                              );
+                            } else {
+                              return ClipRRect(
+                                borderRadius: BorderRadius.only(
+                                  bottomRight: Radius.circular(36),
+                                  bottomLeft: Radius.circular(36),
+                                ),
+                                child: FittedBox(
+                                  fit: BoxFit.fitWidth,
+                                  child: SizedBox(
+                                    width: size,
+                                    height: size / controller.cameraStore.cameraController!.value.aspectRatio,
+                                    child: CameraPreview(controller.cameraStore.cameraController!),
+                                  ),
+                                ),
+                              );
+                            }
+                          },
+                        ),
                       ),
                       SizedBox(
                         height: 150,
@@ -104,6 +135,17 @@ class _LivePageState extends ModularState<LivePage, LiveController> {
                             const HorizontalSizedBox(0.5),
                             PopupMenuButton(
                               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                              elevation: 4,
+                              onSelected: (index) async {
+                                switch (index) {
+                                  case 0:
+                                    print(index);
+                                    break;
+                                  case 1:
+                                    await controller.stopLive(context);
+                                    break;
+                                }
+                              },
                               child: CircleButtonAppBar(
                                 color: AppColors.opaci.withOpacity(0.4),
                                 child: Icon(Icons.more_vert, color: Colors.white),
@@ -111,12 +153,15 @@ class _LivePageState extends ModularState<LivePage, LiveController> {
                               itemBuilder: (context) {
                                 return [
                                   PopupMenuItem(
-                                    value: 1,
+                                    value: 0,
                                     child: const Text("Alterar câmera"),
                                   ),
                                   PopupMenuItem(
-                                    value: 2,
-                                    child: Text("Terminar Live", style: TextStyle(color: AppColors.error),),
+                                    value: 1,
+                                    child: Text(
+                                      "Terminar Live",
+                                      style: TextStyle(color: AppColors.error),
+                                    ),
                                   ),
                                 ];
                               },

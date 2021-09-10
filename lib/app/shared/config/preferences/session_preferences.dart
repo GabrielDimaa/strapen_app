@@ -27,17 +27,17 @@ class SessionPreferences implements ISessionPreferences {
   }
 
   @override
-  Future<void> save(SessionPreferencesModel dto) async {
+  Future<void> save(SessionPreferencesModel model) async {
     await _checkPreferences();
 
     await delete();
 
-    _sharedPreferences!.setString(_userId, dto.userId!);
-    _sharedPreferences!.setString(_username, dto.username!);
-    _sharedPreferences!.setString(_email, dto.email!);
-    _sharedPreferences!.setString(_senha, dto.senha!);
-    _sharedPreferences!.setString(_sessionToken, dto.sessionToken!);
-    _sharedPreferences!.setBool(_isFirstLive, dto.isFirstLive);
+    _sharedPreferences!.setString(_userId, model.userId!);
+    _sharedPreferences!.setString(_username, model.username!);
+    _sharedPreferences!.setString(_email, model.email!);
+    _sharedPreferences!.setString(_senha, model.senha!);
+    _sharedPreferences!.setString(_sessionToken, model.sessionToken!);
+    _sharedPreferences!.setBool(_isFirstLive, model.isFirstLive);
   }
 
   @override

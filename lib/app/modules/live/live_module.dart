@@ -10,13 +10,20 @@ import 'package:strapen_app/app/modules/live/pages/live_create_page.dart';
 import 'package:strapen_app/app/modules/live/pages/live_inserir_catalogos_page.dart';
 import 'package:strapen_app/app/modules/live/pages/live_page.dart';
 import 'package:strapen_app/app/modules/live/pages/live_primeira_page.dart';
+import 'package:strapen_app/app/modules/live/repositories/ilive_repository.dart';
+import 'package:strapen_app/app/modules/live/repositories/live_repository.dart';
+import 'package:strapen_app/app/modules/live/services/ilive_service.dart';
+import 'package:strapen_app/app/modules/live/services/live_service.dart';
+import 'package:strapen_app/app/shared/config/preferences/session_preferences.dart';
 
 class LiveModule extends Module {
   @override
   final List<Bind> binds = [
     Bind((i) => CatalogoRepository()),
-    Bind((i) => LiveController()),
-    Bind((i) => LiveCreateController(i.get<AppController>())),
+    Bind((i) => LiveRepository()),
+    Bind((i) => LiveService(i.get<ILiveRepository>())),
+    Bind((i) => LiveController(i.get<ILiveService>())),
+    Bind((i) => LiveCreateController(i.get<AppController>(), i.get<ILiveService>(), i.get<SessionPreferences>())),
     Bind((i) => LiveInserirCatalogosController(i.get<ICatalogoRepository>(), i.get<LiveCreateController>())),
   ];
 
