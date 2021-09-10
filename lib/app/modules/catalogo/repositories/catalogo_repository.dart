@@ -70,7 +70,7 @@ class CatalogoRepository implements ICatalogoRepository {
       model.dataCriado = catalogoResponse.dataCriado;
 
       await saveProdutosCatalogo(model).catchError((value) {
-        print("FALTA REMOVER O CATÀLOGO!!!");
+        throw Exception("FALTA IMPLEMENTAR!!!");
       });
 
       return model;

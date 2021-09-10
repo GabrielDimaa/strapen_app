@@ -5,7 +5,7 @@ import 'package:strapen_app/app/modules/user/models/user_model.dart';
 abstract class ILiveService {
   Future<LiveModel> solicitarLive(UserModel user);
   Future<void> startLive(LiveModel model, CameraController cameraController);
-  Future<void> stopLive(CameraController cameraController);
+  Future<void> stopLive(LiveModel model, CameraController cameraController);
 
   Future<LiveModel> save(LiveModel model);
 }

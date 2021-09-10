@@ -28,6 +28,7 @@ class LiveService implements ILiveService {
         response['id'],
         response['stream_key'],
         (response['playback_ids'] as List).first['id'],
+        null,
         user,
       );
     } catch (e) {
@@ -41,10 +42,11 @@ class LiveService implements ILiveService {
   }
 
   @override
-  Future<void> stopLive(CameraController cameraController) async {
+  Future<void> stopLive(LiveModel model, CameraController cameraController) async {
     if (cameraController.value.isInitialized || cameraController.value.isStreamingVideoRtmp) {
-      await cameraController.stopVideoStreaming();
+      await MuxApi.put("${model.streamKey}/complete");
 
+      await cameraController.stopVideoStreaming();
       await cameraController.dispose();
     }
   }

@@ -27,7 +27,7 @@ abstract class MuxApi {
       if (response == null) throw Exception();
 
       return response.data['data'] ?? response.data;
-    } on DioError catch (e) {
+    } on DioError catch (_) {
       _throw();
     } catch (e) {
       rethrow;
@@ -51,7 +51,31 @@ abstract class MuxApi {
       if (response == null) throw Exception();
 
       return response.data;
-    } on DioError catch (e) {
+    } on DioError catch (_) {
+      _throw();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  static Future<Map<String, dynamic>?> put(
+      String url, {
+        Map<String, dynamic>? data,
+        Map<String, dynamic>? headers,
+        bool hasAuth = true,
+      }) async {
+    final Map<String, dynamic> headersAuth = {};
+    if (hasAuth)
+      headersAuth.addAll(await getAuth());
+
+    try {
+      final Dio _dio = DioDefault.getInstance(baseUrl: _baseUrl, headers: headers, headersAuth: headersAuth);
+      final Response? response = await _dio.put(url, data: data);
+
+      if (response == null) throw Exception();
+
+      return response.data['data'] ?? response.data;
+    } on DioError catch (_) {
       _throw();
     } catch (e) {
       rethrow;

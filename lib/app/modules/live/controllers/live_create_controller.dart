@@ -64,10 +64,11 @@ abstract class _LiveCreateController with Store {
 
   @action
   Future<void> initLive(BuildContext context) async {
-    await LoadingDialog.show(context, "Entrando ao vivo...", () async {
-      if (catalogos.isEmpty) throw Exception("Selecione pelo menos um catálogo para exibir na Live.");
+    if (catalogos.isEmpty) throw Exception("Selecione pelo menos um catálogo para exibir na Live.");
 
+    await LoadingDialog.show(context, "Entrando ao vivo...", () async {
       LiveModel? model = await _liveService.solicitarLive(appController.userModel!);
+      model.catalogos = catalogos;
       model = await _liveService.save(model);
 
       if (model.id == null) throw Exception("Houve um erro ao iniciar sua Live.\nSe o erro persistir reinicie o aplicativo.");
