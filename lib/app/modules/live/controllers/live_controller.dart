@@ -2,15 +2,12 @@ import 'package:camera_with_rtmp/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
-import 'package:strapen_app/app/app_widget.dart';
 import 'package:strapen_app/app/modules/home/constants/routes.dart';
 import 'package:strapen_app/app/modules/live/controllers/live_create_controller.dart';
 import 'package:strapen_app/app/modules/live/services/ilive_service.dart';
 import 'package:strapen_app/app/modules/live/stores/camera_store.dart';
 import 'package:strapen_app/app/shared/components/dialog/concluido_dialog.dart';
-import 'package:strapen_app/app/shared/components/dialog/dialog_default.dart';
 import 'package:strapen_app/app/shared/components/dialog/error_dialog.dart';
-import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
 
 part 'live_controller.g.dart';
 

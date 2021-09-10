@@ -1,5 +1,4 @@
 import 'package:camera_with_rtmp/camera.dart';
-import 'package:strapen_app/app/app_controller.dart';
 import 'package:strapen_app/app/modules/live/models/live_model.dart';
 import 'package:strapen_app/app/modules/live/repositories/ilive_repository.dart';
 import 'package:strapen_app/app/modules/live/services/ilive_service.dart';

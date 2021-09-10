@@ -4,13 +4,11 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:strapen_app/app/app_widget.dart';
 import 'package:strapen_app/app/modules/live/controllers/live_controller.dart';
-import 'package:strapen_app/app/modules/live/stores/camera_store.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/app_bar_default.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/widgets/circle_background_app_bar.dart';
 import 'package:strapen_app/app/shared/components/dialog/error_dialog.dart';
 import 'package:strapen_app/app/shared/components/loading/circular_loading.dart';
 import 'package:strapen_app/app/shared/components/sized_box/horizontal_sized_box.dart';
-import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
 
 class LivePage extends StatefulWidget {
   final CameraLensDirection cameraDirection;
