@@ -10,14 +10,14 @@ import 'package:strapen_app/app/modules/live/stores/camera_store.dart';
 import 'package:strapen_app/app/shared/components/dialog/concluido_dialog.dart';
 import 'package:strapen_app/app/shared/components/dialog/error_dialog.dart';
 
-part 'live_controller.g.dart';
+part 'live_transmitir_controller.g.dart';
 
-class LiveController = _LiveController with _$LiveController;
+class LiveTransmitirController = _LiveTransmitirController with _$LiveTransmitirController;
 
-abstract class _LiveController with Store {
+abstract class _LiveTransmitirController with Store {
   final ILiveService _liveService;
 
-  _LiveController(this._liveService);
+  _LiveTransmitirController(this._liveService);
 
   @observable
   CameraStore cameraStore = CameraStore();

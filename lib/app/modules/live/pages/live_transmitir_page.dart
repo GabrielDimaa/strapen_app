@@ -3,23 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:strapen_app/app/app_widget.dart';
-import 'package:strapen_app/app/modules/live/controllers/live_controller.dart';
+import 'package:strapen_app/app/modules/live/controllers/live_transmitir_controller.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/app_bar_default.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/widgets/circle_background_app_bar.dart';
 import 'package:strapen_app/app/shared/components/dialog/error_dialog.dart';
 import 'package:strapen_app/app/shared/components/loading/circular_loading.dart';
 import 'package:strapen_app/app/shared/components/sized_box/horizontal_sized_box.dart';
 
-class LivePage extends StatefulWidget {
+class LiveTransmitirPage extends StatefulWidget {
   final CameraLensDirection cameraDirection;
 
-  const LivePage({required this.cameraDirection});
+  const LiveTransmitirPage({required this.cameraDirection});
 
   @override
-  _LivePageState createState() => _LivePageState();
+  _LiveTransmitirPageState createState() => _LiveTransmitirPageState();
 }
 
-class _LivePageState extends ModularState<LivePage, LiveController> {
+class _LiveTransmitirPageState extends ModularState<LiveTransmitirPage, LiveTransmitirController> {
   @override
   void initState() {
     super.initState();
