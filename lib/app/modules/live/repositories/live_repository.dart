@@ -1,6 +1,5 @@
 import 'package:parse_server_sdk/parse_server_sdk.dart';
 import 'package:strapen_app/app/modules/catalogo/constants/columns.dart';
-import 'package:strapen_app/app/modules/catalogo/models/catalogo_model.dart';
 import 'package:strapen_app/app/modules/catalogo/repositories/catalogo_repository.dart';
 import 'package:strapen_app/app/modules/live/constants/columns.dart';
 import 'package:strapen_app/app/modules/live/models/live_model.dart';

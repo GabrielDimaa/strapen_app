@@ -2,7 +2,6 @@ import 'package:camera_with_rtmp/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
-import 'package:strapen_app/app/modules/home/constants/routes.dart';
 import 'package:strapen_app/app/modules/live/controllers/live_create_controller.dart';
 import 'package:strapen_app/app/modules/live/models/live_model.dart';
 import 'package:strapen_app/app/modules/live/services/ilive_service.dart';

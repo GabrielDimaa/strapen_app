@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:strapen_app/app/app_controller.dart';
 import 'package:strapen_app/app/modules/auth/auth_module.dart';
@@ -16,10 +15,8 @@ import 'package:strapen_app/app/modules/produto/produto_module.dart';
 import 'package:strapen_app/app/modules/splash/splash_module.dart';
 import 'package:strapen_app/app/modules/start/constants/routes.dart';
 import 'package:strapen_app/app/modules/start/start_module.dart';
-import 'package:strapen_app/app/modules/user/constants/routes.dart';
-import 'package:strapen_app/app/modules/user/repositories/user_repository.dart';
 import 'package:strapen_app/app/modules/user/repositories/iuser_repository.dart';
-import 'package:strapen_app/app/modules/user/user_module.dart';
+import 'package:strapen_app/app/modules/user/repositories/user_repository.dart';
 import 'package:strapen_app/app/shared/config/preferences/session_preferences.dart';
 
 class AppModule extends Module {

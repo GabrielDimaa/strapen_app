@@ -2,9 +2,6 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'package:strapen_app/app/app_controller.dart';
 import 'package:strapen_app/app/modules/live/constants/routes.dart';
-import 'package:strapen_app/app/modules/user/repositories/iuser_repository.dart';
-import 'package:strapen_app/app/shared/config/preferences/session_preferences.dart';
-import 'package:strapen_app/app/shared/config/preferences/session_preferences_model.dart';
 
 part 'home_controller.g.dart';
 

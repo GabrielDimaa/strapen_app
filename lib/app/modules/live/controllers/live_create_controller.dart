@@ -10,8 +10,6 @@ import 'package:strapen_app/app/modules/live/stores/camera_store.dart';
 import 'package:strapen_app/app/modules/user/repositories/iuser_repository.dart';
 import 'package:strapen_app/app/shared/components/dialog/error_dialog.dart';
 import 'package:strapen_app/app/shared/components/dialog/loading_dialog.dart';
-import 'package:strapen_app/app/shared/config/preferences/session_preferences.dart';
-import 'package:strapen_app/app/shared/config/preferences/session_preferences_model.dart';
 
 part 'live_create_controller.g.dart';
 
