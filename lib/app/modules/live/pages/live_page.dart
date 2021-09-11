@@ -180,7 +180,8 @@ class _LivePageState extends ModularState<LivePage, LiveController> {
 
   @override
   void dispose() async {
-    await controller.cameraStore.cameraController!.dispose();
+    if (controller.cameraStore.cameraController!.value.isInitialized)
+      await controller.cameraStore.cameraController!.dispose();
     super.dispose();
   }
 }

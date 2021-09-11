@@ -52,18 +52,22 @@ abstract class _LiveController with Store {
 
   @action
   Future<void> stopLive(BuildContext context) async {
-    await _liveService.stopLive(liveModel!, cameraStore.cameraController!);
+    try {
+      await _liveService.stopLive(liveModel!, cameraStore.cameraController!);
+    } finally {
+      await cameraStore.cameraController!.stopVideoStreaming();
 
-    Future.delayed(Duration(seconds: 3), () {
-      Modular.to.navigate(HOME_ROUTE);
-    });
+      Future.delayed(Duration(seconds: 3), () {
+        Modular.to.navigate(HOME_ROUTE);
+      });
 
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (_) => ConcluidoDialog(
-        message: "Sua Live foi finalizada com sucesso! Você será redirecionado para a tela inicial.",
-      ),
-    );
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) => ConcluidoDialog(
+          message: "Sua Live foi finalizada com sucesso! Você será redirecionado para a tela inicial.",
+        ),
+      );
+    }
   }
 }

@@ -44,10 +44,7 @@ class LiveService implements ILiveService {
   @override
   Future<void> stopLive(LiveModel model, CameraController cameraController) async {
     if (cameraController.value.isInitialized || cameraController.value.isStreamingVideoRtmp) {
-      await MuxApi.put("${model.streamKey}/complete");
-
-      await cameraController.stopVideoStreaming();
-      await cameraController.dispose();
+      await MuxApi.put("${model.liveId}/complete");
     }
   }
 
