@@ -55,17 +55,13 @@ class RegistroWidget extends StatelessWidget {
                     ),
                     const VerticalSizedBox(2),
                     Observer(
-                      builder: (_) {
-                        if (controller.loading)
-                          return LinearLoading();
-                        else
-                          return Container(height: 1);
-                      },
+                      builder: (_) => LinearLoading(visible: controller.loading),
                     ),
                     const VerticalSizedBox(2),
                     Column(
                       children: children,
                     ),
+                    const VerticalSizedBox(2),
                   ],
                 ),
               ),

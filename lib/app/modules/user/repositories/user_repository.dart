@@ -43,7 +43,7 @@ class UserRepository implements IUserRepository {
       ..set<String>(USER_CEP_COLUMN, model.cep!)
       ..set<String>(USER_CIDADE_COLUMN, model.cidade!)
       ..set<Uint8List?>(USER_FOTO_COLUMN, model.foto)
-      ..set<bool?>(USER_FIST_LIVE_COLUMN, model.firstLive);
+      ..set<bool>(USER_FIST_LIVE_COLUMN, model.firstLive ?? true);
   }
 
   @override
@@ -125,6 +125,23 @@ class UserRepository implements IUserRepository {
       final ParseObject parseObject = ParseUser(null, null, null)
         ..objectId = id
         ..set<bool>(USER_FIST_LIVE_COLUMN, false);
+
+      final ParseResponse response = await parseObject.save();
+
+      if (!response.success) throw Exception(ParseErrorsUtils.get(response.statusCode));
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  @override
+  Future<void> updateSenha(UserModel model) async {
+    try {
+      if (model.id == null || model.senha.isNullOrEmpty()) throw Exception("Houve um erro ao alterar sua senha.");
+
+      final ParseObject parseObject = ParseUser(null, null, null)
+        ..objectId = model.id
+        ..set<String>(USER_SENHA_COLUMN, model.senha!);
 
       final ParseResponse response = await parseObject.save();
 

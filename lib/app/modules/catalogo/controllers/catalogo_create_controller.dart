@@ -46,8 +46,6 @@ abstract class _CatalogoCreateController with Store implements IDefaultControlle
   @action
   Future<void> save(BuildContext context) async {
     try {
-      setLoading(true);
-
       await LoadingDialog.show(context, "Salvando catálogo...", () async {
         catalogoStore.setUser(appController.userModel);
 
@@ -57,8 +55,8 @@ abstract class _CatalogoCreateController with Store implements IDefaultControlle
         if (model.id != null)
           Modular.to.pop();
       });
-    } finally {
-      setLoading(false);
+    } catch(_) {
+      rethrow;
     }
   }
 

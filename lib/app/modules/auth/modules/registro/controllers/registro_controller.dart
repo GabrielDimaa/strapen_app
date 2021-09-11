@@ -60,6 +60,8 @@ abstract class _RegistroController with Store {
 
         if (userStore.equalsSenha)
           onPressed.call();
+        else
+          throw Exception("As senhas não conferem!");
       }
     } catch (e) {
       ErrorDialog.show(context: context, content: e.toString());

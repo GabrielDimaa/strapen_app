@@ -27,27 +27,31 @@ abstract class _AppController with Store {
   void setUserModel(UserModel? value) => userModel = value;
 
   Future<void> checkSession({bool isAberturaApp = false}) async {
-    SessionPreferencesModel sessionModel = await _sessionPreferences.get();
+    try {
+      SessionPreferencesModel sessionModel = await _sessionPreferences.get();
 
-    if (sessionModel.isNull) {
-      Modular.to.navigate(APRESENTACAO_ROUTE);
-    } else {
-      AuthModel authModel = AuthModel(sessionModel.email, sessionModel.senha, sessionModel.sessionToken);
+      if (sessionModel.isNull) {
+            Modular.to.navigate(APRESENTACAO_ROUTE);
+          } else {
+            AuthModel authModel = AuthModel(sessionModel.email, sessionModel.senha, sessionModel.sessionToken);
 
-      if (isAberturaApp) {
-        UserModel? userModel = await _authRepository.login(authModel);
+            if (isAberturaApp) {
+              UserModel? userModel = await _authRepository.login(authModel);
 
-        if (userModel == null) {
-          Modular.to.navigate(AUTH_ROUTE);
-        } else {
-          setUserModel(userModel);
-          Modular.to.navigate(START_ROUTE);
-        }
-      } else {
-        if (!await _authRepository.checkSession(authModel)) {
-          Modular.to.navigate(AUTH_ROUTE);
-        }
-      }
+              if (userModel == null) {
+                Modular.to.navigate(AUTH_ROUTE);
+              } else {
+                setUserModel(userModel);
+                Modular.to.navigate(START_ROUTE);
+              }
+            } else {
+              if (!await _authRepository.checkSession(authModel)) {
+                Modular.to.navigate(AUTH_ROUTE);
+              }
+            }
+          }
+    } catch (e) {
+      Modular.to.navigate(AUTH_ROUTE);
     }
   }
 }

@@ -53,12 +53,7 @@ class _AuthPageState extends ModularState<AuthPage, AuthController> {
                         ),
                         const VerticalSizedBox(1.5),
                         Observer(
-                          builder: (_) {
-                            if (controller.loading)
-                              return LinearLoading();
-                            else
-                              return Container(height: 1);
-                          },
+                          builder: (_) => LinearLoading(visible: controller.loading),
                         ),
                         const VerticalSizedBox(1.5),
                         Form(

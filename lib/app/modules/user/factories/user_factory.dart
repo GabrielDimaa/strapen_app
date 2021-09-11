@@ -37,4 +37,22 @@ abstract class UserFactory {
       null,
     );
   }
+
+  static UserStore fromModel(UserModel model) {
+    return UserStore(
+      model.id,
+      model.nome,
+      model.descricao,
+      model.dataNascimento,
+      model.cpfCnpj,
+      model.foto,
+      model.username,
+      model.email,
+      model.telefone,
+      model.cep,
+      model.cidade,
+      model.senha,
+      model.firstLive,
+    );
+  }
 }

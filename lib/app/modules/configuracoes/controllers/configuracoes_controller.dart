@@ -15,17 +15,17 @@ abstract class _ConfiguracoesController with Store {
 
   @action
   Future<void> toEditarPerfil() async {
-    await Modular.to.pushNamed(USER_ROUTE);
+    await Modular.to.pushNamed(USER_ROUTE + USER_EDITAR_PERFIL_ROUTE);
   }
 
   @action
   Future<void> toEditarDadosPessoais() async {
-    await Modular.to.pushNamed(USER_EDITAR_ROUTE);
+    await Modular.to.pushNamed(USER_ROUTE + USER_DADOS_PESSOAIS_ROUTE);
   }
 
   @action
   Future<void> toAlterarSenha() async {
-    await Modular.to.pushNamed(USER_SENHA_ROUTE);
+    await Modular.to.pushNamed(USER_ROUTE + USER_SENHA_ROUTE);
   }
 
   @action

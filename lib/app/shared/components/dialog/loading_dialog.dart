@@ -11,11 +11,17 @@ class LoadingDialog extends StatefulWidget {
   _LoadingDialogState createState() => _LoadingDialogState();
 
   static Future show(BuildContext context, String mensagem, Function action) async {
-    showDialog(context: context, barrierDismissible: false, builder: (_) => LoadingDialog(mensagem: mensagem));
+    try {
+      showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (_) => LoadingDialog(mensagem: mensagem),
+      );
 
-    await action.call();
-
-    Modular.to.pop();
+      await action.call();
+    } finally {
+      Modular.to.pop();
+    }
   }
 }
 

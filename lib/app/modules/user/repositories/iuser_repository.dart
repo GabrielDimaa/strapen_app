@@ -6,4 +6,5 @@ abstract class IUserRepository implements IRepository<UserModel> {
   Future<bool> existsData(String column, String data, String messageError);
   Future<void> saveSession(UserModel model, String senha, String session);
   Future<void> updateFirstLive(String id);
+  Future<void> updateSenha(UserModel model);
 }

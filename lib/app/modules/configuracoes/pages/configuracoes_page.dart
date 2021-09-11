@@ -8,8 +8,6 @@ import 'package:strapen_app/app/shared/components/padding/padding_scaffold.dart'
 import 'package:strapen_app/app/shared/components/sized_box/horizontal_sized_box.dart';
 
 class ConfiguracoesPage extends StatefulWidget {
-  const ConfiguracoesPage({Key? key}) : super(key: key);
-
   @override
   _ConfiguracoesPageState createState() => _ConfiguracoesPageState();
 }
