@@ -16,11 +16,13 @@ abstract class UserFactory {
       null,
       null,
       null,
+      null,
     );
   }
 
   static UserModel newModel() {
     return UserModel(
+      null,
       null,
       null,
       null,

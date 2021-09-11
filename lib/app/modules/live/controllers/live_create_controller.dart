@@ -7,6 +7,7 @@ import 'package:strapen_app/app/modules/live/constants/routes.dart';
 import 'package:strapen_app/app/modules/live/models/live_model.dart';
 import 'package:strapen_app/app/modules/live/services/ilive_service.dart';
 import 'package:strapen_app/app/modules/live/stores/camera_store.dart';
+import 'package:strapen_app/app/modules/user/repositories/iuser_repository.dart';
 import 'package:strapen_app/app/shared/components/dialog/error_dialog.dart';
 import 'package:strapen_app/app/shared/components/dialog/loading_dialog.dart';
 import 'package:strapen_app/app/shared/config/preferences/session_preferences.dart';
@@ -19,9 +20,9 @@ class LiveCreateController = _LiveCreateController with _$LiveCreateController;
 abstract class _LiveCreateController with Store {
   final AppController appController;
   final ILiveService _liveService;
-  final SessionPreferences _sessionPreferences;
+  final IUserRepository _userRepository;
 
-  _LiveCreateController(this.appController, this._liveService, this._sessionPreferences);
+  _LiveCreateController(this.appController, this._liveService, this._userRepository);
 
   @observable
   CameraStore cameraStore = CameraStore();
@@ -67,7 +68,7 @@ abstract class _LiveCreateController with Store {
     if (catalogos.isEmpty) throw Exception("Selecione pelo menos um catálogo para exibir na Live.");
 
     await LoadingDialog.show(context, "Entrando ao vivo...", () async {
-      LiveModel? model = await _liveService.solicitarLive(appController.userModel!);
+      LiveModel model = await _liveService.solicitarLive(appController.userModel!);
       model.catalogos = catalogos;
       model = await _liveService.save(model);
 
@@ -75,8 +76,8 @@ abstract class _LiveCreateController with Store {
 
       setLiveModel(model);
 
-      SessionPreferencesModel sessionModel = (await _sessionPreferences.get())..isFirstLive = false;
-      _sessionPreferences.save(sessionModel);
+      //Manter assíncrono para trancar demorar muito o início da Live
+      _userRepository.updateFirstLive(model.user!.id!);
 
       Modular.to.navigate(LIVE_ROUTE + LIVE_TRANSMITIR_ROUTE, arguments: cameraStore.currentCamera!.lensDirection);
     });

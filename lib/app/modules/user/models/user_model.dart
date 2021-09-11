@@ -18,6 +18,8 @@ class UserModel {
 
   String? senha;
 
+  bool? firstLive;
+
   UserModel(
     this.id,
     this.nome,
@@ -31,5 +33,6 @@ class UserModel {
     this.cep,
     this.cidade,
     this.senha,
+    this.firstLive,
   );
 }

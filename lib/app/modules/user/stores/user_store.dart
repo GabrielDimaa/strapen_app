@@ -46,6 +46,9 @@ abstract class _UserStore with Store {
   @observable
   String? confirmarSenha;
 
+  @observable
+  bool? firstLive;
+
   @action
   void setNome(String? value) => nome = value;
 
@@ -82,6 +85,9 @@ abstract class _UserStore with Store {
   @action
   void setConfirmarSenha(String? value) => confirmarSenha = value;
 
+  @action
+  void setFirstLive(bool? value) => firstLive = value;
+
   @computed
   bool get equalsSenha => senha == confirmarSenha;
 
@@ -98,6 +104,7 @@ abstract class _UserStore with Store {
     this.cep,
     this.cidade,
     this.senha,
+    this.firstLive,
   );
 
   UserModel toModel() {
@@ -114,6 +121,7 @@ abstract class _UserStore with Store {
       cep,
       cidade,
       senha,
+      firstLive,
     );
   }
 }

@@ -42,7 +42,8 @@ class UserRepository implements IUserRepository {
       ..set<String?>(USER_DESCRICAO_COLUMN, model.descricao)
       ..set<String>(USER_CEP_COLUMN, model.cep!)
       ..set<String>(USER_CIDADE_COLUMN, model.cidade!)
-      ..set<Uint8List?>(USER_FOTO_COLUMN, model.foto);
+      ..set<Uint8List?>(USER_FOTO_COLUMN, model.foto)
+      ..set<bool?>(USER_FIST_LIVE_COLUMN, model.firstLive);
   }
 
   @override
@@ -60,6 +61,7 @@ class UserRepository implements IUserRepository {
       e.get<String>(USER_CEP_COLUMN),
       e.get<String>(USER_CIDADE_COLUMN),
       null,
+      e.get<bool>(USER_FIST_LIVE_COLUMN),
     );
   }
 
@@ -72,7 +74,6 @@ class UserRepository implements IUserRepository {
         model.email,
         senha,
         session,
-        true,
       ),
     );
   }
@@ -113,6 +114,21 @@ class UserRepository implements IUserRepository {
       if ((response.results?.length ?? 0) > 0) throw Exception(messageError);
 
       return false;
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  @override
+  Future<void> updateFirstLive(String id) async {
+    try {
+      final ParseObject parseObject = ParseUser(null, null, null)
+        ..objectId = id
+        ..set<bool>(USER_FIST_LIVE_COLUMN, false);
+
+      final ParseResponse response = await parseObject.save();
+
+      if (!response.success) throw Exception(ParseErrorsUtils.get(response.statusCode));
     } catch (e) {
       throw Exception(e);
     }

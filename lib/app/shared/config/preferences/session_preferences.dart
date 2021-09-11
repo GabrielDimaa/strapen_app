@@ -19,7 +19,6 @@ class SessionPreferences implements ISessionPreferences {
   static const String _email = "email";
   static const String _senha = "senha";
   static const String _sessionToken = "sessionToken";
-  static const String _isFirstLive = "isFirstLive";
 
   Future<void> _checkPreferences() async {
     if (_sharedPreferences == null)
@@ -37,7 +36,6 @@ class SessionPreferences implements ISessionPreferences {
     _sharedPreferences!.setString(_email, model.email!);
     _sharedPreferences!.setString(_senha, model.senha!);
     _sharedPreferences!.setString(_sessionToken, model.sessionToken!);
-    _sharedPreferences!.setBool(_isFirstLive, model.isFirstLive);
   }
 
   @override
@@ -50,7 +48,6 @@ class SessionPreferences implements ISessionPreferences {
       _sharedPreferences!.getString(_email),
       _sharedPreferences!.getString(_senha),
       _sharedPreferences!.getString(_sessionToken),
-      _sharedPreferences!.getBool(_isFirstLive) ?? true,
     );
   }
 
@@ -63,6 +60,5 @@ class SessionPreferences implements ISessionPreferences {
     _sharedPreferences!.remove(_email);
     _sharedPreferences!.remove(_senha);
     _sharedPreferences!.remove(_sessionToken);
-    _sharedPreferences!.remove(_isFirstLive);
   }
 }
