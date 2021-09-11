@@ -7,8 +7,10 @@ import 'package:strapen_app/app/modules/live/controllers/live_create_controller.
 import 'package:strapen_app/app/modules/live/models/live_model.dart';
 import 'package:strapen_app/app/modules/live/services/ilive_service.dart';
 import 'package:strapen_app/app/modules/live/stores/camera_store.dart';
+import 'package:strapen_app/app/modules/start/constants/routes.dart';
 import 'package:strapen_app/app/shared/components/dialog/concluido_dialog.dart';
 import 'package:strapen_app/app/shared/components/dialog/error_dialog.dart';
+import 'package:strapen_app/app/shared/components/dialog/loading_dialog.dart';
 
 part 'live_transmitir_controller.g.dart';
 
@@ -52,22 +54,25 @@ abstract class _LiveTransmitirController with Store {
 
   @action
   Future<void> stopLive(BuildContext context) async {
-    try {
-      await _liveService.stopLive(liveModel!, cameraStore.cameraController!);
-    } finally {
-      await cameraStore.cameraController!.stopVideoStreaming();
+    await LoadingDialog.show(context, "Finalizando...", () async {
+      try {
+        await _liveService.stopLive(liveModel!, cameraStore.cameraController!);
+      } finally {
+        await cameraStore.cameraController!.stopVideoStreaming();
 
-      Future.delayed(Duration(seconds: 3), () {
-        Modular.to.navigate(HOME_ROUTE);
-      });
+        Future.delayed(Duration(seconds: 3), () {
+          setLoading(false);
+          Modular.to.navigate(START_ROUTE);
+        });
 
-      showDialog(
-        context: context,
-        barrierDismissible: false,
-        builder: (_) => ConcluidoDialog(
-          message: "Sua Live foi finalizada com sucesso! Você será redirecionado para a tela inicial.",
-        ),
-      );
-    }
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (_) => ConcluidoDialog(
+            message: "Sua Live foi finalizada com sucesso! Você será redirecionado para a tela inicial.",
+          ),
+        );
+      }
+    });
   }
 }

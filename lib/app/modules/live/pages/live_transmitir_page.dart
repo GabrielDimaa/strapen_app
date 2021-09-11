@@ -180,8 +180,7 @@ class _LiveTransmitirPageState extends ModularState<LiveTransmitirPage, LiveTran
 
   @override
   void dispose() async {
-    if (controller.cameraStore.cameraController!.value.isInitialized)
-      await controller.cameraStore.cameraController!.dispose();
     super.dispose();
+    await controller.cameraStore.cameraController!.dispose();
   }
 }
