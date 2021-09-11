@@ -3,6 +3,7 @@ import 'package:strapen_app/app/app_controller.dart';
 import 'package:strapen_app/app/modules/catalogo/repositories/catalogo_repository.dart';
 import 'package:strapen_app/app/modules/catalogo/repositories/icatalogo_repository.dart';
 import 'package:strapen_app/app/modules/live/constants/routes.dart';
+import 'package:strapen_app/app/modules/live/controllers/live_assistir_controller.dart';
 import 'package:strapen_app/app/modules/live/controllers/live_transmitir_controller.dart';
 import 'package:strapen_app/app/modules/live/controllers/live_create_controller.dart';
 import 'package:strapen_app/app/modules/live/controllers/live_inserir_catalogos_controller.dart';
@@ -23,13 +24,15 @@ class LiveModule extends Module {
     Bind((i) => LiveRepository()),
     Bind((i) => LiveService(i.get<ILiveRepository>())),
     Bind((i) => LiveTransmitirController(i.get<ILiveService>())),
+    Bind((i) => LiveAssistirController()),
     Bind((i) => LiveCreateController(i.get<AppController>(), i.get<ILiveService>(), i.get<SessionPreferences>())),
     Bind((i) => LiveInserirCatalogosController(i.get<ICatalogoRepository>(), i.get<LiveCreateController>())),
   ];
 
   @override
   final List<ModularRoute> routes = [
-    ChildRoute(Modular.initialRoute, child: (_, args) => LiveTransmitirPage(cameraDirection: args.data)),
+    ChildRoute(LIVE_TRANSMITIR_ROUTE, child: (_, args) => LiveTransmitirPage(cameraDirection: args.data)),
+    ChildRoute(LIVE_ASSISTIR_ROUTE, child: (_, args) => LiveTransmitirPage(cameraDirection: args.data)),
     ChildRoute(LIVE_CREATE_ROUTE, child: (_, args) => LiveCreatePage()),
     ChildRoute(LIVE_PRIMEIRA_ROUTE, child: (_, args) => LivePrimeiraPage()),
     ChildRoute(LIVE_INSERIR_CATALOGO_ROUTE, child: (_, args) => LiveInserirCatalogosPage()),

@@ -10,6 +10,8 @@ abstract class MuxApi {
   static final String _baseUrl = "https://api.mux.com/video/v1/live-streams/";
   static final String _baseUrlRmtp = "rtmps://global-live.mux.com:443/app/";
 
+  static String urlStream(String playbackId) => "https://stream.mux.com/$playbackId.m3u8";
+
   static Future<Map<String, dynamic>?> post(
     String url, {
     Map<String, dynamic>? data,
@@ -18,7 +20,7 @@ abstract class MuxApi {
   }) async {
     final Map<String, dynamic> headersAuth = {};
     if (hasAuth)
-      headersAuth.addAll(await getAuth());
+      headersAuth.addAll(await _getAuth());
 
     try {
       final Dio _dio = DioDefault.getInstance(baseUrl: _baseUrl, headers: headers, headersAuth: headersAuth);
@@ -42,7 +44,7 @@ abstract class MuxApi {
   }) async {
     final Map<String, dynamic> headersAuth = {};
     if (!hasAuth)
-      headersAuth.addAll(await getAuth());
+      headersAuth.addAll(await _getAuth());
 
     try {
       final Dio _dio = DioDefault.getInstance(baseUrl: _baseUrl, headers: headers, headersAuth: headersAuth);
@@ -66,7 +68,7 @@ abstract class MuxApi {
       }) async {
     final Map<String, dynamic> headersAuth = {};
     if (hasAuth)
-      headersAuth.addAll(await getAuth());
+      headersAuth.addAll(await _getAuth());
 
     try {
       final Dio _dio = DioDefault.getInstance(baseUrl: _baseUrl, headers: headers, headersAuth: headersAuth);
@@ -89,7 +91,7 @@ abstract class MuxApi {
     await cameraController.startVideoStreaming(_baseUrlRmtp + model.streamKey!);
   }
 
-  static Future<Map<String, dynamic>> getAuth() async {
+  static Future<Map<String, dynamic>> _getAuth() async {
     await dotenv.load(fileName: ".env");
     return {"authorization": "Basic " + base64Encode(utf8.encode("${dotenv.env['MUX_TOKEN_ID']}:${dotenv.env['MUX_TOKEN_SECRET']}"))};
   }

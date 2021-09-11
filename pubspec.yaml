@@ -15,6 +15,7 @@ dependencies:
 
   brasil_fields: ^1.1.4
   carousel_slider: ^4.0.0
+  chewie: ^1.2.2
   connectivity_plus: ^1.0.8
   cupertino_icons: ^1.0.3
   dio: ^4.0.0
@@ -29,6 +30,7 @@ dependencies:
   parse_server_sdk_flutter: ^3.1.0
   shared_preferences: ^2.0.6
   snapping_sheet: ^3.1.0
+  video_player: ^2.2.0
 
   camera_with_rtmp:
     git:

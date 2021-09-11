@@ -16,8 +16,10 @@ import 'package:strapen_app/app/modules/produto/produto_module.dart';
 import 'package:strapen_app/app/modules/splash/splash_module.dart';
 import 'package:strapen_app/app/modules/start/constants/routes.dart';
 import 'package:strapen_app/app/modules/start/start_module.dart';
+import 'package:strapen_app/app/modules/user/constants/routes.dart';
 import 'package:strapen_app/app/modules/user/repositories/user_repository.dart';
 import 'package:strapen_app/app/modules/user/repositories/iuser_repository.dart';
+import 'package:strapen_app/app/modules/user/user_module.dart';
 import 'package:strapen_app/app/shared/config/preferences/session_preferences.dart';
 
 class AppModule extends Module {
@@ -27,7 +29,6 @@ class AppModule extends Module {
     Bind((i) => AuthRepository(i.get<IUserRepository>(), i.get<SessionPreferences>())),
     Bind.singleton((i) => AppController(i.get<IAuthRepository>(), i.get<SessionPreferences>())),
     Bind.lazySingleton((i) => SessionPreferences()),
-    Bind.singleton((i) => RouteObserver<PageRoute>())
   ];
 
   @override

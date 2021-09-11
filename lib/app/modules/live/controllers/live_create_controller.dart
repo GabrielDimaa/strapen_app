@@ -78,7 +78,7 @@ abstract class _LiveCreateController with Store {
       SessionPreferencesModel sessionModel = (await _sessionPreferences.get())..isFirstLive = false;
       _sessionPreferences.save(sessionModel);
 
-      Modular.to.navigate(LIVE_ROUTE, arguments: cameraStore.currentCamera!.lensDirection);
+      Modular.to.navigate(LIVE_ROUTE + LIVE_TRANSMITIR_ROUTE, arguments: cameraStore.currentCamera!.lensDirection);
     });
   }
 }
