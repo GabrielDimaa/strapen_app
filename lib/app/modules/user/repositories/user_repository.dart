@@ -10,9 +10,9 @@ import 'package:strapen_app/app/shared/extensions/string_extension.dart';
 import 'package:strapen_app/app/shared/utils/parse_errors_utils.dart';
 
 class UserRepository implements IUserRepository {
-  final SessionPreferences? _sharedPreferences;
+  final SessionPreferences? _sessionPreferences;
 
-  UserRepository(this._sharedPreferences);
+  UserRepository(this._sessionPreferences);
 
   @override
   String className() => "User";
@@ -67,7 +67,7 @@ class UserRepository implements IUserRepository {
 
   @override
   Future<void> saveSession(UserModel model, String senha, String session) async {
-    await _sharedPreferences!.save(
+    await _sessionPreferences!.save(
       SessionPreferencesModel(
         model.id,
         model.username,
@@ -144,6 +144,24 @@ class UserRepository implements IUserRepository {
         ..set<String>(USER_SENHA_COLUMN, model.senha!);
 
       final ParseResponse response = await parseObject.save();
+
+      await _sessionPreferences!.updateSenha(model.senha!);
+
+      if (!response.success) throw Exception(ParseErrorsUtils.get(response.statusCode));
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  @override
+  Future<void> updateDadosPessoais(UserModel model) async {
+    try {
+      if (model.id == null) throw Exception("Houve um erro ao alterar sua senha.");
+
+      ParseUser user = toParseObject(model);
+      ParseResponse response = await user.save();
+
+      await _sessionPreferences!.updateDadosPessoais(model);
 
       if (!response.success) throw Exception(ParseErrorsUtils.get(response.statusCode));
     } catch (e) {

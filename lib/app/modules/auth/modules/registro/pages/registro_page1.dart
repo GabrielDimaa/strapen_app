@@ -3,11 +3,10 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:strapen_app/app/modules/auth/modules/registro/components/registro_widget.dart';
 import 'package:strapen_app/app/modules/auth/modules/registro/controllers/registro_controller.dart';
-import 'package:strapen_app/app/shared/components/date_picker/cupertino_date.dart';
+import 'package:strapen_app/app/shared/components/widgets/text_field_data_nascimento.dart';
 import 'package:strapen_app/app/shared/components/form/validator.dart';
 import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
 import 'package:strapen_app/app/shared/components/text_input/text_input_default.dart';
-import 'package:strapen_app/app/shared/extensions/datetime_extension.dart';
 
 class RegistroPage1 extends StatefulWidget {
   @override
@@ -51,41 +50,14 @@ class _RegistroPage1State extends State<RegistroPage1> {
               ),
               const VerticalSizedBox(2),
               Observer(
-                builder: (_) {
-                  bool clear = false;
-                  return TextFormField(
-                    decoration: InputDecorationDefault(
-                      label: "Data de nascimento",
-                      sufixIcon: Visibility(
-                        visible: controller.userStore.dataNascimento != null,
-                        child: IconButton(
-                          icon: Icon(Icons.cancel_outlined, color: Colors.grey[200]),
-                          onPressed: () {
-                            _dataNascimentoController.clear();
-                            controller.userStore.setDataNascimento(null);
-                            clear = true;
-                          },
-                        ),
-                      ),
-                    ),
-                    controller: _dataNascimentoController,
-                    readOnly: true,
-                    enabled: !controller.loading,
-                    validator: InputDateValidator().validate,
-                    focusNode: _dataNascimentoFocus,
-                    onTap: () async {
-                      if (!clear) {
-                        DateTime? date = await CupertinoDate.show(context);
-                        if (date != null) {
-                          _dataNascimentoController.text = date.formated;
-                          controller.userStore.setDataNascimento(date);
-                        }
-                      } else {
-                        clear = false;
-                      }
-                    },
-                  );
-                },
+                builder: (_) => TextFieldDataNascimento(
+                  sufixIconVisible: controller.userStore.dataNascimento != null,
+                  controller: _dataNascimentoController,
+                  enabled: !controller.loading,
+                  focusNode: _dataNascimentoFocus,
+                  onClear: () => controller.userStore.setDataNascimento(null),
+                  setDataStore: controller.userStore.setDataNascimento,
+                ),
               ),
             ],
           ),

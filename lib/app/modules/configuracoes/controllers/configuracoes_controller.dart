@@ -14,8 +14,8 @@ abstract class _ConfiguracoesController with Store {
   _ConfiguracoesController(this._sessionPreferences);
 
   @action
-  Future<void> toEditarPerfil() async {
-    await Modular.to.pushNamed(USER_ROUTE + USER_EDITAR_PERFIL_ROUTE);
+  Future<void> toMeuPerfil() async {
+    await Modular.to.pushNamed(USER_ROUTE);
   }
 
   @action

@@ -13,11 +13,7 @@ class UserModule extends Module {
   @override
   final List<Bind> binds = [
     Bind((i) => UserRepository(i.get<SessionPreferences>())),
-    Bind((i) => UserEditarController(
-          i.get<IUserRepository>(),
-          i.get<AppController>(),
-          i.get<SessionPreferences>(),
-        )),
+    Bind((i) => UserEditarController(i.get<IUserRepository>(), i.get<AppController>())),
   ];
 
   @override

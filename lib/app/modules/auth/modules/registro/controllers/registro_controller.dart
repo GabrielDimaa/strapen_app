@@ -26,9 +26,6 @@ abstract class _RegistroController with Store {
   bool loading = false;
 
   @observable
-  bool isCpf = true;
-
-  @observable
   bool visibleSenha = false;
 
   @observable
@@ -36,9 +33,6 @@ abstract class _RegistroController with Store {
 
   @observable
   bool showErrorEqualsSenha = false;
-
-  @action
-  void setIsCpf(bool value) => isCpf = value;
 
   @action
   void setVisibleSenha(bool value) => visibleSenha = value;

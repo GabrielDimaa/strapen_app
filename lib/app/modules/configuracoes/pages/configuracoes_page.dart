@@ -30,8 +30,8 @@ class _ConfiguracoesPageState extends ModularState<ConfiguracoesPage, Configurac
                 children: [
                   _itemList(
                     icon: Icons.person,
-                    label: "Editar perfil",
-                    onTap: () async => await controller.toEditarPerfil(),
+                    label: "Meu perfil",
+                    onTap: () async => await controller.toMeuPerfil(),
                   ),
                   _itemList(
                     icon: Icons.phonelink_lock,

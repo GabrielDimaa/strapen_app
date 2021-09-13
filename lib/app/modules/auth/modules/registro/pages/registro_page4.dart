@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:strapen_app/app/modules/auth/modules/registro/components/radio_button_widget.dart';
+import 'package:strapen_app/app/shared/components/widgets/text_field_cpf_cnpj/radio_button_widget.dart';
 import 'package:strapen_app/app/modules/auth/modules/registro/components/registro_widget.dart';
 import 'package:strapen_app/app/modules/auth/modules/registro/controllers/registro_controller.dart';
 import 'package:strapen_app/app/modules/user/constants/columns.dart';
@@ -12,6 +12,7 @@ import 'package:strapen_app/app/shared/components/form/validator.dart';
 import 'package:strapen_app/app/shared/components/sized_box/horizontal_sized_box.dart';
 import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
 import 'package:strapen_app/app/shared/components/text_input/text_input_default.dart';
+import 'package:strapen_app/app/shared/components/widgets/text_field_cpf_cnpj/text_field_cpf_cnpj.dart';
 import 'package:strapen_app/app/shared/extensions/string_extension.dart';
 
 class RegistroPage4 extends StatefulWidget {
@@ -41,63 +42,14 @@ class _RegistroPage4State extends State<RegistroPage4> {
       children: [
         Form(
           key: _formKey,
-          child: Column(
-            children: [
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Observer(builder: (_) {
-                    void Function() onTap = () {
-                      controller.setIsCpf(true);
-                      _cpfCnpjController.clear();
-                    };
-
-                    return RadioButtonWidget(
-                      title: "CPF",
-                      onTap: !controller.loading ? onTap : null,
-                      onChaged: (bool? value) => !controller.loading ? onTap.call() : null,
-                      value: controller.isCpf,
-                      groupValue: true,
-                    );
-                  }),
-                  const HorizontalSizedBox(2),
-                  Observer(builder: (_) {
-                    void Function() onTap = () {
-                      controller.setIsCpf(false);
-                      _cpfCnpjController.clear();
-                    };
-
-                    return RadioButtonWidget(
-                      title: "CNPJ",
-                      onTap: !controller.loading ? onTap : null,
-                      onChaged: (bool? value) => !controller.loading ? onTap.call() : null,
-                      value: controller.isCpf,
-                      groupValue: false,
-                    );
-                  }),
-                ],
-              ),
-              const VerticalSizedBox(),
-              Observer(
-                builder: (_) => TextFormField(
-                  decoration: InputDecorationDefault(label: controller.isCpf ? "CPF" : "CNPJ"),
-                  controller: _cpfCnpjController,
-                  keyboardType: TextInputType.number,
-                  validator: InputCpfCnpjValidator(isCnpj: !controller.isCpf).validate,
-                  textInputAction: TextInputAction.done,
-                  enabled: !controller.loading,
-                  focusNode: _cpfCnpjFocus,
-                  onFieldSubmitted: (_) => _cpfCnpjFocus.unfocus(),
-                  onSaved: (String? value) {
-                    controller.userStore.setCpfCnpj(value.extrairNum());
-                  },
-                  inputFormatters: [
-                    FilteringTextInputFormatter.digitsOnly,
-                    controller.isCpf ? CpfInputFormatter() : CnpjInputFormatter(),
-                  ],
-                ),
-              ),
-            ],
+          child: TextFieldCpfCnpj(
+            enabled: !controller.loading,
+            textController: _cpfCnpjController,
+            onFieldSubmitted: (_) => _cpfCnpjFocus.unfocus(),
+            focusNode: _cpfCnpjFocus,
+            onSaved: (String? value) {
+              controller.userStore.setCpfCnpj(value.extrairNum());
+            },
           ),
         ),
       ],
@@ -109,7 +61,7 @@ class _RegistroPage4State extends State<RegistroPage4> {
             await controller.existsData(
               USER_CPFCNPJ_COLUMN,
               _cpfCnpjController.text.extrairNum(),
-              "Já existe esse ${controller.isCpf ? "CPF" : "CNPJ"} cadastrado no Strapen.",
+              "Já existe esse CPF ou CNPJ cadastrado no Strapen.",
             );
             await controller.nextPage(5);
           } catch (e) {
