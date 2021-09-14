@@ -1,11 +1,9 @@
-import 'dart:io';
-
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:strapen_app/app/app_widget.dart';
+import 'package:strapen_app/app/modules/user/components/foto_perfil_widget.dart';
 import 'package:strapen_app/app/modules/user/controllers/user_editar_controller.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/app_bar_default.dart';
 import 'package:strapen_app/app/shared/components/bottom_sheet/bottom_sheet_image_picker.dart';
@@ -17,7 +15,6 @@ import 'package:strapen_app/app/shared/components/sized_box/horizontal_sized_box
 import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
 import 'package:strapen_app/app/shared/components/text_input/text_input_default.dart';
 import 'package:strapen_app/app/shared/extensions/string_extension.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 class UserEditarPerfilPage extends StatefulWidget {
   @override
@@ -49,7 +46,9 @@ class _UserEditarPerfilPageState extends ModularState<UserEditarPerfilPage, User
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarDefault(),
+      appBar: AppBarDefault(
+        title: const Text("Editar perfil"),
+      ),
       body: Padding(
         padding: const PaddingScaffold(),
         child: Column(
@@ -60,16 +59,8 @@ class _UserEditarPerfilPageState extends ModularState<UserEditarPerfilPage, User
                 child: Column(
                   children: [
                     const VerticalSizedBox(),
-                    CircleAvatar(
-                      radius: 70,
-                      backgroundColor: AppColors.primary,
-                      child: Observer(
-                        builder: (_) => CircleAvatar(
-                          radius: 67,
-                          backgroundColor: AppColors.background,
-                          child: controller.userStore.foto != null ? _fotoPerfil() : Container(),
-                        ),
-                      ),
+                    Observer(
+                      builder: (_) => FotoPerfilWidget(foto: controller.userStore.foto),
                     ),
                     const VerticalSizedBox(),
                     TextButton(
@@ -167,20 +158,6 @@ class _UserEditarPerfilPageState extends ModularState<UserEditarPerfilPage, User
           ],
         ),
       ),
-    );
-  }
-
-  Widget _fotoPerfil() {
-    return CircleAvatar(
-      radius: 62,
-      backgroundImage: controller.userStore.foto is File
-          ? Image.file(
-              controller.userStore.foto,
-            ).image
-          : FadeInImage.memoryNetwork(
-              placeholder: kTransparentImage,
-              image: controller.userStore.foto,
-            ).image,
     );
   }
 
