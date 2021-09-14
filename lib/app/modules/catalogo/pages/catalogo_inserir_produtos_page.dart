@@ -14,6 +14,7 @@ import 'package:strapen_app/app/shared/components/padding/padding_scaffold.dart'
 import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
 import 'package:strapen_app/app/shared/components/widgets/empty_list_widget.dart';
 import 'package:strapen_app/app/shared/extensions/double_extension.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class CatalogoInserirProdutosPage extends StatefulWidget {
   @override
@@ -70,8 +71,9 @@ class _CatalogoInserirProdutosPageState extends ModularState<CatalogoInserirProd
                                   dense: true,
                                   secondary: ClipRRect(
                                     borderRadius: BorderRadius.circular(12),
-                                    child: Image.network(
-                                      prod.fotos!.first,
+                                    child: FadeInImage.memoryNetwork(
+                                      placeholder: kTransparentImage,
+                                      image: prod.fotos!.first,
                                       height: 42,
                                       width: 42,
                                     ),

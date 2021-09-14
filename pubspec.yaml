@@ -30,6 +30,7 @@ dependencies:
   parse_server_sdk_flutter: ^3.1.0
   shared_preferences: ^2.0.6
   snapping_sheet: ^3.1.0
+  transparent_image: ^2.0.0
   video_player: ^2.2.0
 
   camera_with_rtmp:

@@ -12,6 +12,7 @@ import 'package:strapen_app/app/shared/components/loading/circular_loading.dart'
 import 'package:strapen_app/app/shared/components/padding/padding_scaffold.dart';
 import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
 import 'package:strapen_app/app/shared/components/widgets/produto_grid_tile.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class CatalogoInfoPage extends StatefulWidget {
   final CatalogoModel model;
@@ -58,8 +59,9 @@ class _CatalogoInfoPageState extends ModularState<CatalogoInfoPage, CatalogoInfo
                     alignment: Alignment.center,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(16),
-                      child: Image.network(
-                        controller.catalogoStore!.foto!,
+                      child: FadeInImage.memoryNetwork(
+                        placeholder: kTransparentImage,
+                        image: controller.catalogoStore!.foto!,
                         height: 180,
                         width: 180,
                       ),

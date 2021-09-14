@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:strapen_app/app/app_widget.dart';
 import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
 import 'package:strapen_app/app/shared/extensions/double_extension.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class ProdutoGridTile extends StatelessWidget {
   final String image;
@@ -34,7 +35,11 @@ class ProdutoGridTile extends StatelessWidget {
             alignment: Alignment.center,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(16),
-              child: Image.network(image, height: 110),
+              child: FadeInImage.memoryNetwork(
+                placeholder: kTransparentImage,
+                image: image,
+                height: 110,
+              ),
             ),
           ),
           const VerticalSizedBox(),

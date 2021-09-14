@@ -14,6 +14,7 @@ import 'package:strapen_app/app/shared/components/padding/padding_scaffold.dart'
 import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
 import 'package:strapen_app/app/shared/components/widgets/empty_list_widget.dart';
 import 'package:strapen_app/app/shared/extensions/datetime_extension.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class LiveInserirCatalogosPage extends StatefulWidget {
   const LiveInserirCatalogosPage({Key? key}) : super(key: key);
@@ -72,8 +73,9 @@ class _LiveInserirCatalogosPageState extends ModularState<LiveInserirCatalogosPa
                                   dense: true,
                                   secondary: ClipRRect(
                                     borderRadius: BorderRadius.circular(12),
-                                    child: Image.network(
-                                      cat.foto!,
+                                    child: FadeInImage.memoryNetwork(
+                                      placeholder: kTransparentImage,
+                                      image: cat.foto!,
                                       height: 42,
                                       width: 42,
                                     ),

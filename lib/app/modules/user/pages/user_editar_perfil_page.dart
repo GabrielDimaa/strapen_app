@@ -17,6 +17,7 @@ import 'package:strapen_app/app/shared/components/sized_box/horizontal_sized_box
 import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
 import 'package:strapen_app/app/shared/components/text_input/text_input_default.dart';
 import 'package:strapen_app/app/shared/extensions/string_extension.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class UserEditarPerfilPage extends StatefulWidget {
   @override
@@ -176,8 +177,9 @@ class _UserEditarPerfilPageState extends ModularState<UserEditarPerfilPage, User
           ? Image.file(
               controller.userStore.foto,
             ).image
-          : Image.network(
-              controller.userStore.foto,
+          : FadeInImage.memoryNetwork(
+              placeholder: kTransparentImage,
+              image: controller.userStore.foto,
             ).image,
     );
   }

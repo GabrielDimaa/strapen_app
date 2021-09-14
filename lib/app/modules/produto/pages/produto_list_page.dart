@@ -12,6 +12,7 @@ import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.d
 import 'package:strapen_app/app/shared/components/widgets/empty_list_widget.dart';
 import 'package:strapen_app/app/shared/components/widgets/list_tile_widget.dart';
 import 'package:strapen_app/app/shared/extensions/double_extension.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class ProdutoListPage extends StatefulWidget {
   @override
@@ -61,7 +62,12 @@ class _ProdutoListPageState extends ModularState<ProdutoListPage, ProdutoListCon
                         final prod = controller.produtos[i];
                         return ListTileWidget(
                           onTap: () async => await controller.toProdutoInfo(prod),
-                          leadingImage: Image.network(prod.fotos!.first, height: 64, width: 64,),
+                          leadingImage: FadeInImage.memoryNetwork(
+                            placeholder: kTransparentImage,
+                            image: prod.fotos!.first,
+                            height: 64,
+                            width: 64,
+                          ),
                           title: Text(prod.descricao!),
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,

@@ -14,6 +14,7 @@ import 'package:strapen_app/app/shared/components/padding/padding_scaffold.dart'
 import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
 import 'package:strapen_app/app/shared/components/text_input/text_input_default.dart';
 import 'package:strapen_app/app/shared/extensions/string_extension.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class CriarCatalogoWidget extends StatefulWidget {
   @override
@@ -195,7 +196,7 @@ class _CriarCatalogoWidgetState extends State<CriarCatalogoWidget> {
       leading: Padding(
         padding: const EdgeInsets.only(left: 6),
         child: CircleAvatar(
-          backgroundImage: Image.network(prod.fotos!.first).image,
+          backgroundImage: FadeInImage.memoryNetwork(placeholder: kTransparentImage, image: prod.fotos!.first).image,
         ),
       ),
       title: Text(
