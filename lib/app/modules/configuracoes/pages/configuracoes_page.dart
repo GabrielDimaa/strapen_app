@@ -47,7 +47,7 @@ class _ConfiguracoesPageState extends ModularState<ConfiguracoesPage, Configurac
               ),
             ),
             OutlinedButtonDefault(
-              onPressed: () async => await controller.logout(),
+              onPressed: () async => await controller.logout(context),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 mainAxisAlignment: MainAxisAlignment.center,
