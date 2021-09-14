@@ -6,13 +6,14 @@ import 'package:transparent_image/transparent_image.dart';
 
 class FotoPerfilWidget extends StatelessWidget {
   final dynamic foto;
+  final double? radiusSize;
 
-  const FotoPerfilWidget({required this.foto});
-
-  double get radius => 70;
+  const FotoPerfilWidget({required this.foto, this.radiusSize});
 
   @override
   Widget build(BuildContext context) {
+    double radius = radiusSize ?? 70;
+
     return Builder(
       builder: (_) {
         ImageProvider<Object>? image;
