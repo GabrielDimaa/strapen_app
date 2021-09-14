@@ -1,5 +1,4 @@
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:strapen_app/app/modules/user/models/user_model.dart';
 import 'package:strapen_app/app/shared/config/preferences/session_preferences_model.dart';
 
 abstract class ISessionPreferences {
@@ -7,7 +6,6 @@ abstract class ISessionPreferences {
   Future<SessionPreferencesModel> get();
   Future<void> delete();
   Future<void> updateSenha(String senha);
-  Future<void> updateDadosPessoais(UserModel model);
 }
 
 class SessionPreferences implements ISessionPreferences {
@@ -68,16 +66,5 @@ class SessionPreferences implements ISessionPreferences {
     await _checkPreferences();
 
     _sharedPreferences!.setString(_senha, senha);
-  }
-
-  @override
-  Future<void> updateDadosPessoais(UserModel model) async {
-    await _checkPreferences();
-
-    SessionPreferencesModel sessionModel = await get();
-    _sharedPreferences!.setString(_username, model.username!);
-    _sharedPreferences!.setString(_email, model.email!);
-    _sharedPreferences!.setString(_senha, sessionModel.senha!);
-    _sharedPreferences!.setString(_sessionToken, sessionModel.sessionToken!);
   }
 }

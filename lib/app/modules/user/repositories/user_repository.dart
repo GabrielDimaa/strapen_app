@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 import 'package:strapen_app/app/modules/user/constants/columns.dart';
 import 'package:strapen_app/app/modules/user/models/user_model.dart';
@@ -8,6 +6,7 @@ import 'package:strapen_app/app/shared/config/preferences/session_preferences.da
 import 'package:strapen_app/app/shared/config/preferences/session_preferences_model.dart';
 import 'package:strapen_app/app/shared/extensions/string_extension.dart';
 import 'package:strapen_app/app/shared/utils/parse_errors_utils.dart';
+import 'package:strapen_app/app/shared/utils/parse_images_utils.dart';
 
 class UserRepository implements IUserRepository {
   final SessionPreferences? _sessionPreferences;
@@ -42,7 +41,6 @@ class UserRepository implements IUserRepository {
       ..set<String?>(USER_DESCRICAO_COLUMN, model.descricao)
       ..set<String>(USER_CEP_COLUMN, model.cep!)
       ..set<String>(USER_CIDADE_COLUMN, model.cidade!)
-      ..set<Uint8List?>(USER_FOTO_COLUMN, model.foto)
       ..set<bool>(USER_FIST_LIVE_COLUMN, model.firstLive ?? true);
   }
 
@@ -54,7 +52,7 @@ class UserRepository implements IUserRepository {
       e.get<String?>(USER_DESCRICAO_COLUMN),
       e.get<DateTime>(USER_DATANASCIMENTO_COLUMN),
       e.get<String>(USER_CPFCNPJ_COLUMN),
-      e.get<Uint8List?>(USER_FOTO_COLUMN),
+      e.get<dynamic>(USER_FOTO_COLUMN).first.url,
       e.get<String>(USER_USERNAME_COLUMN),
       e.get<String>(USER_EMAIL_COLUMN),
       e.get<String>(USER_TELEFONE_COLUMN),
@@ -96,6 +94,31 @@ class UserRepository implements IUserRepository {
       await saveSession(model, senha, parse.get<String>("sessionToken")!);
 
       return model;
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  @override
+  Future<void> update(UserModel model) async {
+    try {
+      if (model.id == null) throw Exception("Houve um erro ao atualizar seus dados.");
+
+      List<ParseFileBase> parseImage = await ParseImageUtils.save([model.foto]);
+
+      ParseUser user = toParseObject(model)..set<List<ParseFileBase>>(USER_FOTO_COLUMN, parseImage);
+      ParseResponse response = await user.save();
+
+      if (!response.success) throw Exception(ParseErrorsUtils.get(response.statusCode));
+
+      SessionPreferencesModel session = await _sessionPreferences!.get();
+      await _sessionPreferences!.save(SessionPreferencesModel(
+        model.id,
+        model.username,
+        model.email,
+        session.senha,
+        session.sessionToken,
+      ));
     } catch (e) {
       throw Exception(e);
     }
@@ -146,22 +169,6 @@ class UserRepository implements IUserRepository {
       final ParseResponse response = await parseObject.save();
 
       await _sessionPreferences!.updateSenha(model.senha!);
-
-      if (!response.success) throw Exception(ParseErrorsUtils.get(response.statusCode));
-    } catch (e) {
-      throw Exception(e);
-    }
-  }
-
-  @override
-  Future<void> updateDadosPessoais(UserModel model) async {
-    try {
-      if (model.id == null) throw Exception("Houve um erro ao alterar sua senha.");
-
-      ParseUser user = toParseObject(model);
-      ParseResponse response = await user.save();
-
-      await _sessionPreferences!.updateDadosPessoais(model);
 
       if (!response.success) throw Exception(ParseErrorsUtils.get(response.statusCode));
     } catch (e) {

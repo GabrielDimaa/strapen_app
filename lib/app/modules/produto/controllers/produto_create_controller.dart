@@ -11,7 +11,7 @@ import 'package:strapen_app/app/modules/produto/repositories/iproduto_repository
 import 'package:strapen_app/app/modules/produto/stores/produto_store.dart';
 import 'package:strapen_app/app/shared/components/dialog/loading_dialog.dart';
 import 'package:strapen_app/app/shared/interfaces/default_controller_interface.dart';
-import 'package:strapen_app/app/shared/utils/image_picker.dart';
+import 'package:strapen_app/app/shared/utils/image_picker_utils.dart';
 
 part 'produto_create_controller.g.dart';
 

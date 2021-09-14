@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 import 'package:strapen_app/app/modules/catalogo/constants/columns.dart';
 import 'package:strapen_app/app/modules/catalogo/models/catalogo_model.dart';
@@ -9,6 +7,7 @@ import 'package:strapen_app/app/modules/produto/repositories/produto_repository.
 import 'package:strapen_app/app/modules/user/repositories/user_repository.dart';
 import 'package:strapen_app/app/shared/extensions/string_extension.dart';
 import 'package:strapen_app/app/shared/utils/parse_errors_utils.dart';
+import 'package:strapen_app/app/shared/utils/parse_images_utils.dart';
 
 class CatalogoRepository implements ICatalogoRepository {
   @override
@@ -55,7 +54,7 @@ class CatalogoRepository implements ICatalogoRepository {
     try {
       validate(model);
 
-      List<ParseFileBase> parseImagem = await _saveImagem(model.foto!);
+      List<ParseFileBase> parseImagem = await ParseImageUtils.save([model.foto]);
 
       ParseObject parseCatalogo = toParseObject(model);
       parseCatalogo..set<List<ParseFileBase>>(CATALOGO_FOTO_COLUMN, parseImagem);
@@ -162,31 +161,6 @@ class CatalogoRepository implements ICatalogoRepository {
 
       return produtos;
     } catch(e) {
-      throw Exception(e);
-    }
-  }
-
-  Future<List<ParseFileBase>> _saveImagem(dynamic foto) async {
-    final List<ParseFileBase>? parseImagem;
-
-    try {
-      if (foto is File) {
-        ParseFile parseFile = ParseFile(foto, name: "image1_catalogo");
-
-        ParseResponse response = await parseFile.save();
-        if (!response.success) throw Exception(ParseErrorsUtils.get(response.statusCode));
-
-        parseImagem = [parseFile];
-      } else {
-        final parseFile = ParseFile(null)
-          ..name = "image1_catalogo"
-          ..url = foto.toString();
-
-        parseImagem = [parseFile];
-      }
-
-      return parseImagem;
-    } catch (e) {
       throw Exception(e);
     }
   }

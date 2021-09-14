@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 import 'package:mobx/mobx.dart';
 import 'package:strapen_app/app/modules/user/models/user_model.dart';
 
@@ -23,7 +21,7 @@ abstract class _UserStore with Store {
   String? cpfCnpj;
 
   @observable
-  Uint8List? foto;
+  dynamic foto;
 
   @observable
   String? username;
@@ -62,7 +60,7 @@ abstract class _UserStore with Store {
   void setCpfCnpj(String? value) => cpfCnpj = value;
 
   @action
-  void setFoto(Uint8List? value) => foto = value;
+  void setFoto(dynamic value) => foto = value;
 
   @action
   void setUserName(String? value) => username = value;

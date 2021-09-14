@@ -1,5 +1,3 @@
-import 'dart:typed_data';
-
 class UserModel {
   String? id;
 
@@ -7,7 +5,7 @@ class UserModel {
   String? descricao;
   DateTime? dataNascimento;
   String? cpfCnpj;
-  Uint8List? foto;
+  dynamic foto;
 
   String? username;
   String? email;

@@ -254,6 +254,7 @@ class _ProdutoCreatePageState extends ModularState<ProdutoCreatePage, ProdutoCre
 
   @override
   void dispose() {
+    super.dispose();
     _descricaoController.dispose();
     _descricaoDetalhadaController.dispose();
     _quantidadeController.dispose();
@@ -262,6 +263,5 @@ class _ProdutoCreatePageState extends ModularState<ProdutoCreatePage, ProdutoCre
     _descricaoDetalhadaFocus.dispose();
     _quantidadeFocus.dispose();
     _precoFocus.dispose();
-    super.dispose();
   }
 }

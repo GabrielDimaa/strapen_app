@@ -13,7 +13,7 @@ import 'package:strapen_app/app/modules/catalogo/repositories/icatalogo_reposito
 import 'package:strapen_app/app/modules/catalogo/stores/catalogo_store.dart';
 import 'package:strapen_app/app/shared/components/dialog/loading_dialog.dart';
 import 'package:strapen_app/app/shared/interfaces/default_controller_interface.dart';
-import 'package:strapen_app/app/shared/utils/image_picker.dart';
+import 'package:strapen_app/app/shared/utils/image_picker_utils.dart';
 
 part 'catalogo_create_controller.g.dart';
 

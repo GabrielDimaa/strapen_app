@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:parse_server_sdk/parse_server_sdk.dart';
 import 'package:strapen_app/app/modules/produto/constants/columns.dart';
 import 'package:strapen_app/app/modules/produto/models/produto_model.dart';
@@ -7,6 +5,7 @@ import 'package:strapen_app/app/modules/produto/repositories/iproduto_repository
 import 'package:strapen_app/app/modules/user/factories/user_factory.dart';
 import 'package:strapen_app/app/shared/extensions/string_extension.dart';
 import 'package:strapen_app/app/shared/utils/parse_errors_utils.dart';
+import 'package:strapen_app/app/shared/utils/parse_images_utils.dart';
 
 class ProdutoRepository implements IProdutoRepository {
   @override
@@ -56,7 +55,7 @@ class ProdutoRepository implements IProdutoRepository {
     try {
       validate(model);
 
-      List<ParseFileBase> parseImages = await _saveImagens(model.fotos!);
+      List<ParseFileBase> parseImages = await ParseImageUtils.save(model.fotos!);
 
       ParseObject parseProduto = toParseObject(model)..set<List<ParseFileBase>>(PRODUTO_FOTOS_COLUMN, parseImages);
 
@@ -89,36 +88,6 @@ class ProdutoRepository implements IProdutoRepository {
       List<ProdutoModel> produtos = parseResponse?.map((e) => toModel(e)).toList() ?? [];
 
       return produtos;
-    } catch (e) {
-      throw Exception(e);
-    }
-  }
-
-  Future<List<ParseFileBase>> _saveImagens(List<dynamic> fotos) async {
-    final List<ParseFileBase> parseImagens = <ParseFileBase>[];
-    int count = 1;
-
-    try {
-      for (var foto in fotos) {
-        if (foto is File) {
-          ParseFile parseFile = ParseFile(foto, name: "image$count");
-
-          ParseResponse response = await parseFile.save();
-          if (!response.success) throw Exception(ParseErrorsUtils.get(response.statusCode));
-
-          parseImagens.add(parseFile);
-        } else {
-          final parseFile = ParseFile(null)
-            ..name = "image$count"
-            ..url = foto.toString();
-
-          parseImagens.add(parseFile);
-        }
-
-        count++;
-      }
-
-      return parseImagens;
     } catch (e) {
       throw Exception(e);
     }

@@ -124,7 +124,7 @@ class _UserDadosPessoaisPageState extends ModularState<UserDadosPessoaisPage, Us
                                     textCapitalization: TextCapitalization.sentences,
                                     enabled: !controller.loading,
                                     onSaved: controller.userStore.setCidade,
-                                    textInputAction: TextInputAction.done,
+                                    textInputAction: TextInputAction.next,
                                     focusNode: _cidadeFocus,
                                     onFieldSubmitted: (_) => controller.focusChange(context, _cidadeFocus, _dataNascimentoFocus),
                                   ),
@@ -163,11 +163,12 @@ class _UserDadosPessoaisPageState extends ModularState<UserDadosPessoaisPage, Us
                   ElevatedButton(
                     child: const Text("Salvar"),
                     onPressed: () async {
+                      unfocusAll();
                       try {
                         if (_formKey.currentState!.validate()) {
                           _formKey.currentState!.save();
 
-                          await controller.salvarDadosPessoais(context);
+                          await controller.update(context, "Salvando dados pessoais...");
                         }
                       } catch (e) {
                         ErrorDialog.show(context: context, content: e.toString());
@@ -181,6 +182,13 @@ class _UserDadosPessoaisPageState extends ModularState<UserDadosPessoaisPage, Us
         ),
       ),
     );
+  }
+
+  void unfocusAll() {
+    _emailFocus.unfocus();
+    _dataNascimentoFocus.unfocus();
+    _cepFocus.unfocus();
+    _cpfCnpjFocus.unfocus();
   }
 
   @override

@@ -1,14 +1,16 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'package:strapen_app/app/app_controller.dart';
-import 'package:strapen_app/app/modules/user/constants/columns.dart';
 import 'package:strapen_app/app/modules/user/factories/user_factory.dart';
 import 'package:strapen_app/app/modules/user/models/user_model.dart';
 import 'package:strapen_app/app/modules/user/repositories/iuser_repository.dart';
 import 'package:strapen_app/app/modules/user/stores/user_store.dart';
 import 'package:strapen_app/app/shared/components/dialog/loading_dialog.dart';
 import 'package:strapen_app/app/shared/interfaces/default_controller_interface.dart';
+import 'package:strapen_app/app/shared/utils/image_picker_utils.dart';
 
 part 'user_editar_controller.g.dart';
 
@@ -64,12 +66,12 @@ abstract class _UserEditarController with Store implements IDefaultController {
   }
 
   @action
-  Future<void> salvarDadosPessoais(BuildContext context) async {
+  Future<void> update(BuildContext context, String message) async {
     try {
-      await LoadingDialog.show(context, "Salvando dados pessoais...", () async {
+      await LoadingDialog.show(context, message, () async {
         UserModel model = userStore.toModel();
 
-        await _userRepository.updateDadosPessoais(model);
+        await _userRepository.update(model);
         _appController.setUserModel(model);
 
         Modular.to.pop();
@@ -77,6 +79,15 @@ abstract class _UserEditarController with Store implements IDefaultController {
     } catch (e) {
       rethrow;
     }
+  }
+
+  @action
+  Future<void> getImagePicker(bool isCamera) async {
+    File? image = await ImagePickerUtils.getImagePicker(isCamera);
+    if (image == null) return;
+
+    userStore.setFoto(image);
+    Modular.to.pop();
   }
 
   @action

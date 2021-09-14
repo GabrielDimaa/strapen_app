@@ -1,17 +1,9 @@
-import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:strapen_app/app/shared/components/widgets/text_field_cpf_cnpj/radio_button_widget.dart';
 import 'package:strapen_app/app/modules/auth/modules/registro/components/registro_widget.dart';
 import 'package:strapen_app/app/modules/auth/modules/registro/controllers/registro_controller.dart';
 import 'package:strapen_app/app/modules/user/constants/columns.dart';
 import 'package:strapen_app/app/shared/components/dialog/error_dialog.dart';
-import 'package:strapen_app/app/shared/components/form/validator.dart';
-import 'package:strapen_app/app/shared/components/sized_box/horizontal_sized_box.dart';
-import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
-import 'package:strapen_app/app/shared/components/text_input/text_input_default.dart';
 import 'package:strapen_app/app/shared/components/widgets/text_field_cpf_cnpj/text_field_cpf_cnpj.dart';
 import 'package:strapen_app/app/shared/extensions/string_extension.dart';
 
