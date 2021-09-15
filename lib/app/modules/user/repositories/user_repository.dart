@@ -27,6 +27,7 @@ class UserRepository implements IUserRepository {
     if (model.cep.isNullOrEmpty()) throw Exception("Informe seu CEP.");
     if (model.cidade.isNullOrEmpty()) throw Exception("Informe sua cidade.");
     if (model.senha.isNullOrEmpty()) throw Exception("Informe uma senha válida para sua conta.");
+    if (model.foto == null) throw Exception("Selecione uma foto para seu perfil.");
   }
 
   @override
@@ -52,7 +53,7 @@ class UserRepository implements IUserRepository {
       e.get<String?>(USER_DESCRICAO_COLUMN),
       e.get<DateTime>(USER_DATANASCIMENTO_COLUMN),
       e.get<String>(USER_CPFCNPJ_COLUMN),
-      e.get<dynamic>(USER_FOTO_COLUMN).first.url,
+      e.get<dynamic>(USER_FOTO_COLUMN)?.first?.url,
       e.get<String>(USER_USERNAME_COLUMN),
       e.get<String>(USER_EMAIL_COLUMN),
       e.get<String>(USER_TELEFONE_COLUMN),
@@ -83,7 +84,9 @@ class UserRepository implements IUserRepository {
 
       validate(model);
 
-      ParseUser user = toParseObject(model);
+      List<ParseFileBase> parseImage = await ParseImageUtils.save([model.foto]);
+
+      ParseUser user = toParseObject(model)..set<List<ParseFileBase>>(USER_FOTO_COLUMN, parseImage);
       ParseResponse response = await user.signUp();
 
       if (!response.success) throw Exception(ParseErrorsUtils.get(response.statusCode));
