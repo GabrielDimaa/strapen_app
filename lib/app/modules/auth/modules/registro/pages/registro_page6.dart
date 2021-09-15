@@ -76,7 +76,7 @@ class _RegistroPage6State extends State<RegistroPage6> {
                 children: [
                   Icon(Icons.edit),
                   const HorizontalSizedBox(),
-                  Text("Editar"),
+                  Text("Alterar foto"),
                 ],
               ),
               onPressed: () async => await _showBottomSheet(),
