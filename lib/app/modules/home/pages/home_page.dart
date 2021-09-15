@@ -4,6 +4,7 @@ import 'package:strapen_app/app/app_widget.dart';
 import 'package:strapen_app/app/modules/home/components/action_app_bar_home.dart';
 import 'package:strapen_app/app/modules/home/controllers/home_controller.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/app_bar_default.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -22,8 +23,11 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
           padding: const EdgeInsets.only(left: 12, top: 6, bottom: 6),
           child: CircleAvatar(
             radius: 50,
-            backgroundColor: AppColors.primary,
-            backgroundImage: Image.asset("assets/images/test/avatar_test.png").image,
+            backgroundColor: AppColors.secondary,
+            backgroundImage: FadeInImage.memoryNetwork(
+              placeholder: kTransparentImage,
+              image: controller.userStore.foto,
+            ).image,
           ),
         ),
         actionsWidgets: [
@@ -32,7 +36,7 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
             children: [
               ActionAppBarHome(
                 icon: Icons.search,
-                onTap: (){},
+                onTap: () {},
               ),
               const SizedBox(width: 6),
               ActionAppBarHome(

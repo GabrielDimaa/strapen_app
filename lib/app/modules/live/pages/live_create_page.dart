@@ -222,5 +222,6 @@ class _LiveCreatePageState extends ModularState<LiveCreatePage, LiveCreateContro
   @override
   void dispose() async {
     super.dispose();
+    controller.cameraStore.cameraController?.dispose();
   }
 }
