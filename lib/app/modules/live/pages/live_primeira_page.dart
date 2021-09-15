@@ -4,6 +4,7 @@ import 'package:strapen_app/app/app_widget.dart';
 import 'package:strapen_app/app/modules/live/constants/routes.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/app_bar_default.dart';
 import 'package:strapen_app/app/shared/components/button/elevated_button_default.dart';
+import 'package:strapen_app/app/shared/components/dialog/loading_dialog.dart';
 import 'package:strapen_app/app/shared/components/image/vetor.dart';
 import 'package:strapen_app/app/shared/components/padding/padding_scaffold.dart';
 import 'package:strapen_app/app/shared/components/scaffold/scaffold_gradiente.dart';
@@ -49,8 +50,10 @@ class LivePrimeiraPage extends StatelessWidget {
             child: Text("Avançar"),
             primary: Colors.white,
             onPrimary: AppColors.primary,
-            onPressed: () {
-              Modular.to.popAndPushNamed(LIVE_ROUTE + LIVE_CREATE_ROUTE);
+            onPressed: () async {
+              await LoadingDialog.show(context, "Carregando...", () async {
+                await Modular.to.popAndPushNamed(LIVE_ROUTE + LIVE_CREATE_ROUTE);
+              });
             },
           ),
         ],

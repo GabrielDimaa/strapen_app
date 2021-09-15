@@ -109,15 +109,19 @@ class _LiveInserirCatalogosPageState extends ModularState<LiveInserirCatalogosPa
           ),
           Padding(
             padding: const MarginButtonWithoutScaffold(),
-            child: ElevatedButtonDefault(
-              child: Text("Confirmar"),
-              onPressed: () async {
-                try {
-                  controller.save();
-                } catch (e) {
-                  ErrorDialog.show(context: context, content: e.toString());
-                }
-              },
+            child: Observer(
+              builder: (_) => ElevatedButtonDefault(
+                child: const Text("Confirmar"),
+                onPressed: controller.catalogos.isNotEmpty
+                    ? () async {
+                        try {
+                          controller.save();
+                        } catch (e) {
+                          ErrorDialog.show(context: context, content: e.toString());
+                        }
+                      }
+                    : null,
+              ),
             ),
           ),
         ],
