@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'package:strapen_app/app/app_controller.dart';
@@ -8,6 +9,7 @@ import 'package:strapen_app/app/modules/user/factories/user_factory.dart';
 import 'package:strapen_app/app/modules/user/models/user_model.dart';
 import 'package:strapen_app/app/modules/user/repositories/iuser_repository.dart';
 import 'package:strapen_app/app/modules/user/stores/user_store.dart';
+import 'package:strapen_app/app/shared/components/dialog/dialog_default.dart';
 import 'package:strapen_app/app/shared/components/dialog/loading_dialog.dart';
 import 'package:strapen_app/app/shared/interfaces/default_controller_interface.dart';
 import 'package:strapen_app/app/shared/utils/image_picker_utils.dart';
@@ -55,11 +57,24 @@ abstract class _UserEditarController with Store implements IDefaultController {
   @action
   Future<void> salvarNovaSenha(BuildContext context) async {
     try {
-      await LoadingDialog.show(context, "Salvando nova senha...", () async {
-        await _userRepository.updateSenha(userStore.toModel());
+      bool confirm = await DialogDefault.show(
+        context: context,
+        title: const Text("Alterar senha"),
+        content: const Text("Confirme para alterar sua senha."),
+        actions: [
+          TextButton(
+            child: const Text("Confirmar"),
+            onPressed: () => Modular.to.pop(true),
+          ),
+        ],
+      );
 
-        Modular.to.pop();
-      });
+      if (confirm)
+        await LoadingDialog.show(context, "Salvando nova senha...", () async {
+          await _userRepository.updateSenha(userStore.toModel());
+
+          Modular.to.pop();
+        });
     } catch (e) {
       rethrow;
     }
@@ -68,14 +83,27 @@ abstract class _UserEditarController with Store implements IDefaultController {
   @action
   Future<void> update(BuildContext context, String message) async {
     try {
-      await LoadingDialog.show(context, message, () async {
-        UserModel model = userStore.toModel();
+      bool confirm = await DialogDefault.show(
+        context: context,
+        title: const Text("Alterar"),
+        content: const Text("Confirme para alterar os dados da sua conta."),
+        actions: [
+          TextButton(
+            child: const Text("Confirmar"),
+            onPressed: () => Modular.to.pop(true),
+          ),
+        ],
+      );
 
-        await _userRepository.update(model);
-        _appController.setUserModel(model);
+      if (confirm)
+        await LoadingDialog.show(context, message, () async {
+          UserModel model = userStore.toModel();
 
-        Modular.to.pop();
-      });
+          await _userRepository.update(model);
+          _appController.setUserModel(model);
+
+          Modular.to.pop();
+        });
     } catch (e) {
       rethrow;
     }

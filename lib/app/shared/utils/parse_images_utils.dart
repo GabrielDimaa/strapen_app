@@ -18,9 +18,7 @@ abstract class ParseImageUtils {
 
           parseImages.add(parseFile);
         } else {
-          final parseFile = ParseFile(null)
-            ..name = "image$count"
-            ..url = foto.toString();
+          final parseFile = ParseFile(null, name: "image$count", url: foto.toString());
 
           parseImages.add(parseFile);
         }
