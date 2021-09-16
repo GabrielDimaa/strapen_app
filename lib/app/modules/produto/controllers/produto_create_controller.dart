@@ -51,20 +51,16 @@ abstract class _ProdutoCreateController with Store implements IDefaultController
   @action
   Future<void> save(BuildContext context) async {
     try {
-      setLoading(true);
+      ProdutoModel? model;
 
       await LoadingDialog.show(context, "Salvando produto...", () async {
         produtoStore.setAnunciante(_appController.userModel);
-        ProdutoModel? model = await _produtoRepository.save(produtoStore.toModel());
-
-        setLoading(false);
-
-        if (model?.id != null) Modular.to.pop(model!);
+        model = await _produtoRepository.save(produtoStore.toModel());
       });
+
+      Modular.to.pop(model ?? ProdutoFactory.newModel());
     } catch (_) {
       rethrow;
-    } finally {
-      setLoading(false);
     }
   }
 

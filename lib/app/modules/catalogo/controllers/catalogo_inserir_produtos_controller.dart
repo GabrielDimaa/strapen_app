@@ -1,6 +1,7 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'package:strapen_app/app/modules/catalogo/controllers/catalogo_create_controller.dart';
+import 'package:strapen_app/app/modules/produto/constants/routes.dart';
 import 'package:strapen_app/app/modules/produto/models/produto_model.dart';
 import 'package:strapen_app/app/modules/produto/repositories/iproduto_repository.dart';
 
@@ -58,5 +59,13 @@ abstract class _CatalogoInserirProdutosController with Store {
     _catalogoController.catalogoStore.produtos = produtosSelected;
 
     Modular.to.pop();
+  }
+
+  @action
+  Future<void> toProdutoCreate() async {
+    ProdutoModel? produtoModel = await Modular.to.pushNamed(PRODUTO_ROUTE + PRODUTO_CREATE_ROUTE);
+
+    if (produtoModel?.id != null)
+      produtos.add(produtoModel!);
   }
 }

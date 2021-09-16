@@ -26,4 +26,16 @@ abstract class CatalogoFactory {
       null,
     );
   }
+
+  static CatalogoModel newModel() {
+    return CatalogoModel(
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+      null,
+    );
+  }
 }

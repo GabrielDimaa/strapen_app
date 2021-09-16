@@ -46,15 +46,15 @@ abstract class _CatalogoCreateController with Store implements IDefaultControlle
   @action
   Future<void> save(BuildContext context) async {
     try {
+      CatalogoModel? model;
+
       await LoadingDialog.show(context, "Salvando catálogo...", () async {
         catalogoStore.setUser(appController.userModel);
 
-        CatalogoModel model = catalogoStore.toModel();
-        model = await _catalogoRepository.save(model);
-
-        if (model.id != null)
-          Modular.to.pop();
+        model = await _catalogoRepository.save(catalogoStore.toModel());
       });
+
+      Modular.to.pop(model ?? CatalogoFactory.newModel());
     } catch(_) {
       rethrow;
     }

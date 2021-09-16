@@ -26,4 +26,16 @@ abstract class ProdutoFactory {
       null,
     );
   }
+
+  static ProdutoModel newModel() {
+    return ProdutoModel(
+      null,
+      null,
+      null,
+      [],
+      0,
+      null,
+      null,
+    );
+  }
 }

@@ -67,6 +67,7 @@ class CatalogoRepository implements ICatalogoRepository {
       CatalogoModel catalogoResponse = toModel(parseResponse);
       model.id = catalogoResponse.id;
       model.dataCriado = catalogoResponse.dataCriado;
+      model.foto = catalogoResponse.foto;
 
       await saveProdutosCatalogo(model).catchError((value) {
         throw Exception("FALTA IMPLEMENTAR!!!");

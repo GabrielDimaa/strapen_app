@@ -5,6 +5,7 @@ import 'package:strapen_app/app/app_widget.dart';
 import 'package:strapen_app/app/modules/catalogo/controllers/catalogo_inserir_produtos_controller.dart';
 import 'package:strapen_app/app/modules/produto/models/produto_model.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/app_bar_default.dart';
+import 'package:strapen_app/app/shared/components/app_bar_default/widgets/circle_background_app_bar.dart';
 import 'package:strapen_app/app/shared/components/button/elevated_button_default.dart';
 import 'package:strapen_app/app/shared/components/dialog/error_dialog.dart';
 import 'package:strapen_app/app/shared/components/loading/circular_loading.dart';
@@ -32,7 +33,19 @@ class _CatalogoInserirProdutosPageState extends ModularState<CatalogoInserirProd
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
     return Scaffold(
-      appBar: AppBarDefault(title: Text("Produtos")),
+      appBar: AppBarDefault(
+        title: Text("Produtos"),
+        actionsWidgets: [
+          CircleButtonAppBar(
+            child: Icon(
+              Icons.playlist_add,
+              size: 28,
+              color: Colors.white,
+            ),
+            onTap: () async => await controller.toProdutoCreate(),
+          ),
+        ],
+      ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
@@ -107,15 +120,19 @@ class _CatalogoInserirProdutosPageState extends ModularState<CatalogoInserirProd
           ),
           Padding(
             padding: const MarginButtonWithoutScaffold(),
-            child: ElevatedButtonDefault(
-              child: Text("Confirmar"),
-              onPressed: () async {
-                try {
-                  controller.save();
-                } catch (e) {
-                  ErrorDialog.show(context: context, content: e.toString());
-                }
-              },
+            child: Observer(
+              builder: (_) => ElevatedButtonDefault(
+                child: Text("Confirmar"),
+                onPressed: controller.produtos.isNotEmpty
+                    ? () async {
+                        try {
+                          controller.save();
+                        } catch (e) {
+                          ErrorDialog.show(context: context, content: e.toString());
+                        }
+                      }
+                    : null,
+              ),
             ),
           ),
         ],

@@ -50,10 +50,8 @@ class LivePrimeiraPage extends StatelessWidget {
             child: Text("Avançar"),
             primary: Colors.white,
             onPrimary: AppColors.primary,
-            onPressed: () async {
-              await LoadingDialog.show(context, "Carregando...", () async {
-                await Modular.to.popAndPushNamed(LIVE_ROUTE + LIVE_CREATE_ROUTE);
-              });
+            onPressed: () {
+              Modular.to.popAndPushNamed(LIVE_ROUTE + LIVE_CREATE_ROUTE);
             },
           ),
         ],

@@ -1,5 +1,6 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
+import 'package:strapen_app/app/modules/catalogo/constants/routes.dart';
 import 'package:strapen_app/app/modules/catalogo/models/catalogo_model.dart';
 import 'package:strapen_app/app/modules/catalogo/repositories/icatalogo_repository.dart';
 import 'package:strapen_app/app/modules/live/controllers/live_create_controller.dart';
@@ -57,5 +58,13 @@ abstract class _LiveInserirCatalogosController with Store {
     _liveController.setCatalogos(catalogosSelected);
 
     Modular.to.pop();
+  }
+
+  @action
+  Future<void> toCatalogoCreate() async {
+    CatalogoModel? catalogoModel = await Modular.to.pushNamed(CATALOGO_ROUTE + CATALOGO_CREATE_ROUTE);
+
+    if (catalogoModel?.id != null)
+      catalogos.add(catalogoModel!);
   }
 }

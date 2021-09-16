@@ -64,6 +64,7 @@ class _ProdutoCreatePageState extends ModularState<ProdutoCreatePage, ProdutoCre
     return Scaffold(
       appBar: AppBarDefault(
         title: Text("Produto"),
+        backgroundColor: AppColors.background,
         actionsWidgets: [
           CircleButtonAppBar(
             child: Icon(
