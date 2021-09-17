@@ -76,6 +76,7 @@ abstract class _LiveCreateController with Store {
 
       //Manter assíncrono para trancar demorar muito o início da Live
       _userRepository.updateFirstLive(model.user!.id!);
+      appController.userModel!.firstLive = false;
 
       Modular.to.navigate(LIVE_ROUTE + LIVE_TRANSMITIR_ROUTE, arguments: cameraStore.currentCamera!.lensDirection);
     });
