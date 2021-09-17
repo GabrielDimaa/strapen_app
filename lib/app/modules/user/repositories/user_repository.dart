@@ -178,4 +178,24 @@ class UserRepository implements IUserRepository {
       throw Exception(e);
     }
   }
+
+  @override
+  Future<UserModel?> fetchSearch(String text) async {
+    try {
+      final QueryBuilder<ParseObject> query = QueryBuilder(ParseUser.forQuery());
+      query..whereEqualTo(USER_NOME_COLUMN, text);
+
+      final ParseResponse response = await query.query();
+
+      if (!response.success) throw Exception(ParseErrorsUtils.get(response.statusCode));
+      ParseObject? parseResponse = (response.results as List<ParseObject>?)?.first;
+
+      if (parseResponse != null)
+        return toModel(parseResponse);
+
+      return null;
+    } catch(e) {
+      throw Exception(e);
+    }
+  }
 }

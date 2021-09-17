@@ -3,6 +3,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:strapen_app/app/app_widget.dart';
 import 'package:strapen_app/app/modules/home/components/action_app_bar_home.dart';
 import 'package:strapen_app/app/modules/home/controllers/home_controller.dart';
+import 'package:strapen_app/app/modules/user/components/user_search_delegate.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/app_bar_default.dart';
 import 'package:transparent_image/transparent_image.dart';
 
@@ -36,7 +37,9 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
             children: [
               ActionAppBarHome(
                 icon: Icons.search,
-                onTap: () {},
+                onTap: () {
+                  showSearch(context: context, delegate: UserSearchDelegate());
+                },
               ),
               const SizedBox(width: 6),
               ActionAppBarHome(
