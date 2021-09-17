@@ -183,7 +183,8 @@ class UserRepository implements IUserRepository {
   Future<UserModel?> fetchSearch(String text) async {
     try {
       final QueryBuilder<ParseObject> query = QueryBuilder(ParseUser.forQuery());
-      query..whereEqualTo(USER_NOME_COLUMN, text);
+      query.whereContains(USER_NOME_COLUMN, text.toLowerCase(), caseSensitive: false);
+      query.setLimit(30);
 
       final ParseResponse response = await query.query();
 
