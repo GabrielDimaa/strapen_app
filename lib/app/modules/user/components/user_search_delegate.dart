@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:strapen_app/app/modules/user/constants/routes.dart';
 import 'package:strapen_app/app/modules/user/models/user_model.dart';
 import 'package:strapen_app/app/modules/user/repositories/iuser_repository.dart';
 import 'package:strapen_app/app/shared/components/loading/circular_loading.dart';
 import 'package:strapen_app/app/shared/components/padding/padding_scaffold.dart';
+import 'package:strapen_app/app/shared/components/sized_box/horizontal_sized_box.dart';
 import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
 import 'package:transparent_image/transparent_image.dart';
 
@@ -53,15 +55,42 @@ class UserSearchDelegate extends SearchDelegate {
               );
             } else {
               UserModel model = snapshot.data!;
-              return ListTile(
-                leading: CircleAvatar(
-                  backgroundImage: FadeInImage.memoryNetwork(
-                    placeholder: kTransparentImage,
-                    image: model.foto,
-                  ).image,
+              return InkWell(
+                onTap: () async => await Modular.to.pushNamed(USER_ROUTE, arguments: model),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      CircleAvatar(
+                        radius: 32,
+                        backgroundImage: FadeInImage.memoryNetwork(
+                          placeholder: kTransparentImage,
+                          image: model.foto,
+                        ).image,
+                      ),
+                      const HorizontalSizedBox(1.5),
+                      Column(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            model.nome!,
+                            softWrap: false,
+                            overflow: TextOverflow.fade,
+                          ),
+                          Text(
+                            "@${model.username!}",
+                            softWrap: false,
+                            overflow: TextOverflow.fade,
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
                 ),
-                title: Text(model.nome!),
-                subtitle: Text("@${model.username!}"),
               );
             }
         }

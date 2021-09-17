@@ -12,7 +12,9 @@ class UserController = _UserController with _$UserController;
 abstract class _UserController with Store {
   final AppController _appController;
 
-  _UserController(this._appController);
+  _UserController(this._appController) {
+    setUserStore(UserFactory.fromModel(_appController.userModel!));
+  }
 
   @observable
   UserStore userStore = UserFactory.newStore();
@@ -27,18 +29,10 @@ abstract class _UserController with Store {
   void setLoading(bool value) => loading = value;
 
   @action
-  Future<void> load() async {
-    try {
-      setLoading(true);
-
-      setUserStore(UserFactory.fromModel(_appController.userModel!));
-    } finally {
-      setLoading(false);
-    }
-  }
-
-  @action
   Future<void> toEditarPerfil() async {
     await Modular.to.pushNamed(USER_ROUTE + USER_EDITAR_PERFIL_ROUTE);
   }
+
+  @computed
+  bool get isEditavel => _appController.userModel!.id == userStore.id;
 }

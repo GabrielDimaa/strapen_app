@@ -4,6 +4,8 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:strapen_app/app/app_widget.dart';
 import 'package:strapen_app/app/modules/user/components/foto_perfil_widget.dart';
 import 'package:strapen_app/app/modules/user/controllers/user_controller.dart';
+import 'package:strapen_app/app/modules/user/factories/user_factory.dart';
+import 'package:strapen_app/app/modules/user/models/user_model.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/app_bar_default.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/widgets/circle_background_app_bar.dart';
 import 'package:strapen_app/app/shared/components/padding/padding_scaffold.dart';
@@ -11,6 +13,10 @@ import 'package:strapen_app/app/shared/components/sized_box/horizontal_sized_box
 import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
 
 class UserPage extends StatefulWidget {
+  final UserModel? model;
+
+  const UserPage({required this.model});
+
   @override
   _UserPageState createState() => _UserPageState();
 }
@@ -19,7 +25,7 @@ class _UserPageState extends ModularState<UserPage, UserController> {
   @override
   void initState() {
     super.initState();
-    controller.load();
+    if (widget.model != null) controller.setUserStore(UserFactory.fromModel(widget.model!));
   }
 
   @override
@@ -30,9 +36,14 @@ class _UserPageState extends ModularState<UserPage, UserController> {
       appBar: AppBarDefault(
         title: Text("Perfil"),
         actionsWidgets: [
-          CircleButtonAppBar(
-            child: Icon(Icons.edit, color: Colors.white),
-            onTap: () async => await controller.toEditarPerfil(),
+          Observer(
+            builder: (_) => Visibility(
+              visible: controller.isEditavel,
+              child: CircleButtonAppBar(
+                child: Icon(Icons.edit, color: Colors.white),
+                onTap: () async => await controller.toEditarPerfil(),
+              ),
+            ),
           ),
         ],
       ),

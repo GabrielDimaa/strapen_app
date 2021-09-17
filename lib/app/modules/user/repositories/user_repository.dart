@@ -1,4 +1,6 @@
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
+import 'package:strapen_app/app/app_controller.dart';
 import 'package:strapen_app/app/modules/user/constants/columns.dart';
 import 'package:strapen_app/app/modules/user/models/user_model.dart';
 import 'package:strapen_app/app/modules/user/repositories/iuser_repository.dart';
@@ -184,6 +186,7 @@ class UserRepository implements IUserRepository {
     try {
       final QueryBuilder<ParseObject> query = QueryBuilder(ParseUser.forQuery());
       query.whereContains(USER_NOME_COLUMN, text.toLowerCase(), caseSensitive: false);
+      query.whereNotEqualTo(USER_ID_COLUMN, Modular.get<AppController>().userModel!.id);
       query.setLimit(30);
 
       final ParseResponse response = await query.query();

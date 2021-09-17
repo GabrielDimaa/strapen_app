@@ -21,7 +21,7 @@ class UserModule extends Module {
 
   @override
   final List<ModularRoute> routes = [
-    ChildRoute(USER_ROUTE, child: (_, args) => UserPage()),
+    ChildRoute(USER_ROUTE, child: (_, args) => UserPage(model: args.data)),
     ChildRoute(USER_EDITAR_PERFIL_ROUTE, child: (_, args) => UserEditarPerfilPage()),
     ChildRoute(USER_DADOS_PESSOAIS_ROUTE, child: (_, args) => UserDadosPessoaisPage()),
     ChildRoute(USER_SENHA_ROUTE, child: (_, args) => UserSenhaPage()),

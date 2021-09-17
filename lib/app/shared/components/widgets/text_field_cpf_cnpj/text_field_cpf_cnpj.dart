@@ -65,20 +65,22 @@ class TextFieldCpfCnpj extends StatelessWidget {
           ],
         ),
         const VerticalSizedBox(),
-        TextFormField(
-          decoration: InputDecorationDefault(label: controller.isCpf ? "CPF" : "CNPJ"),
-          controller: textController,
-          keyboardType: TextInputType.number,
-          validator: InputCpfCnpjValidator(isCnpj: !controller.isCpf).validate,
-          textInputAction: TextInputAction.done,
-          enabled: enabled,
-          focusNode: focusNode,
-          onFieldSubmitted: onFieldSubmitted,
-          onSaved: onSaved,
-          inputFormatters: [
-            FilteringTextInputFormatter.digitsOnly,
-            controller.isCpf ? CpfInputFormatter() : CnpjInputFormatter(),
-          ],
+        Observer(
+          builder: (_) => TextFormField(
+            decoration: InputDecorationDefault(label: controller.isCpf ? "CPF" : "CNPJ"),
+            controller: textController,
+            keyboardType: TextInputType.number,
+            validator: InputCpfCnpjValidator(isCnpj: !controller.isCpf).validate,
+            textInputAction: TextInputAction.done,
+            enabled: enabled,
+            focusNode: focusNode,
+            onFieldSubmitted: onFieldSubmitted,
+            onSaved: onSaved,
+            inputFormatters: [
+              FilteringTextInputFormatter.digitsOnly,
+              controller.isCpf ? CpfInputFormatter() : CnpjInputFormatter(),
+            ],
+          ),
         ),
       ],
     );
