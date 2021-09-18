@@ -35,7 +35,11 @@ class _ChatWidgetState extends State<ChatWidget> {
             ),
           );
         } else if (snapshot.hasData) {
-          return ChatTile(model: _chatRepository.toModel(snapshot.loadedData!));
+          ChatModel chat = _chatRepository.toModel(snapshot.loadedData!);
+          return ChatTile(
+            model: chat,
+            mine: widget.model.user!.id == chat.user!.id,
+          );
         } else {
           return const CircularLoading();
         }

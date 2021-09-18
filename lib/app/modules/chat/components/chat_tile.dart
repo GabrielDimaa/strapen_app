@@ -12,21 +12,19 @@ class ChatTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    CircleAvatar image() => CircleAvatar(
-      radius: 22,
-      backgroundImage: FadeInImage.memoryNetwork(
-        placeholder: kTransparentImage,
-        image: model.user!.foto,
-      ).image,
-    );
-
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4),
       child: Row(
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          !mine ? image() : Container(),
+          CircleAvatar(
+            radius: 22,
+            backgroundImage: FadeInImage.memoryNetwork(
+              placeholder: kTransparentImage,
+              image: model.user!.foto,
+            ).image,
+          ),
           const HorizontalSizedBox(),
           Expanded(
             child: Container(
@@ -38,13 +36,18 @@ class ChatTile extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(model.user!.username!, style: TextStyle(fontWeight: FontWeight.w600)),
+                  Text(
+                    mine ? "Você" : "@${model.user!.username!}",
+                    style: TextStyle(
+                      fontWeight: FontWeight.w600,
+                      color: mine ? AppColors.primary : AppColors.secondary,
+                    ),
+                  ),
                   Text(model.comentario!, style: TextStyle(fontSize: 14))
                 ],
               ),
             ),
           ),
-          mine ? image() : Container(),
         ],
       ),
     );

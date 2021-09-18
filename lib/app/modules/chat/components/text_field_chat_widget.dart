@@ -32,6 +32,7 @@ class TextFieldChatWidget extends StatelessWidget {
                 focusNode: focus,
                 textInputAction: TextInputAction.done,
                 onSubmitted: (_) => focus.unfocus(),
+                textCapitalization: TextCapitalization.sentences,
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.symmetric(horizontal: 20),
                   hintText: "Escreva um comentário...",
