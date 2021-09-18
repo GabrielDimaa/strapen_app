@@ -1,14 +1,12 @@
 import 'package:camera_with_rtmp/camera.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 import 'package:strapen_app/app/app_widget.dart';
-import 'package:strapen_app/app/modules/live/components/chat_tile.dart';
-import 'package:strapen_app/app/modules/live/components/text_field_comentario_widget.dart';
-import 'package:strapen_app/app/modules/live/controllers/live_transmitir_controller.dart';
-import 'package:strapen_app/app/modules/user/factories/user_factory.dart';
+import 'package:strapen_app/app/modules/chat/components/chat_widget.dart';
+import 'package:strapen_app/app/modules/chat/components/text_field_chat_widget.dart';
+import 'package:strapen_app/app/modules/chat/models/chat_model.dart';
+import 'package:strapen_app/app/modules/live/controllers/live_controller.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/app_bar_default.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/widgets/circle_background_app_bar.dart';
 import 'package:strapen_app/app/shared/components/dialog/error_dialog.dart';
@@ -24,11 +22,13 @@ class LiveTransmitirPage extends StatefulWidget {
   _LiveTransmitirPageState createState() => _LiveTransmitirPageState();
 }
 
-class _LiveTransmitirPageState extends ModularState<LiveTransmitirPage, LiveTransmitirController> {
+class _LiveTransmitirPageState extends State<LiveTransmitirPage> {
+  final LiveController controller = Modular.get<LiveController>();
+
   @override
   void initState() {
     super.initState();
-    controller.load(context: context, direction: widget.cameraDirection);
+    controller.loadTransmitirLive(context);
   }
 
   @override
@@ -51,12 +51,11 @@ class _LiveTransmitirPageState extends ModularState<LiveTransmitirPage, LiveTran
                       children: [
                         Column(
                           children: [
-                            //region Live
+                            //region Live / Chat
                             Expanded(
                               child: Stack(
                                 children: [
                                   SizedBox(
-                                    //height: MediaQuery.of(context).size.height / 2,
                                     width: size,
                                     child: Observer(
                                       builder: (_) {
@@ -69,66 +68,18 @@ class _LiveTransmitirPageState extends ModularState<LiveTransmitirPage, LiveTran
                                             ),
                                           );
                                         } else {
-                                          return ClipRRect(
-                                            // borderRadius: BorderRadius.only(
-                                            //   bottomRight: Radius.circular(36),
-                                            //   bottomLeft: Radius.circular(36),
-                                            // ),
-                                            child: FittedBox(
-                                              fit: BoxFit.fitWidth,
-                                              child: SizedBox(
-                                                width: size,
-                                                height: size / controller.cameraStore.cameraController!.value.aspectRatio,
-                                                child: CameraPreview(controller.cameraStore.cameraController!),
-                                              ),
-                                            ),
-                                          );
+                                          return CameraPreview(controller.cameraStore.cameraController!);
                                         }
                                       },
                                     ),
                                   ),
-                                  // Positioned(
-                                  //   bottom: 0,
-                                  //   child: SizedBox(
-                                  //     height: MediaQuery.of(context).size.height / 3,
-                                  //     width: double.maxFinite,
-                                  //     child: ListView.builder(
-                                  //       reverse: true,
-                                  //       itemCount: 8,
-                                  //       itemBuilder: (_, i) {
-                                  //         return ChatTile(
-                                  //           model: UserFactory.newModel(),
-                                  //           comentario: "Comentário $i",
-                                  //         );
-                                  //       },
-                                  //     ),
-                                  //   ),
-                                  // ),
                                   Positioned(
                                     bottom: 0,
                                     child: SizedBox(
                                       height: MediaQuery.of(context).size.height / 3,
-                                      width: double.maxFinite,
-                                      child: ParseLiveListWidget(
-                                        query: QueryBuilder(ParseObject("Chat")),
-                                          // ..whereEqualTo("live",
-                                          //     (ParseObject("Live")..set("objectId", controller.liveModel!.id)).toPointer()),
-                                        reverse: false,
-                                        childBuilder: (_, snapshot) {
-                                          if (snapshot.failed) {
-                                            return const Text('something went wrong!');
-                                          } else if (snapshot.hasData) {
-                                            return ListTile(
-                                              title: Text(
-                                                "SUCESSO",
-                                              ),
-                                            );
-                                          } else {
-                                            return const ListTile(
-                                              leading: CircularProgressIndicator(),
-                                            );
-                                          }
-                                        },
+                                      width: MediaQuery.of(context).size.width,
+                                      child: ChatWidget(
+                                        model: ChatModel(null, null, controller.appController.userModel!, controller.liveModel),
                                       ),
                                     ),
                                   ),
@@ -136,9 +87,17 @@ class _LiveTransmitirPageState extends ModularState<LiveTransmitirPage, LiveTran
                               ),
                             ),
                             //endregion
-                            TextFieldComentarioWidget(
-                              sendComentario: () {},
+                            //region Input Chat
+                            TextFieldChatWidget(
+                              sendComentario: (String? comentario) {
+                                try {
+                                  controller.sendComentario(comentario);
+                                } catch (e) {
+                                  ErrorDialog.show(context: context, content: e.toString());
+                                }
+                              },
                             ),
+                            //endregion
                           ],
                         ),
                         _appBar(),

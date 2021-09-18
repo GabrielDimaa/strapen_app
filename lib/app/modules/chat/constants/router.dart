@@ -1,0 +1,1 @@
+const String CHAT_ROUTE = "/chat";

@@ -4,7 +4,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:strapen_app/app/app_widget.dart';
 import 'package:strapen_app/app/modules/catalogo/models/catalogo_model.dart';
-import 'package:strapen_app/app/modules/live/controllers/live_create_controller.dart';
+import 'package:strapen_app/app/modules/live/controllers/live_controller.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/app_bar_default.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/widgets/circle_background_app_bar.dart';
 import 'package:strapen_app/app/shared/components/button/elevated_button_default.dart';
@@ -22,11 +22,13 @@ class LiveCreatePage extends StatefulWidget {
   _LiveCreatePageState createState() => _LiveCreatePageState();
 }
 
-class _LiveCreatePageState extends ModularState<LiveCreatePage, LiveCreateController> {
+class _LiveCreatePageState extends State<LiveCreatePage> {
+  final LiveController controller = Modular.get<LiveController>();
+
   @override
   void initState() {
     super.initState();
-    controller.load(context: context);
+    controller.loadCreateLive(context);
   }
 
   @override

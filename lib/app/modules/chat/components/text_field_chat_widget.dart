@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:strapen_app/app/app_widget.dart';
 import 'package:strapen_app/app/shared/components/padding/padding_list.dart';
 import 'package:strapen_app/app/shared/components/sized_box/horizontal_sized_box.dart';
 
-class TextFieldComentarioWidget extends StatelessWidget {
-  final VoidCallback sendComentario;
+class TextFieldChatWidget extends StatelessWidget {
+  final Function(String?) sendComentario;
 
-  const TextFieldComentarioWidget({required this.sendComentario});
+  TextFieldChatWidget({required this.sendComentario});
+
+  final TextEditingController controller = TextEditingController();
+  final FocusNode focus = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -24,6 +28,10 @@ class TextFieldComentarioWidget extends StatelessWidget {
                 color: AppColors.opaci,
               ),
               child: TextField(
+                controller: controller,
+                focusNode: focus,
+                textInputAction: TextInputAction.done,
+                onSubmitted: (_) => focus.unfocus(),
                 decoration: InputDecoration(
                   contentPadding: const EdgeInsets.symmetric(horizontal: 20),
                   hintText: "Escreva um comentário...",
@@ -36,7 +44,11 @@ class TextFieldComentarioWidget extends StatelessWidget {
           ),
           const HorizontalSizedBox(),
           InkWell(
-            onTap: sendComentario,
+            onTap: () {
+              sendComentario.call(controller.text);
+              controller.clear();
+              focus.unfocus();
+            },
             borderRadius: radius,
             child: Ink(
               height: height,

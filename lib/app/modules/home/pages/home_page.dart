@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 import 'package:strapen_app/app/app_widget.dart';
 import 'package:strapen_app/app/modules/home/components/action_app_bar_home.dart';
 import 'package:strapen_app/app/modules/home/controllers/home_controller.dart';
@@ -48,30 +47,6 @@ class _HomePageState extends ModularState<HomePage, HomeController> {
                 onTap: () async => await controller.toCreateLive(),
               ),
             ],
-          ),
-        ],
-      ),
-      body: Column(
-        children: [
-          Expanded(
-            child: ParseLiveListWidget<ParseObject>(
-              query: QueryBuilder(ParseObject("Chat")),
-              childBuilder: (_, snapshot) {
-                if (snapshot.failed) {
-                  return const Text('Algo deu errado porra');
-                } else if (snapshot.hasData) {
-                  return ListTile(
-                    title: Text(
-                      snapshot.loadedData!.get<String>("comentario")!,
-                    ),
-                  );
-                } else {
-                  return const ListTile(
-                    leading: CircularProgressIndicator(),
-                  );
-                }
-              },
-            ),
           ),
         ],
       ),

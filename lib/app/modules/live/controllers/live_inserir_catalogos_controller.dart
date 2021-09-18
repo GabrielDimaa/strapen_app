@@ -3,7 +3,7 @@ import 'package:mobx/mobx.dart';
 import 'package:strapen_app/app/modules/catalogo/constants/routes.dart';
 import 'package:strapen_app/app/modules/catalogo/models/catalogo_model.dart';
 import 'package:strapen_app/app/modules/catalogo/repositories/icatalogo_repository.dart';
-import 'package:strapen_app/app/modules/live/controllers/live_create_controller.dart';
+import 'package:strapen_app/app/modules/live/controllers/live_controller.dart';
 
 part 'live_inserir_catalogos_controller.g.dart';
 
@@ -11,7 +11,7 @@ class LiveInserirCatalogosController = _LiveInserirCatalogosController with _$Li
 
 abstract class _LiveInserirCatalogosController with Store {
   final ICatalogoRepository _catalogoRepository;
-  final LiveCreateController _liveController;
+  final LiveController _liveController;
 
   _LiveInserirCatalogosController(this._catalogoRepository, this._liveController);
 

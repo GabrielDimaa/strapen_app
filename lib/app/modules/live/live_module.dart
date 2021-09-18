@@ -2,10 +2,10 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:strapen_app/app/app_controller.dart';
 import 'package:strapen_app/app/modules/catalogo/repositories/catalogo_repository.dart';
 import 'package:strapen_app/app/modules/catalogo/repositories/icatalogo_repository.dart';
+import 'package:strapen_app/app/modules/chat/repositories/chat_repository.dart';
+import 'package:strapen_app/app/modules/chat/repositories/ichat_repository.dart';
 import 'package:strapen_app/app/modules/live/constants/routes.dart';
-import 'package:strapen_app/app/modules/live/controllers/live_assistir_controller.dart';
-import 'package:strapen_app/app/modules/live/controllers/live_transmitir_controller.dart';
-import 'package:strapen_app/app/modules/live/controllers/live_create_controller.dart';
+import 'package:strapen_app/app/modules/live/controllers/live_controller.dart';
 import 'package:strapen_app/app/modules/live/controllers/live_inserir_catalogos_controller.dart';
 import 'package:strapen_app/app/modules/live/pages/live_create_page.dart';
 import 'package:strapen_app/app/modules/live/pages/live_inserir_catalogos_page.dart';
@@ -22,14 +22,18 @@ import 'package:strapen_app/app/shared/config/preferences/session_preferences.da
 class LiveModule extends Module {
   @override
   final List<Bind> binds = [
-    Bind((i) => CatalogoRepository()),
-    Bind((i) => UserRepository(i.get<SessionPreferences>())),
     Bind((i) => LiveRepository()),
+    Bind((i) => UserRepository(i.get<SessionPreferences>())),
+    Bind((i) => CatalogoRepository()),
+    Bind((i) => ChatRepository()),
     Bind((i) => LiveService(i.get<ILiveRepository>())),
-    Bind((i) => LiveTransmitirController(i.get<ILiveService>())),
-    Bind((i) => LiveAssistirController()),
-    Bind((i) => LiveCreateController(i.get<AppController>(), i.get<ILiveService>(), i.get<IUserRepository>())),
-    Bind((i) => LiveInserirCatalogosController(i.get<ICatalogoRepository>(), i.get<LiveCreateController>())),
+    Bind((i) => LiveController(
+          i.get<AppController>(),
+          i.get<ILiveService>(),
+          i.get<IUserRepository>(),
+          i.get<IChatRepository>(),
+        )),
+    Bind((i) => LiveInserirCatalogosController(i.get<ICatalogoRepository>(), i.get<LiveController>())),
   ];
 
   @override
