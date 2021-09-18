@@ -13,12 +13,15 @@ void main() async {
   final keyApplicationId = dotenv.env['PARSE_SERVER_APP_ID'];
   final keyParseServerUrl = dotenv.env['PARSE_SERVER_URL'];
   final keyClientKey = dotenv.env['PARSE_SERVER_CLIENT_KEY'];
+  final keyLiveQueryUrl = dotenv.env['PARSE_SERVER_LIVE_QUERY_URL'];
 
   await Parse().initialize(
     keyApplicationId!,
     keyParseServerUrl!,
     clientKey: keyClientKey,
     debug: kDebugMode,
+    liveQueryUrl: keyLiveQueryUrl,
+    autoSendSessionId: true,
   );
 
   runApp(ModularApp(module: AppModule(), child: AppWidget()));

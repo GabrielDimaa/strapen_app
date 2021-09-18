@@ -1,9 +1,14 @@
 import 'package:camera_with_rtmp/camera.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 import 'package:strapen_app/app/app_widget.dart';
+import 'package:strapen_app/app/modules/live/components/chat_tile.dart';
+import 'package:strapen_app/app/modules/live/components/text_field_comentario_widget.dart';
 import 'package:strapen_app/app/modules/live/controllers/live_transmitir_controller.dart';
+import 'package:strapen_app/app/modules/user/factories/user_factory.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/app_bar_default.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/widgets/circle_background_app_bar.dart';
 import 'package:strapen_app/app/shared/components/dialog/error_dialog.dart';
@@ -41,139 +46,205 @@ class _LiveTransmitirPageState extends ModularState<LiveTransmitirPage, LiveTran
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  Stack(
-                    children: [
-                      SizedBox(
-                        height: MediaQuery.of(context).size.height / 2,
-                        width: size,
-                        child: Observer(
-                          builder: (_) {
-                            if (!(controller.cameraStore.cameraController?.value.isInitialized ?? false)) {
-                              return Center(
-                                child: Text(
-                                  "Permita o Strapen acessar sua câmera para iniciar a Live.",
-                                  style: textTheme.bodyText2,
-                                  textAlign: TextAlign.center,
-                                ),
-                              );
-                            } else {
-                              return ClipRRect(
-                                borderRadius: BorderRadius.only(
-                                  bottomRight: Radius.circular(36),
-                                  bottomLeft: Radius.circular(36),
-                                ),
-                                child: FittedBox(
-                                  fit: BoxFit.fitWidth,
-                                  child: SizedBox(
+                  Expanded(
+                    child: Stack(
+                      children: [
+                        Column(
+                          children: [
+                            //region Live
+                            Expanded(
+                              child: Stack(
+                                children: [
+                                  SizedBox(
+                                    //height: MediaQuery.of(context).size.height / 2,
                                     width: size,
-                                    height: size / controller.cameraStore.cameraController!.value.aspectRatio,
-                                    child: CameraPreview(controller.cameraStore.cameraController!),
-                                  ),
-                                ),
-                              );
-                            }
-                          },
-                        ),
-                      ),
-                      SizedBox(
-                        height: 150,
-                        child: AppBarDefault(
-                          backgroundColorBackButton: AppColors.opaci.withOpacity(0.4),
-                          leadingSize: 500,
-                          leadingWidget: Row(
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              const HorizontalSizedBox(),
-                              Container(
-                                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-                                decoration: BoxDecoration(
-                                  color: Colors.red.withOpacity(0.1),
-                                  borderRadius: BorderRadius.circular(36),
-                                ),
-                                child: Row(
-                                  children: [
-                                    CircleAvatar(
-                                      backgroundColor: Colors.red,
-                                      radius: 4,
+                                    child: Observer(
+                                      builder: (_) {
+                                        if (!(controller.cameraStore.cameraController?.value.isInitialized ?? false)) {
+                                          return Center(
+                                            child: Text(
+                                              "Permita o Strapen acessar sua câmera para iniciar a Live.",
+                                              style: textTheme.bodyText2,
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          );
+                                        } else {
+                                          return ClipRRect(
+                                            // borderRadius: BorderRadius.only(
+                                            //   bottomRight: Radius.circular(36),
+                                            //   bottomLeft: Radius.circular(36),
+                                            // ),
+                                            child: FittedBox(
+                                              fit: BoxFit.fitWidth,
+                                              child: SizedBox(
+                                                width: size,
+                                                height: size / controller.cameraStore.cameraController!.value.aspectRatio,
+                                                child: CameraPreview(controller.cameraStore.cameraController!),
+                                              ),
+                                            ),
+                                          );
+                                        }
+                                      },
                                     ),
-                                    const HorizontalSizedBox(0.5),
-                                    Text(
-                                      "AO VIVO",
-                                      style: TextStyle(color: Colors.red, fontWeight: FontWeight.w700),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          actionsWidgets: [
-                            Visibility(
-                              visible: controller.cameraStore.hasBackAndFront,
-                              child: CircleButtonAppBar(
-                                color: AppColors.opaci.withOpacity(0.4),
-                                onTap: () async {
-                                  try {
-                                    controller.setLoading(true);
-
-                                    await controller.cameraStore.alterarDirecaoCamera();
-                                  } catch (e) {
-                                    ErrorDialog.show(context: context, content: e.toString());
-                                  } finally {
-                                    controller.setLoading(false);
-                                  }
-                                },
-                                child: Observer(
-                                  builder: (_) => Icon(
-                                    controller.cameraStore.currentCamera?.lensDirection == CameraLensDirection.front ? Icons.camera_rear : Icons.camera_front,
-                                    color: Colors.white,
                                   ),
-                                ),
+                                  // Positioned(
+                                  //   bottom: 0,
+                                  //   child: SizedBox(
+                                  //     height: MediaQuery.of(context).size.height / 3,
+                                  //     width: double.maxFinite,
+                                  //     child: ListView.builder(
+                                  //       reverse: true,
+                                  //       itemCount: 8,
+                                  //       itemBuilder: (_, i) {
+                                  //         return ChatTile(
+                                  //           model: UserFactory.newModel(),
+                                  //           comentario: "Comentário $i",
+                                  //         );
+                                  //       },
+                                  //     ),
+                                  //   ),
+                                  // ),
+                                  Positioned(
+                                    bottom: 0,
+                                    child: SizedBox(
+                                      height: MediaQuery.of(context).size.height / 3,
+                                      width: double.maxFinite,
+                                      child: ParseLiveListWidget(
+                                        query: QueryBuilder(ParseObject("Chat")),
+                                          // ..whereEqualTo("live",
+                                          //     (ParseObject("Live")..set("objectId", controller.liveModel!.id)).toPointer()),
+                                        reverse: false,
+                                        childBuilder: (_, snapshot) {
+                                          if (snapshot.failed) {
+                                            return const Text('something went wrong!');
+                                          } else if (snapshot.hasData) {
+                                            return ListTile(
+                                              title: Text(
+                                                "SUCESSO",
+                                              ),
+                                            );
+                                          } else {
+                                            return const ListTile(
+                                              leading: CircularProgressIndicator(),
+                                            );
+                                          }
+                                        },
+                                      ),
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
-                            const HorizontalSizedBox(0.5),
-                            PopupMenuButton(
-                              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-                              elevation: 4,
-                              onSelected: (index) async {
-                                switch (index) {
-                                  case 0:
-                                    print(index);
-                                    break;
-                                  case 1:
-                                    await controller.stopLive(context);
-                                    break;
-                                }
-                              },
-                              child: CircleButtonAppBar(
-                                color: AppColors.opaci.withOpacity(0.4),
-                                child: Icon(Icons.more_vert, color: Colors.white),
-                              ),
-                              itemBuilder: (context) {
-                                return [
-                                  PopupMenuItem(
-                                    value: 0,
-                                    child: const Text("Alterar câmera"),
-                                  ),
-                                  PopupMenuItem(
-                                    value: 1,
-                                    child: Text(
-                                      "Terminar Live",
-                                      style: TextStyle(color: AppColors.error),
-                                    ),
-                                  ),
-                                ];
-                              },
+                            //endregion
+                            TextFieldComentarioWidget(
+                              sendComentario: () {},
                             ),
                           ],
                         ),
-                      ),
-                    ],
+                        _appBar(),
+                      ],
+                    ),
                   ),
                 ],
               );
             }
           },
         ),
+      ),
+    );
+  }
+
+  Widget _appBar() {
+    return SizedBox(
+      height: 150,
+      child: AppBarDefault(
+        backgroundColorBackButton: AppColors.opaci.withOpacity(0.4),
+        leadingSize: 500,
+        leadingWidget: Row(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: [
+            const HorizontalSizedBox(),
+            Container(
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+              decoration: BoxDecoration(
+                color: Colors.red.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(36),
+              ),
+              child: Row(
+                children: [
+                  CircleAvatar(
+                    backgroundColor: Colors.red,
+                    radius: 4,
+                  ),
+                  const HorizontalSizedBox(0.5),
+                  Text(
+                    "AO VIVO",
+                    style: TextStyle(color: Colors.red, fontWeight: FontWeight.w700),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        actionsWidgets: [
+          Visibility(
+            visible: controller.cameraStore.hasBackAndFront,
+            child: CircleButtonAppBar(
+              color: AppColors.opaci.withOpacity(0.4),
+              onTap: () async {
+                try {
+                  controller.setLoading(true);
+
+                  await controller.cameraStore.alterarDirecaoCamera();
+                } catch (e) {
+                  ErrorDialog.show(context: context, content: e.toString());
+                } finally {
+                  controller.setLoading(false);
+                }
+              },
+              child: Observer(
+                builder: (_) => Icon(
+                  controller.cameraStore.currentCamera?.lensDirection == CameraLensDirection.front ? Icons.camera_rear : Icons.camera_front,
+                  color: Colors.white,
+                ),
+              ),
+            ),
+          ),
+          const HorizontalSizedBox(0.5),
+          PopupMenuButton(
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+            elevation: 4,
+            onSelected: (index) async {
+              switch (index) {
+                case 0:
+                  print(index);
+                  break;
+                case 1:
+                  await controller.stopLive(context);
+                  break;
+              }
+            },
+            child: CircleButtonAppBar(
+              color: AppColors.opaci.withOpacity(0.4),
+              child: Icon(Icons.more_vert, color: Colors.white),
+            ),
+            itemBuilder: (context) {
+              return [
+                PopupMenuItem(
+                  value: 0,
+                  child: const Text("Alterar câmera"),
+                ),
+                PopupMenuItem(
+                  value: 1,
+                  child: Text(
+                    "Terminar Live",
+                    style: TextStyle(color: AppColors.error),
+                  ),
+                ),
+              ];
+            },
+          ),
+        ],
       ),
     );
   }
