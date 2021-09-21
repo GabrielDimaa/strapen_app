@@ -146,62 +146,48 @@ class _LiveTransmitirPageState extends State<LiveTransmitirPage> {
           ],
         ),
         actionsWidgets: [
-          Visibility(
-            visible: controller.cameraStore.hasBackAndFront,
-            child: CircleButtonAppBar(
-              color: AppColors.opaci.withOpacity(0.4),
-              onTap: () async {
-                try {
-                  controller.setLoading(true);
-
-                  await controller.cameraStore.alterarDirecaoCamera();
-                } catch (e) {
-                  ErrorDialog.show(context: context, content: e.toString());
-                } finally {
-                  controller.setLoading(false);
+          Observer(
+            builder: (_) => PopupMenuButton(
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+              elevation: 4,
+              onSelected: (index) async {
+                switch (index) {
+                  case 0:
+                    try {
+                      controller.setLoading(true);
+                      await controller.cameraStore.alterarDirecaoCamera();
+                    } catch (e) {
+                      ErrorDialog.show(context: context, content: e.toString());
+                    } finally {
+                      controller.setLoading(false);
+                    }
+                    break;
+                  case 1:
+                    await controller.stopLive(context);
+                    break;
                 }
               },
-              child: Observer(
-                builder: (_) => Icon(
-                  controller.cameraStore.currentCamera?.lensDirection == CameraLensDirection.front ? Icons.camera_rear : Icons.camera_front,
-                  color: Colors.white,
-                ),
+              child: CircleButtonAppBar(
+                color: AppColors.opaci.withOpacity(0.4),
+                child: Icon(Icons.more_vert, color: Colors.white),
               ),
-            ),
-          ),
-          const HorizontalSizedBox(0.5),
-          PopupMenuButton(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-            elevation: 4,
-            onSelected: (index) async {
-              switch (index) {
-                case 0:
-                  print(index);
-                  break;
-                case 1:
-                  await controller.stopLive(context);
-                  break;
-              }
-            },
-            child: CircleButtonAppBar(
-              color: AppColors.opaci.withOpacity(0.4),
-              child: Icon(Icons.more_vert, color: Colors.white),
-            ),
-            itemBuilder: (context) {
-              return [
-                PopupMenuItem(
-                  value: 0,
-                  child: const Text("Alterar câmera"),
-                ),
-                PopupMenuItem(
-                  value: 1,
-                  child: Text(
-                    "Terminar Live",
-                    style: TextStyle(color: AppColors.error),
+              itemBuilder: (context) {
+                return [
+                  PopupMenuItem(
+                    value: 0,
+                    enabled: controller.cameraStore.hasBackAndFront,
+                    child: const Text("Alterar câmera"),
                   ),
-                ),
-              ];
-            },
+                  PopupMenuItem(
+                    value: 1,
+                    child: Text(
+                      "Terminar Live",
+                      style: TextStyle(color: AppColors.error),
+                    ),
+                  ),
+                ];
+              },
+            ),
           ),
         ],
       ),
