@@ -11,6 +11,7 @@ import 'package:strapen_app/app/shared/components/app_bar_default/widgets/circle
 import 'package:strapen_app/app/shared/components/padding/padding_scaffold.dart';
 import 'package:strapen_app/app/shared/components/sized_box/horizontal_sized_box.dart';
 import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
+import 'package:strapen_app/app/shared/extensions/string_extension.dart';
 
 class UserPage extends StatefulWidget {
   final UserModel? model;
@@ -86,13 +87,19 @@ class _UserPageState extends ModularState<UserPage, UserController> {
               ],
             ),
             const VerticalSizedBox(3),
-            Text(
-              "Descrição",
-              style: textTheme.headline1!.copyWith(fontWeight: FontWeight.w600),
-            ),
             Observer(
-              builder: (_) => Text(
-                controller.userStore.descricao ?? "",
+              builder: (_) => Visibility(
+                visible: controller.userStore.bio.notIsNullOrEmpty(),
+                child: Column(
+                  children: [
+                    Text(
+                      "Descrição",
+                      style: textTheme.headline1!.copyWith(fontWeight: FontWeight.w600),
+                    ),
+                    const VerticalSizedBox(0.5),
+                    Text(controller.userStore.bio ?? ""),
+                  ],
+                ),
               ),
             ),
             const VerticalSizedBox(5),

@@ -41,7 +41,7 @@ class UserRepository implements IUserRepository {
       ..set<DateTime>(USER_DATANASCIMENTO_COLUMN, model.dataNascimento!)
       ..set<String>(USER_CPFCNPJ_COLUMN, model.cpfCnpj!)
       ..set<String>(USER_TELEFONE_COLUMN, model.telefone!)
-      ..set<String?>(USER_DESCRICAO_COLUMN, model.descricao)
+      ..set<String?>(USER_BIO_COLUMN, model.bio)
       ..set<String>(USER_CEP_COLUMN, model.cep!)
       ..set<String>(USER_CIDADE_COLUMN, model.cidade!)
       ..set<bool>(USER_FIST_LIVE_COLUMN, model.firstLive ?? true);
@@ -52,7 +52,7 @@ class UserRepository implements IUserRepository {
     return UserModel(
       e.get<String>(USER_ID_COLUMN),
       e.get<String>(USER_NOME_COLUMN),
-      e.get<String?>(USER_DESCRICAO_COLUMN),
+      e.get<String?>(USER_BIO_COLUMN),
       e.get<DateTime>(USER_DATANASCIMENTO_COLUMN),
       e.get<String>(USER_CPFCNPJ_COLUMN),
       e.get<dynamic>(USER_FOTO_COLUMN)?.first?.url,

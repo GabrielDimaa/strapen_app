@@ -2,7 +2,7 @@ class UserModel {
   String? id;
 
   String? nome;
-  String? descricao;
+  String? bio;
   DateTime? dataNascimento;
   String? cpfCnpj;
   dynamic foto;
@@ -21,7 +21,7 @@ class UserModel {
   UserModel(
     this.id,
     this.nome,
-    this.descricao,
+    this.bio,
     this.dataNascimento,
     this.cpfCnpj,
     this.foto,

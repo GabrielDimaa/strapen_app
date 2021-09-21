@@ -12,7 +12,7 @@ abstract class _UserStore with Store {
   String? nome;
 
   @observable
-  String? descricao;
+  String? bio;
 
   @observable
   DateTime? dataNascimento;
@@ -51,7 +51,7 @@ abstract class _UserStore with Store {
   void setNome(String? value) => nome = value;
 
   @action
-  void setDescricao(String? value) => descricao = value;
+  void setBio(String? value) => bio = value;
 
   @action
   void setDataNascimento(DateTime? value) => dataNascimento = value;
@@ -92,7 +92,7 @@ abstract class _UserStore with Store {
   _UserStore(
     this.id,
     this.nome,
-    this.descricao,
+    this.bio,
     this.dataNascimento,
     this.cpfCnpj,
     this.foto,
@@ -109,7 +109,7 @@ abstract class _UserStore with Store {
     return UserModel(
       id,
       nome,
-      descricao,
+      bio,
       dataNascimento,
       cpfCnpj,
       foto,

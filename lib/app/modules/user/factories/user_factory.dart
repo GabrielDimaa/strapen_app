@@ -42,7 +42,7 @@ abstract class UserFactory {
     return UserStore(
       model.id,
       model.nome,
-      model.descricao,
+      model.bio,
       model.dataNascimento,
       model.cpfCnpj,
       model.foto,
