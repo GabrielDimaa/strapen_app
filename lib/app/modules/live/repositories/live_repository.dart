@@ -1,4 +1,5 @@
 import 'package:parse_server_sdk/parse_server_sdk.dart';
+import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 import 'package:strapen_app/app/modules/catalogo/constants/columns.dart';
 import 'package:strapen_app/app/modules/catalogo/repositories/catalogo_repository.dart';
 import 'package:strapen_app/app/modules/live/constants/columns.dart';
@@ -12,9 +13,6 @@ import 'package:strapen_app/app/shared/utils/parse_errors_utils.dart';
 class LiveRepository implements ILiveRepository {
   @override
   String className() => "Live";
-
-  @override
-  String classNameRelation() => "Live_Catalogo";
 
   @override
   void validate(LiveModel model) {
@@ -55,6 +53,10 @@ class LiveRepository implements ILiveRepository {
       validate(model);
 
       ParseObject parseLive = toParseObject(model);
+      parseLive.addRelation(LIVE_CATALOGO_COLUMN, model.catalogos!.map((e) {
+        return ParseObject(CatalogoRepository().className())..objectId = e.id;
+      }).toList());
+
       ParseResponse response = await parseLive.save();
 
       if (!response.success) throw Exception(ParseErrorsUtils.get(response.statusCode));
@@ -63,24 +65,9 @@ class LiveRepository implements ILiveRepository {
       LiveModel liveModelResponse = toModel(parseResponse);
       model.id = liveModelResponse.id;
 
-      await saveCatalogosLive(model).catchError((value) {
-        throw Exception("FALTA IMPLEMENTAR!!!");
-      });
-
       return model;
     } catch (e) {
       throw Exception(e);
-    }
-  }
-
-  @override
-  Future<void> saveCatalogosLive(LiveModel model) async {
-    for (var it in model.catalogos!) {
-      ParseObject parseObject = ParseObject(classNameRelation())
-        ..set<ParseObject>(LIVE_CATALOGO_COLUMN, ParseObject(CatalogoRepository().className())..set(CATALOGO_ID_COLUMN, it.id))
-        ..set<ParseObject>(LIVE_COLUMN, ParseObject(className())..set(LIVE_ID_COLUMN, model.id));
-
-      await parseObject.save();
     }
   }
 }

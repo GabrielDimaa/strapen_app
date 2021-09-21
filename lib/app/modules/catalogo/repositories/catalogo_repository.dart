@@ -14,9 +14,6 @@ class CatalogoRepository implements ICatalogoRepository {
   String className() => "Catalogo";
 
   @override
-  String classNameRelation() => "Produto_Catalogo";
-
-  @override
   void validate(CatalogoModel model) {
     if (model.titulo.isNullOrEmpty()) throw Exception("Informe um título para o catálogo.");
     if (model.descricao.isNullOrEmpty()) throw Exception("Informe uma descrição para o catálogo.");
@@ -58,6 +55,9 @@ class CatalogoRepository implements ICatalogoRepository {
 
       ParseObject parseCatalogo = toParseObject(model);
       parseCatalogo..set<List<ParseFileBase>>(CATALOGO_FOTO_COLUMN, parseImagem);
+      parseCatalogo.addRelation(CATALOGO_PRODUTO_COLUMN, model.produtos!.map((e) {
+        return ParseObject(ProdutoRepository().className())..objectId = e.id;
+      }).toList());
 
       ParseResponse response = await parseCatalogo.save();
 
@@ -69,24 +69,9 @@ class CatalogoRepository implements ICatalogoRepository {
       model.dataCriado = catalogoResponse.dataCriado;
       model.foto = catalogoResponse.foto;
 
-      await saveProdutosCatalogo(model).catchError((value) {
-        throw Exception("FALTA IMPLEMENTAR!!!");
-      });
-
       return model;
     } catch (e) {
       throw Exception(e);
-    }
-  }
-
-  @override
-  Future<void> saveProdutosCatalogo(CatalogoModel model) async {
-    for (var it in model.produtos!) {
-      ParseObject parseObject = ParseObject(classNameRelation())
-        ..set<ParseObject>(CATALOGO_PRODUTO_COLUMN, ParseObject(ProdutoRepository().className())..set(CATALOGO_ID_COLUMN, it.id))
-        ..set<ParseObject>(CATALOGO_COLUMN, ParseObject(className())..set(CATALOGO_ID_COLUMN, model.id));
-
-      await parseObject.save();
     }
   }
 
@@ -144,21 +129,18 @@ class CatalogoRepository implements ICatalogoRepository {
     try {
       if (idCatalogo == null) throw Exception("Houve um erro, tente novamente.\nSe o erro persistir, reinicie o aplicativo.");
 
-      QueryBuilder query = QueryBuilder<ParseObject>(ParseObject(classNameRelation()))
-        ..whereEqualTo(CATALOGO_COLUMN, (ParseObject(className())..set(CATALOGO_ID_COLUMN, idCatalogo)).toPointer())
-        ..includeObject([CATALOGO_PRODUTO_COLUMN]);
+      QueryBuilder query = QueryBuilder<ParseObject>(ParseObject(ProdutoRepository().className()))
+        ..whereRelatedTo(CATALOGO_PRODUTO_COLUMN, className(), idCatalogo);
 
       ParseResponse response = await query.query();
 
       if (!response.success) throw Exception(ParseErrorsUtils.get(response.statusCode));
-      List<ParseObject>? listParse = response.results as List<ParseObject>?;
+      List<ParseObject>? parseResponse = response.results as List<ParseObject>?;
 
-      List<ProdutoModel> produtos = listParse?.map((e) {
-        return ProdutoRepository().toModel(e.get(CATALOGO_PRODUTO_COLUMN));
-      }).toList() ?? [];
+      if (parseResponse == null)
+        throw Exception("Houve um erro ao buscar o catálogo.");
 
-      if (produtos.isEmpty)
-        throw Exception("Houve um erro ao buscar os produtos do catálogo.");
+      List<ProdutoModel> produtos = parseResponse.map((e) => ProdutoRepository().toModel(e)).toList();
 
       return produtos;
     } catch(e) {
