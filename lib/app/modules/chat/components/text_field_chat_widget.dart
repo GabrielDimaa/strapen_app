@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:strapen_app/app/app_widget.dart';
+import 'package:strapen_app/app/shared/components/loading/circular_loading.dart';
 import 'package:strapen_app/app/shared/components/padding/padding_list.dart';
 import 'package:strapen_app/app/shared/components/sized_box/horizontal_sized_box.dart';
 
 class TextFieldChatWidget extends StatelessWidget {
   final Function(String?) sendComentario;
+  final bool loading;
 
-  TextFieldChatWidget({required this.sendComentario});
+  TextFieldChatWidget({required this.sendComentario, required this.loading});
 
   final TextEditingController controller = TextEditingController();
   final FocusNode focus = FocusNode();
@@ -17,7 +19,7 @@ class TextFieldChatWidget extends StatelessWidget {
     final BorderRadius radius = BorderRadius.circular(12);
     final double height = 48;
     return Padding(
-      padding: const EdgeInsets.all(PaddingList.value),
+      padding: const EdgeInsets.symmetric(horizontal: PaddingList.value),
       child: Row(
         children: [
           Expanded(
@@ -58,7 +60,12 @@ class TextFieldChatWidget extends StatelessWidget {
                 borderRadius: radius,
                 color: AppColors.opaci,
               ),
-              child: Icon(Icons.send, color: AppColors.primary),
+              child: loading
+                  ? Padding(
+                      padding: const EdgeInsets.all(12),
+                      child: CircularLoading(),
+                    )
+                  : Icon(Icons.send, color: AppColors.primary),
             ),
           ),
         ],

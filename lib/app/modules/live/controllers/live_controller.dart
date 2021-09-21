@@ -41,6 +41,12 @@ abstract class _LiveController with Store {
   @observable
   bool loading = false;
 
+  @observable
+  bool loadingSendMessage = false;
+
+  @action
+  void setLoadingSendMessage(bool value) => loadingSendMessage = value;
+
   @action
   void setCameraStore(CameraStore value) => cameraStore = value;
 
@@ -115,10 +121,9 @@ abstract class _LiveController with Store {
         showDialog(
           context: context,
           barrierDismissible: false,
-          builder: (_) =>
-              ConcluidoDialog(
-                message: "Sua Live foi finalizada com sucesso! Você será redirecionado para a tela inicial.",
-              ),
+          builder: (_) => ConcluidoDialog(
+            message: "Sua Live foi finalizada com sucesso! Você será redirecionado para a tela inicial.",
+          ),
         );
       }
     });
@@ -130,9 +135,14 @@ abstract class _LiveController with Store {
   }
 
   @action
-  void sendComentario(String? comentario) {
-    if (comentario.isNullOrEmpty()) return;
+  Future<void> sendComentario(String? comentario) async {
+    try {
+      setLoadingSendMessage(true);
+      if (comentario.isNullOrEmpty()) return;
 
-    _chatRepository.sendComentario(ChatModel(null, comentario, appController.userModel!, liveModel));
+      await _chatRepository.sendComentario(ChatModel(null, comentario, appController.userModel!, liveModel));
+    } finally {
+      setLoadingSendMessage(false);
+    }
   }
 }

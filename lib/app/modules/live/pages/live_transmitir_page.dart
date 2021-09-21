@@ -38,6 +38,7 @@ class _LiveTransmitirPageState extends State<LiveTransmitirPage> {
 
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      backgroundColor: Colors.black,
       body: SafeArea(
         child: Observer(
           builder: (_) {
@@ -59,7 +60,14 @@ class _LiveTransmitirPageState extends State<LiveTransmitirPage> {
                             ),
                           );
                         } else {
-                          return CameraPreview(controller.cameraStore.cameraController!);
+                          return Stack(
+                            children: [
+                              AspectRatio(
+                                aspectRatio: controller.cameraStore.cameraController!.value.aspectRatio,
+                                child: CameraPreview(controller.cameraStore.cameraController!),
+                              ),
+                            ],
+                          );
                         }
                       },
                     ),
@@ -81,14 +89,17 @@ class _LiveTransmitirPageState extends State<LiveTransmitirPage> {
                                 model: ChatModel(null, null, controller.appController.userModel!, controller.liveModel),
                               ),
                             ),
-                            TextFieldChatWidget(
-                              sendComentario: (String? comentario) {
-                                try {
-                                  controller.sendComentario(comentario);
-                                } catch (e) {
-                                  ErrorDialog.show(context: context, content: e.toString());
-                                }
-                              },
+                            Observer(
+                              builder: (_) => TextFieldChatWidget(
+                                loading: controller.loadingSendMessage,
+                                sendComentario: (String? comentario) {
+                                  try {
+                                    controller.sendComentario(comentario);
+                                  } catch (e) {
+                                    ErrorDialog.show(context: context, content: e.toString());
+                                  }
+                                },
+                              ),
                             ),
                           ],
                         ),
