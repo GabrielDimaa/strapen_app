@@ -10,77 +10,88 @@ class ProdutoGridTile extends StatelessWidget {
   final String descricao;
   final double preco;
   final int qtd;
+  final VoidCallback? onTap;
+  final bool isEditavel;
 
   const ProdutoGridTile({
     required this.image,
     required this.descricao,
     required this.preco,
     required this.qtd,
+    required this.onTap,
+    this.isEditavel = true,
   });
 
   @override
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
-    return Container(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.grey),
-      ),
-      padding: const EdgeInsets.all(12),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Align(
-            alignment: Alignment.center,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(16),
-              child: FadeInImage.memoryNetwork(
-                placeholder: kTransparentImage,
-                image: image,
-                height: 110,
+    final BorderRadius radius = BorderRadius.circular(16);
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        decoration: BoxDecoration(
+          borderRadius: radius,
+          border: Border.all(color: Colors.grey),
+        ),
+        padding: const EdgeInsets.all(12),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Align(
+              alignment: Alignment.center,
+              child: ClipRRect(
+                borderRadius: radius,
+                child: FadeInImage.memoryNetwork(
+                  placeholder: kTransparentImage,
+                  image: image,
+                  height: 110,
+                ),
               ),
             ),
-          ),
-          const VerticalSizedBox(),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                descricao,
-                overflow: TextOverflow.ellipsis,
-                style: textTheme.bodyText2,
-              ),
-              const VerticalSizedBox(0.5),
-              ButtonBar(
-                buttonPadding: const EdgeInsets.all(0),
-                alignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "$qtd ${qtd > 1 ? "unidades" : "unidade"}",
-                        style: textTheme.bodyText1!.copyWith(color: Colors.grey, fontSize: 12),
+            const VerticalSizedBox(),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  descricao,
+                  overflow: TextOverflow.ellipsis,
+                  style: textTheme.bodyText2,
+                ),
+                const VerticalSizedBox(0.5),
+                ButtonBar(
+                  buttonPadding: const EdgeInsets.all(0),
+                  alignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "$qtd ${qtd > 1 ? "unidades" : "unidade"}",
+                          style: textTheme.bodyText1!.copyWith(color: Colors.grey, fontSize: 12),
+                        ),
+                        Text(
+                          preco.formatReal(),
+                          style: textTheme.bodyText2!.copyWith(color: AppColors.primary),
+                        ),
+                      ],
+                    ),
+                    Visibility(
+                      visible: isEditavel,
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.end,
+                        children: [
+                          _buttonQtd(icon: Icons.edit, color: AppColors.primary, onTap: () {}),
+                        ],
                       ),
-                      Text(
-                        preco.formatReal(),
-                        style: textTheme.bodyText2!.copyWith(color: AppColors.primary),
-                      ),
-                    ],
-                  ),
-                  Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      _buttonQtd(icon: Icons.edit, color: AppColors.primary, onTap: () {}),
-                    ],
-                  ),
-                ],
-              ),
-            ],
-          ),
-        ],
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }

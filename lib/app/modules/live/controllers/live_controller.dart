@@ -6,6 +6,8 @@ import 'package:strapen_app/app/app_controller.dart';
 import 'package:strapen_app/app/modules/catalogo/models/catalogo_model.dart';
 import 'package:strapen_app/app/modules/chat/models/chat_model.dart';
 import 'package:strapen_app/app/modules/chat/repositories/ichat_repository.dart';
+import 'package:strapen_app/app/modules/live/components/catalogo_bottom_sheet.dart';
+import 'package:strapen_app/app/modules/live/components/catalogo_list_bottom_sheet.dart';
 import 'package:strapen_app/app/modules/live/constants/routes.dart';
 import 'package:strapen_app/app/modules/live/models/live_model.dart';
 import 'package:strapen_app/app/modules/live/services/ilive_service.dart';
@@ -144,5 +146,13 @@ abstract class _LiveController with Store {
     } finally {
       setLoadingSendMessage(false);
     }
+  }
+
+  @action
+  Future<void> showCatalogoBottomSheet(BuildContext context) async {
+    if (catalogos.length > 1)
+      await CatalogoListBottomSheet.show(context: context);
+    else
+      await CatalogoBottomSheet.show(context: context, catalogo: catalogos.first);
   }
 }

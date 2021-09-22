@@ -11,13 +11,15 @@ import 'package:strapen_app/app/shared/components/app_bar_default/app_bar_defaul
 import 'package:strapen_app/app/shared/components/app_bar_default/widgets/circle_background_app_bar.dart';
 import 'package:strapen_app/app/shared/components/padding/padding_scaffold.dart';
 import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
+import 'package:strapen_app/app/shared/components/widgets/snap_bottom_sheet.dart';
 import 'package:strapen_app/app/shared/extensions/double_extension.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class ProdutoInfoPage extends StatefulWidget {
   final ProdutoModel model;
+  final bool isLive;
 
-  const ProdutoInfoPage({required this.model});
+  const ProdutoInfoPage({required this.model, this.isLive = false});
 
   @override
   _ProdutoInfoPageState createState() => _ProdutoInfoPageState();
@@ -114,17 +116,7 @@ class _ProdutoInfoPageState extends ModularState<ProdutoInfoPage, ProdutoInfoCon
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       const VerticalSizedBox(2),
-                      Align(
-                        alignment: Alignment.center,
-                        child: Container(
-                          height: 5,
-                          width: 50,
-                          decoration: BoxDecoration(
-                            color: AppColors.secondary,
-                            borderRadius: BorderRadius.circular(100),
-                          ),
-                        ),
-                      ),
+                      const SnapBottomSheet(),
                       const VerticalSizedBox(4),
                       Expanded(
                         child: ListView(

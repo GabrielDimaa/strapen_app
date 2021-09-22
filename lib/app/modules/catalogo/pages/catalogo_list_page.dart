@@ -83,7 +83,3 @@ class _CatalogoListPageState extends ModularState<CatalogoListPage, CatalogoList
     );
   }
 }
-
-// EmptyListWidget(
-// message: "Sua lista está vazia. Crie um catálogo de produtos para ser exibido em uma Live.",
-// ),

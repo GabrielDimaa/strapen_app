@@ -15,6 +15,7 @@ import 'package:strapen_app/app/shared/components/padding/padding_scaffold.dart'
 import 'package:strapen_app/app/shared/components/sized_box/horizontal_sized_box.dart';
 import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
 import 'package:strapen_app/app/shared/components/widgets/catalogo_grid_tile.dart';
+import 'package:strapen_app/app/shared/components/widgets/catalogo_grid_view.dart';
 import 'package:strapen_app/app/shared/extensions/datetime_extension.dart';
 
 class LiveCreatePage extends StatefulWidget {
@@ -123,16 +124,8 @@ class _LiveCreatePageState extends State<LiveCreatePage> {
                                     Expanded(
                                       child: Observer(builder: (_) {
                                         if (controller.catalogos.isNotEmpty) {
-                                          return GridView.builder(
-                                            shrinkWrap: true,
-                                            padding: EdgeInsets.all(0),
+                                          return CatalogoGridView(
                                             itemCount: controller.catalogos.length,
-                                            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                                              crossAxisCount: 2,
-                                              crossAxisSpacing: 12,
-                                              mainAxisSpacing: 12,
-                                              childAspectRatio: 0.68,
-                                            ),
                                             itemBuilder: (_, i) {
                                               final CatalogoModel cat = controller.catalogos[i];
                                               return CatalogoGridTile(

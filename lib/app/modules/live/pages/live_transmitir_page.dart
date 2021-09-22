@@ -11,7 +11,12 @@ import 'package:strapen_app/app/shared/components/app_bar_default/app_bar_defaul
 import 'package:strapen_app/app/shared/components/app_bar_default/widgets/circle_background_app_bar.dart';
 import 'package:strapen_app/app/shared/components/dialog/error_dialog.dart';
 import 'package:strapen_app/app/shared/components/loading/circular_loading.dart';
+import 'package:strapen_app/app/shared/components/padding/padding_list.dart';
 import 'package:strapen_app/app/shared/components/sized_box/horizontal_sized_box.dart';
+import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
+import 'package:strapen_app/app/shared/components/widgets/list_tile_widget.dart';
+import 'package:strapen_app/app/shared/extensions/datetime_extension.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class LiveTransmitirPage extends StatefulWidget {
   final CameraLensDirection cameraDirection;
@@ -34,83 +39,95 @@ class _LiveTransmitirPageState extends State<LiveTransmitirPage> {
   @override
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
-    final double size = MediaQuery.of(context).size.width;
 
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: Colors.black,
-      body: SafeArea(
-        child: Observer(
-          builder: (_) {
-            if (controller.loading) {
-              return CircularLoading();
-            } else {
-              return Stack(
-                fit: StackFit.expand,
-                children: [
-                  Positioned.fill(
-                    child: Observer(
-                      builder: (_) {
-                        if (!(controller.cameraStore.cameraController?.value.isInitialized ?? false)) {
-                          return Center(
-                            child: Text(
-                              "Permita o Strapen acessar sua câmera para iniciar a Live.",
-                              style: textTheme.bodyText2,
-                              textAlign: TextAlign.center,
-                            ),
-                          );
-                        } else {
-                          return Stack(
-                            children: [
-                              AspectRatio(
-                                aspectRatio: controller.cameraStore.cameraController!.value.aspectRatio,
-                                child: CameraPreview(controller.cameraStore.cameraController!),
-                              ),
-                            ],
-                          );
-                        }
-                      },
-                    ),
-                  ),
-                  Positioned.fill(
-                    child: Scaffold(
-                      resizeToAvoidBottomInset: true,
-                      backgroundColor: Colors.transparent,
-                      appBar: _appBar(),
-                      body: SafeArea(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          mainAxisAlignment: MainAxisAlignment.end,
+    return SafeArea(
+      child: Observer(
+        builder: (_) {
+          if (controller.loading) {
+            return CircularLoading();
+          } else {
+            return Stack(
+              fit: StackFit.expand,
+              children: [
+                Positioned.fill(
+                  child: Observer(
+                    builder: (_) {
+                      if (!(controller.cameraStore.cameraController?.value.isInitialized ?? false)) {
+                        return Center(
+                          child: Text(
+                            "Permita o Strapen acessar sua câmera para iniciar a Live.",
+                            style: textTheme.bodyText2,
+                            textAlign: TextAlign.center,
+                          ),
+                        );
+                      } else {
+                        return Stack(
                           children: [
-                            SizedBox(
-                              height: MediaQuery.of(context).size.height / 3,
-                              width: MediaQuery.of(context).size.width,
-                              child: ChatWidget(
-                                model: ChatModel(null, null, controller.appController.userModel!, controller.liveModel),
-                              ),
-                            ),
-                            Observer(
-                              builder: (_) => TextFieldChatWidget(
-                                loading: controller.loadingSendMessage,
-                                sendComentario: (String? comentario) {
-                                  try {
-                                    controller.sendComentario(comentario);
-                                  } catch (e) {
-                                    ErrorDialog.show(context: context, content: e.toString());
-                                  }
-                                },
-                              ),
+                            AspectRatio(
+                              aspectRatio: controller.cameraStore.cameraController!.value.aspectRatio,
+                              child: CameraPreview(controller.cameraStore.cameraController!),
                             ),
                           ],
-                        ),
+                        );
+                      }
+                    },
+                  ),
+                ),
+                Positioned.fill(
+                  child: Scaffold(
+                    resizeToAvoidBottomInset: true,
+                    backgroundColor: Colors.transparent,
+                    appBar: _appBar(),
+                    body: SafeArea(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.end,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.only(right: 20),
+                            child: CircleButtonAppBar(
+                              color: AppColors.opaci.withOpacity(0.4),
+                              child: Icon(Icons.ballot),
+                              onTap: () async => await controller.showCatalogoBottomSheet(context),
+                            ),
+                          ),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              mainAxisAlignment: MainAxisAlignment.end,
+                              children: [
+                                SizedBox(
+                                  height: MediaQuery.of(context).size.height / 3,
+                                  width: MediaQuery.of(context).size.width,
+                                  child: ChatWidget(
+                                    model: ChatModel(null, null, controller.appController.userModel!, controller.liveModel),
+                                  ),
+                                ),
+                                const VerticalSizedBox(),
+                                Observer(
+                                  builder: (_) => TextFieldChatWidget(
+                                    loading: controller.loadingSendMessage,
+                                    sendComentario: (String? comentario) {
+                                      try {
+                                        controller.sendComentario(comentario);
+                                      } catch (e) {
+                                        ErrorDialog.show(context: context, content: e.toString());
+                                      }
+                                    },
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ),
-                ],
-              );
-            }
-          },
-        ),
+                ),
+              ],
+            );
+          }
+        },
       ),
     );
   }

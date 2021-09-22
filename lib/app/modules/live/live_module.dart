@@ -1,5 +1,6 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:strapen_app/app/app_controller.dart';
+import 'package:strapen_app/app/modules/catalogo/controllers/catalogo_info_controller.dart';
 import 'package:strapen_app/app/modules/catalogo/repositories/catalogo_repository.dart';
 import 'package:strapen_app/app/modules/catalogo/repositories/icatalogo_repository.dart';
 import 'package:strapen_app/app/modules/chat/repositories/chat_repository.dart';
@@ -15,6 +16,7 @@ import 'package:strapen_app/app/modules/live/repositories/ilive_repository.dart'
 import 'package:strapen_app/app/modules/live/repositories/live_repository.dart';
 import 'package:strapen_app/app/modules/live/services/ilive_service.dart';
 import 'package:strapen_app/app/modules/live/services/live_service.dart';
+import 'package:strapen_app/app/modules/produto/controllers/produto_info_controller.dart';
 import 'package:strapen_app/app/modules/user/repositories/iuser_repository.dart';
 import 'package:strapen_app/app/modules/user/repositories/user_repository.dart';
 import 'package:strapen_app/app/shared/config/preferences/session_preferences.dart';
@@ -33,6 +35,8 @@ class LiveModule extends Module {
           i.get<IUserRepository>(),
           i.get<IChatRepository>(),
         )),
+    Bind((i) => CatalogoInfoController(i.get<ICatalogoRepository>())),
+    Bind((i) => ProdutoInfoController()),
     Bind((i) => LiveInserirCatalogosController(i.get<ICatalogoRepository>(), i.get<LiveController>())),
   ];
 
