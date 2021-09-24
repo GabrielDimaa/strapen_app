@@ -1,7 +1,5 @@
 import 'package:mobx/mobx.dart';
 import 'package:strapen_app/app/modules/catalogo/models/catalogo_model.dart';
-import 'package:strapen_app/app/modules/produto/factories/produto_factory.dart';
-import 'package:strapen_app/app/modules/produto/models/produto_model.dart';
 import 'package:strapen_app/app/modules/produto/stores/produto_store.dart';
 import 'package:strapen_app/app/modules/user/models/user_model.dart';
 
