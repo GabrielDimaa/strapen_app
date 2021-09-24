@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:strapen_app/app/app_widget.dart';
 import 'package:strapen_app/app/modules/catalogo/components/catalogo_widget.dart';
 import 'package:strapen_app/app/modules/catalogo/stores/catalogo_store.dart';
@@ -9,8 +8,9 @@ import 'package:strapen_app/app/shared/components/app_bar_default/app_bar_defaul
 
 class CatalogoBottomSheet extends StatefulWidget {
   final CatalogoStore catalogo;
+  final BuildContext context;
 
-  const CatalogoBottomSheet({required this.catalogo});
+  const CatalogoBottomSheet({required this.catalogo, required this.context});
 
   @override
   _CatalogoBottomSheetState createState() => _CatalogoBottomSheetState();
@@ -21,7 +21,7 @@ class CatalogoBottomSheet extends StatefulWidget {
       backgroundColor: AppColors.background,
       isScrollControlled: true,
       useRootNavigator: true,
-      builder: (_) => CatalogoBottomSheet(catalogo: catalogo),
+      builder: (_) => CatalogoBottomSheet(catalogo: catalogo, context: context),
     );
   }
 }
@@ -30,25 +30,21 @@ class _CatalogoBottomSheetState extends State<CatalogoBottomSheet> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 38),
+      padding: EdgeInsets.only(top: MediaQuery.of(widget.context).padding.top),
       child: Column(
         children: [
           AppBarDefault(
             title: const Text("Catálogo"),
           ),
           Expanded(
-            child: Observer(
-              builder: (_) {
-                return CatalogoWidget(
-                  catalogoStore: widget.catalogo,
-                  onPressedProduto: (ProdutoStore produto) async {
-                    await ProdutoBottomSheet.show(
-                      context: context,
-                      produto: produto,
-                    );
-                  },
+            child: CatalogoWidget(
+              catalogoStore: widget.catalogo,
+              onPressedProduto: (ProdutoStore produto) async {
+                await ProdutoBottomSheet.show(
+                  context: widget.context,
+                  produto: produto,
                 );
-              }
+              },
             ),
           ),
         ],

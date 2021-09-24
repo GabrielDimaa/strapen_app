@@ -8,8 +8,9 @@ import 'package:strapen_app/app/modules/produto/stores/produto_store.dart';
 
 class ProdutoBottomSheet extends StatefulWidget {
   final ProdutoStore produto;
+  final BuildContext context;
 
-  const ProdutoBottomSheet({required this.produto});
+  const ProdutoBottomSheet({required this.produto, required this.context});
 
   @override
   _ProdutoBottomSheetState createState() => _ProdutoBottomSheetState();
@@ -20,7 +21,7 @@ class ProdutoBottomSheet extends StatefulWidget {
       backgroundColor: AppColors.background,
       isScrollControlled: true,
       useRootNavigator: true,
-      builder: (_) => ProdutoBottomSheet(produto: produto),
+      builder: (_) => ProdutoBottomSheet(produto: produto, context: context,),
     );
   }
 }
@@ -31,7 +32,7 @@ class _ProdutoBottomSheetState extends State<ProdutoBottomSheet> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 38),
+      padding: EdgeInsets.only(top: MediaQuery.of(widget.context).padding.top),
       child: Observer(
         builder: (_) => ProdutoWidget(produtoStore: widget.produto),
       ),
