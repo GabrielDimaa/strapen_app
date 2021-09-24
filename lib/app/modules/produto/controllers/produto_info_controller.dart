@@ -9,12 +9,6 @@ abstract class _ProdutoInfoController with Store {
   @observable
   ProdutoStore? produtoStore;
 
-  @observable
-  int currentImage = 0;
-
   @action
   void setProdutoStore(ProdutoStore? value) => produtoStore = value;
-
-  @action
-  void setCurrentImage(int value) => currentImage = value;
 }

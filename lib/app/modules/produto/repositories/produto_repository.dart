@@ -1,5 +1,9 @@
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:parse_server_sdk/parse_server_sdk.dart';
+import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
+import 'package:strapen_app/app/modules/live/controllers/live_controller.dart';
 import 'package:strapen_app/app/modules/produto/constants/columns.dart';
+import 'package:strapen_app/app/modules/produto/factories/produto_factory.dart';
 import 'package:strapen_app/app/modules/produto/models/produto_model.dart';
 import 'package:strapen_app/app/modules/produto/repositories/iproduto_repository.dart';
 import 'package:strapen_app/app/modules/user/factories/user_factory.dart';
@@ -10,6 +14,9 @@ import 'package:strapen_app/app/shared/utils/parse_images_utils.dart';
 class ProdutoRepository implements IProdutoRepository {
   @override
   String className() => "Produto";
+
+  LiveQuery? liveQuery;
+  Subscription? subscription;
 
   @override
   void validate(ProdutoModel model) {
@@ -92,4 +99,40 @@ class ProdutoRepository implements IProdutoRepository {
       throw Exception(e);
     }
   }
+
+  @override
+  Future<void> startListener() async {
+    try {
+      List<QueryBuilder<ParseObject>> querys = [];
+      LiveController controller = Modular.get<LiveController>();
+
+      controller.catalogos.forEach((cat) {
+        querys.addAll(cat.produtos!.map<QueryBuilder<ParseObject>>((prod) {
+          return QueryBuilder<ParseObject>(ParseObject(className()))..whereEqualTo(PRODUTO_ID_COLUMN, prod.id);
+        }).toList());
+      });
+
+      if (liveQuery == null) liveQuery = LiveQuery();
+
+      if (subscription == null) {
+        QueryBuilder<ParseObject> query = QueryBuilder<ParseObject>.or(
+          ParseObject(className()),
+          querys,
+        );
+
+        subscription = await liveQuery!.client.subscribe(query);
+
+        subscription!.on(LiveQueryEvent.update, (value) {
+          ProdutoModel produtoModel = toModel(value);
+          controller.produtos.removeWhere((e) => e.id == produtoModel.id);
+          controller.produtos.add(ProdutoFactory.fromModel(produtoModel));
+        });
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  @override
+  void stopListener() => liveQuery?.client.unSubscribe(subscription!);
 }

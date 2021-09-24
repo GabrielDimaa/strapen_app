@@ -11,12 +11,8 @@ import 'package:strapen_app/app/shared/components/app_bar_default/app_bar_defaul
 import 'package:strapen_app/app/shared/components/app_bar_default/widgets/circle_background_app_bar.dart';
 import 'package:strapen_app/app/shared/components/dialog/error_dialog.dart';
 import 'package:strapen_app/app/shared/components/loading/circular_loading.dart';
-import 'package:strapen_app/app/shared/components/padding/padding_list.dart';
 import 'package:strapen_app/app/shared/components/sized_box/horizontal_sized_box.dart';
 import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
-import 'package:strapen_app/app/shared/components/widgets/list_tile_widget.dart';
-import 'package:strapen_app/app/shared/extensions/datetime_extension.dart';
-import 'package:transparent_image/transparent_image.dart';
 
 class LiveTransmitirPage extends StatefulWidget {
   final CameraLensDirection cameraDirection;
@@ -206,11 +202,5 @@ class _LiveTransmitirPageState extends State<LiveTransmitirPage> {
         ),
       ],
     );
-  }
-
-  @override
-  void dispose() async {
-    super.dispose();
-    await controller.cameraStore.cameraController!.dispose();
   }
 }

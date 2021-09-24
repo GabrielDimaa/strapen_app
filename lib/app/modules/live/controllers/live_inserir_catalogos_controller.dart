@@ -53,7 +53,7 @@ abstract class _LiveInserirCatalogosController with Store {
 
   @action
   void save() {
-    if (catalogosSelected.isEmpty ) throw Exception("Selecione pelo menos um catálogo para exibir na Live.");
+    if (catalogosSelected.isEmpty) throw Exception("Selecione pelo menos um catálogo para exibir na Live.");
 
     _liveController.setCatalogos(catalogosSelected);
 

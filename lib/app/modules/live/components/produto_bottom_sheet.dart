@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:strapen_app/app/app_widget.dart';
+import 'package:strapen_app/app/modules/live/controllers/live_controller.dart';
+import 'package:strapen_app/app/modules/produto/components/produto_widget.dart';
 import 'package:strapen_app/app/modules/produto/models/produto_model.dart';
-import 'package:strapen_app/app/modules/produto/pages/produto_info_page.dart';
 
 class ProdutoBottomSheet extends StatefulWidget {
   final ProdutoModel produto;
@@ -23,11 +26,15 @@ class ProdutoBottomSheet extends StatefulWidget {
 }
 
 class _ProdutoBottomSheetState extends State<ProdutoBottomSheet> {
+  LiveController controller = Modular.get<LiveController>();
+
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 38),
-      child: ProdutoInfoPage(model: widget.produto, isLive: true),
+      child: Observer(
+        builder: (_) => ProdutoWidget(produtoStore: controller.produtos.singleWhere((e) => e.id == widget.produto.id)),
+      ),
     );
   }
 }

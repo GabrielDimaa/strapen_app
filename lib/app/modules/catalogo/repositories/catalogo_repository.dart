@@ -42,7 +42,7 @@ class CatalogoRepository implements ICatalogoRepository {
       e.get<String>(CATALOGO_DESCRICAO_COLUMN),
       e.get<List>(CATALOGO_FOTO_COLUMN)?.first.url,
       null,
-      UserRepository(null).toModel(e.get(CATALOGO_USER_COLUMN))
+      UserRepository(null).toModel(e.get(CATALOGO_USER_COLUMN)),
     );
   }
 

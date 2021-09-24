@@ -5,7 +5,6 @@ import 'package:strapen_app/app/modules/catalogo/models/catalogo_model.dart';
 import 'package:strapen_app/app/modules/live/components/produto_bottom_sheet.dart';
 import 'package:strapen_app/app/modules/produto/models/produto_model.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/app_bar_default.dart';
-import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
 
 class CatalogoBottomSheet extends StatefulWidget {
   final CatalogoModel catalogo;
@@ -36,18 +35,19 @@ class _CatalogoBottomSheetState extends State<CatalogoBottomSheet> {
           AppBarDefault(
             title: const Text("Catálogo"),
           ),
-          const VerticalSizedBox(),
-          CatalogoWidget(
-            image: widget.catalogo.foto,
-            titulo: widget.catalogo.titulo!,
-            descricao: widget.catalogo.descricao!,
-            produtos: widget.catalogo.produtos!,
-            onPressed: (ProdutoModel produtoModel) async {
-              await ProdutoBottomSheet.show(
-                context: context,
-                produto: produtoModel,
-              );
-            }
+          Expanded(
+            child: CatalogoWidget(
+              image: widget.catalogo.foto,
+              titulo: widget.catalogo.titulo!,
+              descricao: widget.catalogo.descricao!,
+              produtos: widget.catalogo.produtos!,
+              onPressed: (ProdutoModel produtoModel) async {
+                await ProdutoBottomSheet.show(
+                  context: context,
+                  produto: produtoModel,
+                );
+              }
+            ),
           ),
         ],
       ),

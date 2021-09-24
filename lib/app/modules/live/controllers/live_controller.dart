@@ -4,6 +4,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'package:strapen_app/app/app_controller.dart';
 import 'package:strapen_app/app/modules/catalogo/models/catalogo_model.dart';
+import 'package:strapen_app/app/modules/catalogo/repositories/icatalogo_repository.dart';
 import 'package:strapen_app/app/modules/chat/models/chat_model.dart';
 import 'package:strapen_app/app/modules/chat/repositories/ichat_repository.dart';
 import 'package:strapen_app/app/modules/live/components/catalogo_bottom_sheet.dart';
@@ -12,6 +13,8 @@ import 'package:strapen_app/app/modules/live/constants/routes.dart';
 import 'package:strapen_app/app/modules/live/models/live_model.dart';
 import 'package:strapen_app/app/modules/live/services/ilive_service.dart';
 import 'package:strapen_app/app/modules/live/stores/camera_store.dart';
+import 'package:strapen_app/app/modules/produto/repositories/iproduto_repository.dart';
+import 'package:strapen_app/app/modules/produto/stores/produto_store.dart';
 import 'package:strapen_app/app/modules/start/constants/routes.dart';
 import 'package:strapen_app/app/modules/user/repositories/iuser_repository.dart';
 import 'package:strapen_app/app/shared/components/dialog/concluido_dialog.dart';
@@ -23,19 +26,31 @@ part 'live_controller.g.dart';
 
 class LiveController = _LiveController with _$LiveController;
 
-abstract class _LiveController with Store {
+abstract class _LiveController extends Disposable with Store {
   final AppController appController;
   final ILiveService _liveService;
   final IUserRepository _userRepository;
   final IChatRepository _chatRepository;
+  final IProdutoRepository _produtoRepository;
+  final ICatalogoRepository _catalogoRepository;
 
-  _LiveController(this.appController, this._liveService, this._userRepository, this._chatRepository);
+  _LiveController(
+    this.appController,
+    this._liveService,
+    this._userRepository,
+    this._chatRepository,
+    this._produtoRepository,
+    this._catalogoRepository,
+  );
 
   @observable
   CameraStore cameraStore = CameraStore();
 
   @observable
   ObservableList<CatalogoModel> catalogos = ObservableList<CatalogoModel>();
+
+  @observable
+  ObservableList<ProdutoStore> produtos = ObservableList<ProdutoStore>();
 
   @observable
   LiveModel? liveModel;
@@ -54,6 +69,9 @@ abstract class _LiveController with Store {
 
   @action
   void setCatalogos(ObservableList<CatalogoModel> value) => catalogos = value;
+
+  @action
+  void setProdutos(ObservableList<ProdutoStore> value) => produtos = value;
 
   @action
   void setLiveModel(LiveModel value) => liveModel = value;
@@ -80,6 +98,7 @@ abstract class _LiveController with Store {
       setLoading(true);
 
       await _liveService.startLive(liveModel!, cameraStore.cameraController!);
+      await _produtoRepository.startListener();
     } catch (e) {
       ErrorDialog.show(context: context, content: e.toString());
     } finally {
@@ -97,6 +116,11 @@ abstract class _LiveController with Store {
       model = await _liveService.save(model);
 
       if (model.id == null) throw Exception("Houve um erro ao iniciar sua Live.\nSe o erro persistir reinicie o aplicativo.");
+
+      //Preenche o catálogo com seus respectivos produtos
+      for (var it in catalogos) {
+        it.produtos = (await _catalogoRepository.getByIdCatalogo(it.id)).produtos;
+      }
 
       setLiveModel(model);
 
@@ -154,5 +178,11 @@ abstract class _LiveController with Store {
       await CatalogoListBottomSheet.show(context: context);
     else
       await CatalogoBottomSheet.show(context: context, catalogo: catalogos.first);
+  }
+
+  @override
+  void dispose() async {
+    _produtoRepository.stopListener();
+    await cameraStore.cameraController?.dispose();
   }
 }
