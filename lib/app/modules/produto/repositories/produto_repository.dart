@@ -3,9 +3,10 @@ import 'package:parse_server_sdk/parse_server_sdk.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 import 'package:strapen_app/app/modules/live/controllers/live_controller.dart';
 import 'package:strapen_app/app/modules/produto/constants/columns.dart';
-import 'package:strapen_app/app/modules/produto/factories/produto_factory.dart';
+import 'package:mobx/mobx.dart';
 import 'package:strapen_app/app/modules/produto/models/produto_model.dart';
 import 'package:strapen_app/app/modules/produto/repositories/iproduto_repository.dart';
+import 'package:strapen_app/app/modules/produto/stores/produto_store.dart';
 import 'package:strapen_app/app/modules/user/factories/user_factory.dart';
 import 'package:strapen_app/app/shared/extensions/string_extension.dart';
 import 'package:strapen_app/app/shared/utils/parse_errors_utils.dart';
@@ -103,13 +104,12 @@ class ProdutoRepository implements IProdutoRepository {
   @override
   Future<void> startListener() async {
     try {
-
-      LiveController controller = Modular.get<LiveController>();
+      final LiveController controller = Modular.get<LiveController>();
 
       if (liveQuery == null) liveQuery = LiveQuery();
 
       if (subscription == null) {
-        QueryBuilder<ParseObject> query = QueryBuilder<ParseObject>.or(
+        final QueryBuilder<ParseObject> query = QueryBuilder<ParseObject>.or(
           ParseObject(className()),
           controller.produtos.map<QueryBuilder<ParseObject>>((prod) {
             return QueryBuilder<ParseObject>(ParseObject(className()))..whereEqualTo(PRODUTO_ID_COLUMN, prod.id);
@@ -119,9 +119,17 @@ class ProdutoRepository implements IProdutoRepository {
         subscription = await liveQuery!.client.subscribe(query);
 
         subscription!.on(LiveQueryEvent.update, (value) {
-          ProdutoModel produtoModel = toModel(value);
-          controller.produtos.removeWhere((e) => e.id == produtoModel.id);
-          controller.produtos.add(ProdutoFactory.fromModel(produtoModel));
+          final ProdutoModel prod = toModel(value);
+
+          final List<ProdutoStore> list = controller.produtos.where((e) => e.id == prod.id).toList();
+          //Valores serão atualizados pela instância do objeto
+          list.forEach((e) {
+            e.descricao = prod.descricao;
+            e.descricaoDetalhada = prod.descricaoDetalhada;
+            e.quantidade = prod.quantidade;
+            e.preco = prod.preco;
+            e.fotos = prod.fotos!.asObservable();
+          });
         });
       }
     } catch (e) {

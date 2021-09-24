@@ -165,7 +165,7 @@ abstract class _LiveController extends Disposable with Store {
 
   @action
   Future<void> inserirCatalogos() async {
-    await Modular.to.pushNamed(LIVE_ROUTE + LIVE_INSERIR_CATALOGO_ROUTE);
+     await Modular.to.pushNamed(LIVE_ROUTE + LIVE_INSERIR_CATALOGO_ROUTE);
   }
 
   @action

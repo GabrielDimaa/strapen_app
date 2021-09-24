@@ -66,9 +66,16 @@ class ProdutoGridTile extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          "$qtd ${qtd > 1 ? "unidades" : "unidade"}",
-                          style: textTheme.bodyText1!.copyWith(color: Colors.grey, fontSize: 12),
+                        Visibility(
+                          visible: qtd == 0,
+                          child: Text(
+                            "Sem unidades",
+                            style: textTheme.bodyText1!.copyWith(color: Colors.red, fontSize: 12),
+                          ),
+                          replacement: Text(
+                            "$qtd ${qtd > 1 ? "unidades" : "unidade"}",
+                            style: textTheme.bodyText1!.copyWith(color: Colors.grey, fontSize: 12),
+                          ),
                         ),
                         Text(
                           preco.formatReal(),

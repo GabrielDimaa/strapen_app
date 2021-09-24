@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:strapen_app/app/app_widget.dart';
 import 'package:strapen_app/app/modules/catalogo/components/catalogo_widget.dart';
 import 'package:strapen_app/app/modules/catalogo/stores/catalogo_store.dart';
@@ -36,14 +37,18 @@ class _CatalogoBottomSheetState extends State<CatalogoBottomSheet> {
             title: const Text("Catálogo"),
           ),
           Expanded(
-            child: CatalogoWidget(
-              catalogoStore: widget.catalogo,
-              onPressedProduto: (ProdutoStore produto) async {
-                await ProdutoBottomSheet.show(
-                  context: context,
-                  produto: produto,
+            child: Observer(
+              builder: (_) {
+                return CatalogoWidget(
+                  catalogoStore: widget.catalogo,
+                  onPressedProduto: (ProdutoStore produto) async {
+                    await ProdutoBottomSheet.show(
+                      context: context,
+                      produto: produto,
+                    );
+                  },
                 );
-              },
+              }
             ),
           ),
         ],

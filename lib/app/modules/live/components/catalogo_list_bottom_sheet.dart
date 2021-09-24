@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:strapen_app/app/app_widget.dart';
 import 'package:strapen_app/app/modules/catalogo/stores/catalogo_store.dart';
@@ -46,20 +47,22 @@ class _CatalogoListBottomSheetState extends State<CatalogoListBottomSheet> {
             const SnapBottomSheet(),
             const VerticalSizedBox(3),
             Expanded(
-              child: CatalogoGridView(
-                itemCount: controller.catalogos.length,
-                itemBuilder: (_, i) {
-                  final CatalogoStore cat = controller.catalogos[i];
-                  return CatalogoGridTile(
-                    image: cat.foto,
-                    title: cat.descricao!,
-                    subtitle: cat.dataCriado!.formated,
-                    onTap: () async => await CatalogoBottomSheet.show(
-                      context: context,
-                      catalogo: cat,
-                    ),
-                  );
-                },
+              child: Observer(
+                builder: (_) => CatalogoGridView(
+                  itemCount: controller.catalogos.length,
+                  itemBuilder: (_, i) {
+                    final CatalogoStore cat = controller.catalogos[i];
+                    return CatalogoGridTile(
+                      image: cat.foto,
+                      title: cat.descricao!,
+                      subtitle: cat.dataCriado!.formated,
+                      onTap: () async => await CatalogoBottomSheet.show(
+                        context: context,
+                        catalogo: cat,
+                      ),
+                    );
+                  },
+                ),
               ),
             ),
           ],

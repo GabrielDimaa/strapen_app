@@ -87,13 +87,15 @@ class CatalogoWidget extends StatelessWidget {
               ),
               itemBuilder: (_, i) {
                 final ProdutoStore prod = catalogoStore.produtos![i];
-                return ProdutoGridTile(
-                  image: prod.fotos.first,
-                  descricao: prod.descricao!,
-                  preco: prod.preco!,
-                  qtd: prod.quantidade!,
-                  onTap: () => onPressedProduto.call(prod),
-                  isEditavel: !isLive,
+                return Observer(
+                  builder: (_) => ProdutoGridTile(
+                    image: prod.fotos.first,
+                    descricao: prod.descricao!,
+                    preco: prod.preco!,
+                    qtd: prod.quantidade!,
+                    onTap: () => onPressedProduto.call(prod),
+                    isEditavel: !isLive,
+                  ),
                 );
               },
             ),
