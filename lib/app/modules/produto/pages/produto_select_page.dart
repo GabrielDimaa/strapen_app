@@ -4,6 +4,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:strapen_app/app/app_widget.dart';
 import 'package:strapen_app/app/modules/produto/controllers/produto_select_controller.dart';
 import 'package:strapen_app/app/modules/produto/models/produto_model.dart';
+import 'package:strapen_app/app/modules/produto/stores/produto_store.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/app_bar_default.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/widgets/circle_background_app_bar.dart';
 import 'package:strapen_app/app/shared/components/button/elevated_button_default.dart';
@@ -68,7 +69,7 @@ class _ProdutoSelectPageState extends ModularState<ProdutoSelectPage, ProdutoSel
                       return ListView.builder(
                         itemCount: controller.produtos.length,
                         itemBuilder: (_, i) {
-                          final ProdutoModel prod = controller.produtos[i];
+                          final ProdutoStore prod = controller.produtos[i];
                           return Card(
                             color: AppColors.opaci,
                             child: Padding(
@@ -90,18 +91,13 @@ class _ProdutoSelectPageState extends ModularState<ProdutoSelectPage, ProdutoSel
                                     borderRadius: BorderRadius.circular(12),
                                     child: FadeInImage.memoryNetwork(
                                       placeholder: kTransparentImage,
-                                      image: prod.fotos!.first,
+                                      image: prod.fotos.first,
                                       height: 42,
                                       width: 42,
                                     ),
                                   ),
-                                  value: controller.produtosSelected.any((e) => e.id == prod.id),
-                                  onChanged: (value) {
-                                    if (value!)
-                                      controller.addProdutosSelected(prod);
-                                    else
-                                      controller.removeProdutosSelected(prod);
-                                  },
+                                  value: prod.selected,
+                                  onChanged: (value) => prod.setSelected(value ?? false),
                                 ),
                               ),
                             ),

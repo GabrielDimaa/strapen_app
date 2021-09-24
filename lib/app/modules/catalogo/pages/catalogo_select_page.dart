@@ -4,6 +4,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:strapen_app/app/app_widget.dart';
 import 'package:strapen_app/app/modules/catalogo/models/catalogo_model.dart';
 import 'package:strapen_app/app/modules/catalogo/controllers/catalogo_select_controller.dart';
+import 'package:strapen_app/app/modules/catalogo/stores/catalogo_store.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/app_bar_default.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/widgets/circle_background_app_bar.dart';
 import 'package:strapen_app/app/shared/components/button/elevated_button_default.dart';
@@ -18,9 +19,9 @@ import 'package:strapen_app/app/shared/extensions/datetime_extension.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class CatalogoSelectPage extends StatefulWidget {
-  final List<CatalogoModel>? catalogo;
+  final List<CatalogoModel>? catalogos;
 
-  const CatalogoSelectPage({this.catalogo});
+  const CatalogoSelectPage({this.catalogos});
 
   @override
   _CatalogoSelectPageState createState() => _CatalogoSelectPageState();
@@ -30,7 +31,7 @@ class _CatalogoSelectPageState extends ModularState<CatalogoSelectPage, Catalogo
   @override
   void initState() {
     super.initState();
-    controller.load(widget.catalogo);
+    controller.load(widget.catalogos);
   }
 
   @override
@@ -68,7 +69,7 @@ class _CatalogoSelectPageState extends ModularState<CatalogoSelectPage, Catalogo
                       return ListView.builder(
                         itemCount: controller.catalogos.length,
                         itemBuilder: (_, i) {
-                          final CatalogoModel cat = controller.catalogos[i];
+                          final CatalogoStore cat = controller.catalogos[i];
                           return Card(
                             color: AppColors.opaci,
                             child: Padding(
@@ -95,13 +96,8 @@ class _CatalogoSelectPageState extends ModularState<CatalogoSelectPage, Catalogo
                                       width: 42,
                                     ),
                                   ),
-                                  value: controller.catalogosSelected.any((e) => e.id == cat.id),
-                                  onChanged: (value) {
-                                    if (value!)
-                                      controller.addCatalogosSelected(cat);
-                                    else
-                                      controller.removeCatalogosSelected(cat);
-                                  },
+                                  value: cat.selected,
+                                  onChanged: (value) => cat.setSelected(value ?? false),
                                 ),
                               ),
                             ),

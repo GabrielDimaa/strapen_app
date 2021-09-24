@@ -28,6 +28,9 @@ abstract class _ProdutoStore with Store {
   @observable
   UserModel? anunciante;
 
+  @observable
+  bool selected = false;
+
   @action
   void setId(String? value) => id = value;
 
@@ -51,6 +54,9 @@ abstract class _ProdutoStore with Store {
 
   @action
   void setAnunciante(UserModel? value) => anunciante = value;
+
+  @action
+  void setSelected(bool value) => selected = value;
 
   _ProdutoStore(
     this.id,

@@ -4,6 +4,8 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'package:strapen_app/app/app_controller.dart';
 import 'package:strapen_app/app/modules/catalogo/constants/routes.dart';
+import 'package:strapen_app/app/modules/catalogo/factories/catalogo_factory.dart';
+import 'package:strapen_app/app/modules/catalogo/models/catalogo_model.dart';
 import 'package:strapen_app/app/modules/catalogo/repositories/icatalogo_repository.dart';
 import 'package:strapen_app/app/modules/catalogo/stores/catalogo_store.dart';
 import 'package:strapen_app/app/modules/chat/models/chat_model.dart';
@@ -166,7 +168,10 @@ abstract class _LiveController extends Disposable with Store {
 
   @action
   Future<void> inserirCatalogos() async {
-     await Modular.to.pushNamed(CATALOGO_ROUTE + CATALOGO_SELECT_ROUTE);
+    List<CatalogoModel>? catalogosModel = await Modular.to.pushNamed(CATALOGO_ROUTE + CATALOGO_SELECT_ROUTE, arguments: catalogos.map((e) => e.toModel()).toList());
+    if (catalogosModel != null) {
+      setCatalogos(catalogosModel.map((e) => CatalogoFactory.fromModel(e)).toList().asObservable());
+    }
   }
 
   @action

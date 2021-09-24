@@ -11,6 +11,8 @@ import 'package:strapen_app/app/modules/catalogo/models/catalogo_model.dart';
 import 'package:strapen_app/app/modules/catalogo/repositories/icatalogo_repository.dart';
 import 'package:strapen_app/app/modules/catalogo/stores/catalogo_store.dart';
 import 'package:strapen_app/app/modules/produto/constants/routes.dart';
+import 'package:strapen_app/app/modules/produto/factories/produto_factory.dart';
+import 'package:strapen_app/app/modules/produto/models/produto_model.dart';
 import 'package:strapen_app/app/shared/components/dialog/loading_dialog.dart';
 import 'package:strapen_app/app/shared/interfaces/default_controller_interface.dart';
 import 'package:strapen_app/app/shared/utils/image_picker_utils.dart';
@@ -55,7 +57,7 @@ abstract class _CatalogoCreateController with Store implements IDefaultControlle
       });
 
       Modular.to.pop(model ?? CatalogoFactory.newModel());
-    } catch(_) {
+    } catch (_) {
       rethrow;
     }
   }
@@ -71,6 +73,10 @@ abstract class _CatalogoCreateController with Store implements IDefaultControlle
 
   @action
   Future<void> inserirProdutos() async {
-    await Modular.to.pushNamed(PRODUTO_ROUTE + PRODUTO_SELECT_ROUTE);
+    List<ProdutoModel>? produtosModel = await Modular.to.pushNamed(PRODUTO_ROUTE + PRODUTO_SELECT_ROUTE, arguments: catalogoStore.produtos?.map((e) => e.toModel()).toList());
+
+    if (produtosModel != null) {
+      catalogoStore.setProdutos(produtosModel.map((e) => ProdutoFactory.fromModel(e)).toList().asObservable());
+    }
   }
 }

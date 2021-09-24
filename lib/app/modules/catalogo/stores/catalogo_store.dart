@@ -28,6 +28,9 @@ abstract class _CatalogoStore with Store {
   @observable
   ObservableList<ProdutoStore>? produtos;
 
+  @observable
+  bool selected = false;
+
   @action
   void setTitulo(String? value) => titulo = value;
 
@@ -45,6 +48,9 @@ abstract class _CatalogoStore with Store {
 
   @action
   void setProdutos(ObservableList<ProdutoStore>? value) => produtos = value;
+
+  @action
+  void setSelected(bool value) => selected = value;
 
   _CatalogoStore(
     this.id,
