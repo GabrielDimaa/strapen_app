@@ -33,7 +33,7 @@ class _ProdutoBottomSheetState extends State<ProdutoBottomSheet> {
     return Padding(
       padding: const EdgeInsets.only(top: 38),
       child: Observer(
-        builder: (_) => ProdutoWidget(produtoStore: controller.produtos.singleWhere((e) => e.id == widget.produto.id)),
+        builder: (_) => ProdutoWidget(produtoStore: controller.produtos.firstWhere((e) => e.id == widget.produto.id)),
       ),
     );
   }

@@ -60,10 +60,10 @@ abstract class _LiveController extends Disposable with Store {
   bool loading = false;
 
   @observable
-  bool loadingSendMessage = false;
+  bool loadingSendComentario = false;
 
   @action
-  void setLoadingSendMessage(bool value) => loadingSendMessage = value;
+  void setLoadingSendComentario(bool value) => loadingSendComentario = value;
 
   @action
   void setCameraStore(CameraStore value) => cameraStore = value;
@@ -99,6 +99,11 @@ abstract class _LiveController extends Disposable with Store {
       setLoading(true);
 
       await _liveService.startLive(liveModel!, cameraStore.cameraController!);
+
+      catalogos.forEach((cat) {
+        produtos.addAll(cat.produtos!.map((e) => e).toList().asObservable());
+      });
+
       await _produtoRepository.startListener();
     } catch (e) {
       ErrorDialog.show(context: context, content: e.toString());
@@ -166,12 +171,12 @@ abstract class _LiveController extends Disposable with Store {
   @action
   Future<void> sendComentario(String? comentario) async {
     try {
-      setLoadingSendMessage(true);
+      setLoadingSendComentario(true);
       if (comentario.isNullOrEmpty()) return;
 
       await _chatRepository.sendComentario(ChatModel(null, comentario, appController.userModel!, liveModel));
     } finally {
-      setLoadingSendMessage(false);
+      setLoadingSendComentario(false);
     }
   }
 

@@ -103,21 +103,17 @@ class ProdutoRepository implements IProdutoRepository {
   @override
   Future<void> startListener() async {
     try {
-      List<QueryBuilder<ParseObject>> querys = [];
-      LiveController controller = Modular.get<LiveController>();
 
-      controller.catalogos.forEach((cat) {
-        querys.addAll(cat.produtos!.map<QueryBuilder<ParseObject>>((prod) {
-          return QueryBuilder<ParseObject>(ParseObject(className()))..whereEqualTo(PRODUTO_ID_COLUMN, prod.id);
-        }).toList());
-      });
+      LiveController controller = Modular.get<LiveController>();
 
       if (liveQuery == null) liveQuery = LiveQuery();
 
       if (subscription == null) {
         QueryBuilder<ParseObject> query = QueryBuilder<ParseObject>.or(
           ParseObject(className()),
-          querys,
+          controller.produtos.map<QueryBuilder<ParseObject>>((prod) {
+            return QueryBuilder<ParseObject>(ParseObject(className()))..whereEqualTo(PRODUTO_ID_COLUMN, prod.id);
+          }).toList(),
         );
 
         subscription = await liveQuery!.client.subscribe(query);

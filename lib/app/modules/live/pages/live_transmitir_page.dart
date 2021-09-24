@@ -102,7 +102,7 @@ class _LiveTransmitirPageState extends State<LiveTransmitirPage> {
                                 const VerticalSizedBox(),
                                 Observer(
                                   builder: (_) => TextFieldChatWidget(
-                                    loading: controller.loadingSendMessage,
+                                    loading: controller.loadingSendComentario,
                                     sendComentario: (String? comentario) {
                                       try {
                                         controller.sendComentario(comentario);
