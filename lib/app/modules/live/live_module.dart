@@ -6,9 +6,7 @@ import 'package:strapen_app/app/modules/chat/repositories/chat_repository.dart';
 import 'package:strapen_app/app/modules/chat/repositories/ichat_repository.dart';
 import 'package:strapen_app/app/modules/live/constants/routes.dart';
 import 'package:strapen_app/app/modules/live/controllers/live_controller.dart';
-import 'package:strapen_app/app/modules/live/controllers/live_inserir_catalogos_controller.dart';
 import 'package:strapen_app/app/modules/live/pages/live_create_page.dart';
-import 'package:strapen_app/app/modules/live/pages/live_inserir_catalogos_page.dart';
 import 'package:strapen_app/app/modules/live/pages/live_primeira_page.dart';
 import 'package:strapen_app/app/modules/live/pages/live_transmitir_page.dart';
 import 'package:strapen_app/app/modules/live/repositories/ilive_repository.dart';
@@ -40,7 +38,6 @@ class LiveModule extends Module {
           i.get<ICatalogoRepository>(),
         )),
     Bind((i) => ProdutoInfoController()),
-    Bind((i) => LiveInserirCatalogosController(i.get<ICatalogoRepository>(), i.get<LiveController>())),
   ];
 
   @override
@@ -49,6 +46,5 @@ class LiveModule extends Module {
     ChildRoute(LIVE_ASSISTIR_ROUTE, child: (_, args) => LiveTransmitirPage(cameraDirection: args.data)),
     ChildRoute(LIVE_CREATE_ROUTE, child: (_, args) => LiveCreatePage()),
     ChildRoute(LIVE_PRIMEIRA_ROUTE, child: (_, args) => LivePrimeiraPage()),
-    ChildRoute(LIVE_INSERIR_CATALOGO_ROUTE, child: (_, args) => LiveInserirCatalogosPage()),
   ];
 }

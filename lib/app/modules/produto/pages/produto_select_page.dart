@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:strapen_app/app/app_widget.dart';
-import 'package:strapen_app/app/modules/catalogo/models/catalogo_model.dart';
-import 'package:strapen_app/app/modules/live/controllers/live_inserir_catalogos_controller.dart';
+import 'package:strapen_app/app/modules/produto/controllers/produto_select_controller.dart';
+import 'package:strapen_app/app/modules/produto/models/produto_model.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/app_bar_default.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/widgets/circle_background_app_bar.dart';
 import 'package:strapen_app/app/shared/components/button/elevated_button_default.dart';
@@ -14,21 +14,23 @@ import 'package:strapen_app/app/shared/components/padding/padding_list.dart';
 import 'package:strapen_app/app/shared/components/padding/padding_scaffold.dart';
 import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
 import 'package:strapen_app/app/shared/components/widgets/empty_list_widget.dart';
-import 'package:strapen_app/app/shared/extensions/datetime_extension.dart';
+import 'package:strapen_app/app/shared/extensions/double_extension.dart';
 import 'package:transparent_image/transparent_image.dart';
 
-class LiveInserirCatalogosPage extends StatefulWidget {
-  const LiveInserirCatalogosPage({Key? key}) : super(key: key);
+class ProdutoSelectPage extends StatefulWidget {
+  final List<ProdutoModel>? produtos;
+
+  const ProdutoSelectPage({this.produtos});
 
   @override
-  _LiveInserirCatalogosPageState createState() => _LiveInserirCatalogosPageState();
+  _ProdutoSelectPageState createState() => _ProdutoSelectPageState();
 }
 
-class _LiveInserirCatalogosPageState extends ModularState<LiveInserirCatalogosPage, LiveInserirCatalogosController> {
+class _ProdutoSelectPageState extends ModularState<ProdutoSelectPage, ProdutoSelectController> {
   @override
   void initState() {
     super.initState();
-    controller.load();
+    controller.load(widget.produtos);
   }
 
   @override
@@ -36,7 +38,7 @@ class _LiveInserirCatalogosPageState extends ModularState<LiveInserirCatalogosPa
     final TextTheme textTheme = Theme.of(context).textTheme;
     return Scaffold(
       appBar: AppBarDefault(
-        title: Text("Catálogos"),
+        title: Text("Produtos"),
         actionsWidgets: [
           CircleButtonAppBar(
             child: Icon(
@@ -44,7 +46,7 @@ class _LiveInserirCatalogosPageState extends ModularState<LiveInserirCatalogosPa
               size: 28,
               color: Colors.white,
             ),
-            onTap: () async => await controller.toCatalogoCreate(),
+            onTap: () async => await controller.toProdutoCreate(),
           ),
         ],
       ),
@@ -54,7 +56,7 @@ class _LiveInserirCatalogosPageState extends ModularState<LiveInserirCatalogosPa
           const VerticalSizedBox(),
           Padding(
             padding: const PaddingScaffold(),
-            child: Text("Selecione os catálogos que serão exibidos na Live."),
+            child: Text("Selecione os produtos que serão exibidos no catálogo."),
           ),
           Expanded(
             child: Padding(
@@ -62,11 +64,11 @@ class _LiveInserirCatalogosPageState extends ModularState<LiveInserirCatalogosPa
               child: Observer(
                 builder: (_) {
                   if (!controller.loading) {
-                    if (controller.catalogos.isNotEmpty) {
+                    if (controller.produtos.isNotEmpty) {
                       return ListView.builder(
-                        itemCount: controller.catalogos.length,
+                        itemCount: controller.produtos.length,
                         itemBuilder: (_, i) {
-                          final CatalogoModel cat = controller.catalogos[i];
+                          final ProdutoModel prod = controller.produtos[i];
                           return Card(
                             color: AppColors.opaci,
                             child: Padding(
@@ -75,12 +77,12 @@ class _LiveInserirCatalogosPageState extends ModularState<LiveInserirCatalogosPa
                                 builder: (_) => CheckboxListTile(
                                   contentPadding: const EdgeInsets.all(0),
                                   title: Text(
-                                    cat.descricao!,
+                                    prod.descricao!,
                                     overflow: TextOverflow.ellipsis,
                                     style: textTheme.bodyText2,
                                   ),
                                   subtitle: Text(
-                                    cat.dataCriado!.formated,
+                                    prod.preco!.formatReal(),
                                     style: textTheme.bodyText2!.copyWith(color: AppColors.primary),
                                   ),
                                   dense: true,
@@ -88,17 +90,17 @@ class _LiveInserirCatalogosPageState extends ModularState<LiveInserirCatalogosPa
                                     borderRadius: BorderRadius.circular(12),
                                     child: FadeInImage.memoryNetwork(
                                       placeholder: kTransparentImage,
-                                      image: cat.foto!,
+                                      image: prod.fotos!.first,
                                       height: 42,
                                       width: 42,
                                     ),
                                   ),
-                                  value: controller.catalogosSelected.any((e) => e.id == cat.id),
+                                  value: controller.produtosSelected.any((e) => e.id == prod.id),
                                   onChanged: (value) {
                                     if (value!)
-                                      controller.addCatalogosSelected(cat);
+                                      controller.addProdutosSelected(prod);
                                     else
-                                      controller.removeCatalogosSelected(cat);
+                                      controller.removeProdutosSelected(prod);
                                   },
                                 ),
                               ),
@@ -109,7 +111,7 @@ class _LiveInserirCatalogosPageState extends ModularState<LiveInserirCatalogosPa
                     } else {
                       return Center(
                         child: EmptyListWidget(
-                          message: "Crie catálogos para exibir em sua Live.",
+                          message: "Crie produtos para adicionar no seu novo catálogo.",
                         ),
                       );
                     }
@@ -124,8 +126,8 @@ class _LiveInserirCatalogosPageState extends ModularState<LiveInserirCatalogosPa
             padding: const MarginButtonWithoutScaffold(),
             child: Observer(
               builder: (_) => ElevatedButtonDefault(
-                child: const Text("Confirmar"),
-                onPressed: controller.catalogos.isNotEmpty
+                child: Text("Confirmar"),
+                onPressed: controller.produtos.isNotEmpty
                     ? () async {
                         try {
                           controller.save();

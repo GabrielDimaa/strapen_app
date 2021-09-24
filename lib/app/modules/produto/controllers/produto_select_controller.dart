@@ -1,20 +1,19 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
-import 'package:strapen_app/app/modules/catalogo/controllers/catalogo_create_controller.dart';
+import 'package:strapen_app/app/app_controller.dart';
 import 'package:strapen_app/app/modules/produto/constants/routes.dart';
-import 'package:strapen_app/app/modules/produto/factories/produto_factory.dart';
 import 'package:strapen_app/app/modules/produto/models/produto_model.dart';
 import 'package:strapen_app/app/modules/produto/repositories/iproduto_repository.dart';
 
-part 'catalogo_inserir_produtos_controller.g.dart';
+part 'produto_select_controller.g.dart';
 
-class CatalogoInserirProdutosController = _CatalogoInserirProdutosController with _$CatalogoInserirProdutosController;
+class ProdutoSelectController = _ProdutoSelectController with _$ProdutoSelectController;
 
-abstract class _CatalogoInserirProdutosController with Store {
-  final CatalogoCreateController _catalogoController;
+abstract class _ProdutoSelectController with Store {
   final IProdutoRepository _produtoRepository;
+  final AppController _appController;
 
-  _CatalogoInserirProdutosController(this._catalogoController, this._produtoRepository);
+  _ProdutoSelectController(this._produtoRepository, this._appController);
 
   @observable
   bool loading = false;
@@ -38,18 +37,16 @@ abstract class _CatalogoInserirProdutosController with Store {
   void removeProdutosSelected(ProdutoModel value) => produtosSelected.removeWhere((e) => e.id == value.id);
 
   @action
-  Future<void> load() async {
+  Future<void> load(List<ProdutoModel>? produtos) async {
     try {
       setLoading(true);
 
-      List<ProdutoModel>? lista = await _produtoRepository.getByUser(_catalogoController.appController.userModel?.id);
+      List<ProdutoModel>? lista = await _produtoRepository.getByUser(_appController.userModel?.id);
 
       if (lista != null)
         setProdutos(lista.asObservable());
 
-      produtosSelected = _catalogoController.catalogoStore.produtos?.map((e) {
-        return e.toModel();
-      }).toList().asObservable() ?? ObservableList<ProdutoModel>();
+      produtosSelected = produtos?.asObservable() ?? ObservableList<ProdutoModel>();
     } finally {
       setLoading(false);
     }
@@ -59,9 +56,7 @@ abstract class _CatalogoInserirProdutosController with Store {
   void save() {
     if (produtosSelected.isEmpty ) throw Exception("Selecione pelo menos um produto para exibir no catálogo.");
 
-    _catalogoController.catalogoStore.produtos = produtosSelected.map((e) => ProdutoFactory.fromModel(e)).toList().asObservable();
-
-    Modular.to.pop();
+    Modular.to.pop(produtosSelected);
   }
 
   @action

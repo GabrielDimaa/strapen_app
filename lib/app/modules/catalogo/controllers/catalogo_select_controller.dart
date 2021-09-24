@@ -1,20 +1,19 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
+import 'package:strapen_app/app/app_controller.dart';
 import 'package:strapen_app/app/modules/catalogo/constants/routes.dart';
-import 'package:strapen_app/app/modules/catalogo/factories/catalogo_factory.dart';
 import 'package:strapen_app/app/modules/catalogo/models/catalogo_model.dart';
 import 'package:strapen_app/app/modules/catalogo/repositories/icatalogo_repository.dart';
-import 'package:strapen_app/app/modules/live/controllers/live_controller.dart';
 
-part 'live_inserir_catalogos_controller.g.dart';
+part 'catalogo_select_controller.g.dart';
 
-class LiveInserirCatalogosController = _LiveInserirCatalogosController with _$LiveInserirCatalogosController;
+class CatalogoSelectController = _CatalogoSelectController with _$CatalogoSelectController;
 
-abstract class _LiveInserirCatalogosController with Store {
+abstract class _CatalogoSelectController with Store {
   final ICatalogoRepository _catalogoRepository;
-  final LiveController _liveController;
+  final AppController _appController;
 
-  _LiveInserirCatalogosController(this._catalogoRepository, this._liveController);
+  _CatalogoSelectController(this._catalogoRepository, this._appController);
 
   @observable
   bool loading = false;
@@ -38,15 +37,15 @@ abstract class _LiveInserirCatalogosController with Store {
   void removeCatalogosSelected(CatalogoModel value) => catalogosSelected.removeWhere((e) => e.id == value.id);
 
   @action
-  Future<void> load() async {
+  Future<void> load(List<CatalogoModel>? catalogos) async {
     try {
       setLoading(true);
 
-      List<CatalogoModel>? list = await _catalogoRepository.getByUser(_liveController.appController.userModel?.id);
+      List<CatalogoModel>? list = await _catalogoRepository.getByUser(_appController.userModel?.id);
 
       if (list != null) setCatalogos(list.asObservable());
 
-      catalogosSelected = _liveController.catalogos.map((e) => e.toModel()).toList().asObservable();
+      catalogosSelected = catalogos?.asObservable() ?? ObservableList<CatalogoModel>();
     } finally {
       setLoading(false);
     }
@@ -56,9 +55,7 @@ abstract class _LiveInserirCatalogosController with Store {
   void save() {
     if (catalogosSelected.isEmpty) throw Exception("Selecione pelo menos um catálogo para exibir na Live.");
 
-    _liveController.setCatalogos(catalogosSelected.map((e) => CatalogoFactory.fromModel(e)).toList().asObservable());
-
-    Modular.to.pop();
+    Modular.to.pop(catalogosSelected);
   }
 
   @action

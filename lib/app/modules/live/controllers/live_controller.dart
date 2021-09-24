@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'package:strapen_app/app/app_controller.dart';
+import 'package:strapen_app/app/modules/catalogo/constants/routes.dart';
 import 'package:strapen_app/app/modules/catalogo/repositories/icatalogo_repository.dart';
 import 'package:strapen_app/app/modules/catalogo/stores/catalogo_store.dart';
 import 'package:strapen_app/app/modules/chat/models/chat_model.dart';
@@ -165,7 +166,7 @@ abstract class _LiveController extends Disposable with Store {
 
   @action
   Future<void> inserirCatalogos() async {
-     await Modular.to.pushNamed(LIVE_ROUTE + LIVE_INSERIR_CATALOGO_ROUTE);
+     await Modular.to.pushNamed(CATALOGO_ROUTE + CATALOGO_SELECT_ROUTE);
   }
 
   @action

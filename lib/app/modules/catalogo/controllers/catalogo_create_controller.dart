@@ -6,11 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'package:strapen_app/app/app_controller.dart';
-import 'package:strapen_app/app/modules/catalogo/constants/routes.dart';
 import 'package:strapen_app/app/modules/catalogo/factories/catalogo_factory.dart';
 import 'package:strapen_app/app/modules/catalogo/models/catalogo_model.dart';
 import 'package:strapen_app/app/modules/catalogo/repositories/icatalogo_repository.dart';
 import 'package:strapen_app/app/modules/catalogo/stores/catalogo_store.dart';
+import 'package:strapen_app/app/modules/produto/constants/routes.dart';
 import 'package:strapen_app/app/shared/components/dialog/loading_dialog.dart';
 import 'package:strapen_app/app/shared/interfaces/default_controller_interface.dart';
 import 'package:strapen_app/app/shared/utils/image_picker_utils.dart';
@@ -21,9 +21,9 @@ class CatalogoCreateController = _CatalogoCreateController with _$CatalogoCreate
 
 abstract class _CatalogoCreateController with Store implements IDefaultController {
   final ICatalogoRepository _catalogoRepository;
-  final AppController appController;
+  final AppController _appController;
 
-  _CatalogoCreateController(this._catalogoRepository, this.appController);
+  _CatalogoCreateController(this._catalogoRepository, this._appController);
 
   @observable
   CatalogoStore catalogoStore = CatalogoFactory.newStore();
@@ -49,7 +49,7 @@ abstract class _CatalogoCreateController with Store implements IDefaultControlle
       CatalogoModel? model;
 
       await LoadingDialog.show(context, "Salvando catálogo...", () async {
-        catalogoStore.setUser(appController.userModel);
+        catalogoStore.setUser(_appController.userModel);
 
         model = await _catalogoRepository.save(catalogoStore.toModel());
       });
@@ -71,6 +71,6 @@ abstract class _CatalogoCreateController with Store implements IDefaultControlle
 
   @action
   Future<void> inserirProdutos() async {
-    await Modular.to.pushNamed(CATALOGO_ROUTE + CATALOGO_INSERIR_PRODUTO_ROUTE);
+    await Modular.to.pushNamed(PRODUTO_ROUTE + PRODUTO_SELECT_ROUTE);
   }
 }
