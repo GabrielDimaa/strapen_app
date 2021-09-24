@@ -2,6 +2,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'package:strapen_app/app/modules/catalogo/controllers/catalogo_create_controller.dart';
 import 'package:strapen_app/app/modules/produto/constants/routes.dart';
+import 'package:strapen_app/app/modules/produto/factories/produto_factory.dart';
 import 'package:strapen_app/app/modules/produto/models/produto_model.dart';
 import 'package:strapen_app/app/modules/produto/repositories/iproduto_repository.dart';
 
@@ -46,7 +47,9 @@ abstract class _CatalogoInserirProdutosController with Store {
       if (lista != null)
         setProdutos(lista.asObservable());
 
-      produtosSelected = _catalogoController.catalogoStore.produtos ?? ObservableList<ProdutoModel>();
+      produtosSelected = _catalogoController.catalogoStore.produtos?.map((e) {
+        return e.toModel();
+      }).toList().asObservable() ?? ObservableList<ProdutoModel>();
     } finally {
       setLoading(false);
     }
@@ -56,7 +59,7 @@ abstract class _CatalogoInserirProdutosController with Store {
   void save() {
     if (produtosSelected.isEmpty ) throw Exception("Selecione pelo menos um produto para exibir no catálogo.");
 
-    _catalogoController.catalogoStore.produtos = produtosSelected;
+    _catalogoController.catalogoStore.produtos = produtosSelected.map((e) => ProdutoFactory.fromModel(e)).toList().asObservable();
 
     Modular.to.pop();
   }

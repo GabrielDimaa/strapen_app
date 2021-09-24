@@ -6,6 +6,7 @@ import 'package:strapen_app/app/modules/catalogo/controllers/catalogo_info_contr
 import 'package:strapen_app/app/modules/catalogo/factories/catalogo_factory.dart';
 import 'package:strapen_app/app/modules/catalogo/models/catalogo_model.dart';
 import 'package:strapen_app/app/modules/produto/models/produto_model.dart';
+import 'package:strapen_app/app/modules/produto/stores/produto_store.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/app_bar_default.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/widgets/circle_background_app_bar.dart';
 import 'package:strapen_app/app/shared/components/loading/circular_loading.dart';
@@ -46,11 +47,8 @@ class _CatalogoInfoPageState extends ModularState<CatalogoInfoPage, CatalogoInfo
           } else {
             return Observer(
               builder: (_) => CatalogoWidget(
-                image: controller.catalogoStore!.foto!,
-                titulo: controller.catalogoStore!.titulo!,
-                descricao: controller.catalogoStore!.descricao!,
-                produtos: controller.catalogoStore!.produtos ?? [],
-                onPressed: (ProdutoModel produtoModel) {},
+                catalogoStore: controller.catalogoStore!,
+                onPressedProduto: (ProdutoStore produtoModel) {},
               ),
             );
           }

@@ -5,16 +5,17 @@ import 'package:strapen_app/app/app_widget.dart';
 import 'package:strapen_app/app/modules/live/controllers/live_controller.dart';
 import 'package:strapen_app/app/modules/produto/components/produto_widget.dart';
 import 'package:strapen_app/app/modules/produto/models/produto_model.dart';
+import 'package:strapen_app/app/modules/produto/stores/produto_store.dart';
 
 class ProdutoBottomSheet extends StatefulWidget {
-  final ProdutoModel produto;
+  final ProdutoStore produto;
 
   const ProdutoBottomSheet({required this.produto});
 
   @override
   _ProdutoBottomSheetState createState() => _ProdutoBottomSheetState();
 
-  static Future<void> show({required BuildContext context, required ProdutoModel produto}) async {
+  static Future<void> show({required BuildContext context, required ProdutoStore produto}) async {
     return await showModalBottomSheet(
       context: context,
       backgroundColor: AppColors.background,

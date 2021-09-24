@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:strapen_app/app/app_widget.dart';
 import 'package:strapen_app/app/modules/catalogo/models/catalogo_model.dart';
+import 'package:strapen_app/app/modules/catalogo/stores/catalogo_store.dart';
 import 'package:strapen_app/app/modules/live/components/catalogo_bottom_sheet.dart';
 import 'package:strapen_app/app/modules/live/controllers/live_controller.dart';
 import 'package:strapen_app/app/shared/components/padding/padding_list.dart';
@@ -49,7 +50,7 @@ class _CatalogoListBottomSheetState extends State<CatalogoListBottomSheet> {
               child: CatalogoGridView(
                 itemCount: controller.catalogos.length,
                 itemBuilder: (_, i) {
-                  final CatalogoModel cat = controller.catalogos[i];
+                  final CatalogoStore cat = controller.catalogos[i];
                   return CatalogoGridTile(
                     image: cat.foto,
                     title: cat.descricao!,

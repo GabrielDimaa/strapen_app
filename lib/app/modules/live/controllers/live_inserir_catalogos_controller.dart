@@ -1,6 +1,7 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'package:strapen_app/app/modules/catalogo/constants/routes.dart';
+import 'package:strapen_app/app/modules/catalogo/factories/catalogo_factory.dart';
 import 'package:strapen_app/app/modules/catalogo/models/catalogo_model.dart';
 import 'package:strapen_app/app/modules/catalogo/repositories/icatalogo_repository.dart';
 import 'package:strapen_app/app/modules/live/controllers/live_controller.dart';
@@ -45,7 +46,7 @@ abstract class _LiveInserirCatalogosController with Store {
 
       if (list != null) setCatalogos(list.asObservable());
 
-      catalogosSelected = _liveController.catalogos;
+      catalogosSelected = _liveController.catalogos.map((e) => e.toModel()).toList().asObservable();
     } finally {
       setLoading(false);
     }
@@ -55,7 +56,7 @@ abstract class _LiveInserirCatalogosController with Store {
   void save() {
     if (catalogosSelected.isEmpty) throw Exception("Selecione pelo menos um catálogo para exibir na Live.");
 
-    _liveController.setCatalogos(catalogosSelected);
+    _liveController.setCatalogos(catalogosSelected.map((e) => CatalogoFactory.fromModel(e)).toList().asObservable());
 
     Modular.to.pop();
   }

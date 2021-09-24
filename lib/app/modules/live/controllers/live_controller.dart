@@ -5,6 +5,7 @@ import 'package:mobx/mobx.dart';
 import 'package:strapen_app/app/app_controller.dart';
 import 'package:strapen_app/app/modules/catalogo/models/catalogo_model.dart';
 import 'package:strapen_app/app/modules/catalogo/repositories/icatalogo_repository.dart';
+import 'package:strapen_app/app/modules/catalogo/stores/catalogo_store.dart';
 import 'package:strapen_app/app/modules/chat/models/chat_model.dart';
 import 'package:strapen_app/app/modules/chat/repositories/ichat_repository.dart';
 import 'package:strapen_app/app/modules/live/components/catalogo_bottom_sheet.dart';
@@ -13,6 +14,7 @@ import 'package:strapen_app/app/modules/live/constants/routes.dart';
 import 'package:strapen_app/app/modules/live/models/live_model.dart';
 import 'package:strapen_app/app/modules/live/services/ilive_service.dart';
 import 'package:strapen_app/app/modules/live/stores/camera_store.dart';
+import 'package:strapen_app/app/modules/produto/factories/produto_factory.dart';
 import 'package:strapen_app/app/modules/produto/repositories/iproduto_repository.dart';
 import 'package:strapen_app/app/modules/produto/stores/produto_store.dart';
 import 'package:strapen_app/app/modules/start/constants/routes.dart';
@@ -47,7 +49,7 @@ abstract class _LiveController extends Disposable with Store {
   CameraStore cameraStore = CameraStore();
 
   @observable
-  ObservableList<CatalogoModel> catalogos = ObservableList<CatalogoModel>();
+  ObservableList<CatalogoStore> catalogos = ObservableList<CatalogoStore>();
 
   @observable
   ObservableList<ProdutoStore> produtos = ObservableList<ProdutoStore>();
@@ -68,7 +70,7 @@ abstract class _LiveController extends Disposable with Store {
   void setCameraStore(CameraStore value) => cameraStore = value;
 
   @action
-  void setCatalogos(ObservableList<CatalogoModel> value) => catalogos = value;
+  void setCatalogos(ObservableList<CatalogoStore> value) => catalogos = value;
 
   @action
   void setProdutos(ObservableList<ProdutoStore> value) => produtos = value;
@@ -112,14 +114,16 @@ abstract class _LiveController extends Disposable with Store {
 
     await LoadingDialog.show(context, "Entrando ao vivo...", () async {
       LiveModel model = await _liveService.solicitarLive(appController.userModel!);
-      model.catalogos = catalogos;
+      model.catalogos = catalogos.map((e) => e.toModel()).toList();
       model = await _liveService.save(model);
 
       if (model.id == null) throw Exception("Houve um erro ao iniciar sua Live.\nSe o erro persistir reinicie o aplicativo.");
 
       //Preenche o catálogo com seus respectivos produtos
       for (var it in catalogos) {
-        it.produtos = (await _catalogoRepository.getByIdCatalogo(it.id)).produtos;
+        it.produtos = (await _catalogoRepository.getByIdCatalogo(it.id)).produtos?.map((e) {
+          return ProdutoFactory.fromModel(e);
+        }).toList().asObservable();
       }
 
       setLiveModel(model);

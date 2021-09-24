@@ -5,6 +5,7 @@ import 'package:strapen_app/app/app_widget.dart';
 import 'package:strapen_app/app/modules/catalogo/components/card_inserir_widget.dart';
 import 'package:strapen_app/app/modules/catalogo/controllers/catalogo_create_controller.dart';
 import 'package:strapen_app/app/modules/produto/models/produto_model.dart';
+import 'package:strapen_app/app/modules/produto/stores/produto_store.dart';
 import 'package:strapen_app/app/shared/components/bottom_sheet/bottom_sheet_image_picker.dart';
 import 'package:strapen_app/app/shared/components/button/elevated_button_default.dart';
 import 'package:strapen_app/app/shared/components/dialog/dialog_default.dart';
@@ -190,13 +191,13 @@ class _CriarCatalogoWidgetState extends State<CriarCatalogoWidget> {
     );
   }
 
-  Widget _produtoTile(ProdutoModel prod) {
+  Widget _produtoTile(ProdutoStore prod) {
     return ListTile(
       contentPadding: EdgeInsets.all(0),
       leading: Padding(
         padding: const EdgeInsets.only(left: 6),
         child: CircleAvatar(
-          backgroundImage: FadeInImage.memoryNetwork(placeholder: kTransparentImage, image: prod.fotos!.first).image,
+          backgroundImage: FadeInImage.memoryNetwork(placeholder: kTransparentImage, image: prod.fotos.first).image,
         ),
       ),
       title: Text(

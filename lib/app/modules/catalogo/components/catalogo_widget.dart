@@ -1,25 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:strapen_app/app/app_widget.dart';
-import 'package:strapen_app/app/modules/produto/models/produto_model.dart';
+import 'package:strapen_app/app/modules/catalogo/stores/catalogo_store.dart';
+import 'package:strapen_app/app/modules/produto/stores/produto_store.dart';
 import 'package:strapen_app/app/shared/components/padding/padding_scaffold.dart';
 import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
 import 'package:strapen_app/app/shared/components/widgets/produto_grid_tile.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class CatalogoWidget extends StatelessWidget {
-  final String image;
-  final String titulo;
-  final String descricao;
-  final List<ProdutoModel> produtos;
-  final Function(ProdutoModel) onPressed;
+  final CatalogoStore catalogoStore;
+  final Function(ProdutoStore) onPressedProduto;
   final bool isLive;
 
   const CatalogoWidget({
-    required this.image,
-    required this.titulo,
-    required this.descricao,
-    required this.produtos,
-    required this.onPressed,
+    required this.catalogoStore,
+    required this.onPressedProduto,
     this.isLive = false,
   });
 
@@ -35,20 +31,26 @@ class CatalogoWidget extends StatelessWidget {
             alignment: Alignment.center,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(16),
-              child: FadeInImage.memoryNetwork(
-                placeholder: kTransparentImage,
-                image: image,
-                height: 180,
-                width: 180,
+              child: Observer(
+                builder: (_) => FadeInImage.memoryNetwork(
+                  placeholder: kTransparentImage,
+                  image: catalogoStore.foto,
+                  height: 180,
+                  width: 180,
+                ),
               ),
             ),
           ),
           const VerticalSizedBox(3),
-          _title(context: context, label: titulo),
+          Observer(
+            builder: (_) => _title(context: context, label: catalogoStore.titulo!),
+          ),
           const VerticalSizedBox(),
-          Text(
-            descricao,
-            style: Theme.of(context).textTheme.bodyText1,
+          Observer(
+            builder: (_) => Text(
+              catalogoStore.descricao!,
+              style: Theme.of(context).textTheme.bodyText1,
+            ),
           ),
           const VerticalSizedBox(),
           Visibility(
@@ -72,27 +74,29 @@ class CatalogoWidget extends StatelessWidget {
             color: AppColors.primary,
           ),
           const VerticalSizedBox(2),
-          GridView.builder(
-            physics: const NeverScrollableScrollPhysics(),
-            shrinkWrap: true,
-            itemCount: produtos.length,
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 2,
-              crossAxisSpacing: 12,
-              mainAxisSpacing: 12,
-              childAspectRatio: 0.65,
+          Observer(
+            builder: (_) => GridView.builder(
+              physics: const NeverScrollableScrollPhysics(),
+              shrinkWrap: true,
+              itemCount: catalogoStore.produtos!.length,
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                crossAxisSpacing: 12,
+                mainAxisSpacing: 12,
+                childAspectRatio: 0.65,
+              ),
+              itemBuilder: (_, i) {
+                final ProdutoStore prod = catalogoStore.produtos![i];
+                return ProdutoGridTile(
+                  image: prod.fotos.first,
+                  descricao: prod.descricao!,
+                  preco: prod.preco!,
+                  qtd: prod.quantidade!,
+                  onTap: () => onPressedProduto.call(prod),
+                  isEditavel: !isLive,
+                );
+              },
             ),
-            itemBuilder: (_, i) {
-              final ProdutoModel prod = produtos[i];
-              return ProdutoGridTile(
-                image: prod.fotos!.first,
-                descricao: prod.descricao!,
-                preco: prod.preco!,
-                qtd: prod.quantidade!,
-                onTap: () => onPressed.call(prod),
-                isEditavel: !isLive,
-              );
-            },
           ),
         ],
       ),

@@ -1,6 +1,8 @@
 import 'package:mobx/mobx.dart';
 import 'package:strapen_app/app/modules/catalogo/models/catalogo_model.dart';
+import 'package:strapen_app/app/modules/produto/factories/produto_factory.dart';
 import 'package:strapen_app/app/modules/produto/models/produto_model.dart';
+import 'package:strapen_app/app/modules/produto/stores/produto_store.dart';
 import 'package:strapen_app/app/modules/user/models/user_model.dart';
 
 part 'catalogo_store.g.dart';
@@ -26,7 +28,7 @@ abstract class _CatalogoStore with Store {
   UserModel? user;
 
   @observable
-  ObservableList<ProdutoModel>? produtos;
+  ObservableList<ProdutoStore>? produtos;
 
   @action
   void setTitulo(String? value) => titulo = value;
@@ -44,7 +46,7 @@ abstract class _CatalogoStore with Store {
   void setUser(UserModel? value) => user = value;
 
   @action
-  void setProdutos(ObservableList<ProdutoModel>? value) => produtos = value;
+  void setProdutos(ObservableList<ProdutoStore>? value) => produtos = value;
 
   _CatalogoStore(
     this.id,
@@ -63,7 +65,7 @@ abstract class _CatalogoStore with Store {
       this.titulo,
       this.descricao,
       this.foto,
-      this.produtos,
+      this.produtos?.map((e) => e.toModel()).toList(),
       this.user,
     );
   }

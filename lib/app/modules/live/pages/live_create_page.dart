@@ -4,6 +4,7 @@ import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:strapen_app/app/app_widget.dart';
 import 'package:strapen_app/app/modules/catalogo/models/catalogo_model.dart';
+import 'package:strapen_app/app/modules/catalogo/stores/catalogo_store.dart';
 import 'package:strapen_app/app/modules/live/controllers/live_controller.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/app_bar_default.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/widgets/circle_background_app_bar.dart';
@@ -127,7 +128,7 @@ class _LiveCreatePageState extends State<LiveCreatePage> {
                                           return CatalogoGridView(
                                             itemCount: controller.catalogos.length,
                                             itemBuilder: (_, i) {
-                                              final CatalogoModel cat = controller.catalogos[i];
+                                              final CatalogoStore cat = controller.catalogos[i];
                                               return CatalogoGridTile(
                                                 image: cat.foto,
                                                 title: cat.descricao!,
