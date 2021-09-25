@@ -8,6 +8,7 @@ import 'package:strapen_app/app/modules/user/factories/user_factory.dart';
 import 'package:strapen_app/app/modules/user/models/user_model.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/app_bar_default.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/widgets/circle_background_app_bar.dart';
+import 'package:strapen_app/app/shared/components/loading/circular_loading.dart';
 import 'package:strapen_app/app/shared/components/padding/padding_scaffold.dart';
 import 'package:strapen_app/app/shared/components/sized_box/horizontal_sized_box.dart';
 import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
@@ -27,6 +28,7 @@ class _UserPageState extends ModularState<UserPage, UserController> {
   void initState() {
     super.initState();
     if (widget.model != null) controller.setUserStore(UserFactory.fromModel(widget.model!));
+    controller.load();
   }
 
   @override
@@ -48,96 +50,105 @@ class _UserPageState extends ModularState<UserPage, UserController> {
           ),
         ],
       ),
-      body: SingleChildScrollView(
-        padding: const PaddingScaffold(),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const VerticalSizedBox(),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Observer(
-                  builder: (_) => FotoPerfilWidget(
-                    foto: controller.userStore.foto,
-                    radiusSize: 60,
-                  ),
-                ),
-                const HorizontalSizedBox(2),
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
+      body: Observer(
+        builder: (_) {
+          if (controller.loading) {
+            return const CircularLoading();
+          } else {
+            return SingleChildScrollView(
+              padding: const PaddingScaffold(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const VerticalSizedBox(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       Observer(
-                        builder: (_) => Text(
-                          controller.userStore.nome!,
-                          overflow: TextOverflow.fade,
-                          style: textTheme.bodyText2!.copyWith(color: AppColors.primary, fontSize: 18),
+                        builder: (_) => FotoPerfilWidget(
+                          foto: controller.userStore.foto,
+                          radiusSize: 60,
+                          isAovivo: !(controller.liveModel?.finalizada ?? true),
                         ),
                       ),
-                      const VerticalSizedBox(0.5),
-                      Observer(builder: (_) => Text("@${controller.userStore.username!}")),
-                      const VerticalSizedBox(0.5),
-                      Observer(builder: (_) => Text(controller.userStore.telefone!)),
+                      const HorizontalSizedBox(2),
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Observer(
+                              builder: (_) => Text(
+                                controller.userStore.nome!,
+                                overflow: TextOverflow.fade,
+                                style: textTheme.bodyText2!.copyWith(color: AppColors.primary, fontSize: 18),
+                              ),
+                            ),
+                            const VerticalSizedBox(0.5),
+                            Observer(builder: (_) => Text("@${controller.userStore.username!}")),
+                            const VerticalSizedBox(0.5),
+                            Observer(builder: (_) => Text(controller.userStore.telefone!)),
+                          ],
+                        ),
+                      ),
                     ],
                   ),
-                ),
-              ],
-            ),
-            const VerticalSizedBox(3),
-            Observer(
-              builder: (_) => Visibility(
-                visible: controller.userStore.bio.notIsNullOrEmpty(),
-                child: Column(
-                  children: [
-                    Text(
-                      "Descrição",
-                      style: textTheme.headline1!.copyWith(fontWeight: FontWeight.w600),
-                    ),
-                    const VerticalSizedBox(0.5),
-                    Text(controller.userStore.bio ?? ""),
-                  ],
-                ),
-              ),
-            ),
-            const VerticalSizedBox(5),
-            Align(
-              alignment: Alignment.center,
-              child: SizedBox(
-                width: 280,
-                child: Card(
-                  color: AppColors.primary,
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 4),
-                    child: ButtonBar(
-                      alignment: MainAxisAlignment.spaceBetween,
-                      overflowDirection: VerticalDirection.down,
-                      overflowButtonSpacing: 12,
-                      children: [
-                        Align(
-                          alignment: Alignment.center,
-                          child: _numSeguidor(
-                            qtd: 48,
-                            text: "Seguidores",
+                  const VerticalSizedBox(3),
+                  Observer(
+                    builder: (_) => Visibility(
+                      visible: controller.userStore.bio.notIsNullOrEmpty(),
+                      child: Column(
+                        children: [
+                          Text(
+                            "Descrição",
+                            style: textTheme.headline1!.copyWith(fontWeight: FontWeight.w600),
                           ),
-                        ),
-                        Align(
-                          alignment: Alignment.center,
-                          child: _numSeguidor(
-                            qtd: 36,
-                            text: "Seguindo",
-                          ),
-                        ),
-                      ],
+                          const VerticalSizedBox(0.5),
+                          Text(controller.userStore.bio ?? ""),
+                        ],
+                      ),
                     ),
                   ),
-                ),
+                  const VerticalSizedBox(5),
+                  Align(
+                    alignment: Alignment.center,
+                    child: SizedBox(
+                      width: 280,
+                      child: Card(
+                        color: AppColors.primary,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 4),
+                          child: ButtonBar(
+                            alignment: MainAxisAlignment.spaceBetween,
+                            overflowDirection: VerticalDirection.down,
+                            overflowButtonSpacing: 12,
+                            children: [
+                              Align(
+                                alignment: Alignment.center,
+                                child: _numSeguidor(
+                                  qtd: 48,
+                                  text: "Seguidores",
+                                ),
+                              ),
+                              Align(
+                                alignment: Alignment.center,
+                                child: _numSeguidor(
+                                  qtd: 36,
+                                  text: "Seguindo",
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ],
-        ),
+            );
+          }
+        },
       ),
     );
   }

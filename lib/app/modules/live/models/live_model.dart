@@ -7,10 +7,19 @@ class LiveModel {
   String? streamKey;
   String? liveId;
   String? playBackId;
+  bool? finalizada;
 
   List<CatalogoModel>? catalogos;
 
   UserModel? user;
 
-  LiveModel(this.id, this.liveId, this.streamKey, this.playBackId, this.catalogos, this.user);
+  LiveModel(
+    this.id,
+    this.liveId,
+    this.streamKey,
+    this.playBackId,
+    this.finalizada,
+    this.catalogos,
+    this.user,
+  );
 }

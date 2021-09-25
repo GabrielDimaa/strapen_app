@@ -7,8 +7,9 @@ import 'package:transparent_image/transparent_image.dart';
 class FotoPerfilWidget extends StatelessWidget {
   final dynamic foto;
   final double? radiusSize;
+  final bool isAovivo;
 
-  const FotoPerfilWidget({required this.foto, this.radiusSize});
+  const FotoPerfilWidget({required this.foto, this.radiusSize, this.isAovivo = false});
 
   @override
   Widget build(BuildContext context) {
@@ -27,19 +28,38 @@ class FotoPerfilWidget extends StatelessWidget {
             ).image;
         }
 
-        return CircleAvatar(
-          radius: radius,
-          backgroundColor: AppColors.primary,
-          child: CircleAvatar(
-            radius: radius - 3,
-            backgroundColor: AppColors.background,
-            child: image != null
-                ? CircleAvatar(
-              radius: radius - 8,
-              backgroundImage: image,
-            )
-                : Container(),
-          ),
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            CircleAvatar(
+              radius: radius,
+              backgroundColor: isAovivo ? AppColors.error : AppColors.primary,
+              child: CircleAvatar(
+                radius: radius - 3,
+                backgroundColor: AppColors.background,
+                child: image != null
+                    ? CircleAvatar(
+                  radius: radius - 8,
+                  backgroundImage: image,
+                )
+                    : Container(),
+              ),
+            ),
+            Visibility(
+              visible: isAovivo,
+              child: Card(
+                margin: const EdgeInsets.only(top: 4),
+                color: AppColors.error,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Padding(
+                  padding: const EdgeInsets.all(4),
+                  child: const Text("AO VIVO"),
+                ),
+              ),
+            ),
+          ],
         );
       },
     );
