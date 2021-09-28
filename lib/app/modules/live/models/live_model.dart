@@ -9,6 +9,8 @@ class LiveModel {
   String? playBackId;
   bool? finalizada;
 
+  double? aspectRatio;
+
   List<CatalogoModel>? catalogos;
 
   UserModel? user;
@@ -19,6 +21,7 @@ class LiveModel {
     this.streamKey,
     this.playBackId,
     this.finalizada,
+    this.aspectRatio,
     this.catalogos,
     this.user,
   );

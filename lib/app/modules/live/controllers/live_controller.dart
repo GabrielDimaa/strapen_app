@@ -16,12 +16,14 @@ import 'package:strapen_app/app/modules/live/constants/routes.dart';
 import 'package:strapen_app/app/modules/live/models/live_model.dart';
 import 'package:strapen_app/app/modules/live/services/ilive_service.dart';
 import 'package:strapen_app/app/modules/live/stores/camera_store.dart';
+import 'package:strapen_app/app/modules/live/stores/chewie_store.dart';
 import 'package:strapen_app/app/modules/produto/factories/produto_factory.dart';
 import 'package:strapen_app/app/modules/produto/repositories/iproduto_repository.dart';
 import 'package:strapen_app/app/modules/produto/stores/produto_store.dart';
 import 'package:strapen_app/app/modules/start/constants/routes.dart';
 import 'package:strapen_app/app/modules/user/repositories/iuser_repository.dart';
 import 'package:strapen_app/app/shared/components/dialog/concluido_dialog.dart';
+import 'package:strapen_app/app/shared/components/dialog/dialog_default.dart';
 import 'package:strapen_app/app/shared/components/dialog/error_dialog.dart';
 import 'package:strapen_app/app/shared/components/dialog/loading_dialog.dart';
 import 'package:strapen_app/app/shared/extensions/string_extension.dart';
@@ -51,6 +53,9 @@ abstract class _LiveController extends Disposable with Store {
   CameraStore cameraStore = CameraStore();
 
   @observable
+  ChewieStore chewieStore = ChewieStore();
+
+  @observable
   ObservableList<CatalogoStore> catalogos = ObservableList<CatalogoStore>();
 
   @observable
@@ -66,10 +71,10 @@ abstract class _LiveController extends Disposable with Store {
   bool loadingSendComentario = false;
 
   @action
-  void setLoadingSendComentario(bool value) => loadingSendComentario = value;
+  void setCameraStore(CameraStore value) => cameraStore = value;
 
   @action
-  void setCameraStore(CameraStore value) => cameraStore = value;
+  void setChewieStore(ChewieStore value) => chewieStore = value;
 
   @action
   void setCatalogos(ObservableList<CatalogoStore> value) => catalogos = value;
@@ -82,6 +87,9 @@ abstract class _LiveController extends Disposable with Store {
 
   @action
   void setLoading(bool value) => loading = value;
+
+  @action
+  void setLoadingSendComentario(bool value) => loadingSendComentario = value;
 
   @action
   Future<void> loadCreateLive(BuildContext context) async {
@@ -116,12 +124,27 @@ abstract class _LiveController extends Disposable with Store {
   }
 
   @action
+  Future<void> loadAssistirLive(BuildContext context, LiveModel liveModel) async {
+    try {
+      setLoading(true);
+
+      setLiveModel(liveModel);
+
+      await chewieStore.getInstance(this.liveModel!.playBackId!, this.liveModel!.aspectRatio!);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  @action
   Future<void> initLive(BuildContext context) async {
     if (catalogos.isEmpty) throw Exception("Selecione pelo menos um catálogo para exibir na Live.");
 
     await LoadingDialog.show(context, "Entrando ao vivo...", () async {
+      //Solicita criação da Live na API e adiciona os valores no model para salvar no banco.
       LiveModel model = await _liveService.solicitarLive(appController.userModel!);
       model.catalogos = catalogos.map((e) => e.toModel()).toList();
+      model.aspectRatio = cameraStore.cameraController!.value.aspectRatio;
       model = await _liveService.save(model);
 
       if (model.id == null) throw Exception("Houve um erro ao iniciar sua Live.\nSe o erro persistir reinicie o aplicativo.");
@@ -167,6 +190,23 @@ abstract class _LiveController extends Disposable with Store {
   }
 
   @action
+  Future<void> stopWatch(BuildContext context) async {
+    await DialogDefault.show(
+      context: context,
+      title: const Text("Parar de DialogDefault.showassistir"),
+      content: const Text("Deseja parar de assistir?\nSe você reservou produtos eles serão mostrados no seu perfil. Entre em contato com a empresa para receber seu produto."),
+      actions: [
+        TextButton(
+          child: Text("Confirmar"),
+          onPressed: () async {
+            Modular.to.navigate(START_ROUTE);
+          },
+        ),
+      ]
+    );
+  }
+
+  @action
   Future<void> inserirCatalogos() async {
     List<CatalogoModel>? catalogosModel = await Modular.to.pushNamed(CATALOGO_ROUTE + CATALOGO_SELECT_ROUTE, arguments: catalogos.map((e) => e.toModel()).toList());
     if (catalogosModel != null) {
@@ -198,5 +238,7 @@ abstract class _LiveController extends Disposable with Store {
   void dispose() async {
     _produtoRepository.stopListener();
     await cameraStore.cameraController?.dispose();
+    await chewieStore.videoPlayerController?.dispose();
+    chewieStore.chewieController?.dispose();
   }
 }

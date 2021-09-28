@@ -2,14 +2,16 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:strapen_app/app/app_widget.dart';
+import 'package:strapen_app/app/modules/live/models/live_model.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class FotoPerfilWidget extends StatelessWidget {
   final dynamic foto;
   final double? radiusSize;
-  final bool isAovivo;
+  final LiveModel? liveModel;
+  final VoidCallback? onTap;
 
-  const FotoPerfilWidget({required this.foto, this.radiusSize, this.isAovivo = false});
+  const FotoPerfilWidget({required this.foto, this.radiusSize, this.liveModel, this.onTap});
 
   @override
   Widget build(BuildContext context) {
@@ -28,38 +30,41 @@ class FotoPerfilWidget extends StatelessWidget {
             ).image;
         }
 
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            CircleAvatar(
-              radius: radius,
-              backgroundColor: isAovivo ? AppColors.error : AppColors.primary,
-              child: CircleAvatar(
-                radius: radius - 3,
-                backgroundColor: AppColors.background,
-                child: image != null
-                    ? CircleAvatar(
-                  radius: radius - 8,
-                  backgroundImage: image,
-                )
-                    : Container(),
-              ),
-            ),
-            Visibility(
-              visible: isAovivo,
-              child: Card(
-                margin: const EdgeInsets.only(top: 4),
-                color: AppColors.error,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.all(4),
-                  child: const Text("AO VIVO"),
+        return GestureDetector(
+          onTap: liveModel?.finalizada ?? false ? onTap : null,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              CircleAvatar(
+                radius: radius,
+                backgroundColor: liveModel?.finalizada ?? false ? AppColors.error : AppColors.primary,
+                child: CircleAvatar(
+                  radius: radius - 3,
+                  backgroundColor: AppColors.background,
+                  child: image != null
+                      ? CircleAvatar(
+                    radius: radius - 8,
+                    backgroundImage: image,
+                  )
+                      : Container(),
                 ),
               ),
-            ),
-          ],
+              Visibility(
+                visible: liveModel?.finalizada ?? false,
+                child: Card(
+                  margin: const EdgeInsets.only(top: 4),
+                  color: AppColors.error,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(4),
+                    child: const Text("AO VIVO"),
+                  ),
+                ),
+              ),
+            ],
+          ),
         );
       },
     );

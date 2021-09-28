@@ -1,6 +1,7 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'package:strapen_app/app/app_controller.dart';
+import 'package:strapen_app/app/modules/live/constants/routes.dart';
 import 'package:strapen_app/app/modules/live/models/live_model.dart';
 import 'package:strapen_app/app/modules/live/repositories/ilive_repository.dart';
 import 'package:strapen_app/app/modules/user/constants/routes.dart';
@@ -42,7 +43,7 @@ abstract class _UserController with Store {
     try {
       setLoading(true);
 
-      if (!isEditavel) {
+      if (!isPerfilPessoal) {
         setLiveModel(await _liveRepository.isAovivo(userStore.toModel()));
       }
     } finally {
@@ -55,6 +56,11 @@ abstract class _UserController with Store {
     await Modular.to.pushNamed(USER_ROUTE + USER_EDITAR_PERFIL_ROUTE);
   }
 
+  @action
+  Future<void> toAssistirLive() async {
+    await Modular.to.pushNamed(LIVE_ROUTE + LIVE_ASSISTIR_ROUTE, arguments: liveModel);
+  }
+
   @computed
-  bool get isEditavel => _appController.userModel!.id == userStore.id;
+  bool get isPerfilPessoal => _appController.userModel!.id == userStore.id;
 }

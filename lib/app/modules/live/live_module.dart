@@ -6,6 +6,7 @@ import 'package:strapen_app/app/modules/chat/repositories/chat_repository.dart';
 import 'package:strapen_app/app/modules/chat/repositories/ichat_repository.dart';
 import 'package:strapen_app/app/modules/live/constants/routes.dart';
 import 'package:strapen_app/app/modules/live/controllers/live_controller.dart';
+import 'package:strapen_app/app/modules/live/pages/live_assistir_page.dart';
 import 'package:strapen_app/app/modules/live/pages/live_create_page.dart';
 import 'package:strapen_app/app/modules/live/pages/live_primeira_page.dart';
 import 'package:strapen_app/app/modules/live/pages/live_transmitir_page.dart';
@@ -42,8 +43,8 @@ class LiveModule extends Module {
 
   @override
   final List<ModularRoute> routes = [
-    ChildRoute(LIVE_TRANSMITIR_ROUTE, child: (_, args) => LiveTransmitirPage(cameraDirection: args.data)),
-    ChildRoute(LIVE_ASSISTIR_ROUTE, child: (_, args) => LiveTransmitirPage(cameraDirection: args.data)),
+    ChildRoute(LIVE_TRANSMITIR_ROUTE, child: (_, args) => LiveTransmitirPage()),
+    ChildRoute(LIVE_ASSISTIR_ROUTE, child: (_, args) => LiveAssistirPage(model: args.data)),
     ChildRoute(LIVE_CREATE_ROUTE, child: (_, args) => LiveCreatePage()),
     ChildRoute(LIVE_PRIMEIRA_ROUTE, child: (_, args) => LivePrimeiraPage()),
   ];

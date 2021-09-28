@@ -41,7 +41,7 @@ class _UserPageState extends ModularState<UserPage, UserController> {
         actionsWidgets: [
           Observer(
             builder: (_) => Visibility(
-              visible: controller.isEditavel,
+              visible: controller.isPerfilPessoal,
               child: CircleButtonAppBar(
                 child: Icon(Icons.edit, color: Colors.white),
                 onTap: () async => await controller.toEditarPerfil(),
@@ -63,33 +63,38 @@ class _UserPageState extends ModularState<UserPage, UserController> {
                   const VerticalSizedBox(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Observer(
                         builder: (_) => FotoPerfilWidget(
                           foto: controller.userStore.foto,
                           radiusSize: 60,
-                          isAovivo: !(controller.liveModel?.finalizada ?? true),
+                          liveModel: controller.liveModel,
+                          onTap: () async => await controller.toAssistirLive(),
                         ),
                       ),
                       const HorizontalSizedBox(2),
                       Expanded(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Observer(
-                              builder: (_) => Text(
-                                controller.userStore.nome!,
-                                overflow: TextOverflow.fade,
-                                style: textTheme.bodyText2!.copyWith(color: AppColors.primary, fontSize: 18),
+                        child: Padding(
+                          padding: const EdgeInsets.only(top: 8),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Observer(
+                                builder: (_) => Text(
+                                  controller.userStore.nome!,
+                                  overflow: TextOverflow.fade,
+                                  style: textTheme.bodyText2!.copyWith(color: AppColors.primary, fontSize: 18),
+                                ),
                               ),
-                            ),
-                            const VerticalSizedBox(0.5),
-                            Observer(builder: (_) => Text("@${controller.userStore.username!}")),
-                            const VerticalSizedBox(0.5),
-                            Observer(builder: (_) => Text(controller.userStore.telefone!)),
-                          ],
+                              const VerticalSizedBox(0.5),
+                              Observer(builder: (_) => Text("@${controller.userStore.username!}")),
+                              const VerticalSizedBox(0.5),
+                              Observer(builder: (_) => Text(controller.userStore.telefone!)),
+                            ],
+                          ),
                         ),
                       ),
                     ],

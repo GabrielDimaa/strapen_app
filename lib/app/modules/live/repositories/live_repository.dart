@@ -20,6 +20,7 @@ class LiveRepository implements ILiveRepository {
     if (model.streamKey.isNullOrEmpty()) throw Exception(messageError);
     if (model.liveId.isNullOrEmpty()) throw Exception(messageError);
     if (model.playBackId.isNullOrEmpty()) throw Exception(messageError);
+    if (model.aspectRatio == null) throw Exception(messageError);
   }
 
   @override
@@ -30,6 +31,7 @@ class LiveRepository implements ILiveRepository {
       ..set<String>(LIVE_STREAM_KEY_COLUMN, model.streamKey!)
       ..set<String>(LIVE_PLAYBACK_ID_COLUMN, model.playBackId!)
       ..set<bool>(LIVE_FINALIZADA_COLUMN, model.finalizada ?? false)
+      ..set<double>(LIVE_ASPECT_RATIO_COLUMN, model.aspectRatio!)
       ..set<ParseUser>(LIVE_USER_COLUMN, ParseUser(null, null, null)
         ..set(USER_ID_COLUMN, model.user!.id!));
 
@@ -44,6 +46,7 @@ class LiveRepository implements ILiveRepository {
       e.get<String>(LIVE_STREAM_KEY_COLUMN),
       e.get<String>(LIVE_PLAYBACK_ID_COLUMN),
       e.get<bool>(LIVE_FINALIZADA_COLUMN),
+      e.get<double>(LIVE_ASPECT_RATIO_COLUMN),
       null,
       UserFactory.newModel()..id = e.get(LIVE_USER_COLUMN).get<String>(USER_ID_COLUMN),
     );

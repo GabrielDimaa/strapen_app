@@ -5,4 +5,5 @@ const String LIVE_PLAYBACK_ID_COLUMN = "playbackId";
 const String LIVE_USER_COLUMN = "user";
 const String LIVE_CATALOGO_COLUMN = "catalogo";
 const String LIVE_FINALIZADA_COLUMN = "finalizada";
+const String LIVE_ASPECT_RATIO_COLUMN = "aspectRatio";
 const String LIVE_DATA_CRIADO_COLUMN = "createdAt";

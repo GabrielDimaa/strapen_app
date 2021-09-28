@@ -30,6 +30,7 @@ class LiveService implements ILiveService {
         (response['playback_ids'] as List).first['id'],
         null,
         null,
+        null,
         user,
       );
     } catch (e) {
