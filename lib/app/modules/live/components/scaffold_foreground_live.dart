@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:strapen_app/app/app_widget.dart';
+import 'package:strapen_app/app/modules/chat/components/chat_widget.dart';
 import 'package:strapen_app/app/modules/chat/components/text_field_chat_widget.dart';
+import 'package:strapen_app/app/modules/chat/models/chat_model.dart';
 import 'package:strapen_app/app/modules/live/components/app_bar_live_widget.dart';
 import 'package:strapen_app/app/modules/live/controllers/live_controller.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/widgets/circle_background_app_bar.dart';
@@ -40,13 +42,13 @@ class ScaffoldForegroundLive extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.end,
                 mainAxisAlignment: MainAxisAlignment.end,
                 children: [
-                  // SizedBox(
-                  //   height: MediaQuery.of(context).size.height / 3,
-                  //   width: MediaQuery.of(context).size.width,
-                  //   child: ChatWidget(
-                  //     model: ChatModel(null, null, controller.appController.userModel!, controller.liveModel),
-                  //   ),
-                  // ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height / 3,
+                    width: MediaQuery.of(context).size.width,
+                    child: ChatWidget(
+                      model: ChatModel(null, null, controller.appController.userModel!, controller.liveModel),
+                    ),
+                  ),
                   const VerticalSizedBox(),
                   Observer(
                     builder: (_) => TextFieldChatWidget(

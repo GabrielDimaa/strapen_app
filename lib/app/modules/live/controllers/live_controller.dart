@@ -127,10 +127,11 @@ abstract class _LiveController extends Disposable with Store {
   Future<void> loadAssistirLive(BuildContext context, LiveModel liveModel) async {
     try {
       setLoading(true);
-
       setLiveModel(liveModel);
 
       await chewieStore.getInstance(this.liveModel!.playBackId!, this.liveModel!.aspectRatio!);
+
+      await _produtoRepository.startListener();
     } finally {
       setLoading(false);
     }
@@ -158,7 +159,7 @@ abstract class _LiveController extends Disposable with Store {
 
       setLiveModel(model);
 
-      //Manter assíncrono para trancar demorar muito o início da Live
+      //Manter assíncrono para não demorar o início da Live
       _userRepository.updateFirstLive(model.user!.id!);
       appController.userModel!.firstLive = false;
 
@@ -172,19 +173,19 @@ abstract class _LiveController extends Disposable with Store {
       try {
         await _liveService.stopLive(liveModel!, cameraStore.cameraController!);
       } finally {
-        await cameraStore.cameraController!.stopVideoStreaming();
+        await cameraStore.cameraController!.stopVideoStreaming().whenComplete(() {
+          Future.delayed(Duration(seconds: 3), () {
+            Modular.to.navigate(START_ROUTE);
+          });
 
-        Future.delayed(Duration(seconds: 3), () {
-          Modular.to.navigate(START_ROUTE);
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) => ConcluidoDialog(
+              message: "Sua Live foi finalizada com sucesso! Você será redirecionado para a tela inicial.",
+            ),
+          );
         });
-
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (_) => ConcluidoDialog(
-            message: "Sua Live foi finalizada com sucesso! Você será redirecionado para a tela inicial.",
-          ),
-        );
       }
     });
   }
@@ -193,8 +194,8 @@ abstract class _LiveController extends Disposable with Store {
   Future<void> stopWatch(BuildContext context) async {
     await DialogDefault.show(
       context: context,
-      title: const Text("Parar de DialogDefault.showassistir"),
-      content: const Text("Deseja parar de assistir?\nSe você reservou produtos eles serão mostrados no seu perfil. Entre em contato com a empresa para receber seu produto."),
+      title: const Text("Parar de assistir"),
+      content: const Text("Deseja parar de assistir?\nSe você reservou produtos eles serão mostrados no seu perfil. Entre em contato com a empresa para receber/retirar seu produto."),
       actions: [
         TextButton(
           child: Text("Confirmar"),

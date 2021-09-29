@@ -32,13 +32,20 @@ class _LiveAssistirPageState extends State<LiveAssistirPage> {
         builder: (_) {
           if (controller.loading)
             return const CircularLoading();
-          else
+          else {
             return Stack(
               fit: StackFit.expand,
               children: [
-                Positioned.fill(
+                Positioned(
                   child: Observer(
-                    builder: (_) => Chewie(controller: controller.chewieStore.chewieController!),
+                    builder: (_) => Column(
+                      children: [
+                        AspectRatio(
+                          aspectRatio: controller.liveModel!.aspectRatio!,
+                          child: Chewie(controller: controller.chewieStore.chewieController!),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 Positioned.fill(
@@ -46,6 +53,7 @@ class _LiveAssistirPageState extends State<LiveAssistirPage> {
                 ),
               ],
             );
+          }
         },
       ),
     );

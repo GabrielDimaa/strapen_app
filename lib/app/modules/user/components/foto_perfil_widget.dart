@@ -31,13 +31,13 @@ class FotoPerfilWidget extends StatelessWidget {
         }
 
         return GestureDetector(
-          onTap: liveModel?.finalizada ?? false ? onTap : null,
+          onTap: !(liveModel?.finalizada ?? true) ? onTap : null,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               CircleAvatar(
                 radius: radius,
-                backgroundColor: liveModel?.finalizada ?? false ? AppColors.error : AppColors.primary,
+                backgroundColor: !(liveModel?.finalizada ?? true) ? AppColors.error : AppColors.primary,
                 child: CircleAvatar(
                   radius: radius - 3,
                   backgroundColor: AppColors.background,
@@ -50,7 +50,7 @@ class FotoPerfilWidget extends StatelessWidget {
                 ),
               ),
               Visibility(
-                visible: liveModel?.finalizada ?? false,
+                visible: !(liveModel?.finalizada ?? true),
                 child: Card(
                   margin: const EdgeInsets.only(top: 4),
                   color: AppColors.error,
