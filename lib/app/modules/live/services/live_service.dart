@@ -1,4 +1,5 @@
 import 'package:camera_with_rtmp/camera.dart';
+import 'package:strapen_app/app/modules/catalogo/models/catalogo_model.dart';
 import 'package:strapen_app/app/modules/live/models/live_model.dart';
 import 'package:strapen_app/app/modules/live/repositories/ilive_repository.dart';
 import 'package:strapen_app/app/modules/live/services/ilive_service.dart';
@@ -55,7 +56,14 @@ class LiveService implements ILiveService {
   }
 
   @override
-  Future<LiveModel> save(LiveModel model) async {
-    return await _liveRepository.save(model);
-  }
+  Future<LiveModel> save(LiveModel model) async => await _liveRepository.save(model);
+
+  @override
+  Future<LiveModel?> isAovivo(UserModel userModel) async => await _liveRepository.isAovivo(userModel);
+
+  @override
+  Future<void> finalizar(LiveModel model) async => await _liveRepository.finalizar(model);
+
+  @override
+  Future<List<CatalogoModel>> getCatalogosLive(String idLive) async => await _liveRepository.getCatalogosLive(idLive);
 }

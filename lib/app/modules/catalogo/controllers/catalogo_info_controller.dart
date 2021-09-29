@@ -32,7 +32,7 @@ abstract class _CatalogoInfoController with Store {
     try {
       setLoading(true);
 
-      CatalogoModel model = await _catalogoRepository.getByIdCatalogo(catalogoStore?.id);
+      CatalogoModel model = await _catalogoRepository.getById(catalogoStore?.id);
       setCatalogoStore(CatalogoFactory.fromModel(model));
     } catch(e) {
       setLoading(false);

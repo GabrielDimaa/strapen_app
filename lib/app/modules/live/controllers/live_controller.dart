@@ -131,6 +131,7 @@ abstract class _LiveController extends Disposable with Store {
 
       await chewieStore.getInstance(this.liveModel!.playBackId!, this.liveModel!.aspectRatio!);
 
+      await _liveService.getCatalogosLive(liveModel.id!);
       await _produtoRepository.startListener();
     } finally {
       setLoading(false);
@@ -152,7 +153,7 @@ abstract class _LiveController extends Disposable with Store {
 
       //Preenche o catálogo com seus respectivos produtos
       for (var it in catalogos) {
-        it.produtos = (await _catalogoRepository.getByIdCatalogo(it.id)).produtos?.map((e) {
+        it.produtos = (await _catalogoRepository.getById(it.id)).produtos?.map((e) {
           return ProdutoFactory.fromModel(e);
         }).toList().asObservable();
       }

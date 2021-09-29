@@ -5,6 +5,6 @@ import 'package:strapen_app/app/shared/interfaces/repository_interface.dart';
 abstract class ICatalogoRepository implements IRepository<CatalogoModel> {
   Future<CatalogoModel> save(CatalogoModel model);
   Future<List<CatalogoModel>?> getByUser(String? idUser);
-  Future<CatalogoModel> getByIdCatalogo(String? id);
+  Future<CatalogoModel> getById(String? id);
   Future<List<ProdutoModel>> getProdutosCatalogo(String? idCatalogo);
 }

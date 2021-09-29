@@ -24,7 +24,7 @@ import 'package:strapen_app/app/shared/config/preferences/session_preferences.da
 class LiveModule extends Module {
   @override
   final List<Bind> binds = [
-    Bind((i) => LiveRepository()),
+    Bind((i) => LiveRepository(i.get<ICatalogoRepository>())),
     Bind((i) => UserRepository(i.get<SessionPreferences>())),
     Bind((i) => CatalogoRepository()),
     Bind((i) => ProdutoRepository()),

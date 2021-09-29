@@ -1,6 +1,7 @@
 import 'package:parse_server_sdk/parse_server_sdk.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
-import 'package:strapen_app/app/modules/catalogo/repositories/catalogo_repository.dart';
+import 'package:strapen_app/app/modules/catalogo/models/catalogo_model.dart';
+import 'package:strapen_app/app/modules/catalogo/repositories/icatalogo_repository.dart';
 import 'package:strapen_app/app/modules/live/constants/columns.dart';
 import 'package:strapen_app/app/modules/live/models/live_model.dart';
 import 'package:strapen_app/app/modules/live/repositories/ilive_repository.dart';
@@ -11,6 +12,10 @@ import 'package:strapen_app/app/shared/extensions/string_extension.dart';
 import 'package:strapen_app/app/shared/utils/parse_errors_utils.dart';
 
 class LiveRepository implements ILiveRepository {
+  final ICatalogoRepository? _catalogoRepository;
+
+  LiveRepository(this._catalogoRepository);
+
   @override
   String className() => "Live";
 
@@ -59,7 +64,7 @@ class LiveRepository implements ILiveRepository {
 
       ParseObject parseLive = toParseObject(model);
       parseLive.addRelation(LIVE_CATALOGO_COLUMN, model.catalogos!.map((e) {
-        return ParseObject(CatalogoRepository().className())..objectId = e.id;
+        return ParseObject(_catalogoRepository!.className())..objectId = e.id;
       }).toList());
 
       ParseResponse response = await parseLive.save();
@@ -113,6 +118,32 @@ class LiveRepository implements ILiveRepository {
       final ParseResponse response = await parseObject.save();
 
       if (!response.success) throw Exception(ParseErrorsUtils.get(response.statusCode));
+    } catch(e) {
+      throw Exception(e);
+    }
+  }
+
+  @override
+  Future<List<CatalogoModel>> getCatalogosLive(String idLive) async {
+    try {
+      QueryBuilder query = QueryBuilder<ParseObject>(ParseObject(_catalogoRepository!.className()))
+        ..whereRelatedTo(LIVE_CATALOGO_COLUMN, className(), idLive);
+
+      ParseResponse response = await query.query();
+
+      if (!response.success) throw Exception(ParseErrorsUtils.get(response.statusCode));
+      List<ParseObject>? parseResponse = response.results as List<ParseObject>?;
+
+      if (parseResponse == null)
+        throw Exception("Houve um erro ao buscar os catálogos.");
+
+      List<CatalogoModel> catalogos = parseResponse.map((e) => _catalogoRepository!.toModel(e)).toList();
+
+      for (var cat in catalogos) {
+        cat.produtos = await _catalogoRepository!.getProdutosCatalogo(cat.id);
+      }
+
+      return catalogos;
     } catch(e) {
       throw Exception(e);
     }

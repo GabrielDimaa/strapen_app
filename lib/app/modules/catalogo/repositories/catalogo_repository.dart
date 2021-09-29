@@ -99,7 +99,7 @@ class CatalogoRepository implements ICatalogoRepository {
   }
 
   @override
-  Future<CatalogoModel> getByIdCatalogo(String? id) async {
+  Future<CatalogoModel> getById(String? id) async {
     try {
       if (id == null) throw Exception("Houve um erro, tente novamente.\nSe o erro persistir, reinicie o aplicativo.");
 
@@ -138,7 +138,7 @@ class CatalogoRepository implements ICatalogoRepository {
       List<ParseObject>? parseResponse = response.results as List<ParseObject>?;
 
       if (parseResponse == null)
-        throw Exception("Houve um erro ao buscar o catálogo.");
+        throw Exception("Houve um erro ao buscar os produtos.");
 
       List<ProdutoModel> produtos = parseResponse.map((e) => ProdutoRepository().toModel(e)).toList();
 

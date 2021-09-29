@@ -1,7 +1,11 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:strapen_app/app/app_controller.dart';
+import 'package:strapen_app/app/modules/catalogo/repositories/catalogo_repository.dart';
+import 'package:strapen_app/app/modules/catalogo/repositories/icatalogo_repository.dart';
 import 'package:strapen_app/app/modules/live/repositories/ilive_repository.dart';
 import 'package:strapen_app/app/modules/live/repositories/live_repository.dart';
+import 'package:strapen_app/app/modules/live/services/ilive_service.dart';
+import 'package:strapen_app/app/modules/live/services/live_service.dart';
 import 'package:strapen_app/app/modules/user/constants/routes.dart';
 import 'package:strapen_app/app/modules/user/controllers/user_controller.dart';
 import 'package:strapen_app/app/modules/user/controllers/user_editar_controller.dart';
@@ -17,8 +21,10 @@ class UserModule extends Module {
   @override
   final List<Bind> binds = [
     Bind((i) => UserRepository(i.get<SessionPreferences>())),
-    Bind((i) => LiveRepository()),
-    Bind((i) => UserController(i.get<ILiveRepository>(), i.get<AppController>())),
+    Bind((i) => CatalogoRepository()),
+    Bind((i) => LiveRepository(i.get<ICatalogoRepository>())),
+    Bind((i) => LiveService(i.get<ILiveRepository>())),
+    Bind((i) => UserController(i.get<ILiveService>(), i.get<AppController>())),
     Bind((i) => UserEditarController(i.get<IUserRepository>(), i.get<AppController>())),
   ];
 
