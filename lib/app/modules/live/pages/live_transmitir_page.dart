@@ -58,7 +58,7 @@ class _LiveTransmitirPageState extends State<LiveTransmitirPage> {
                   ),
                 ),
                 Positioned.fill(
-                  child: ScaffoldForegroundLive(isCriadorLive: true),
+                  child: ScaffoldForegroundLive(isCriadorLive: true, ctx: context),
                 ),
               ],
             );

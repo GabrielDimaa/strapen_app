@@ -7,6 +7,7 @@ import 'package:mobx/mobx.dart';
 import 'package:strapen_app/app/modules/produto/models/produto_model.dart';
 import 'package:strapen_app/app/modules/produto/repositories/iproduto_repository.dart';
 import 'package:strapen_app/app/modules/produto/stores/produto_store.dart';
+import 'package:strapen_app/app/modules/user/constants/columns.dart';
 import 'package:strapen_app/app/modules/user/factories/user_factory.dart';
 import 'package:strapen_app/app/shared/extensions/string_extension.dart';
 import 'package:strapen_app/app/shared/utils/parse_errors_utils.dart';
@@ -39,7 +40,7 @@ class ProdutoRepository implements IProdutoRepository {
       ..set<double>(PRODUTO_PRECO_COLUMN, model.preco!)
       ..set<ParseUser>(
         PRODUTO_ANUNCIANTE_COLUMN,
-        ParseUser(null, null, null)..set(PRODUTO_ID_COLUMN, model.anunciante!.id!),
+        ParseUser(null, null, null)..set(USER_ID_COLUMN, model.anunciante!.id!),
       );
 
     return parseObject;
@@ -54,7 +55,7 @@ class ProdutoRepository implements IProdutoRepository {
       e.get<List>(PRODUTO_FOTOS_COLUMN)?.map((e) => e.url).toList(),
       e.get<int>(PRODUTO_QUANTIDADE_COLUMN),
       e.get(PRODUTO_PRECO_COLUMN) is int ? e.get<int>(PRODUTO_PRECO_COLUMN)?.toDouble() ?? null : e.get<double>(PRODUTO_PRECO_COLUMN),
-      UserFactory.newModel()..id = e.get(PRODUTO_ANUNCIANTE_COLUMN).get<String>(PRODUTO_ID_COLUMN),
+      UserFactory.newModel()..id = e.get(PRODUTO_ANUNCIANTE_COLUMN).get<String>(USER_ID_COLUMN),
     );
   }
 
@@ -85,7 +86,7 @@ class ProdutoRepository implements IProdutoRepository {
       QueryBuilder query = QueryBuilder<ParseObject>(ParseObject(className()))
         ..whereEqualTo(
           PRODUTO_ANUNCIANTE_COLUMN,
-          (ParseUser(null, null, null)..set(PRODUTO_ID_COLUMN, id)).toPointer(),
+          (ParseUser(null, null, null)..set(USER_ID_COLUMN, id)).toPointer(),
         );
 
       ParseResponse response = await query.query();

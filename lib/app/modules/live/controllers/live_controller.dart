@@ -18,8 +18,12 @@ import 'package:strapen_app/app/modules/live/services/ilive_service.dart';
 import 'package:strapen_app/app/modules/live/stores/camera_store.dart';
 import 'package:strapen_app/app/modules/live/stores/chewie_store.dart';
 import 'package:strapen_app/app/modules/produto/factories/produto_factory.dart';
+import 'package:strapen_app/app/modules/produto/models/produto_model.dart';
 import 'package:strapen_app/app/modules/produto/repositories/iproduto_repository.dart';
 import 'package:strapen_app/app/modules/produto/stores/produto_store.dart';
+import 'package:strapen_app/app/modules/reserva/factories/reserva_factory.dart';
+import 'package:strapen_app/app/modules/reserva/models/reserva_model.dart';
+import 'package:strapen_app/app/modules/reserva/repositories/ireserva_repository.dart';
 import 'package:strapen_app/app/modules/start/constants/routes.dart';
 import 'package:strapen_app/app/modules/user/repositories/iuser_repository.dart';
 import 'package:strapen_app/app/shared/components/dialog/concluido_dialog.dart';
@@ -39,6 +43,7 @@ abstract class _LiveController extends Disposable with Store {
   final IChatRepository _chatRepository;
   final IProdutoRepository _produtoRepository;
   final ICatalogoRepository _catalogoRepository;
+  final IReservaRepository _reservaRepository;
 
   _LiveController(
     this.appController,
@@ -47,6 +52,7 @@ abstract class _LiveController extends Disposable with Store {
     this._chatRepository,
     this._produtoRepository,
     this._catalogoRepository,
+    this._reservaRepository,
   );
 
   @observable
@@ -60,6 +66,9 @@ abstract class _LiveController extends Disposable with Store {
 
   @observable
   ObservableList<ProdutoStore> produtos = ObservableList<ProdutoStore>();
+
+  @observable
+  ObservableList<ReservaModel> reservas = ObservableList<ReservaModel>();
 
   @observable
   LiveModel? liveModel;
@@ -81,6 +90,9 @@ abstract class _LiveController extends Disposable with Store {
 
   @action
   void setProdutos(ObservableList<ProdutoStore> value) => produtos = value;
+
+  @action
+  void setReservas(ObservableList<ReservaModel> value) => reservas = value;
 
   @action
   void setLiveModel(LiveModel value) => liveModel = value;
@@ -124,14 +136,26 @@ abstract class _LiveController extends Disposable with Store {
   }
 
   @action
-  Future<void> loadAssistirLive(BuildContext context, LiveModel liveModel) async {
+  Future<void> loadAssistirLive(
+      BuildContext context, LiveModel liveModel) async {
     try {
       setLoading(true);
       setLiveModel(liveModel);
 
-      await chewieStore.getInstance(this.liveModel!.playBackId!, this.liveModel!.aspectRatio!);
+      await chewieStore.getInstance(
+          this.liveModel!.playBackId!, this.liveModel!.aspectRatio!);
 
-      await _liveService.getCatalogosLive(liveModel.id!);
+      List<CatalogoModel> catalogos =
+          await _liveService.getCatalogosLive(liveModel.id!);
+      catalogos.forEach((cat) {
+        produtos.addAll(cat.produtos
+                ?.map((e) => ProdutoFactory.fromModel(e))
+                .toList()
+                .asObservable() ??
+            []);
+        this.catalogos.add(CatalogoFactory.fromModel(cat));
+      });
+
       await _produtoRepository.startListener();
     } finally {
       setLoading(false);
@@ -140,22 +164,30 @@ abstract class _LiveController extends Disposable with Store {
 
   @action
   Future<void> initLive(BuildContext context) async {
-    if (catalogos.isEmpty) throw Exception("Selecione pelo menos um catálogo para exibir na Live.");
+    if (catalogos.isEmpty)
+      throw Exception("Selecione pelo menos um catálogo para exibir na Live.");
 
     await LoadingDialog.show(context, "Entrando ao vivo...", () async {
       //Solicita criação da Live na API e adiciona os valores no model para salvar no banco.
-      LiveModel model = await _liveService.solicitarLive(appController.userModel!);
+      LiveModel model =
+          await _liveService.solicitarLive(appController.userModel!);
       model.catalogos = catalogos.map((e) => e.toModel()).toList();
       model.aspectRatio = cameraStore.cameraController!.value.aspectRatio;
       model = await _liveService.save(model);
 
-      if (model.id == null) throw Exception("Houve um erro ao iniciar sua Live.\nSe o erro persistir reinicie o aplicativo.");
+      if (model.id == null)
+        throw Exception(
+            "Houve um erro ao iniciar sua Live.\nSe o erro persistir reinicie o aplicativo.");
 
       //Preenche o catálogo com seus respectivos produtos
       for (var it in catalogos) {
-        it.produtos = (await _catalogoRepository.getById(it.id)).produtos?.map((e) {
-          return ProdutoFactory.fromModel(e);
-        }).toList().asObservable();
+        it.produtos = (await _catalogoRepository.getById(it.id))
+            .produtos
+            ?.map((e) {
+              return ProdutoFactory.fromModel(e);
+            })
+            .toList()
+            .asObservable();
       }
 
       setLiveModel(model);
@@ -164,7 +196,8 @@ abstract class _LiveController extends Disposable with Store {
       _userRepository.updateFirstLive(model.user!.id!);
       appController.userModel!.firstLive = false;
 
-      Modular.to.navigate(LIVE_ROUTE + LIVE_TRANSMITIR_ROUTE, arguments: cameraStore.currentCamera!.lensDirection);
+      Modular.to.navigate(LIVE_ROUTE + LIVE_TRANSMITIR_ROUTE,
+          arguments: cameraStore.currentCamera!.lensDirection);
     });
   }
 
@@ -174,7 +207,9 @@ abstract class _LiveController extends Disposable with Store {
       try {
         await _liveService.stopLive(liveModel!, cameraStore.cameraController!);
       } finally {
-        await cameraStore.cameraController!.stopVideoStreaming().whenComplete(() {
+        await cameraStore.cameraController!
+            .stopVideoStreaming()
+            .whenComplete(() {
           Future.delayed(Duration(seconds: 3), () {
             Modular.to.navigate(START_ROUTE);
           });
@@ -183,7 +218,8 @@ abstract class _LiveController extends Disposable with Store {
             context: context,
             barrierDismissible: false,
             builder: (_) => ConcluidoDialog(
-              message: "Sua Live foi finalizada com sucesso! Você será redirecionado para a tela inicial.",
+              message:
+                  "Sua Live foi finalizada com sucesso! Você será redirecionado para a tela inicial.",
             ),
           );
         });
@@ -194,25 +230,30 @@ abstract class _LiveController extends Disposable with Store {
   @action
   Future<void> stopWatch(BuildContext context) async {
     await DialogDefault.show(
-      context: context,
-      title: const Text("Parar de assistir"),
-      content: const Text("Deseja parar de assistir?\nSe você reservou produtos eles serão mostrados no seu perfil. Entre em contato com a empresa para receber/retirar seu produto."),
-      actions: [
-        TextButton(
-          child: Text("Confirmar"),
-          onPressed: () async {
-            Modular.to.navigate(START_ROUTE);
-          },
-        ),
-      ]
-    );
+        context: context,
+        title: const Text("Parar de assistir"),
+        content: const Text(
+            "Deseja parar de assistir?\nSe você reservou produtos eles serão mostrados no seu perfil. Entre em contato com a empresa para receber/retirar seu produto."),
+        actions: [
+          TextButton(
+            child: Text("Confirmar"),
+            onPressed: () async {
+              Modular.to.navigate(START_ROUTE);
+            },
+          ),
+        ]);
   }
 
   @action
   Future<void> inserirCatalogos() async {
-    List<CatalogoModel>? catalogosModel = await Modular.to.pushNamed(CATALOGO_ROUTE + CATALOGO_SELECT_ROUTE, arguments: catalogos.map((e) => e.toModel()).toList());
+    List<CatalogoModel>? catalogosModel = await Modular.to.pushNamed(
+        CATALOGO_ROUTE + CATALOGO_SELECT_ROUTE,
+        arguments: catalogos.map((e) => e.toModel()).toList());
     if (catalogosModel != null) {
-      setCatalogos(catalogosModel.map((e) => CatalogoFactory.fromModel(e)).toList().asObservable());
+      setCatalogos(catalogosModel
+          .map((e) => CatalogoFactory.fromModel(e))
+          .toList()
+          .asObservable());
     }
   }
 
@@ -222,7 +263,8 @@ abstract class _LiveController extends Disposable with Store {
       setLoadingSendComentario(true);
       if (comentario.isNullOrEmpty()) return;
 
-      await _chatRepository.sendComentario(ChatModel(null, comentario, appController.userModel!, liveModel));
+      await _chatRepository.sendComentario(
+          ChatModel(null, comentario, appController.userModel!, liveModel));
     } finally {
       setLoadingSendComentario(false);
     }
@@ -233,7 +275,24 @@ abstract class _LiveController extends Disposable with Store {
     if (catalogos.length > 1)
       await CatalogoListBottomSheet.show(context: context);
     else
-      await CatalogoBottomSheet.show(context: context, catalogo: catalogos.first);
+      await CatalogoBottomSheet.show(
+          context: context, catalogo: catalogos.first);
+  }
+
+  @action
+  Future<void> reservarProduto(BuildContext context, ProdutoModel produto) async {
+    try {
+      await LoadingDialog.show(context, "Realizando reserva...", () async {
+        ReservaModel model = await _reservaRepository.save(ReservaFactory.fromProdutoModel(produto)..user = appController.userModel);
+
+        if (model.id == null)
+          throw Exception("Houve um erro ao reservar o produto!");
+
+        reservas.add(model);
+      });
+    } catch (_) {
+      rethrow;
+    }
   }
 
   @override

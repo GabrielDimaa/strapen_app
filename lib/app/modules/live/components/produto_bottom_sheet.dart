@@ -5,6 +5,7 @@ import 'package:strapen_app/app/app_widget.dart';
 import 'package:strapen_app/app/modules/live/controllers/live_controller.dart';
 import 'package:strapen_app/app/modules/produto/components/produto_widget.dart';
 import 'package:strapen_app/app/modules/produto/stores/produto_store.dart';
+import 'package:strapen_app/app/shared/components/dialog/error_dialog.dart';
 
 class ProdutoBottomSheet extends StatefulWidget {
   final ProdutoStore produto;
@@ -21,7 +22,10 @@ class ProdutoBottomSheet extends StatefulWidget {
       backgroundColor: AppColors.background,
       isScrollControlled: true,
       useRootNavigator: true,
-      builder: (_) => ProdutoBottomSheet(produto: produto, context: context,),
+      builder: (_) => ProdutoBottomSheet(
+        produto: produto,
+        context: context,
+      ),
     );
   }
 }
@@ -34,7 +38,16 @@ class _ProdutoBottomSheetState extends State<ProdutoBottomSheet> {
     return Padding(
       padding: EdgeInsets.only(top: MediaQuery.of(widget.context).padding.top),
       child: Observer(
-        builder: (_) => ProdutoWidget(produtoStore: widget.produto),
+        builder: (_) => ProdutoWidget(
+          produtoStore: widget.produto,
+          onPressedReserva: () async {
+            try {
+              await controller.reservarProduto(context, widget.produto.toModel());
+            } catch(e) {
+              ErrorDialog.show(context: context, content: e.toString());
+            }
+          },
+        ),
       ),
     );
   }

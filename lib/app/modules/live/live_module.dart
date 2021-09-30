@@ -17,6 +17,8 @@ import 'package:strapen_app/app/modules/live/services/live_service.dart';
 import 'package:strapen_app/app/modules/produto/controllers/produto_info_controller.dart';
 import 'package:strapen_app/app/modules/produto/repositories/iproduto_repository.dart';
 import 'package:strapen_app/app/modules/produto/repositories/produto_repository.dart';
+import 'package:strapen_app/app/modules/reserva/repositories/ireserva_repository.dart';
+import 'package:strapen_app/app/modules/reserva/repositories/reserva_repository.dart';
 import 'package:strapen_app/app/modules/user/repositories/iuser_repository.dart';
 import 'package:strapen_app/app/modules/user/repositories/user_repository.dart';
 import 'package:strapen_app/app/shared/config/preferences/session_preferences.dart';
@@ -29,6 +31,7 @@ class LiveModule extends Module {
     Bind((i) => CatalogoRepository()),
     Bind((i) => ProdutoRepository()),
     Bind((i) => ChatRepository()),
+    Bind((i) => ReservaRepository()),
     Bind((i) => LiveService(i.get<ILiveRepository>())),
     Bind((i) => LiveController(
           i.get<AppController>(),
@@ -37,6 +40,7 @@ class LiveModule extends Module {
           i.get<IChatRepository>(),
           i.get<IProdutoRepository>(),
           i.get<ICatalogoRepository>(),
+          i.get<IReservaRepository>(),
         )),
     Bind((i) => ProdutoInfoController()),
   ];

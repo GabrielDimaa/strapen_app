@@ -49,7 +49,7 @@ class _LiveAssistirPageState extends State<LiveAssistirPage> {
                   ),
                 ),
                 Positioned.fill(
-                  child: ScaffoldForegroundLive(isCriadorLive: false),
+                  child: ScaffoldForegroundLive(isCriadorLive: false, ctx: context),
                 ),
               ],
             );

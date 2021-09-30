@@ -1,0 +1,10 @@
+const String RESERVA_ID_COLUMN = "objectId";
+const String RESERVA_ID_PRODUTO_COLUMN = "idProduto";
+const String RESERVA_DESCRICAO_COLUMN = "descricao";
+const String RESERVA_DESCRICAO_DETALHADA_COLUMN = "descricaoDetalhada";
+const String RESERVA_QUANTIDADE_COLUMN = "quantidade";
+const String RESERVA_PRECO_COLUMN = "preco";
+const String RESERVA_FOTOS_COLUMN = "fotos";
+const String RESERVA_USER_COLUMN = "user";
+const String RESERVA_ANUNCIANTE_COLUMN = "anunciante";
+const String RESERVA_DATA_HORA_CRIADO_COLUMN = "createdAt";

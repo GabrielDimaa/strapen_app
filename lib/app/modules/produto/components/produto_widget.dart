@@ -6,16 +6,19 @@ import 'package:strapen_app/app/app_widget.dart';
 import 'package:strapen_app/app/modules/produto/stores/produto_store.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/app_bar_default.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/widgets/circle_background_app_bar.dart';
+import 'package:strapen_app/app/shared/components/button/elevated_button_default.dart';
+import 'package:strapen_app/app/shared/components/padding/magin_button_without_scaffold.dart';
 import 'package:strapen_app/app/shared/components/padding/padding_scaffold.dart';
 import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
 import 'package:strapen_app/app/shared/components/widgets/snap_bottom_sheet.dart';
-import 'package:transparent_image/transparent_image.dart';
 import 'package:strapen_app/app/shared/extensions/double_extension.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class ProdutoWidget extends StatefulWidget {
   final ProdutoStore produtoStore;
+  final VoidCallback? onPressedReserva;
 
-  const ProdutoWidget({required this.produtoStore});
+  const ProdutoWidget({required this.produtoStore, this.onPressedReserva});
 
   @override
   _ProdutoWidgetState createState() => _ProdutoWidgetState();
@@ -121,9 +124,16 @@ class _ProdutoWidgetState extends State<ProdutoWidget> {
                           ),
                           const VerticalSizedBox(),
                           Observer(
-                            builder: (_) => Text(
-                              "${widget.produtoStore.quantidade!} ${widget.produtoStore.quantidade! > 1 ? "unidades" : "unidade"}",
-                              style: textTheme.bodyText1!.copyWith(color: Colors.grey, fontSize: 12),
+                            builder: (_) => Visibility(
+                              visible: widget.produtoStore.quantidade == 0,
+                              child: Text(
+                                "Sem unidades",
+                                style: textTheme.bodyText1!.copyWith(color: Colors.red, fontSize: 12),
+                              ),
+                              replacement: Text(
+                                "${widget.produtoStore.quantidade!} ${widget.produtoStore.quantidade! > 1 ? "unidades" : "unidade"}",
+                                style: textTheme.bodyText1!.copyWith(color: Colors.grey, fontSize: 12),
+                              ),
                             ),
                           ),
                           const VerticalSizedBox(0.3),
@@ -149,11 +159,28 @@ class _ProdutoWidgetState extends State<ProdutoWidget> {
                           ),
                           const VerticalSizedBox(2.5),
                           const Divider(),
-                          _tileNavigation(label: "Reserva", onTap: () {}),
-                          const Divider(),
-                          _tileNavigation(label: "Catálogo", onTap: () {}),
-                          const Divider(),
+                          Visibility(
+                            visible: widget.onPressedReserva == null,
+                            child: Column(
+                              children: [
+                                _tileNavigation(label: "Reserva", onTap: () {}),
+                                const Divider(),
+                                _tileNavigation(label: "Catálogo", onTap: () {}),
+                                const Divider(),
+                              ],
+                            ),
+                          ),
                         ],
+                      ),
+                    ),
+                    Visibility(
+                      visible: widget.onPressedReserva != null,
+                      child: Padding(
+                        padding: const MarginButtonWithoutScaffold(),
+                        child: ElevatedButtonDefault(
+                          child: const Text("Reservar"),
+                          onPressed: (widget.produtoStore.quantidade ?? 0) > 0 ? widget.onPressedReserva : null,
+                        ),
                       ),
                     ),
                   ],
