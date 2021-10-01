@@ -47,6 +47,7 @@ class _AuthPageState extends ModularState<AuthPage, AuthController> {
                     padding: PaddingScaffold(),
                     child: Column(
                       children: [
+                        const VerticalSizedBox(),
                         Text(
                           "Faça login agora para assistir ou criar Lives com seu catálogo de produtos.",
                           style: textTheme.bodyText2,
