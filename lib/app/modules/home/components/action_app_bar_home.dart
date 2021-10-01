@@ -13,6 +13,7 @@ class ActionAppBarHome extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
+      splashColor: AppColors.secondary,
       borderRadius: borderRadius,
       child: Container(
         padding: const EdgeInsets.symmetric(vertical: 7, horizontal: 11),

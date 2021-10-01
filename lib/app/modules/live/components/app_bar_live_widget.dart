@@ -4,7 +4,6 @@ import 'package:strapen_app/app/app_widget.dart';
 import 'package:strapen_app/app/modules/live/controllers/live_controller.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/app_bar_default.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/widgets/circle_background_app_bar.dart';
-import 'package:strapen_app/app/shared/components/dialog/error_dialog.dart';
 import 'package:strapen_app/app/shared/components/sized_box/horizontal_sized_box.dart';
 
 class AppBarLiveWidget extends StatelessWidget with PreferredSizeWidget {
@@ -46,54 +45,15 @@ class AppBarLiveWidget extends StatelessWidget with PreferredSizeWidget {
         ],
       ),
       actionsWidgets: [
-        Visibility(
-          visible: isCriadorLive,
-          child: PopupMenuButton(
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-            elevation: 4,
-            onSelected: (index) async {
-              switch (index) {
-                case 0:
-                  try {
-                    controller.setLoading(true);
-                    await controller.cameraStore.alterarDirecaoCamera();
-                  } catch (e) {
-                    ErrorDialog.show(context: context, content: e.toString());
-                  } finally {
-                    controller.setLoading(false);
-                  }
-                  break;
-                case 1:
-                  await controller.stopLive(context);
-                  break;
-              }
-            },
-            child: CircleButtonAppBar(
-              color: AppColors.opaci.withOpacity(0.4),
-              child: Icon(Icons.more_vert, color: Colors.white),
-            ),
-            itemBuilder: (context) {
-              return [
-                PopupMenuItem(
-                  value: 0,
-                  enabled: controller.cameraStore.hasBackAndFront,
-                  child: const Text("Alterar câmera"),
-                ),
-                PopupMenuItem(
-                  value: 1,
-                  child: Text(
-                    "Terminar Live",
-                    style: TextStyle(color: AppColors.error),
-                  ),
-                ),
-              ];
-            },
-          ),
-          replacement: CircleButtonAppBar(
-            color: AppColors.opaci.withOpacity(0.4),
-            child: Icon(Icons.close, color: Colors.white),
-            onTap: () async => await controller.stopWatch(context),
-          ),
+        CircleButtonAppBar(
+          color: AppColors.opaci.withOpacity(0.4),
+          child: Icon(Icons.close, color: Colors.white),
+          onTap: () async {
+            if (isCriadorLive)
+              await controller.stopLive(context);
+            else
+              await controller.stopWatch(context);
+          },
         ),
       ],
     );

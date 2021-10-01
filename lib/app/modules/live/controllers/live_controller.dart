@@ -194,41 +194,65 @@ abstract class _LiveController extends Disposable with Store {
 
   @action
   Future<void> stopLive(BuildContext context) async {
-    await LoadingDialog.show(context, "Finalizando...", () async {
-      try {
-        await _liveService.stopLive(liveModel!, cameraStore.cameraController!);
-      } finally {
-        await cameraStore.cameraController!.stopVideoStreaming().whenComplete(() {
-          Future.delayed(Duration(seconds: 3), () {
-            Modular.to.navigate(START_ROUTE);
-          });
+    bool? confirm = await DialogDefault.show(
+      context: context,
+      title: const Text("Encerrar transmissão"),
+      content: const Text("Deseja encerrar sua Live?"),
+      actions: [
+        TextButton(
+          child: Text("Confirmar"),
+          onPressed: () async {
+            Modular.to.pop(true);
+          },
+        ),
+      ],
+    );
 
-          showDialog(
-            context: context,
-            barrierDismissible: false,
-            builder: (_) => ConcluidoDialog(
-              message: "Sua Live foi finalizada com sucesso! Você será redirecionado para a tela inicial.",
-            ),
-          );
-        });
-      }
-    });
+    if (confirm ?? false) {
+      await LoadingDialog.show(context, "Finalizando...", () async {
+        try {
+          await _liveService.stopLive(liveModel!, cameraStore.cameraController!);
+        } finally {
+          await cameraStore.cameraController!.stopVideoStreaming().whenComplete(() {
+            Future.delayed(Duration(seconds: 3), () {
+              Modular.to.navigate(START_ROUTE);
+            });
+
+            showDialog(
+              context: context,
+              barrierDismissible: false,
+              builder: (_) => ConcluidoDialog(
+                message: "Sua Live foi finalizada com sucesso! Você será redirecionado para a tela inicial.",
+              ),
+            );
+          });
+        }
+      });
+    }
   }
 
   @action
   Future<void> stopWatch(BuildContext context) async {
-    await DialogDefault.show(
+    bool confirm = true;
+
+    if (reservas.isNotEmpty) {
+      confirm = await DialogDefault.show(
         context: context,
         title: const Text("Parar de assistir"),
-        content: const Text("Deseja parar de assistir?\nSe você reservou produtos eles serão mostrados no seu perfil. Entre em contato com a empresa para receber/retirar seu produto."),
+        content: const Text("Deseja parar de assistir?\nSeus produtos reservados serão mostrados no seu perfil."),
         actions: [
           TextButton(
             child: Text("Confirmar"),
             onPressed: () async {
-              Modular.to.navigate(START_ROUTE);
+              Modular.to.pop(true);
             },
           ),
-        ]);
+        ],
+      );
+    }
+
+    if (confirm)
+      Modular.to.navigate(START_ROUTE);
   }
 
   @action

@@ -15,9 +15,9 @@ class ScaffoldForegroundLive extends StatelessWidget {
   final LiveController controller = Modular.get<LiveController>();
 
   final bool isCriadorLive;
-  final BuildContext ctx;
+  final BuildContext context;
 
-  ScaffoldForegroundLive({required this.isCriadorLive, required this.ctx});
+  ScaffoldForegroundLive({required this.isCriadorLive, required this.context});
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +35,7 @@ class ScaffoldForegroundLive extends StatelessWidget {
               child: CircleButtonAppBar(
                 color: AppColors.opaci.withOpacity(0.4),
                 child: Icon(Icons.ballot),
-                onTap: () async => await controller.showCatalogoBottomSheet(ctx),
+                onTap: () async => await controller.showCatalogoBottomSheet(this.context),
               ),
             ),
             Expanded(

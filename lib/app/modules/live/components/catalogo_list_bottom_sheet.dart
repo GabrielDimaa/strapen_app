@@ -13,6 +13,10 @@ import 'package:strapen_app/app/shared/components/widgets/snap_bottom_sheet.dart
 import 'package:strapen_app/app/shared/extensions/datetime_extension.dart';
 
 class CatalogoListBottomSheet extends StatefulWidget {
+  final BuildContext context;
+
+  const CatalogoListBottomSheet({required this.context});
+
   @override
   _CatalogoListBottomSheetState createState() => _CatalogoListBottomSheetState();
 
@@ -27,7 +31,7 @@ class CatalogoListBottomSheet extends StatefulWidget {
         ),
       ),
       isScrollControlled: true,
-      builder: (_) => CatalogoListBottomSheet(),
+      builder: (_) => CatalogoListBottomSheet(context: context,),
     );
   }
 }
@@ -57,7 +61,7 @@ class _CatalogoListBottomSheetState extends State<CatalogoListBottomSheet> {
                       title: cat.descricao!,
                       subtitle: cat.dataCriado!.formated,
                       onTap: () async => await CatalogoBottomSheet.show(
-                        context: context,
+                        context: widget.context,
                         catalogo: cat,
                       ),
                     );

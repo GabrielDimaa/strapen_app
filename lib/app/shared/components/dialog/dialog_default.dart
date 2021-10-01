@@ -54,7 +54,7 @@ class _DialogDefaultState extends State<DialogDefault> {
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              TextButton(onPressed: () => Modular.to.pop(), child: Text(widget.labelButtonDefault ?? "Cancelar")),
+              TextButton(onPressed: () => Modular.to.pop(false), child: Text(widget.labelButtonDefault ?? "Cancelar")),
             ]..addAll(widget.actions ?? []),
           ),
         ),
