@@ -15,44 +15,38 @@ class ScaffoldForegroundLive extends StatelessWidget {
   final LiveController controller = Modular.get<LiveController>();
 
   final bool isCriadorLive;
+  final double aspectRatio;
   final BuildContext context;
 
-  ScaffoldForegroundLive({required this.isCriadorLive, required this.context});
+  ScaffoldForegroundLive({required this.isCriadorLive, required this.aspectRatio, required this.context});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: Colors.transparent,
-      appBar: AppBarLiveWidget(isCriadorLive: isCriadorLive),
-      body: SafeArea(
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.end,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 12, right: 20),
-              child: CircleButtonAppBar(
-                color: AppColors.opaci.withOpacity(0.4),
-                child: Icon(Icons.ballot),
-                onTap: () async => await controller.showCatalogoBottomSheet(this.context),
-              ),
-            ),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height / 3,
-                    width: MediaQuery.of(context).size.width,
-                    child: ChatWidget(
-                      model: ChatModel(null, null, controller.appController.userModel!, controller.liveModel),
-                    ),
+      body: Stack(
+        children: [
+          SizedBox(
+            width: double.infinity,
+            height: MediaQuery.of(context).size.width / aspectRatio,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisSize: MainAxisSize.max,
+              children: [
+                SizedBox(
+                  height: MediaQuery.of(context).size.height / 4,
+                  width: MediaQuery.of(context).size.width,
+                  child: ChatWidget(
+                    model: ChatModel(null, null, controller.appController.userModel!, controller.liveModel),
                   ),
-                  const VerticalSizedBox(),
-                  Observer(
-                    builder: (_) => TextFieldChatWidget(
+                ),
+                const VerticalSizedBox(),
+                Observer(
+                  builder: (_) => Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: TextFieldChatWidget(
                       loading: controller.loadingSendComentario,
                       sendComentario: (String? comentario) {
                         try {
@@ -63,11 +57,25 @@ class ScaffoldForegroundLive extends StatelessWidget {
                       },
                     ),
                   ),
-                ],
-              ),
+                ),
+              ],
             ),
-          ],
-        ),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.end,
+            children: [
+              AppBarLiveWidget(isCriadorLive: isCriadorLive),
+              Padding(
+                padding: const EdgeInsets.only(top: 12, right: 20),
+                child: CircleButtonAppBar(
+                  color: AppColors.opaci.withOpacity(0.4),
+                  child: Icon(Icons.shopping_cart),
+                  onTap: () async => await controller.showCatalogoBottomSheet(this.context),
+                ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

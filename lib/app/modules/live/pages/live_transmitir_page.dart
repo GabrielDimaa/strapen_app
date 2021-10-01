@@ -31,34 +31,36 @@ class _LiveTransmitirPageState extends State<LiveTransmitirPage> {
             return const CircularLoading();
           } else {
             return Stack(
-              fit: StackFit.expand,
               children: [
-                Positioned.fill(
-                  child: Observer(
-                    builder: (_) {
-                      if (!(controller.cameraStore.cameraController?.value.isInitialized ?? false)) {
-                        return Center(
-                          child: Text(
-                            "Permita o Strapen acessar sua câmera para iniciar a Live.",
-                            style: textTheme.bodyText2,
-                            textAlign: TextAlign.center,
-                          ),
-                        );
-                      } else {
-                        return Stack(
-                          children: [
-                            AspectRatio(
+                Observer(
+                  builder: (_) {
+                    if (!(controller.cameraStore.cameraController?.value.isInitialized ?? false)) {
+                      return Center(
+                        child: Text(
+                          "Permita o Strapen acessar sua câmera para iniciar a Live.",
+                          style: textTheme.bodyText2,
+                          textAlign: TextAlign.center,
+                        ),
+                      );
+                    } else {
+                      return Stack(
+                        children: [
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(16),
+                            child: AspectRatio(
                               aspectRatio: controller.cameraStore.cameraController!.value.aspectRatio,
                               child: CameraPreview(controller.cameraStore.cameraController!),
                             ),
-                          ],
-                        );
-                      }
-                    },
-                  ),
-                ),
-                Positioned.fill(
-                  child: ScaffoldForegroundLive(isCriadorLive: true, context: context),
+                          ),
+                          ScaffoldForegroundLive(
+                            isCriadorLive: true,
+                            aspectRatio: controller.cameraStore.cameraController!.value.aspectRatio,
+                            context: context,
+                          ),
+                        ],
+                      );
+                    }
+                  },
                 ),
               ],
             );
