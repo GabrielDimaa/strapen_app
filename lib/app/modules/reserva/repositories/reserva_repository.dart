@@ -21,7 +21,7 @@ class ReservaRepository implements IReservaRepository {
     if ((model.preco ?? 0) <= 0) throw Exception(messageError());
     if ((model.fotos?.length ?? 0) == 0) throw Exception(messageError());
     if (model.user?.id == null) throw Exception(messageError());
-    if (model.anunciante?.id == null) throw Exception(messageError());
+    if (model.anunciante == null) throw Exception(messageError());
   }
 
   @override
@@ -33,15 +33,12 @@ class ReservaRepository implements IReservaRepository {
       ..set<String>(RESERVA_DESCRICAO_DETALHADA_COLUMN, model.descricaoDetalhada!)
       ..set<int>(RESERVA_QUANTIDADE_COLUMN, model.quantidade!)
       ..set<double>(RESERVA_PRECO_COLUMN, model.preco!)
-      ..set<List<String>>(RESERVA_FOTOS_COLUMN, model.fotos!)
+      ..set<List>(RESERVA_FOTOS_COLUMN, model.fotos!)
       ..set<ParseUser>(
         RESERVA_USER_COLUMN,
         ParseUser(null, null, null)..set(USER_ID_COLUMN, model.user!.id!),
       )
-      ..set<ParseUser>(
-        RESERVA_ANUNCIANTE_COLUMN,
-        ParseUser(null, null, null)..set(USER_ID_COLUMN, model.anunciante!.id!),
-      );
+      ..set<String>(RESERVA_ANUNCIANTE_COLUMN, model.anunciante!);
   }
 
   @override
@@ -55,7 +52,7 @@ class ReservaRepository implements IReservaRepository {
       e.get(RESERVA_PRECO_COLUMN) is int ? e.get<int>(RESERVA_PRECO_COLUMN)?.toDouble() ?? null : e.get<double>(RESERVA_PRECO_COLUMN),
       e.get<List<String>>(RESERVA_FOTOS_COLUMN)?.map((e) => e).toList(),
       UserFactory.newModel()..id = e.get(RESERVA_USER_COLUMN).get<String>(USER_ID_COLUMN),
-      UserFactory.newModel()..id = e.get(RESERVA_ANUNCIANTE_COLUMN).get<String>(USER_ID_COLUMN),
+      e.get<String>(RESERVA_ANUNCIANTE_COLUMN),
       e.get<DateTime>(RESERVA_DATA_HORA_CRIADO_COLUMN),
     );
   }
@@ -72,10 +69,9 @@ class ReservaRepository implements IReservaRepository {
       if (!response.success) throw Exception(ParseErrorsUtils.get(response.statusCode));
       ParseObject parseResponse = (response.results as List<dynamic>).first;
 
-      ReservaModel reservaModelResponse = toModel(parseResponse);
-      model.id = reservaModelResponse.id;
+      ReservaModel reservaModel = toModel(parseResponse);
 
-      return model;
+      return reservaModel;
     } catch(e) {
       throw Exception(e);
     }

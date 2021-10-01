@@ -17,8 +17,9 @@ import 'package:transparent_image/transparent_image.dart';
 class ProdutoWidget extends StatefulWidget {
   final ProdutoStore produtoStore;
   final VoidCallback? onPressedReserva;
+  final bool reservadoSuccess;
 
-  const ProdutoWidget({required this.produtoStore, this.onPressedReserva});
+  const ProdutoWidget({required this.produtoStore, this.onPressedReserva, this.reservadoSuccess = false});
 
   @override
   _ProdutoWidgetState createState() => _ProdutoWidgetState();
@@ -85,15 +86,9 @@ class _ProdutoWidgetState extends State<ProdutoWidget> {
         child: Column(
           mainAxisSize: MainAxisSize.max,
           children: [
-            Observer(
-              builder: (_) => Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: widget.produtoStore.fotos.asMap().entries.map((e) {
-                  return Observer(
-                    builder: (_) => _itemIndicator(e.key == currentImage),
-                  );
-                }).toList(),
-              ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: widget.produtoStore.fotos.asMap().entries.map((e) => _itemIndicator(e.key == currentImage)).toList(),
             ),
             const VerticalSizedBox(1),
             Expanded(
@@ -123,25 +118,46 @@ class _ProdutoWidgetState extends State<ProdutoWidget> {
                             ),
                           ),
                           const VerticalSizedBox(),
-                          Observer(
-                            builder: (_) => Visibility(
-                              visible: widget.produtoStore.quantidade == 0,
-                              child: Text(
-                                "Sem unidades",
-                                style: textTheme.bodyText1!.copyWith(color: Colors.red, fontSize: 12),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                children: [
+                                  Observer(
+                                    builder: (_) => Visibility(
+                                      visible: widget.produtoStore.quantidade == 0,
+                                      child: Text(
+                                        "Sem unidades",
+                                        style: textTheme.bodyText1!.copyWith(color: Colors.red, fontSize: 12),
+                                      ),
+                                      replacement: Text(
+                                        "${widget.produtoStore.quantidade!} ${widget.produtoStore.quantidade! > 1 ? "unidades" : "unidade"}",
+                                        style: textTheme.bodyText1!.copyWith(color: Colors.grey, fontSize: 12),
+                                      ),
+                                    ),
+                                  ),
+                                  const VerticalSizedBox(0.3),
+                                  Observer(
+                                    builder: (_) => Text(
+                                      widget.produtoStore.preco!.formatReal(),
+                                      style: textTheme.bodyText2!.copyWith(color: AppColors.primary, fontSize: 18),
+                                    ),
+                                  ),
+                                ],
                               ),
-                              replacement: Text(
-                                "${widget.produtoStore.quantidade!} ${widget.produtoStore.quantidade! > 1 ? "unidades" : "unidade"}",
-                                style: textTheme.bodyText1!.copyWith(color: Colors.grey, fontSize: 12),
+                              Visibility(
+                                visible: widget.reservadoSuccess,
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(24),
+                                    border: Border.all(color: AppColors.primary),
+                                    color: AppColors.primaryOpaci,
+                                  ),
+                                  child: Text("Reservado", style: TextStyle(color: AppColors.primary)),
+                                ),
                               ),
-                            ),
-                          ),
-                          const VerticalSizedBox(0.3),
-                          Observer(
-                            builder: (_) => Text(
-                              widget.produtoStore.preco!.formatReal(),
-                              style: textTheme.bodyText2!.copyWith(color: AppColors.primary, fontSize: 18),
-                            ),
+                            ],
                           ),
                           const VerticalSizedBox(2.5),
                           const Divider(),

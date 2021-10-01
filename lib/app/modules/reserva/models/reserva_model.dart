@@ -11,7 +11,7 @@ class ReservaModel {
   List<String>? fotos;
 
   UserModel? user;
-  UserModel? anunciante;
+  String? anunciante;
 
   DateTime? dataHoraReserva;
 

@@ -24,13 +24,11 @@ class CatalogoRepository implements ICatalogoRepository {
 
   @override
   ParseObject toParseObject(CatalogoModel model) {
-    ParseObject parseObject = ParseObject(className())
+    return ParseObject(className())
       ..set<String?>(CATALOGO_ID_COLUMN, model.id)
       ..set<String>(CATALOGO_TITULO_COLUMN, model.titulo!)
       ..set<String>(CATALOGO_DESCRICAO_COLUMN, model.descricao!)
       ..set<ParseUser>(CATALOGO_USER_COLUMN, ParseUser(null, null, null)..set(CATALOGO_ID_COLUMN, model.user!.id!));
-
-    return parseObject;
   }
 
   @override

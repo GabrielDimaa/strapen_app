@@ -40,13 +40,14 @@ class _ProdutoBottomSheetState extends State<ProdutoBottomSheet> {
       child: Observer(
         builder: (_) => ProdutoWidget(
           produtoStore: widget.produto,
-          onPressedReserva: () async {
+          reservadoSuccess: controller.reservas.any((e) => e.idProduto == widget.produto.id),
+          onPressedReserva: !controller.isCriadorLive ? () async {
             try {
               await controller.reservarProduto(context, widget.produto.toModel());
             } catch(e) {
               ErrorDialog.show(context: context, content: e.toString());
             }
-          },
+          } : null,
         ),
       ),
     );
