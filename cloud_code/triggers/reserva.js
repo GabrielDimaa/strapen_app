@@ -4,6 +4,7 @@ Parse.Cloud.beforeSave("Reserva", async (request) => {
     
     const query = new Parse.Query("Produto");
     query.equalTo("objectId", produtoId);
+    
     const result = await query.first();
     
     if (result.get("quantidade") <= 0) {
