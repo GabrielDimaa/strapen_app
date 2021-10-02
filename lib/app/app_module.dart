@@ -23,7 +23,7 @@ import 'package:strapen_app/app/modules/user/repositories/iuser_repository.dart'
 import 'package:strapen_app/app/modules/user/repositories/user_repository.dart';
 import 'package:strapen_app/app/modules/user/user_module.dart';
 import 'package:strapen_app/app/shared/config/preferences/session_preferences.dart';
-
+import 'modules/start/controllers/start_controller.dart';
 import 'modules/user/constants/routes.dart';
 
 class AppModule extends Module {
@@ -31,6 +31,7 @@ class AppModule extends Module {
   List<Bind> get binds => [
     Bind((i) => UserRepository(i.get<SessionPreferences>())),
     Bind((i) => AuthRepository(i.get<IUserRepository>(), i.get<SessionPreferences>())),
+    Bind((i) => StartController()),
     Bind.singleton((i) => AppController(i.get<IAuthRepository>(), i.get<SessionPreferences>())),
     Bind.lazySingleton((i) => SessionPreferences()),
   ];

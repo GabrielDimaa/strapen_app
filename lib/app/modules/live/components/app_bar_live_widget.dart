@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:strapen_app/app/app_widget.dart';
 import 'package:strapen_app/app/modules/live/controllers/live_controller.dart';
@@ -28,18 +29,33 @@ class AppBarLiveWidget extends StatelessWidget with PreferredSizeWidget {
               color: Colors.red.withOpacity(0.1),
               borderRadius: BorderRadius.circular(36),
             ),
-            child: Row(
-              children: [
-                CircleAvatar(
-                  backgroundColor: Colors.red,
-                  radius: 4,
-                ),
-                const HorizontalSizedBox(0.5),
-                Text(
-                  "AO VIVO",
-                  style: TextStyle(color: Colors.red, fontWeight: FontWeight.w700),
-                ),
-              ],
+            child: Observer(
+              builder: (_) {
+                if (controller.liveEncerrada) {
+                  controller.showDialogInformarLiveEncerrada(context);
+                }
+
+                return Visibility(
+                  visible: !controller.liveEncerrada,
+                  child: Row(
+                    children: [
+                      const CircleAvatar(
+                        backgroundColor: Colors.red,
+                        radius: 4,
+                      ),
+                      const HorizontalSizedBox(0.5),
+                      Text(
+                        "AO VIVO",
+                        style: const TextStyle(color: Colors.red, fontWeight: FontWeight.w700),
+                      ),
+                    ],
+                  ),
+                  replacement: const Text(
+                    "ENCERRADA",
+                    style: TextStyle(color: Colors.red, fontWeight: FontWeight.w700),
+                  ),
+                );
+              }
             ),
           ),
         ],

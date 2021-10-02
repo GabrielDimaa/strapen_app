@@ -43,6 +43,9 @@ class _ProdutoBottomSheetState extends State<ProdutoBottomSheet> {
           reservadoSuccess: controller.reservas.any((e) => e.idProduto == widget.produto.id),
           onPressedReserva: !controller.isCriadorLive ? () async {
             try {
+              if (controller.liveEncerrada)
+                throw Exception("A Live já foi encerrada.");
+
               await controller.reservarProduto(context, widget.produto.toModel());
             } catch(e) {
               ErrorDialog.show(context: context, content: e.toString());

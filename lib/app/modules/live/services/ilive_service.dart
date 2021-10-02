@@ -12,4 +12,6 @@ abstract class ILiveService {
   Future<LiveModel?> isAovivo(UserModel userModel);
   Future<void> finalizar(LiveModel model);
   Future<List<CatalogoModel>> getCatalogosLive(String idLive);
+  Future<void> startListener(String idLive);
+  void stopListener();
 }

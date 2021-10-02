@@ -66,4 +66,10 @@ class LiveService implements ILiveService {
 
   @override
   Future<List<CatalogoModel>> getCatalogosLive(String idLive) async => await _liveRepository.getCatalogosLive(idLive);
+
+  @override
+  Future<void> startListener(String idLive) async => await _liveRepository.startListener(idLive);
+
+  @override
+  void stopListener() => _liveRepository.stopListener();
 }

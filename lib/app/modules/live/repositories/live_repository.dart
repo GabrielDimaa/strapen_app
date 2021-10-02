@@ -1,8 +1,10 @@
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:parse_server_sdk/parse_server_sdk.dart';
 import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 import 'package:strapen_app/app/modules/catalogo/models/catalogo_model.dart';
 import 'package:strapen_app/app/modules/catalogo/repositories/icatalogo_repository.dart';
 import 'package:strapen_app/app/modules/live/constants/columns.dart';
+import 'package:strapen_app/app/modules/live/controllers/live_controller.dart';
 import 'package:strapen_app/app/modules/live/models/live_model.dart';
 import 'package:strapen_app/app/modules/live/repositories/ilive_repository.dart';
 import 'package:strapen_app/app/modules/user/constants/columns.dart';
@@ -18,6 +20,9 @@ class LiveRepository implements ILiveRepository {
 
   @override
   String className() => "Live";
+
+  LiveQuery? liveQuery;
+  Subscription? subscription;
 
   @override
   void validate(LiveModel model) {
@@ -148,4 +153,32 @@ class LiveRepository implements ILiveRepository {
       throw Exception(e);
     }
   }
+
+  Future<void> startListener(String idLive) async {
+    try {
+      if (liveQuery == null) liveQuery = LiveQuery();
+
+      if (subscription == null) {
+        final QueryBuilder query = QueryBuilder<ParseObject>(ParseObject(className()))
+          ..whereEqualTo(LIVE_CATALOGO_COLUMN, idLive);
+
+        subscription = await liveQuery!.client.subscribe(query);
+
+        subscription!.on(LiveQueryEvent.update, (value) {
+          final LiveController liveController = Modular.get<LiveController>();
+
+          final LiveModel model = toModel(value);
+          //Inserido o delay considerando o delay da Live
+          Future.delayed(Duration(seconds: 12), () {
+            liveController.setLiveEncerrada(model.finalizada ?? false);
+          });
+        });
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  @override
+  void stopListener() => liveQuery?.client.unSubscribe(subscription!);
 }
