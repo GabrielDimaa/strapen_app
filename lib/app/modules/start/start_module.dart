@@ -36,4 +36,10 @@ class StartModule extends Module {
       ModuleRoute(CONFIGURACOES_ROUTE, module: ConfiguracoesModule()),
     ]),
   ];
+
+  @override
+  List<Module> get imports => [
+    HomeModule(),
+    ConfiguracoesModule(),
+  ];
 }

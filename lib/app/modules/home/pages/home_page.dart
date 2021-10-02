@@ -14,7 +14,15 @@ class HomePage extends StatefulWidget {
   _HomePageState createState() => _HomePageState();
 }
 
-class _HomePageState extends ModularState<HomePage, HomeController> {
+class _HomePageState extends State<HomePage> {
+  final HomeController controller = Modular.get<HomeController>();
+
+  @override
+  void initState() {
+    super.initState();
+    controller.load();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

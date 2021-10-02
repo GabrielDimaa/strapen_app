@@ -12,9 +12,7 @@ class HomeController = _HomeController with _$HomeController;
 abstract class _HomeController with Store {
   final AppController _appController;
 
-  _HomeController(this._appController) {
-    setUserStore(UserFactory.fromModel(_appController.userModel!));
-  }
+  _HomeController(this._appController);
 
   @observable
   UserStore userStore = UserFactory.newStore();
@@ -32,6 +30,8 @@ abstract class _HomeController with Store {
   Future<void> load() async {
     try {
       setLoading(true);
+
+      setUserStore(UserFactory.fromModel(_appController.userModel!));
     } finally {
       setLoading(false);
     }

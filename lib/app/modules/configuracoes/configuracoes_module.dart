@@ -6,7 +6,7 @@ import 'package:strapen_app/app/shared/config/preferences/session_preferences.da
 class ConfiguracoesModule extends Module {
   @override
   final List<Bind> binds = [
-    Bind((i) => ConfiguracoesController(i.get<SessionPreferences>())),
+    Bind((i) => ConfiguracoesController(i.get<SessionPreferences>()), export: true),
   ];
 
   @override

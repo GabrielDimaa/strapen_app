@@ -6,7 +6,7 @@ import 'package:strapen_app/app/modules/home/pages/home_page.dart';
 class HomeModule extends Module {
   @override
   final List<Bind> binds = [
-    Bind((i) => HomeController(i.get<AppController>())),
+    Bind((i) => HomeController(i.get<AppController>()), export: true),
   ];
 
   @override

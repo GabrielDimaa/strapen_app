@@ -10,9 +10,7 @@ import 'package:strapen_app/app/modules/chat/chat_module.dart';
 import 'package:strapen_app/app/modules/chat/constants/router.dart';
 import 'package:strapen_app/app/modules/configuracoes/configuracoes_module.dart';
 import 'package:strapen_app/app/modules/configuracoes/constants/routes.dart';
-import 'package:strapen_app/app/modules/configuracoes/controllers/configuracoes_controller.dart';
 import 'package:strapen_app/app/modules/home/constants/routes.dart';
-import 'package:strapen_app/app/modules/home/controllers/home_controller.dart';
 import 'package:strapen_app/app/modules/home/home_module.dart';
 import 'package:strapen_app/app/modules/live/constants/routes.dart';
 import 'package:strapen_app/app/modules/live/live_module.dart';
@@ -33,8 +31,6 @@ class AppModule extends Module {
   List<Bind> get binds => [
     Bind((i) => UserRepository(i.get<SessionPreferences>())),
     Bind((i) => AuthRepository(i.get<IUserRepository>(), i.get<SessionPreferences>())),
-    Bind((i) => HomeController(i.get<AppController>())),
-    Bind((i) => ConfiguracoesController(i.get<SessionPreferences>())),
     Bind.singleton((i) => AppController(i.get<IAuthRepository>(), i.get<SessionPreferences>())),
     Bind.lazySingleton((i) => SessionPreferences()),
   ];
