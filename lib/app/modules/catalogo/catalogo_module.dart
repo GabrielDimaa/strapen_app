@@ -11,15 +11,20 @@ import 'package:strapen_app/app/modules/catalogo/pages/catalogo_list_page.dart';
 import 'package:strapen_app/app/modules/catalogo/pages/catalogo_select_page.dart';
 import 'package:strapen_app/app/modules/catalogo/repositories/catalogo_repository.dart';
 import 'package:strapen_app/app/modules/catalogo/repositories/icatalogo_repository.dart';
+import 'package:strapen_app/app/modules/produto/controllers/produto_select_controller.dart';
+import 'package:strapen_app/app/modules/produto/repositories/iproduto_repository.dart';
+import 'package:strapen_app/app/modules/produto/repositories/produto_repository.dart';
 
 class CatalogoModule extends Module {
   @override
   final List<Bind> binds = [
     Bind((i) => CatalogoRepository()),
+    Bind((i) => ProdutoRepository()),
     Bind((i) => CatalogoListController(i.get<ICatalogoRepository>(), i.get<AppController>())),
     Bind((i) => CatalogoCreateController(i.get<ICatalogoRepository>(), i.get<AppController>())),
     Bind((i) => CatalogoSelectController(i.get<ICatalogoRepository>(), i.get<AppController>())),
     Bind((i) => CatalogoInfoController(i.get<ICatalogoRepository>())),
+    Bind((i) => ProdutoSelectController(i.get<IProdutoRepository>(), i.get<AppController>())),
   ];
 
   @override

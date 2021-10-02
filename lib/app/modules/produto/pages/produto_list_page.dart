@@ -19,7 +19,9 @@ class ProdutoListPage extends StatefulWidget {
   _ProdutoListPageState createState() => _ProdutoListPageState();
 }
 
-class _ProdutoListPageState extends ModularState<ProdutoListPage, ProdutoListController> {
+class _ProdutoListPageState extends State<ProdutoListPage> {
+  final ProdutoListController controller = Modular.get<ProdutoListController>();
+
   @override
   void initState() {
     super.initState();
@@ -51,40 +53,43 @@ class _ProdutoListPageState extends ModularState<ProdutoListPage, ProdutoListCon
                 if (controller.loading) {
                   return const CircularLoading();
                 } else {
-                  if (controller.produtos.isEmpty) {
+                  if (controller.produtos?.isEmpty ?? true) {
                     return const EmptyListWidget(
                       message: "Sua lista está vazia. Crie produtos para adicioná-los em algum catálogo.",
                     );
                   } else {
-                    return ListView.builder(
-                      itemCount: controller.produtos.length,
-                      itemBuilder: (_, i) {
-                        final prod = controller.produtos[i];
-                        return ListTileWidget(
-                          onTap: () async => await controller.toProdutoInfo(prod),
-                          leadingImage: FadeInImage.memoryNetwork(
-                            placeholder: kTransparentImage,
-                            image: prod.fotos!.first,
-                            height: 64,
-                            width: 64,
-                          ),
-                          title: Text(prod.descricao!),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                "${prod.quantidade!} ${prod.quantidade! > 1 ? "unidades" : "unidade"}",
-                                style: textTheme.bodyText1!.copyWith(color: Colors.grey, fontSize: 12),
-                              ),
-                              const VerticalSizedBox(0.3),
-                              Text(
-                                prod.preco!.formatReal(),
-                                style: textTheme.bodyText2!.copyWith(color: AppColors.primary),
-                              ),
-                            ],
-                          ),
-                        );
-                      },
+                    return RefreshIndicator(
+                      onRefresh: controller.atualizarListaProdutos,
+                      child: ListView.builder(
+                        itemCount: controller.produtos!.length,
+                        itemBuilder: (_, i) {
+                          final prod = controller.produtos![i];
+                          return ListTileWidget(
+                            onTap: () async => await controller.toProdutoInfo(prod),
+                            leadingImage: FadeInImage.memoryNetwork(
+                              placeholder: kTransparentImage,
+                              image: prod.fotos!.first,
+                              height: 64,
+                              width: 64,
+                            ),
+                            title: Text(prod.descricao!),
+                            subtitle: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "${prod.quantidade!} ${prod.quantidade! > 1 ? "unidades" : "unidade"}",
+                                  style: textTheme.bodyText1!.copyWith(color: Colors.grey, fontSize: 12),
+                                ),
+                                const VerticalSizedBox(0.3),
+                                Text(
+                                  prod.preco!.formatReal(),
+                                  style: textTheme.bodyText2!.copyWith(color: AppColors.primary),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
                     );
                   }
                 }

@@ -17,7 +17,7 @@ abstract class _ProdutoListController with Store {
   _ProdutoListController(this._produtoRepository, this._appController);
 
   @observable
-  ObservableList<ProdutoModel> produtos = ObservableList<ProdutoModel>();
+  ObservableList<ProdutoModel>? produtos;
 
   @observable
   bool loading = false;
@@ -30,12 +30,18 @@ abstract class _ProdutoListController with Store {
     try {
       setLoading(true);
 
-      List<ProdutoModel>? list = await _produtoRepository.getByUser(_appController.userModel?.id);
-
-      if (list != null) produtos = list.asObservable();
+      if (produtos == null)
+        await atualizarListaProdutos();
     } finally {
       setLoading(false);
     }
+  }
+
+  @action
+  Future<void> atualizarListaProdutos() async {
+    List<ProdutoModel>? list = await _produtoRepository.getByUser(_appController.userModel?.id);
+
+    if (list != null) produtos = list.asObservable();
   }
 
   @action

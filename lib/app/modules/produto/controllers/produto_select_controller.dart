@@ -21,7 +21,7 @@ abstract class _ProdutoSelectController with Store {
   bool loading = false;
 
   @observable
-  ObservableList<ProdutoStore> produtos = ObservableList<ProdutoStore>();
+  ObservableList<ProdutoStore>? produtos;
 
   @action
   void setLoading(bool value) => loading = value;
@@ -34,14 +34,12 @@ abstract class _ProdutoSelectController with Store {
     try {
       setLoading(true);
 
-      List<ProdutoModel>? list = await _produtoRepository.getByUser(_appController.userModel?.id);
+      if (produtos == null)
+        await atualizarListaProdutos();
 
-      if (list != null)
-        setProdutos(list.map((e) => ProdutoFactory.fromModel(e)).toList().asObservable());
-
-      if (produtosModel != null) {
+      if (produtosModel != null && produtos != null) {
         produtosModel.forEach((cat) {
-          final ProdutoStore? catalogo = produtos.firstWhere((e) => cat.id == e.id, orElse: null);
+          final ProdutoStore? catalogo = produtos?.firstWhere((e) => cat.id == e.id, orElse: null);
           if (catalogo != null) catalogo.setSelected(true);
         });
       }
@@ -51,8 +49,16 @@ abstract class _ProdutoSelectController with Store {
   }
 
   @action
+  Future<void> atualizarListaProdutos() async {
+    List<ProdutoModel>? list = await _produtoRepository.getByUser(_appController.userModel?.id);
+
+    if (list != null)
+      setProdutos(list.map((e) => ProdutoFactory.fromModel(e)).toList().asObservable());
+  }
+
+  @action
   void save() {
-    List<ProdutoStore> selecteds = produtos.where((e) => e.selected).toList();
+    List<ProdutoStore> selecteds = produtos?.where((e) => e.selected).toList() ?? [];
     if (selecteds.isEmpty) throw Exception("Selecione pelo menos um produto para exibir no catálogo.");
 
     Modular.to.pop(selecteds.map((e) => e.toModel()).toList());
@@ -63,6 +69,7 @@ abstract class _ProdutoSelectController with Store {
     ProdutoModel? produtoModel = await Modular.to.pushNamed(PRODUTO_ROUTE + PRODUTO_CREATE_ROUTE);
 
     if (produtoModel?.id != null)
-      produtos.add(ProdutoFactory.fromModel(produtoModel!));
+      if (produtos == null) produtos = ObservableList();
+      produtos!.add(ProdutoFactory.fromModel(produtoModel!));
   }
 }

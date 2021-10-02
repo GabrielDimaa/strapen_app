@@ -21,7 +21,7 @@ abstract class _CatalogoSelectController with Store {
   bool loading = false;
 
   @observable
-  ObservableList<CatalogoStore> catalogos = ObservableList<CatalogoStore>();
+  ObservableList<CatalogoStore>? catalogos;
 
   @action
   void setLoading(bool value) => loading = value;
@@ -34,14 +34,12 @@ abstract class _CatalogoSelectController with Store {
     try {
       setLoading(true);
 
-      List<CatalogoModel>? list = await _catalogoRepository.getByUser(_appController.userModel?.id);
+      if (catalogos == null)
+        await atualizarListaCatalogos();
 
-      if (list != null)
-        setCatalogos(list.map((e) => CatalogoFactory.fromModel(e)).toList().asObservable());
-
-      if (catalogosModel != null) {
+      if (catalogosModel != null && catalogos != null) {
         catalogosModel.forEach((cat) {
-          final CatalogoStore? catalogo = catalogos.firstWhere((e) => cat.id == e.id, orElse: null);
+          final CatalogoStore? catalogo = catalogos!.firstWhere((e) => cat.id == e.id, orElse: null);
           if (catalogo != null) catalogo.setSelected(true);
         });
       }
@@ -51,8 +49,16 @@ abstract class _CatalogoSelectController with Store {
   }
 
   @action
+  Future<void> atualizarListaCatalogos() async {
+    List<CatalogoModel>? list = await _catalogoRepository.getByUser(_appController.userModel?.id);
+
+    if (list != null)
+      setCatalogos(list.map((e) => CatalogoFactory.fromModel(e)).toList().asObservable());
+  }
+
+  @action
   void save() {
-    List<CatalogoStore> selecteds = catalogos.where((e) => e.selected).toList();
+    List<CatalogoStore> selecteds = catalogos?.where((e) => e.selected).toList() ?? [];
     if (selecteds.isEmpty) throw Exception("Selecione pelo menos um catálogo para exibir na Live.");
 
     Modular.to.pop(selecteds.map((e) => e.toModel()).toList());
@@ -63,7 +69,8 @@ abstract class _CatalogoSelectController with Store {
     CatalogoModel? catalogoModel = await Modular.to.pushNamed(CATALOGO_ROUTE + CATALOGO_CREATE_ROUTE);
 
     if (catalogoModel?.id != null) {
-      catalogos.add(CatalogoFactory.fromModel(catalogoModel!));
+      if (catalogos == null) catalogos = ObservableList<CatalogoStore>();
+      catalogos!.add(CatalogoFactory.fromModel(catalogoModel!));
     }
   }
 }

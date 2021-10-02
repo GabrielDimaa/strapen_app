@@ -17,7 +17,9 @@ class CatalogoListPage extends StatefulWidget {
   _CatalogoListPageState createState() => _CatalogoListPageState();
 }
 
-class _CatalogoListPageState extends ModularState<CatalogoListPage, CatalogoListController> {
+class _CatalogoListPageState extends State<CatalogoListPage> {
+  final CatalogoListController controller = Modular.get<CatalogoListController>();
+
   @override
   void initState() {
     super.initState();
@@ -45,34 +47,37 @@ class _CatalogoListPageState extends ModularState<CatalogoListPage, CatalogoList
                 if (controller.loading) {
                   return const CircularLoading();
                 } else {
-                  if (controller.catalogos.isEmpty) {
+                  if (controller.catalogos?.isEmpty ?? true) {
                     return const EmptyListWidget(
                       message: "Sua lista está vazia. Crie catálogos para serem exibidos nas Lives.",
                     );
                   } else {
-                    return ListView.builder(
-                        itemCount: controller.catalogos.length,
-                        itemBuilder: (_, i) {
-                          final cat = controller.catalogos[i];
-                          return ListTileWidget(
-                            leadingImage: FadeInImage.memoryNetwork(
-                              placeholder: kTransparentImage,
-                              image: cat.foto,
-                              height: 64,
-                              width: 64,
-                            ),
-                            title: Text(cat.titulo!),
-                            onTap: () async => await controller.toCatalogoInfo(cat),
-                            subtitle: Column(
-                              children: [
-                                Text(
-                                  cat.dataCriado!.formated,
-                                  style: textTheme.bodyText2!.copyWith(color: AppColors.primary),
-                                ),
-                              ],
-                            ),
-                          );
-                        });
+                    return RefreshIndicator(
+                      onRefresh: controller.atualizarListaCatalogos,
+                      child: ListView.builder(
+                          itemCount: controller.catalogos!.length,
+                          itemBuilder: (_, i) {
+                            final cat = controller.catalogos![i];
+                            return ListTileWidget(
+                              leadingImage: FadeInImage.memoryNetwork(
+                                placeholder: kTransparentImage,
+                                image: cat.foto,
+                                height: 64,
+                                width: 64,
+                              ),
+                              title: Text(cat.titulo!),
+                              onTap: () async => await controller.toCatalogoInfo(cat),
+                              subtitle: Column(
+                                children: [
+                                  Text(
+                                    cat.dataCriado!.formated,
+                                    style: textTheme.bodyText2!.copyWith(color: AppColors.primary),
+                                  ),
+                                ],
+                              ),
+                            );
+                          }),
+                    );
                   }
                 }
               }),

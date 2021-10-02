@@ -27,7 +27,9 @@ class ProdutoSelectPage extends StatefulWidget {
   _ProdutoSelectPageState createState() => _ProdutoSelectPageState();
 }
 
-class _ProdutoSelectPageState extends ModularState<ProdutoSelectPage, ProdutoSelectController> {
+class _ProdutoSelectPageState extends State<ProdutoSelectPage> {
+  final ProdutoSelectController controller = Modular.get<ProdutoSelectController>();
+
   @override
   void initState() {
     super.initState();
@@ -65,44 +67,47 @@ class _ProdutoSelectPageState extends ModularState<ProdutoSelectPage, ProdutoSel
               child: Observer(
                 builder: (_) {
                   if (!controller.loading) {
-                    if (controller.produtos.isNotEmpty) {
-                      return ListView.builder(
-                        itemCount: controller.produtos.length,
-                        itemBuilder: (_, i) {
-                          final ProdutoStore prod = controller.produtos[i];
-                          return Card(
-                            color: AppColors.opaci,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 12),
-                              child: Observer(
-                                builder: (_) => CheckboxListTile(
-                                  contentPadding: const EdgeInsets.all(0),
-                                  title: Text(
-                                    prod.descricao!,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: textTheme.bodyText2,
-                                  ),
-                                  subtitle: Text(
-                                    prod.preco!.formatReal(),
-                                    style: textTheme.bodyText2!.copyWith(color: AppColors.primary),
-                                  ),
-                                  dense: true,
-                                  secondary: ClipRRect(
-                                    borderRadius: BorderRadius.circular(12),
-                                    child: FadeInImage.memoryNetwork(
-                                      placeholder: kTransparentImage,
-                                      image: prod.fotos.first,
-                                      height: 42,
-                                      width: 42,
+                    if (controller.produtos?.isNotEmpty ?? false) {
+                      return RefreshIndicator(
+                        onRefresh: controller.atualizarListaProdutos,
+                        child: ListView.builder(
+                          itemCount: controller.produtos!.length,
+                          itemBuilder: (_, i) {
+                            final ProdutoStore prod = controller.produtos![i];
+                            return Card(
+                              color: AppColors.opaci,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 12),
+                                child: Observer(
+                                  builder: (_) => CheckboxListTile(
+                                    contentPadding: const EdgeInsets.all(0),
+                                    title: Text(
+                                      prod.descricao!,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: textTheme.bodyText2,
                                     ),
+                                    subtitle: Text(
+                                      prod.preco!.formatReal(),
+                                      style: textTheme.bodyText2!.copyWith(color: AppColors.primary),
+                                    ),
+                                    dense: true,
+                                    secondary: ClipRRect(
+                                      borderRadius: BorderRadius.circular(12),
+                                      child: FadeInImage.memoryNetwork(
+                                        placeholder: kTransparentImage,
+                                        image: prod.fotos.first,
+                                        height: 42,
+                                        width: 42,
+                                      ),
+                                    ),
+                                    value: prod.selected,
+                                    onChanged: (value) => prod.setSelected(value ?? false),
                                   ),
-                                  value: prod.selected,
-                                  onChanged: (value) => prod.setSelected(value ?? false),
                                 ),
                               ),
-                            ),
-                          );
-                        },
+                            );
+                          },
+                        ),
                       );
                     } else {
                       return Center(
@@ -123,7 +128,7 @@ class _ProdutoSelectPageState extends ModularState<ProdutoSelectPage, ProdutoSel
             child: Observer(
               builder: (_) => ElevatedButtonDefault(
                 child: Text("Confirmar"),
-                onPressed: controller.produtos.isNotEmpty
+                onPressed: controller.produtos?.isNotEmpty ?? false
                     ? () async {
                         try {
                           controller.save();

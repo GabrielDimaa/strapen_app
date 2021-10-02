@@ -27,7 +27,9 @@ class CatalogoSelectPage extends StatefulWidget {
   _CatalogoSelectPageState createState() => _CatalogoSelectPageState();
 }
 
-class _CatalogoSelectPageState extends ModularState<CatalogoSelectPage, CatalogoSelectController> {
+class _CatalogoSelectPageState extends State<CatalogoSelectPage> {
+  final CatalogoSelectController controller = Modular.get<CatalogoSelectController>();
+
   @override
   void initState() {
     super.initState();
@@ -65,44 +67,47 @@ class _CatalogoSelectPageState extends ModularState<CatalogoSelectPage, Catalogo
               child: Observer(
                 builder: (_) {
                   if (!controller.loading) {
-                    if (controller.catalogos.isNotEmpty) {
-                      return ListView.builder(
-                        itemCount: controller.catalogos.length,
-                        itemBuilder: (_, i) {
-                          final CatalogoStore cat = controller.catalogos[i];
-                          return Card(
-                            color: AppColors.opaci,
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 12),
-                              child: Observer(
-                                builder: (_) => CheckboxListTile(
-                                  contentPadding: const EdgeInsets.all(0),
-                                  title: Text(
-                                    cat.descricao!,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: textTheme.bodyText2,
-                                  ),
-                                  subtitle: Text(
-                                    cat.dataCriado!.formated,
-                                    style: textTheme.bodyText2!.copyWith(color: AppColors.primary),
-                                  ),
-                                  dense: true,
-                                  secondary: ClipRRect(
-                                    borderRadius: BorderRadius.circular(12),
-                                    child: FadeInImage.memoryNetwork(
-                                      placeholder: kTransparentImage,
-                                      image: cat.foto!,
-                                      height: 42,
-                                      width: 42,
+                    if (controller.catalogos?.isNotEmpty ?? false) {
+                      return RefreshIndicator(
+                        onRefresh: controller.atualizarListaCatalogos,
+                        child: ListView.builder(
+                          itemCount: controller.catalogos!.length,
+                          itemBuilder: (_, i) {
+                            final CatalogoStore cat = controller.catalogos![i];
+                            return Card(
+                              color: AppColors.opaci,
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 12),
+                                child: Observer(
+                                  builder: (_) => CheckboxListTile(
+                                    contentPadding: const EdgeInsets.all(0),
+                                    title: Text(
+                                      cat.titulo!,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: textTheme.bodyText2,
                                     ),
+                                    subtitle: Text(
+                                      cat.dataCriado!.formated,
+                                      style: textTheme.bodyText2!.copyWith(color: AppColors.primary),
+                                    ),
+                                    dense: true,
+                                    secondary: ClipRRect(
+                                      borderRadius: BorderRadius.circular(12),
+                                      child: FadeInImage.memoryNetwork(
+                                        placeholder: kTransparentImage,
+                                        image: cat.foto!,
+                                        height: 42,
+                                        width: 42,
+                                      ),
+                                    ),
+                                    value: cat.selected,
+                                    onChanged: (value) => cat.setSelected(value ?? false),
                                   ),
-                                  value: cat.selected,
-                                  onChanged: (value) => cat.setSelected(value ?? false),
                                 ),
                               ),
-                            ),
-                          );
-                        },
+                            );
+                          },
+                        ),
                       );
                     } else {
                       return Center(
@@ -123,7 +128,7 @@ class _CatalogoSelectPageState extends ModularState<CatalogoSelectPage, Catalogo
             child: Observer(
               builder: (_) => ElevatedButtonDefault(
                 child: const Text("Confirmar"),
-                onPressed: controller.catalogos.isNotEmpty
+                onPressed: controller.catalogos?.isNotEmpty ?? false
                     ? () async {
                         try {
                           controller.save();

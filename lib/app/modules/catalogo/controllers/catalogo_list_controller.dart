@@ -16,7 +16,7 @@ abstract class _CatalogoListController with Store {
   _CatalogoListController(this._catalogoRepository, this._appController);
 
   @observable
-  ObservableList<CatalogoModel> catalogos = ObservableList<CatalogoModel>();
+  ObservableList<CatalogoModel>? catalogos;
 
   @observable
   bool loading = false;
@@ -29,12 +29,18 @@ abstract class _CatalogoListController with Store {
     try {
       setLoading(true);
 
-      List<CatalogoModel>? list = await _catalogoRepository.getByUser(_appController.userModel?.id);
-
-      if (list != null) catalogos = list.asObservable();
+      if (catalogos == null)
+        await atualizarListaCatalogos();
     } finally {
       setLoading(false);
     }
+  }
+
+  @action
+  Future<void> atualizarListaCatalogos() async {
+    List<CatalogoModel>? list = await _catalogoRepository.getByUser(_appController.userModel?.id);
+
+    if (list != null) catalogos = list.asObservable();
   }
 
   @action
