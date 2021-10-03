@@ -7,6 +7,7 @@ import 'package:strapen_app/app/shared/components/app_bar_default/app_bar_defaul
 import 'package:strapen_app/app/shared/components/fab_default/fab_default.dart';
 import 'package:strapen_app/app/shared/components/loading/circular_loading.dart';
 import 'package:strapen_app/app/shared/components/padding/padding_list.dart';
+import 'package:strapen_app/app/shared/components/padding/padding_scaffold.dart';
 import 'package:strapen_app/app/shared/components/widgets/empty_list_widget.dart';
 import 'package:strapen_app/app/shared/components/widgets/list_tile_widget.dart';
 import 'package:strapen_app/app/shared/extensions/datetime_extension.dart';
@@ -40,6 +41,10 @@ class _CatalogoListPageState extends State<CatalogoListPage> {
       ),
       body: Column(
         children: [
+          Padding(
+            padding: const PaddingScaffold(),
+            child: const Text("Aqui você poderá visualizar todos os seus catálogos disponíveis para exibir em sua Live."),
+          ),
           Expanded(
             child: Padding(
               padding: const PaddingList(),
@@ -55,28 +60,29 @@ class _CatalogoListPageState extends State<CatalogoListPage> {
                     return RefreshIndicator(
                       onRefresh: controller.atualizarListaCatalogos,
                       child: ListView.builder(
-                          itemCount: controller.catalogos!.length,
-                          itemBuilder: (_, i) {
-                            final cat = controller.catalogos![i];
-                            return ListTileWidget(
-                              leadingImage: FadeInImage.memoryNetwork(
-                                placeholder: kTransparentImage,
-                                image: cat.foto,
-                                height: 64,
-                                width: 64,
-                              ),
-                              title: Text(cat.titulo!),
-                              onTap: () async => await controller.toCatalogoInfo(cat),
-                              subtitle: Column(
-                                children: [
-                                  Text(
-                                    cat.dataCriado!.formated,
-                                    style: textTheme.bodyText2!.copyWith(color: AppColors.primary),
-                                  ),
-                                ],
-                              ),
-                            );
-                          }),
+                        itemCount: controller.catalogos!.length,
+                        itemBuilder: (_, i) {
+                          final cat = controller.catalogos![i];
+                          return ListTileWidget(
+                            leadingImage: FadeInImage.memoryNetwork(
+                              placeholder: kTransparentImage,
+                              image: cat.foto,
+                              height: 64,
+                              width: 64,
+                            ),
+                            title: Text(cat.titulo!),
+                            onTap: () async => await controller.toCatalogoInfo(cat),
+                            subtitle: Column(
+                              children: [
+                                Text(
+                                  cat.dataCriado!.formated,
+                                  style: textTheme.bodyText2!.copyWith(color: AppColors.primary),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      ),
                     );
                   }
                 }
