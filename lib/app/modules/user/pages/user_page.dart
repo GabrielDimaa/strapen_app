@@ -27,8 +27,7 @@ class _UserPageState extends ModularState<UserPage, UserController> {
   @override
   void initState() {
     super.initState();
-    if (widget.model != null) controller.setUserStore(UserFactory.fromModel(widget.model!));
-    controller.load();
+    controller.load(widget.model);
   }
 
   @override

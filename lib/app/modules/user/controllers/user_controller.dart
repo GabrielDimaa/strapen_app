@@ -6,6 +6,7 @@ import 'package:strapen_app/app/modules/live/models/live_model.dart';
 import 'package:strapen_app/app/modules/live/services/ilive_service.dart';
 import 'package:strapen_app/app/modules/user/constants/routes.dart';
 import 'package:strapen_app/app/modules/user/factories/user_factory.dart';
+import 'package:strapen_app/app/modules/user/models/user_model.dart';
 import 'package:strapen_app/app/modules/user/stores/user_store.dart';
 
 part 'user_controller.g.dart';
@@ -39,13 +40,15 @@ abstract class _UserController with Store {
   void setLiveModel(LiveModel? value) => liveModel = value;
 
   @action
-  Future<void> load() async {
+  Future<void> load(UserModel? model) async {
     try {
       setLoading(true);
 
-      if (!isPerfilPessoal) {
+      if (model != null)
+        setUserStore(UserFactory.fromModel(model));
+
+      if (!isPerfilPessoal)
         setLiveModel(await _liveService.isAovivo(userStore.toModel()));
-      }
     } finally {
       setLoading(false);
     }
