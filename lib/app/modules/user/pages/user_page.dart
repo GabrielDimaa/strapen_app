@@ -56,9 +56,8 @@ class _UserPageState extends ModularState<UserPage, UserController> {
             return SingleChildScrollView(
               padding: const PaddingScaffold(),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
-                  const VerticalSizedBox(),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,7 +66,7 @@ class _UserPageState extends ModularState<UserPage, UserController> {
                       Observer(
                         builder: (_) => FotoPerfilWidget(
                           foto: controller.userStore.foto,
-                          radiusSize: 60,
+                          radiusSize: 52,
                           liveModel: controller.liveModel,
                           onTap: () async => await controller.toAssistirLive(),
                         ),
@@ -82,13 +81,13 @@ class _UserPageState extends ModularState<UserPage, UserController> {
                             children: [
                               Observer(
                                 builder: (_) => Text(
-                                  controller.userStore.nome!,
+                                  "@${controller.userStore.username!}",
                                   overflow: TextOverflow.fade,
                                   style: textTheme.bodyText2!.copyWith(color: AppColors.primary, fontSize: 18),
                                 ),
                               ),
                               const VerticalSizedBox(0.5),
-                              Observer(builder: (_) => Text("@${controller.userStore.username!}")),
+                              Observer(builder: (_) => Text(controller.userStore.nome!, overflow: TextOverflow.fade)),
                               const VerticalSizedBox(0.5),
                               Observer(builder: (_) => Text(controller.userStore.telefone!)),
                             ],
@@ -97,15 +96,15 @@ class _UserPageState extends ModularState<UserPage, UserController> {
                       ),
                     ],
                   ),
-                  const VerticalSizedBox(3),
+                  const VerticalSizedBox(1.5),
                   Observer(
                     builder: (_) => Visibility(
                       visible: controller.userStore.bio.notIsNullOrEmpty(),
                       child: Column(
                         children: [
                           Text(
-                            "Descrição",
-                            style: textTheme.headline1!.copyWith(fontWeight: FontWeight.w600),
+                            "Bio",
+                            style: textTheme.bodyText2!.copyWith(fontSize: 18),
                           ),
                           const VerticalSizedBox(0.5),
                           Text(controller.userStore.bio ?? ""),
@@ -113,39 +112,62 @@ class _UserPageState extends ModularState<UserPage, UserController> {
                       ),
                     ),
                   ),
-                  const VerticalSizedBox(5),
-                  Align(
-                    alignment: Alignment.center,
-                    child: SizedBox(
-                      width: 280,
-                      child: Card(
-                        color: AppColors.primary,
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 4),
-                          child: ButtonBar(
-                            alignment: MainAxisAlignment.spaceBetween,
-                            overflowDirection: VerticalDirection.down,
-                            overflowButtonSpacing: 12,
-                            children: [
-                              Align(
-                                alignment: Alignment.center,
-                                child: _numSeguidor(
-                                  qtd: 48,
-                                  text: "Seguidores",
-                                ),
-                              ),
-                              Align(
-                                alignment: Alignment.center,
-                                child: _numSeguidor(
-                                  qtd: 36,
-                                  text: "Seguindo",
-                                ),
-                              ),
-                            ],
-                          ),
+                  const VerticalSizedBox(1.5),
+                  ButtonBar(
+                    alignment: MainAxisAlignment.center,
+                    overflowDirection: VerticalDirection.down,
+                    overflowButtonSpacing: 12,
+                    children: [
+                      Align(
+                        alignment: Alignment.center,
+                        child: _itemBar(
+                          qtd: 5,
+                          text: "Lives",
                         ),
                       ),
-                    ),
+                      const HorizontalSizedBox(),
+                      Align(
+                        alignment: Alignment.center,
+                        child: _itemBar(
+                          qtd: 48,
+                          text: "Seguidores",
+                        ),
+                      ),
+                      const HorizontalSizedBox(),
+                      Align(
+                        alignment: Alignment.center,
+                        child: _itemBar(
+                          qtd: 36,
+                          text: "Seguindo",
+                        ),
+                      ),
+                    ],
+                  ),
+                  const VerticalSizedBox(1.5),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _buttonSeguir(isSeguir: true),
+                    ],
+                  ),
+                  const VerticalSizedBox(1.5),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        "Reservas",
+                        style: textTheme.bodyText2!.copyWith(fontSize: 18),
+                      ),
+                      TextButton(
+                        onPressed: () async => await controller.toReservas(),
+                        child: Row(
+                          children: [
+                            const Text("Ver todos"),
+                            Icon(Icons.keyboard_arrow_right),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -156,13 +178,41 @@ class _UserPageState extends ModularState<UserPage, UserController> {
     );
   }
 
-  Widget _numSeguidor({required int qtd, required String text}) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Text("$qtd", style: TextStyle(fontSize: 26, fontWeight: FontWeight.w600)),
-        Text(text, style: TextStyle(fontSize: 14)),
-      ],
+  Widget _itemBar({required int qtd, required String text}) {
+    return SizedBox(
+      width: 66,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          Text("$qtd", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+          const VerticalSizedBox(0.3),
+          Text(text, style: TextStyle(fontSize: 12)),
+        ],
+      ),
+    );
+  }
+
+  Widget _buttonSeguir({required bool isSeguir}) {
+    return InkWell(
+      onTap: () {},
+      splashColor: isSeguir ? AppColors.secondary.withOpacity(0.4) : AppColors.primaryDark.withOpacity(0.4),
+      borderRadius: BorderRadius.circular(12),
+      child: Ink(
+        width: 136,
+        padding: const EdgeInsets.symmetric(vertical: 8),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: AppColors.primary),
+          color: isSeguir ? AppColors.primary : AppColors.primaryOpaci,
+        ),
+        child: Text(
+          isSeguir ? "Seguir" : "Seguindo",
+          textAlign: TextAlign.center,
+          style: TextStyle(
+            color: isSeguir ? Colors.white : AppColors.primary,
+          ),
+        ),
+      ),
     );
   }
 }

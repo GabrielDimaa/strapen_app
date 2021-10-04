@@ -4,6 +4,7 @@ import 'package:strapen_app/app/app_controller.dart';
 import 'package:strapen_app/app/modules/live/constants/routes.dart';
 import 'package:strapen_app/app/modules/live/models/live_model.dart';
 import 'package:strapen_app/app/modules/live/services/ilive_service.dart';
+import 'package:strapen_app/app/modules/reserva/constants/routes.dart';
 import 'package:strapen_app/app/modules/user/constants/routes.dart';
 import 'package:strapen_app/app/modules/user/factories/user_factory.dart';
 import 'package:strapen_app/app/modules/user/models/user_model.dart';
@@ -62,6 +63,11 @@ abstract class _UserController with Store {
   @action
   Future<void> toAssistirLive() async {
     await Modular.to.pushNamed(LIVE_ROUTE + LIVE_ASSISTIR_ROUTE, arguments: liveModel);
+  }
+
+  @action
+  Future<void> toReservas() async {
+    await Modular.to.pushNamed(RESERVA_ROUTE);
   }
 
   @computed

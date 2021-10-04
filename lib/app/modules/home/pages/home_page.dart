@@ -30,13 +30,21 @@ class _HomePageState extends State<HomePage> {
         title: Text("Home"),
         leadingWidget: Padding(
           padding: const EdgeInsets.only(left: 12, top: 6, bottom: 6),
-          child: CircleAvatar(
-            radius: 50,
-            backgroundColor: AppColors.secondary,
-            backgroundImage: FadeInImage.memoryNetwork(
-              placeholder: kTransparentImage,
-              image: controller.userStore.foto,
-            ).image,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              GestureDetector(
+                onTap: () async => await controller.toPerfil(),
+                child: CircleAvatar(
+                  radius: 26,
+                  backgroundColor: AppColors.secondary,
+                  backgroundImage: FadeInImage.memoryNetwork(
+                    placeholder: kTransparentImage,
+                    image: controller.userStore.foto,
+                  ).image,
+                ),
+              ),
+            ],
           ),
         ),
         actionsWidgets: [

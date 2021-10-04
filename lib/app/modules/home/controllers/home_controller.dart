@@ -2,6 +2,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'package:strapen_app/app/app_controller.dart';
 import 'package:strapen_app/app/modules/live/constants/routes.dart';
+import 'package:strapen_app/app/modules/user/constants/routes.dart';
 import 'package:strapen_app/app/modules/user/factories/user_factory.dart';
 import 'package:strapen_app/app/modules/user/stores/user_store.dart';
 
@@ -40,9 +41,14 @@ abstract class _HomeController with Store {
   @action
   Future<void> toCreateLive() async {
     if (_appController.userModel!.firstLive ?? false) {
-      Modular.to.pushNamed(LIVE_ROUTE + LIVE_PRIMEIRA_ROUTE);
+      await Modular.to.pushNamed(LIVE_ROUTE + LIVE_PRIMEIRA_ROUTE);
     } else {
-      Modular.to.pushNamed(LIVE_ROUTE + LIVE_CREATE_ROUTE);
+      await Modular.to.pushNamed(LIVE_ROUTE + LIVE_CREATE_ROUTE);
     }
+  }
+
+  @action
+  Future<void> toPerfil() async {
+    await Modular.to.pushNamed(USER_ROUTE);
   }
 }
