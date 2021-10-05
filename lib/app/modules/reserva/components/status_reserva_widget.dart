@@ -29,9 +29,9 @@ class StatusReservaWidget extends StatelessWidget {
   Color _getBackground(EnumStatusReserva status) {
     switch (status) {
       case EnumStatusReserva.Cancelado:
-        return AppColors.error.withOpacity(0.4);
+        return AppColors.error.withOpacity(0.15);
       case EnumStatusReserva.EmAberto:
-        return Color(0xFFFFE900).withOpacity(0.4);
+        return Color(0xFFFFE900).withOpacity(0.15);
       case EnumStatusReserva.Finalizado:
         return AppColors.primaryOpaci;
     }

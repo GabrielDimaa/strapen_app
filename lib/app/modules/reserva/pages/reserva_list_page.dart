@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:strapen_app/app/modules/reserva/components/status_reserva_widget.dart';
 import 'package:strapen_app/app/modules/reserva/controllers/reserva_list_controller.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/app_bar_default.dart';
 import 'package:strapen_app/app/shared/components/loading/circular_loading.dart';
@@ -32,7 +33,7 @@ class _ReservaListPageState extends State<ReservaListPage> {
         children: [
           Padding(
             padding: const PaddingScaffold(),
-            child: const Text("Aqui você poderá visualizar todos os seus produtos reservados durante as Lives.\nCombine com o anunciante do produto para realizar a retirada do mesmo."),
+            child: const Text("Aqui você poderá visualizar todos as suas reservas.\nCombine com o anunciante do produto para realizar a retirada do mesmo."),
           ),
           Expanded(
             child: Padding(
@@ -60,7 +61,7 @@ class _ReservaListPageState extends State<ReservaListPage> {
                               width: 64,
                             ),
                             title: Text(res.descricao!),
-                            subtitle: Text(res.descricao!),
+                            subtitle: StatusReservaWidget(status: res.status!),
                           );
                         },
                       ),

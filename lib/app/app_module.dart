@@ -16,6 +16,8 @@ import 'package:strapen_app/app/modules/live/constants/routes.dart';
 import 'package:strapen_app/app/modules/live/live_module.dart';
 import 'package:strapen_app/app/modules/produto/constants/routes.dart';
 import 'package:strapen_app/app/modules/produto/produto_module.dart';
+import 'package:strapen_app/app/modules/reserva/constants/routes.dart';
+import 'package:strapen_app/app/modules/reserva/reserva_module.dart';
 import 'package:strapen_app/app/modules/splash/splash_module.dart';
 import 'package:strapen_app/app/modules/start/constants/routes.dart';
 import 'package:strapen_app/app/modules/start/start_module.dart';
@@ -48,5 +50,6 @@ class AppModule extends Module {
     ModuleRoute(CONFIGURACOES_ROUTE, module: ConfiguracoesModule()),
     ModuleRoute(USER_ROUTE, module: UserModule()),
     ModuleRoute(CHAT_ROUTE, module: ChatModule()),
+    ModuleRoute(RESERVA_ROUTE, module: ReservaModule()),
   ];
 }
