@@ -15,6 +15,7 @@ class LiveService implements ILiveService {
   Future<LiveModel> solicitarLive(UserModel user) async {
     try {
       var response = await MuxApi.post("", data: {
+        "low_latency": true,
         "playback_policy": "public",
         "new_asset_settings": {
           "playback_policy": "public",
