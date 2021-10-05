@@ -3,4 +3,5 @@ import 'package:strapen_app/app/shared/interfaces/repository_interface.dart';
 
 abstract class IReservaRepository implements IRepository<ReservaModel> {
   Future<ReservaModel> save(ReservaModel model);
+  Future<List<ReservaModel>> getAll(String idUser);
 }

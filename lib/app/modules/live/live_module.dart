@@ -32,7 +32,7 @@ class LiveModule extends Module {
     Bind((i) => CatalogoRepository()),
     Bind((i) => ProdutoRepository()),
     Bind((i) => ChatRepository()),
-    Bind((i) => ReservaRepository()),
+    Bind((i) => ReservaRepository(i.get<IUserRepository>())),
     Bind((i) => LiveService(i.get<ILiveRepository>())),
     Bind((i) => LiveController(
           i.get<AppController>(),

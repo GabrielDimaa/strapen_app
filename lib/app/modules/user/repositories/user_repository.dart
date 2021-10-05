@@ -105,6 +105,24 @@ class UserRepository implements IUserRepository {
   }
 
   @override
+  Future<UserModel> getById(String? id) async {
+    try {
+      if (id == null) throw Exception("Houve um erro ao buscar o usuário!");
+
+      QueryBuilder query = QueryBuilder<ParseObject>(ParseObject(className()))..whereEqualTo(USER_ID_COLUMN, id);
+
+      ParseResponse response = await query.query();
+
+      if (!response.success) throw Exception(ParseErrorsUtils.get(response.statusCode));
+      ParseObject parse = (response.results as List<dynamic>).first;
+
+      return toModel(parse);
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  @override
   Future<void> update(UserModel model) async {
     try {
       if (model.id == null) throw Exception("Houve um erro ao atualizar seus dados.");
@@ -194,11 +212,10 @@ class UserRepository implements IUserRepository {
       if (!response.success) throw Exception(ParseErrorsUtils.get(response.statusCode));
       ParseObject? parseResponse = (response.results as List<ParseObject>?)?.first;
 
-      if (parseResponse != null)
-        return toModel(parseResponse);
+      if (parseResponse != null) return toModel(parseResponse);
 
       return null;
-    } catch(e) {
+    } catch (e) {
       throw Exception(e);
     }
   }

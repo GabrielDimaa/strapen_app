@@ -1,13 +1,19 @@
 import 'package:parse_server_sdk/parse_server_sdk.dart';
 import 'package:strapen_app/app/modules/reserva/constants/columns.dart';
+import 'package:strapen_app/app/modules/reserva/enums/enum_status_reserva.dart';
 import 'package:strapen_app/app/modules/reserva/models/reserva_model.dart';
 import 'package:strapen_app/app/modules/reserva/repositories/ireserva_repository.dart';
 import 'package:strapen_app/app/modules/user/constants/columns.dart';
 import 'package:strapen_app/app/modules/user/factories/user_factory.dart';
+import 'package:strapen_app/app/modules/user/repositories/iuser_repository.dart';
 import 'package:strapen_app/app/shared/extensions/string_extension.dart';
 import 'package:strapen_app/app/shared/utils/parse_errors_utils.dart';
 
 class ReservaRepository implements IReservaRepository {
+  final IUserRepository _userRepository;
+
+  ReservaRepository(this._userRepository);
+
   @override
   String className() => "Reserva";
   String messageError() => "Houve um erro ao reservar o produto.";
@@ -38,7 +44,8 @@ class ReservaRepository implements IReservaRepository {
         RESERVA_USER_COLUMN,
         ParseUser(null, null, null)..set(USER_ID_COLUMN, model.user!.id!),
       )
-      ..set<String>(RESERVA_ANUNCIANTE_COLUMN, model.anunciante!);
+      ..set<String>(RESERVA_ANUNCIANTE_COLUMN, model.anunciante!.id!)
+      ..set<int>(RESERVA_STATUS_COLUMN, EnumStatusReservaHelper.getValue(model.status!));
   }
 
   @override
@@ -52,7 +59,8 @@ class ReservaRepository implements IReservaRepository {
       e.get(RESERVA_PRECO_COLUMN) is int ? e.get<int>(RESERVA_PRECO_COLUMN)?.toDouble() ?? null : e.get<double>(RESERVA_PRECO_COLUMN),
       e.get<List<String>>(RESERVA_FOTOS_COLUMN)?.map((e) => e).toList(),
       UserFactory.newModel()..id = e.get(RESERVA_USER_COLUMN).get<String>(USER_ID_COLUMN),
-      e.get<String>(RESERVA_ANUNCIANTE_COLUMN),
+      null,
+      EnumStatusReservaHelper.get(e.get<int>(RESERVA_STATUS_COLUMN) ?? 0),
       e.get<DateTime>(RESERVA_DATA_HORA_CRIADO_COLUMN),
     );
   }
@@ -72,6 +80,33 @@ class ReservaRepository implements IReservaRepository {
       ReservaModel reservaModel = toModel(parseResponse);
 
       return reservaModel;
+    } catch(e) {
+      throw Exception(e);
+    }
+  }
+
+  @override
+  Future<List<ReservaModel>> getAll(String idUser) async {
+    try {
+      QueryBuilder query = QueryBuilder<ParseObject>(ParseObject(className()))
+        ..whereEqualTo(
+          RESERVA_USER_COLUMN,
+          (ParseUser(null, null, null)..set(USER_ID_COLUMN, idUser)).toPointer(),
+        );
+
+      ParseResponse response = await query.query();
+
+      if (!response.success) throw Exception(ParseErrorsUtils.get(response.statusCode));
+      List<ParseObject>? parseResponseList = response.results as List<ParseObject>?;
+
+      if (parseResponseList?.isEmpty ?? true) return [];
+
+      List<ReservaModel> reservas = [];
+      for (var parse in parseResponseList!) {
+        reservas.add(toModel(parse)..anunciante = await _userRepository.getById(parse.get<String>(RESERVA_ANUNCIANTE_COLUMN)));
+      }
+
+      return reservas;
     } catch(e) {
       throw Exception(e);
     }

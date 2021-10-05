@@ -1,3 +1,4 @@
+import 'package:strapen_app/app/modules/reserva/enums/enum_status_reserva.dart';
 import 'package:strapen_app/app/modules/user/models/user_model.dart';
 
 class ReservaModel {
@@ -11,8 +12,9 @@ class ReservaModel {
   List<String>? fotos;
 
   UserModel? user;
-  String? anunciante;
+  UserModel? anunciante;
 
+  EnumStatusReserva? status;
   DateTime? dataHoraReserva;
 
   ReservaModel(
@@ -25,6 +27,7 @@ class ReservaModel {
     this.fotos,
     this.user,
     this.anunciante,
+    this.status,
     this.dataHoraReserva,
   );
 }
