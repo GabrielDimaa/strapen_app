@@ -154,6 +154,25 @@ class LiveRepository implements ILiveRepository {
     }
   }
 
+  @override
+  Future<int> getCountLives(String idUser) async {
+    try {
+      final QueryBuilder<ParseObject> query = QueryBuilder(ParseObject(className()));
+      query
+        ..whereEqualTo(
+          LIVE_USER_COLUMN,
+          (ParseUser(null, null, null)..set(USER_ID_COLUMN, idUser)).toPointer(),
+        )
+        ..count();
+
+      final ParseResponse? response = await query.count();
+
+      return (response?.result?[0] ?? 0) as int;
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
   Future<void> startListener(String idLive) async {
     try {
       if (liveQuery == null) liveQuery = LiveQuery();

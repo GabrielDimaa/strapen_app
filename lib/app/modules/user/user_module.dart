@@ -13,7 +13,9 @@ import 'package:strapen_app/app/modules/user/pages/user_dados_pessoais_page.dart
 import 'package:strapen_app/app/modules/user/pages/user_editar_perfil_page.dart';
 import 'package:strapen_app/app/modules/user/pages/user_page.dart';
 import 'package:strapen_app/app/modules/user/pages/user_senha_page.dart';
+import 'package:strapen_app/app/modules/user/repositories/iseguidor_repository.dart';
 import 'package:strapen_app/app/modules/user/repositories/iuser_repository.dart';
+import 'package:strapen_app/app/modules/user/repositories/seguidor_repository.dart';
 import 'package:strapen_app/app/modules/user/repositories/user_repository.dart';
 import 'package:strapen_app/app/shared/config/preferences/session_preferences.dart';
 
@@ -22,9 +24,10 @@ class UserModule extends Module {
   final List<Bind> binds = [
     Bind((i) => UserRepository(i.get<SessionPreferences>())),
     Bind((i) => CatalogoRepository()),
+    Bind((i) => SeguidorRepository()),
     Bind((i) => LiveRepository(i.get<ICatalogoRepository>())),
     Bind((i) => LiveService(i.get<ILiveRepository>())),
-    Bind((i) => UserController(i.get<ILiveService>(), i.get<AppController>())),
+    Bind((i) => UserController(i.get<ISeguidorRepository>(), i.get<ILiveService>(), i.get<AppController>())),
     Bind((i) => UserEditarController(i.get<IUserRepository>(), i.get<AppController>())),
   ];
 

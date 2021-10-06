@@ -1,3 +1,4 @@
+///User
 const String USER_ID_COLUMN = "objectId";
 const String USER_NOME_COLUMN = "nome";
 const String USER_EMAIL_COLUMN = "email";
@@ -11,3 +12,8 @@ const String USER_CEP_COLUMN = "cep";
 const String USER_CIDADE_COLUMN = "cidade";
 const String USER_FOTO_COLUMN = "foto";
 const String USER_FIST_LIVE_COLUMN = "firstLive";
+
+///Seguidor
+const String SEGUIDOR_ID_COLUMN = "objectId";
+const String SEGUIDOR_USER_COLUMN = "user";
+const String SEGUIDOR_SEGUINDO_COLUMN = "seguindo";
