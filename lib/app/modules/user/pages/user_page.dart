@@ -7,6 +7,7 @@ import 'package:strapen_app/app/modules/user/controllers/user_controller.dart';
 import 'package:strapen_app/app/modules/user/models/user_model.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/app_bar_default.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/widgets/circle_background_app_bar.dart';
+import 'package:strapen_app/app/shared/components/dialog/error_dialog.dart';
 import 'package:strapen_app/app/shared/components/loading/circular_loading.dart';
 import 'package:strapen_app/app/shared/components/padding/padding_scaffold.dart';
 import 'package:strapen_app/app/shared/components/sized_box/horizontal_sized_box.dart';
@@ -120,54 +121,66 @@ class _UserPageState extends ModularState<UserPage, UserController> {
                     children: [
                       Align(
                         alignment: Alignment.center,
-                        child: _itemBar(
-                          qtd: 5,
-                          text: "Lives",
+                        child: Observer(
+                          builder: (_) => _itemBar(
+                            qtd: controller.countLive,
+                            text: "Lives",
+                          ),
                         ),
                       ),
                       const HorizontalSizedBox(),
                       Align(
                         alignment: Alignment.center,
-                        child: _itemBar(
-                          qtd: 48,
-                          text: "Seguidores",
+                        child: Observer(
+                          builder: (_) => _itemBar(
+                            qtd: controller.countSeguidores,
+                            text: "Seguidores",
+                          ),
                         ),
                       ),
                       const HorizontalSizedBox(),
                       Align(
                         alignment: Alignment.center,
-                        child: _itemBar(
-                          qtd: 36,
-                          text: "Seguindo",
+                        child: Observer(
+                          builder: (_) => _itemBar(
+                            qtd: controller.countSeguindo,
+                            text: "Seguindo",
+                          ),
                         ),
                       ),
                     ],
                   ),
-                  const VerticalSizedBox(1.5),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      _buttonSeguir(isSeguir: true),
-                    ],
-                  ),
-                  const VerticalSizedBox(1.5),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        "Reservas",
-                        style: textTheme.bodyText2!.copyWith(fontSize: 18),
+                  const VerticalSizedBox(2),
+                  Observer(
+                    builder: (_) => Visibility(
+                      visible: !controller.isPerfilPessoal,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Observer(
+                            builder: (_) => _buttonSeguir(context: context),
+                          ),
+                        ],
                       ),
-                      TextButton(
-                        onPressed: () async => await controller.toReservas(),
-                        child: Row(
-                          children: [
-                            const Text("Ver todos"),
-                            Icon(Icons.keyboard_arrow_right),
-                          ],
-                        ),
+                      replacement: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Reservas",
+                            style: textTheme.bodyText2!.copyWith(fontSize: 18),
+                          ),
+                          TextButton(
+                            onPressed: () async => await controller.toReservas(),
+                            child: Row(
+                              children: [
+                                const Text("Ver todos"),
+                                Icon(Icons.keyboard_arrow_right),
+                              ],
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
                 ],
               ),
@@ -192,25 +205,74 @@ class _UserPageState extends ModularState<UserPage, UserController> {
     );
   }
 
-  Widget _buttonSeguir({required bool isSeguir}) {
+  Widget _buttonSeguir({required BuildContext context}) {
     return InkWell(
-      onTap: () {},
-      splashColor: isSeguir ? AppColors.secondary.withOpacity(0.4) : AppColors.primaryDark.withOpacity(0.4),
-      borderRadius: BorderRadius.circular(12),
+      onTap: () async {
+        try {
+          if (controller.seguindo) {
+            await showModalBottomSheet(
+              context: context,
+              builder: (_) => BottomSheet(
+                onClosing: () {},
+                builder: (_) => Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const VerticalSizedBox(),
+                    TextButton(
+                      onPressed: () async {
+                        try {
+                          await controller.deixarDeSeguir(context);
+                        } finally {
+                          Modular.to.pop();
+                        }
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.person_remove_outlined,
+                          ),
+                          const HorizontalSizedBox(),
+                          const Text(
+                            "Deixar de seguir",
+                          ),
+                        ],
+                      ),
+                    ),
+                    const VerticalSizedBox(),
+                  ],
+                ),
+              ),
+            );
+          } else {
+            await controller.seguirDeixarDeSeguir(context);
+          }
+        } catch (e) {
+          ErrorDialog.show(context: context, content: e.toString());
+        }
+      },
+      splashColor: controller.seguindo ? AppColors.primaryDark.withOpacity(0.4) : AppColors.secondary.withOpacity(0.4),
+      borderRadius: BorderRadius.circular(8),
       child: Ink(
         width: 136,
         padding: const EdgeInsets.symmetric(vertical: 8),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(8),
           border: Border.all(color: AppColors.primary),
-          color: isSeguir ? AppColors.primary : AppColors.primaryOpaci,
+          color: controller.seguindo ? AppColors.primaryOpaci : AppColors.primary,
         ),
-        child: Text(
-          isSeguir ? "Seguir" : "Seguindo",
-          textAlign: TextAlign.center,
-          style: TextStyle(
-            color: isSeguir ? Colors.white : AppColors.primary,
-          ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              controller.seguindo ? "Seguindo " : "Seguir",
+              style: TextStyle(
+                color: controller.seguindo ? AppColors.primary : Colors.white,
+              ),
+            ),
+            if (controller.seguindo) Icon(Icons.keyboard_arrow_down, color: AppColors.primary, size: 20),
+          ],
         ),
       ),
     );

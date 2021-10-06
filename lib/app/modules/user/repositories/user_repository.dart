@@ -219,4 +219,13 @@ class UserRepository implements IUserRepository {
       throw Exception(e);
     }
   }
+
+  @override
+  Future<void> seguirUser(UserModel text) async {
+    try {
+
+    } catch(e) {
+      throw Exception(e);
+    }
+  }
 }
