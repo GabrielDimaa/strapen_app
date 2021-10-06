@@ -227,8 +227,17 @@ class _UserPageState extends ModularState<UserPage, UserController> {
                           Modular.to.pop();
                         }
                       },
-                      child: const Text(
-                        "Deixar de seguir",
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Icon(
+                            Icons.person_remove_outlined,
+                          ),
+                          const HorizontalSizedBox(),
+                          const Text(
+                            "Deixar de seguir",
+                          ),
+                        ],
                       ),
                     ),
                     const VerticalSizedBox(),
