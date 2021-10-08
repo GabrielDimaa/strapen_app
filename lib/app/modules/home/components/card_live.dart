@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:strapen_app/app/app_widget.dart';
+import 'package:strapen_app/app/shared/apis/mux_api.dart';
 import 'package:strapen_app/app/shared/components/sized_box/horizontal_sized_box.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class CardLive extends StatelessWidget {
   final String playBackId;
@@ -16,8 +18,9 @@ class CardLive extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         child: Stack(
           children: [
-            Image.network(
-              "https://image.mux.com/$playBackId/thumbnail.png?width=150&height=190&fit_mode=smartcrop&time=35",
+            FadeInImage.memoryNetwork(
+              placeholder: kTransparentImage,
+              image: MuxApi.urlImageLive(playBackId, width: 150, height: 190),
               width: 150,
               height: 190,
             ),
