@@ -1,5 +1,6 @@
 import 'package:camera_with_rtmp/camera.dart';
 import 'package:strapen_app/app/modules/catalogo/models/catalogo_model.dart';
+import 'package:strapen_app/app/modules/live/models/live_demonstracao_model.dart';
 import 'package:strapen_app/app/modules/live/models/live_model.dart';
 import 'package:strapen_app/app/modules/live/repositories/ilive_repository.dart';
 import 'package:strapen_app/app/modules/live/services/ilive_service.dart';
@@ -39,6 +40,9 @@ class LiveService implements ILiveService {
       throw Exception(e);
     }
   }
+
+  @override
+  Future<LiveDemonstracaoModel> getLivesDemonstracao(String idUser) async => await _liveRepository.getLivesDemonstracao(idUser);
 
   @override
   Future<void> startLive(LiveModel model, CameraController cameraController) async {

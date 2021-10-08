@@ -5,18 +5,21 @@ import 'package:strapen_app/app/modules/catalogo/models/catalogo_model.dart';
 import 'package:strapen_app/app/modules/catalogo/repositories/icatalogo_repository.dart';
 import 'package:strapen_app/app/modules/live/constants/columns.dart';
 import 'package:strapen_app/app/modules/live/controllers/live_controller.dart';
+import 'package:strapen_app/app/modules/live/models/live_demonstracao_model.dart';
 import 'package:strapen_app/app/modules/live/models/live_model.dart';
 import 'package:strapen_app/app/modules/live/repositories/ilive_repository.dart';
 import 'package:strapen_app/app/modules/user/constants/columns.dart';
 import 'package:strapen_app/app/modules/user/factories/user_factory.dart';
 import 'package:strapen_app/app/modules/user/models/user_model.dart';
+import 'package:strapen_app/app/modules/user/repositories/iseguidor_repository.dart';
 import 'package:strapen_app/app/shared/extensions/string_extension.dart';
 import 'package:strapen_app/app/shared/utils/parse_errors_utils.dart';
 
 class LiveRepository implements ILiveRepository {
   final ICatalogoRepository? _catalogoRepository;
+  final ISeguidorRepository? _seguidorRepository;
 
-  LiveRepository(this._catalogoRepository);
+  LiveRepository(this._catalogoRepository, this._seguidorRepository);
 
   @override
   String className() => "Live";
@@ -161,7 +164,8 @@ class LiveRepository implements ILiveRepository {
       query
         ..whereEqualTo(
           LIVE_USER_COLUMN,
-          (ParseUser(null, null, null)..set(USER_ID_COLUMN, idUser)).toPointer(),
+          (ParseUser(null, null, null)
+            ..set(USER_ID_COLUMN, idUser)).toPointer(),
         )
         ..count();
 
@@ -169,6 +173,72 @@ class LiveRepository implements ILiveRepository {
 
       return (response?.result?[0] ?? 0) as int;
     } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  @override
+  Future<LiveDemonstracaoModel> getLivesDemonstracao(String idUser) async {
+    try {
+      LiveDemonstracaoModel livesFiltradas = LiveDemonstracaoModel([], []);
+      List<String> usersId = await _seguidorRepository!.getAllSeguindo(idUser);
+
+      if (usersId.isNotEmpty) {
+        final QueryBuilder query = QueryBuilder<ParseObject>.or(
+          ParseObject(className()),
+          usersId.map((id) {
+            return QueryBuilder(ParseObject(className()))
+              ..whereEqualTo(LIVE_USER_COLUMN, (ParseUser(null, null, null)..set(USER_ID_COLUMN, id)).toPointer());
+          }).toList())
+          ..whereEqualTo(LIVE_FINALIZADA_COLUMN, false)
+          ..includeObject([LIVE_USER_COLUMN])
+          ..orderByDescending(LIVE_DATA_CRIADO_COLUMN)
+          ..setLimit(15);
+
+        final ParseResponse response = await query.query();
+
+        if (!response.success) throw Exception(ParseErrorsUtils.get(response.statusCode));
+        final List<ParseObject>? parseResponse = response.results as List<ParseObject>?;
+
+        if (parseResponse?.isNotEmpty ?? false)
+          livesFiltradas.livesSeguindo!.addAll(parseResponse!.map((e) {
+            //Busca somente o username
+            return toModel(e)..user!.username = e.get(LIVE_USER_COLUMN).get<String>(USER_USERNAME_COLUMN);
+          }).toList());
+      }
+
+
+      QueryBuilder query;
+
+      if (usersId.isNotEmpty) {
+        query = QueryBuilder<ParseObject>.or(
+          ParseObject(className()),
+          usersId.map((id) {
+            return QueryBuilder(ParseObject(className()))
+              ..whereNotEqualTo(LIVE_USER_COLUMN, (ParseUser(null, null, null)..set(USER_ID_COLUMN, id)).toPointer());
+          }).toList());
+      } else {
+        query = QueryBuilder<ParseObject>(ParseObject(className()));
+      }
+
+      query.includeObject([LIVE_USER_COLUMN]);
+      query..whereEqualTo(LIVE_FINALIZADA_COLUMN, false);
+      query..orderByDescending(LIVE_DATA_CRIADO_COLUMN);
+      query..setLimit(15);
+
+      final ParseResponse response = await query.query();
+
+      if (!response.success) throw Exception(ParseErrorsUtils.get(response.statusCode));
+      final List<ParseObject>? parseResponse = response.results as List<ParseObject>?;
+
+      if (parseResponse?.isNotEmpty ?? false)
+        livesFiltradas.livesOutros!.addAll(parseResponse!.map((e) {
+          //Busca somente o username
+          return toModel(e)..user!.username = e.get(LIVE_USER_COLUMN).get<String>(USER_USERNAME_COLUMN);
+        }).toList());
+
+      return livesFiltradas;
+    } catch(e) {
       throw Exception(e);
     }
   }

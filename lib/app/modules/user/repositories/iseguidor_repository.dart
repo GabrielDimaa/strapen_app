@@ -8,4 +8,6 @@ abstract class ISeguidorRepository implements IRepository<SeguidorModel> {
   Future<bool> estaSeguindo(UserModel user, UserModel seguirUser);
   Future<int> getCountSeguidores(String idUser);
   Future<int> getCountSeguindo(String idUser);
+  ///Retorna apenas os ids dos usuários
+  Future<List<String>> getAllSeguindo(String idUser);
 }

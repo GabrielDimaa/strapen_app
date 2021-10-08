@@ -20,15 +20,18 @@ import 'package:strapen_app/app/modules/produto/repositories/iproduto_repository
 import 'package:strapen_app/app/modules/produto/repositories/produto_repository.dart';
 import 'package:strapen_app/app/modules/reserva/repositories/ireserva_repository.dart';
 import 'package:strapen_app/app/modules/reserva/repositories/reserva_repository.dart';
+import 'package:strapen_app/app/modules/user/repositories/iseguidor_repository.dart';
 import 'package:strapen_app/app/modules/user/repositories/iuser_repository.dart';
+import 'package:strapen_app/app/modules/user/repositories/seguidor_repository.dart';
 import 'package:strapen_app/app/modules/user/repositories/user_repository.dart';
 import 'package:strapen_app/app/shared/config/preferences/session_preferences.dart';
 
 class LiveModule extends Module {
   @override
   final List<Bind> binds = [
-    Bind((i) => LiveRepository(i.get<ICatalogoRepository>())),
+    Bind((i) => LiveRepository(i.get<ICatalogoRepository>(), i.get<ISeguidorRepository>())),
     Bind((i) => UserRepository(i.get<SessionPreferences>())),
+    Bind((i) => SeguidorRepository()),
     Bind((i) => CatalogoRepository()),
     Bind((i) => ProdutoRepository()),
     Bind((i) => ChatRepository()),

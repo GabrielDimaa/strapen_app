@@ -32,7 +32,7 @@ class ChatRepository implements IChatRepository {
         CHAT_USER_COLUMN,
         ParseUser(null, null, null)..set(USER_ID_COLUMN, model.user!.id!),
       )
-      ..set<ParseObject>(CHAT_LIVE_COLUMN, ParseObject(LiveRepository(null).className())..set(LIVE_ID_COLUMN, model.live!.id));
+      ..set<ParseObject>(CHAT_LIVE_COLUMN, ParseObject(LiveRepository(null, null).className())..set(LIVE_ID_COLUMN, model.live!.id));
 
     return parseObject;
   }
@@ -43,7 +43,7 @@ class ChatRepository implements IChatRepository {
       e.get<String>(CHAT_ID_COLUMN),
       e.get<String>(CHAT_COMENTARIO_COLUMN),
       UserRepository(null).toModel(e.get(CHAT_USER_COLUMN)),
-      LiveRepository(null).toModel(e.get(CHAT_LIVE_COLUMN)),
+      LiveRepository(null, null).toModel(e.get(CHAT_LIVE_COLUMN)),
     );
   }
 
@@ -72,7 +72,7 @@ class ChatRepository implements IChatRepository {
     return QueryBuilder(ParseObject(className()))
       ..whereEqualTo(
         CHAT_LIVE_COLUMN,
-        (ParseObject(LiveRepository(null).className())..set(CHAT_ID_COLUMN, liveModel.id)).toPointer(),
+        (ParseObject(LiveRepository(null, null).className())..set(CHAT_ID_COLUMN, liveModel.id)).toPointer(),
       )
       ..orderByAscending(CHAT_CREATED_COLUMN)
       ..includeObject([CHAT_USER_COLUMN, CHAT_LIVE_COLUMN]);

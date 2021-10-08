@@ -25,7 +25,7 @@ class UserModule extends Module {
     Bind((i) => UserRepository(i.get<SessionPreferences>())),
     Bind((i) => CatalogoRepository()),
     Bind((i) => SeguidorRepository()),
-    Bind((i) => LiveRepository(i.get<ICatalogoRepository>())),
+    Bind((i) => LiveRepository(i.get<ICatalogoRepository>(), i.get<ISeguidorRepository>())),
     Bind((i) => LiveService(i.get<ILiveRepository>())),
     Bind((i) => UserController(i.get<ISeguidorRepository>(), i.get<ILiveService>(), i.get<AppController>())),
     Bind((i) => UserEditarController(i.get<IUserRepository>(), i.get<AppController>())),

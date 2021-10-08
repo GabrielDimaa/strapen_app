@@ -105,6 +105,23 @@ class SeguidorRepository implements ISeguidorRepository {
     }
   }
 
+  ///Retorna apenas os ids dos usuários
+  @override
+  Future<List<String>> getAllSeguindo(String idUser) async {
+    QueryBuilder querySeguindo = QueryBuilder<ParseObject>(ParseObject(SeguidorRepository().className()))
+      ..whereEqualTo(
+        SEGUIDOR_USER_COLUMN,
+        (ParseUser(null, null, null)..set(USER_ID_COLUMN, idUser)).toPointer(),
+      );
+
+    final ParseResponse seguidorResponse = await querySeguindo.query();
+
+    if (!seguidorResponse.success) throw Exception(ParseErrorsUtils.get(seguidorResponse.statusCode));
+    List<ParseObject>? parseResponse = seguidorResponse.results as List<ParseObject>?;
+
+    return parseResponse?.map<String>((e) => e.get(SEGUIDOR_SEGUINDO_COLUMN).get<String>(USER_ID_COLUMN)).toList() ?? [];
+  }
+
   @override
   Future<int> getCountSeguidores(String idUser) async {
     try {
