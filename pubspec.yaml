@@ -57,6 +57,7 @@ flutter:
     - assets/images/test/avatar_test.png
     - assets/images/concluido.png
     - assets/images/empty_produtos.svg
+    - assets/images/empty_lives.svg
 
   fonts:
     - family: Lexend

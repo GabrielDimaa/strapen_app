@@ -31,7 +31,7 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
-    TextStyle style() => textTheme.headline1!.copyWith(fontWeight: FontWeight.w600, color: AppColors.primary);
+    TextStyle style = textTheme.headline1!.copyWith(fontWeight: FontWeight.w600);
 
     return Scaffold(
       appBar: AppBarDefault(
@@ -94,7 +94,7 @@ class _HomePageState extends State<HomePage> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("Seguindo", style: style()),
+                              Text("Seguindo", style: style),
                               const VerticalSizedBox(2),
                               ListLives(lives: controller.lives?.livesSeguindo ?? []),
                             ],
@@ -122,7 +122,7 @@ class _HomePageState extends State<HomePage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text("Canal de Lives", style: textTheme.headline1!.copyWith(fontWeight: FontWeight.w600, color: AppColors.primary)),
+        Text("Canal de Lives", style: textTheme.headline1!.copyWith(fontWeight: FontWeight.w600)),
         const VerticalSizedBox(2),
         ListLives(lives: controller.lives?.livesOutros ?? []),
       ],
