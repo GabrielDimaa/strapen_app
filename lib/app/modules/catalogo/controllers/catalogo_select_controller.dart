@@ -70,7 +70,7 @@ abstract class _CatalogoSelectController with Store {
 
     if (catalogoModel?.id != null) {
       if (catalogos == null) catalogos = ObservableList<CatalogoStore>();
-      catalogos!.add(CatalogoFactory.fromModel(catalogoModel!));
+      catalogos!.insert(0, CatalogoFactory.fromModel(catalogoModel!));
     }
   }
 }

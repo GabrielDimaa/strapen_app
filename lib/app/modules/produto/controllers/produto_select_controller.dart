@@ -70,6 +70,6 @@ abstract class _ProdutoSelectController with Store {
 
     if (produtoModel?.id != null)
       if (produtos == null) produtos = ObservableList();
-      produtos!.add(ProdutoFactory.fromModel(produtoModel!));
+      produtos!.insert(0, ProdutoFactory.fromModel(produtoModel!));
   }
 }

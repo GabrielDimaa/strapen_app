@@ -2,6 +2,7 @@ import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
 import 'package:strapen_app/app/modules/catalogo/constants/columns.dart';
 import 'package:strapen_app/app/modules/catalogo/models/catalogo_model.dart';
 import 'package:strapen_app/app/modules/catalogo/repositories/icatalogo_repository.dart';
+import 'package:strapen_app/app/modules/produto/constants/columns.dart';
 import 'package:strapen_app/app/modules/produto/models/produto_model.dart';
 import 'package:strapen_app/app/modules/produto/repositories/produto_repository.dart';
 import 'package:strapen_app/app/modules/user/repositories/user_repository.dart';
@@ -81,6 +82,7 @@ class CatalogoRepository implements ICatalogoRepository {
       QueryBuilder query = QueryBuilder<ParseObject>(ParseObject(className()))
         ..whereEqualTo(CATALOGO_USER_COLUMN, (ParseUser(null, null, null)
           ..set(CATALOGO_ID_COLUMN, idUser)).toPointer())
+        ..orderByDescending(CATALOGO_DATA_CRIADO_COLUMN)
         ..includeObject([CATALOGO_USER_COLUMN]);
 
       ParseResponse response = await query.query();
@@ -103,6 +105,7 @@ class CatalogoRepository implements ICatalogoRepository {
 
       QueryBuilder query = QueryBuilder<ParseObject>(ParseObject(className()))
         ..whereEqualTo(CATALOGO_ID_COLUMN, id)
+        ..orderByDescending(CATALOGO_DATA_CRIADO_COLUMN)
         ..includeObject([CATALOGO_USER_COLUMN]);
 
       ParseResponse response = await query.query();
@@ -128,7 +131,8 @@ class CatalogoRepository implements ICatalogoRepository {
       if (idCatalogo == null) throw Exception("Houve um erro, tente novamente.\nSe o erro persistir, reinicie o aplicativo.");
 
       QueryBuilder query = QueryBuilder<ParseObject>(ParseObject(ProdutoRepository().className()))
-        ..whereRelatedTo(CATALOGO_PRODUTO_COLUMN, className(), idCatalogo);
+        ..whereRelatedTo(CATALOGO_PRODUTO_COLUMN, className(), idCatalogo)
+        ..orderByDescending(PRODUTO_DATA_CRIADO_COLUMN);
 
       ParseResponse response = await query.query();
 

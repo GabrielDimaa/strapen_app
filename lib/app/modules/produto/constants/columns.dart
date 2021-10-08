@@ -5,3 +5,4 @@ const String PRODUTO_QUANTIDADE_COLUMN = "quantidade";
 const String PRODUTO_PRECO_COLUMN = "preco";
 const String PRODUTO_FOTOS_COLUMN = "fotos";
 const String PRODUTO_ANUNCIANTE_COLUMN = "anunciante";
+const String PRODUTO_DATA_CRIADO_COLUMN = "createdAt";

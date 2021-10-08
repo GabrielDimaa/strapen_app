@@ -29,8 +29,7 @@ abstract class _CatalogoListController with Store {
     try {
       setLoading(true);
 
-      if (catalogos == null)
-        await atualizarListaCatalogos();
+      if (catalogos == null) await atualizarListaCatalogos();
     } finally {
       setLoading(false);
     }
@@ -45,13 +44,17 @@ abstract class _CatalogoListController with Store {
 
   @action
   Future<void> toCatalogoCreate() async {
-    await Modular.to.pushNamed(CATALOGO_ROUTE + CATALOGO_CREATE_ROUTE);
-    await load();
+    CatalogoModel? catalogoModel = await Modular.to.pushNamed(CATALOGO_ROUTE + CATALOGO_CREATE_ROUTE) as CatalogoModel?;
+    if (catalogoModel?.id != null) {
+      if (catalogos == null)
+        await atualizarListaCatalogos();
+      else
+        catalogos!.insert(0, catalogoModel!);
+    }
   }
 
   @action
   Future<void> toCatalogoInfo(CatalogoModel model) async {
     await Modular.to.pushNamed(CATALOGO_ROUTE + CATALOGO_INFO_ROUTE, arguments: model);
-    await load();
   }
 }

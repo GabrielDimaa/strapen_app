@@ -86,8 +86,8 @@ class ProdutoRepository implements IProdutoRepository {
       QueryBuilder query = QueryBuilder<ParseObject>(ParseObject(className()))
         ..whereEqualTo(
           PRODUTO_ANUNCIANTE_COLUMN,
-          (ParseUser(null, null, null)..set(USER_ID_COLUMN, id)).toPointer(),
-        );
+          (ParseUser(null, null, null)..set(USER_ID_COLUMN, id)).toPointer())
+        ..orderByDescending(PRODUTO_DATA_CRIADO_COLUMN);
 
       ParseResponse response = await query.query();
 

@@ -1,4 +1,3 @@
-
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'package:strapen_app/app/app_controller.dart';
@@ -30,8 +29,7 @@ abstract class _ProdutoListController with Store {
     try {
       setLoading(true);
 
-      if (produtos == null)
-        await atualizarListaProdutos();
+      if (produtos == null) await atualizarListaProdutos();
     } finally {
       setLoading(false);
     }
@@ -46,13 +44,17 @@ abstract class _ProdutoListController with Store {
 
   @action
   Future<void> toProdutoCreate() async {
-    await Modular.to.pushNamed(PRODUTO_ROUTE + PRODUTO_CREATE_ROUTE);
-    await load();
+    ProdutoModel? produtoModel = await Modular.to.pushNamed(PRODUTO_ROUTE + PRODUTO_CREATE_ROUTE) as ProdutoModel?;
+    if (produtoModel?.id != null) {
+      if (produtos == null)
+        await atualizarListaProdutos();
+      else
+        produtos!.insert(0, produtoModel!);
+    }
   }
 
   @action
   Future<void> toProdutoInfo(ProdutoModel model) async {
     await Modular.to.pushNamed(PRODUTO_ROUTE + PRODUTO_INFO_ROUTE, arguments: model);
-    await load();
   }
 }
