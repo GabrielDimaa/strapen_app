@@ -23,6 +23,7 @@ class _CatalogoCreatePageState extends ModularState<CatalogoCreatePage, Catalogo
             CircleButtonAppBar(
               child: Icon(Icons.delete, color: Colors.white),
               onTap: () {},
+              messageTooltip: "Remover",
             ),
           ],
           bottomWidgets: const TabBar(

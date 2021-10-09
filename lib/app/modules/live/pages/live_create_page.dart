@@ -167,6 +167,7 @@ class _LiveCreatePageState extends State<LiveCreatePage> {
                                 visible: controller.cameraStore.hasBackAndFront,
                                 child: CircleButtonAppBar(
                                   color: AppColors.opaci.withOpacity(0.4),
+                                  messageTooltip: "Inverter câmera",
                                   onTap: () async {
                                     try {
                                       controller.setLoading(true);

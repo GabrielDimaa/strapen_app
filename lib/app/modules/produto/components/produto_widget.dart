@@ -86,6 +86,7 @@ class _ProdutoWidgetState extends State<ProdutoWidget> {
                       Icons.edit,
                       color: Colors.white,
                     ),
+                    messageTooltip: "Editar",
                   ),
                 ),
               ],

@@ -70,6 +70,7 @@ class ScaffoldForegroundLive extends StatelessWidget {
                 child: CircleButtonAppBar(
                   color: AppColors.opaci.withOpacity(0.4),
                   child: Icon(Icons.shopping_cart),
+                  messageTooltip: "Ver catálogos",
                   onTap: () async => await controller.showCatalogoBottomSheet(this.context),
                 ),
               ),

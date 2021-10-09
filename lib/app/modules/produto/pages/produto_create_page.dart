@@ -67,6 +67,7 @@ class _ProdutoCreatePageState extends ModularState<ProdutoCreatePage, ProdutoCre
         backgroundColor: AppColors.background,
         actionsWidgets: [
           CircleButtonAppBar(
+            messageTooltip: "Remover",
             child: Icon(
               Icons.delete,
               color: Colors.white,

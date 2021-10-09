@@ -61,14 +61,14 @@ class _HomePageState extends State<HomePage> {
             children: [
               ActionAppBarHome(
                 icon: Icons.search,
-                onTap: () {
-                  showSearch(context: context, delegate: UserSearchDelegate());
-                },
+                onTap: () async => await showSearch(context: context, delegate: UserSearchDelegate()),
+                messageTooltip: "Pesquisar usuários",
               ),
               const SizedBox(width: 6),
               ActionAppBarHome(
                 icon: Icons.shop,
                 onTap: () async => await controller.toCreateLive(),
+                messageTooltip: "Iniciar Live",
               ),
             ],
           ),

@@ -36,6 +36,7 @@ class _CatalogoInfoPageState extends ModularState<CatalogoInfoPage, CatalogoInfo
           CircleButtonAppBar(
             child: Icon(Icons.edit, color: Colors.white),
             onTap: () {},
+            messageTooltip: "Editar",
           ),
         ],
       ),

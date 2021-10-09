@@ -44,6 +44,7 @@ class _UserPageState extends ModularState<UserPage, UserController> {
               child: CircleButtonAppBar(
                 child: Icon(Icons.edit, color: Colors.white),
                 onTap: () async => await controller.toEditarPerfil(),
+                messageTooltip: "Editar",
               ),
             ),
           ),

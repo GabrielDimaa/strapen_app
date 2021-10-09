@@ -64,6 +64,7 @@ class AppBarLiveWidget extends StatelessWidget with PreferredSizeWidget {
         CircleButtonAppBar(
           color: AppColors.opaci.withOpacity(0.4),
           child: Icon(Icons.close, color: Colors.white),
+          messageTooltip: "Encerrar",
           onTap: () async {
             if (isCriadorLive)
               await controller.stopLive(context);

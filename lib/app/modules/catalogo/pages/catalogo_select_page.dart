@@ -50,6 +50,7 @@ class _CatalogoSelectPageState extends State<CatalogoSelectPage> {
               color: Colors.white,
             ),
             onTap: () async => await controller.toCatalogoCreate(),
+            messageTooltip: "Criar Catálogo",
           ),
         ],
       ),

@@ -8,7 +8,8 @@ class BackButtonDefault extends CircleButtonAppBar {
   BackButtonDefault({this.backgroundColor, this.iconColor}) : super(
     color: backgroundColor,
     child: BackButton(
-      color: iconColor ?? Colors.white,
+      color: iconColor ?? Colors.white
     ),
+    messageTooltip: "Voltar",
   );
 }

@@ -50,6 +50,7 @@ class _ProdutoSelectPageState extends State<ProdutoSelectPage> {
               color: Colors.white,
             ),
             onTap: () async => await controller.toProdutoCreate(),
+            messageTooltip: "Criar produto",
           ),
         ],
       ),
