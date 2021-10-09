@@ -28,7 +28,7 @@ class _ProdutoInfoPageState extends ModularState<ProdutoInfoPage, ProdutoInfoCon
     return Scaffold(
       backgroundColor: AppColors.background.withOpacity(0.6),
       body: Observer(
-          builder: (_) => ProdutoWidget(produtoStore: controller.produtoStore!),
+        builder: (_) => ProdutoWidget(produtoStore: controller.produtoStore!),
       ),
     );
   }

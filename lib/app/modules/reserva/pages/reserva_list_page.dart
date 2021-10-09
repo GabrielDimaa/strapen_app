@@ -1,24 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:strapen_app/app/modules/reserva/components/status_reserva_widget.dart';
 import 'package:strapen_app/app/modules/reserva/controllers/reserva_list_controller.dart';
+import 'package:strapen_app/app/modules/reserva/models/reserva_model.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/app_bar_default.dart';
 import 'package:strapen_app/app/shared/components/loading/circular_loading.dart';
-import 'package:strapen_app/app/shared/components/padding/padding_list.dart';
 import 'package:strapen_app/app/shared/components/padding/padding_scaffold.dart';
 import 'package:strapen_app/app/shared/components/widgets/empty_list_widget.dart';
-import 'package:strapen_app/app/shared/components/widgets/list_tile_widget.dart';
-import 'package:transparent_image/transparent_image.dart';
+import 'package:strapen_app/app/shared/components/widgets/produto_grid_tile.dart';
+import 'package:strapen_app/app/shared/components/widgets/produto_grid_view.dart';
 
 class ReservaListPage extends StatefulWidget {
   @override
   _ReservaListPageState createState() => _ReservaListPageState();
 }
 
-class _ReservaListPageState extends State<ReservaListPage> {
-  final ReservaListController controller = Modular.get<ReservaListController>();
-
+class _ReservaListPageState extends ModularState<ReservaListPage, ReservaListController> {
   @override
   void initState() {
     super.initState();
@@ -37,7 +35,7 @@ class _ReservaListPageState extends State<ReservaListPage> {
           ),
           Expanded(
             child: Padding(
-              padding: const PaddingList(),
+              padding: const PaddingScaffold(),
               child: Observer(builder: (_) {
                 if (controller.loading) {
                   return const CircularLoading();
@@ -49,19 +47,18 @@ class _ReservaListPageState extends State<ReservaListPage> {
                   } else {
                     return RefreshIndicator(
                       onRefresh: controller.buscarReservas,
-                      child: ListView.builder(
+                      child: ProdutoGridView(
+                        aspectRatioWithStatus: true,
                         itemCount: controller.reservas!.length,
                         itemBuilder: (_, i) {
-                          final res = controller.reservas![i];
-                          return ListTileWidget(
-                            leadingImage: FadeInImage.memoryNetwork(
-                              placeholder: kTransparentImage,
-                              image: res.fotos!.first,
-                              height: 64,
-                              width: 64,
-                            ),
-                            title: Text(res.descricao!),
-                            subtitle: StatusReservaWidget(status: res.status!),
+                          final ReservaModel res = controller.reservas![i];
+                          return ProdutoGridTile(
+                            image: res.fotos!.first,
+                            descricao: res.descricao!,
+                            data: res.dataHoraReserva,
+                            preco: res.preco! * res.quantidade!,
+                            status: res.status,
+                            onTap: () async => await controller.toProdutoInfoPage(res),
                           );
                         },
                       ),

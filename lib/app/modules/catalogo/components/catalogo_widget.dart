@@ -6,6 +6,7 @@ import 'package:strapen_app/app/modules/produto/stores/produto_store.dart';
 import 'package:strapen_app/app/shared/components/padding/padding_scaffold.dart';
 import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
 import 'package:strapen_app/app/shared/components/widgets/produto_grid_tile.dart';
+import 'package:strapen_app/app/shared/components/widgets/produto_grid_view.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class CatalogoWidget extends StatelessWidget {
@@ -75,16 +76,8 @@ class CatalogoWidget extends StatelessWidget {
           ),
           const VerticalSizedBox(2),
           Observer(
-            builder: (_) => GridView.builder(
-              physics: const NeverScrollableScrollPhysics(),
-              shrinkWrap: true,
+            builder: (_) => ProdutoGridView(
               itemCount: catalogoStore.produtos!.length,
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 2,
-                crossAxisSpacing: 12,
-                mainAxisSpacing: 12,
-                childAspectRatio: 0.65,
-              ),
               itemBuilder: (_, i) {
                 final ProdutoStore prod = catalogoStore.produtos![i];
                 return Observer(
@@ -94,7 +87,6 @@ class CatalogoWidget extends StatelessWidget {
                     preco: prod.preco!,
                     qtd: prod.quantidade!,
                     onTap: () => onPressedProduto.call(prod),
-                    isEditavel: !isLive,
                   ),
                 );
               },

@@ -1,5 +1,8 @@
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'package:strapen_app/app/app_controller.dart';
+import 'package:strapen_app/app/modules/produto/constants/routes.dart';
+import 'package:strapen_app/app/modules/produto/factories/produto_factory.dart';
 import 'package:strapen_app/app/modules/reserva/models/reserva_model.dart';
 import 'package:strapen_app/app/modules/reserva/repositories/ireserva_repository.dart';
 
@@ -30,8 +33,7 @@ abstract class _ReservaListController with Store {
     try {
       setLoading(true);
 
-      if (reservas == null)
-        await buscarReservas();
+      await buscarReservas();
     } finally {
       setLoading(false);
     }
@@ -39,7 +41,12 @@ abstract class _ReservaListController with Store {
 
   @action
   Future<void> buscarReservas() async {
-    List<ReservaModel> reservas = await _reservaRepository.getAll(_appController.userModel!.id!);
+    List<ReservaModel> reservas = await _reservaRepository.getAllCompras(_appController.userModel!.id!);
     setReservas(reservas.asObservable());
+  }
+
+  @action
+  Future<void> toProdutoInfoPage(ReservaModel model) async {
+    await Modular.to.pushNamed(PRODUTO_ROUTE + PRODUTO_INFO_ROUTE, arguments: ProdutoFactory.fromReservaModel(model));
   }
 }

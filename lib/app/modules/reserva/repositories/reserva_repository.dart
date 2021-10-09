@@ -4,16 +4,11 @@ import 'package:strapen_app/app/modules/reserva/enums/enum_status_reserva.dart';
 import 'package:strapen_app/app/modules/reserva/models/reserva_model.dart';
 import 'package:strapen_app/app/modules/reserva/repositories/ireserva_repository.dart';
 import 'package:strapen_app/app/modules/user/constants/columns.dart';
-import 'package:strapen_app/app/modules/user/factories/user_factory.dart';
-import 'package:strapen_app/app/modules/user/repositories/iuser_repository.dart';
+import 'package:strapen_app/app/modules/user/repositories/user_repository.dart';
 import 'package:strapen_app/app/shared/extensions/string_extension.dart';
 import 'package:strapen_app/app/shared/utils/parse_errors_utils.dart';
 
 class ReservaRepository implements IReservaRepository {
-  final IUserRepository _userRepository;
-
-  ReservaRepository(this._userRepository);
-
   @override
   String className() => "Reserva";
   String messageError() => "Houve um erro ao reservar o produto.";
@@ -27,7 +22,7 @@ class ReservaRepository implements IReservaRepository {
     if ((model.preco ?? 0) <= 0) throw Exception(messageError());
     if ((model.fotos?.length ?? 0) == 0) throw Exception(messageError());
     if (model.user?.id == null) throw Exception(messageError());
-    if (model.anunciante == null) throw Exception(messageError());
+    if (model.anunciante?.id == null) throw Exception(messageError());
   }
 
   @override
@@ -44,7 +39,10 @@ class ReservaRepository implements IReservaRepository {
         RESERVA_USER_COLUMN,
         ParseUser(null, null, null)..set(USER_ID_COLUMN, model.user!.id!),
       )
-      ..set<String>(RESERVA_ANUNCIANTE_COLUMN, model.anunciante!.id!)
+      ..set<ParseUser>(
+        RESERVA_ANUNCIANTE_COLUMN,
+        ParseUser(null, null, null)..set(USER_ID_COLUMN, model.anunciante!.id!),
+      )
       ..set<int>(RESERVA_STATUS_COLUMN, EnumStatusReservaHelper.getValue(model.status!));
   }
 
@@ -57,9 +55,9 @@ class ReservaRepository implements IReservaRepository {
       e.get<String>(RESERVA_DESCRICAO_DETALHADA_COLUMN),
       e.get<int>(RESERVA_QUANTIDADE_COLUMN),
       e.get(RESERVA_PRECO_COLUMN) is int ? e.get<int>(RESERVA_PRECO_COLUMN)?.toDouble() ?? null : e.get<double>(RESERVA_PRECO_COLUMN),
-      e.get<List<String>>(RESERVA_FOTOS_COLUMN)?.map((e) => e).toList(),
-      UserFactory.newModel()..id = e.get(RESERVA_USER_COLUMN).get<String>(USER_ID_COLUMN),
-      null,
+      e.get<List>(RESERVA_FOTOS_COLUMN)?.map((e) => e.toString()).toList() ?? [],
+      UserRepository(null).toModel(e.get(RESERVA_USER_COLUMN)),
+      UserRepository(null).toModel(e.get(RESERVA_ANUNCIANTE_COLUMN)),
       EnumStatusReservaHelper.get(e.get<int>(RESERVA_STATUS_COLUMN) ?? 0),
       e.get<DateTime>(RESERVA_DATA_HORA_CRIADO_COLUMN),
     );
@@ -86,9 +84,10 @@ class ReservaRepository implements IReservaRepository {
   }
 
   @override
-  Future<List<ReservaModel>> getAll(String idUser) async {
+  Future<List<ReservaModel>> getAllCompras(String idUser) async {
     try {
       QueryBuilder query = QueryBuilder<ParseObject>(ParseObject(className()))
+        ..includeObject([RESERVA_USER_COLUMN, RESERVA_ANUNCIANTE_COLUMN])
         ..whereEqualTo(
           RESERVA_USER_COLUMN,
           (ParseUser(null, null, null)..set(USER_ID_COLUMN, idUser)).toPointer(),
@@ -99,14 +98,7 @@ class ReservaRepository implements IReservaRepository {
       if (!response.success) throw Exception(ParseErrorsUtils.get(response.statusCode));
       List<ParseObject>? parseResponseList = response.results as List<ParseObject>?;
 
-      if (parseResponseList?.isEmpty ?? true) return [];
-
-      List<ReservaModel> reservas = [];
-      for (var parse in parseResponseList!) {
-        reservas.add(toModel(parse)..anunciante = await _userRepository.getById(parse.get<String>(RESERVA_ANUNCIANTE_COLUMN)));
-      }
-
-      return reservas;
+      return parseResponseList?.map((e) => toModel(e)).toList() ?? [];
     } catch(e) {
       throw Exception(e);
     }

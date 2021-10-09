@@ -31,13 +31,15 @@ class ListTileWidget extends StatelessWidget {
                       child: leadingImage,
                     ),
                     const HorizontalSizedBox(),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        title != null ? title! : Container(),
-                        const VerticalSizedBox(0.3),
-                        subtitle != null ? subtitle! : Container(),
-                      ],
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          title != null ? title! : Container(),
+                          const VerticalSizedBox(0.3),
+                          subtitle != null ? subtitle! : Container(),
+                        ],
+                      ),
                     ),
                   ],
                 ),
