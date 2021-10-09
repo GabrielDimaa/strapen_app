@@ -59,7 +59,7 @@ class CompraReservaListWidget extends StatelessWidget {
       children: [
         Text(
           title,
-          style: Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 18),
+          style: Theme.of(context).textTheme.headline1!.copyWith(fontWeight: FontWeight.w600),
         ),
         TextButton(
           onPressed: onPressed,

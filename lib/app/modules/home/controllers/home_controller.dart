@@ -4,6 +4,8 @@ import 'package:strapen_app/app/app_controller.dart';
 import 'package:strapen_app/app/modules/live/constants/routes.dart';
 import 'package:strapen_app/app/modules/live/models/live_demonstracao_model.dart';
 import 'package:strapen_app/app/modules/live/services/ilive_service.dart';
+import 'package:strapen_app/app/modules/reserva/models/reserva_model.dart';
+import 'package:strapen_app/app/modules/reserva/repositories/ireserva_repository.dart';
 import 'package:strapen_app/app/modules/user/constants/routes.dart';
 import 'package:strapen_app/app/modules/user/factories/user_factory.dart';
 import 'package:strapen_app/app/modules/user/stores/user_store.dart';
@@ -13,10 +15,15 @@ part 'home_controller.g.dart';
 class HomeController = _HomeController with _$HomeController;
 
 abstract class _HomeController with Store {
+  final IReservaRepository _reservaRepository;
   final ILiveService _liveService;
   final AppController _appController;
 
-  _HomeController(this._liveService, this._appController);
+  _HomeController(this._reservaRepository, this._liveService, this._appController) {
+    this._ultimaAtualizacao = DateTime.now();
+  }
+
+  late final DateTime _ultimaAtualizacao;
 
   @observable
   UserStore userStore = UserFactory.newStore();
@@ -25,7 +32,16 @@ abstract class _HomeController with Store {
   bool loading = false;
 
   @observable
-  LiveDemonstracaoModel? lives = LiveDemonstracaoModel([], []);
+  LiveDemonstracaoModel lives = LiveDemonstracaoModel([], []);
+
+  @observable
+  ObservableList<ReservaModel>? reservas;
+
+  @observable
+  ObservableList<ReservaModel>? compras;
+
+  @computed
+  bool get reservasExibidoPrimeiro => (compras?.isEmpty ?? true) && (reservas?.isNotEmpty ?? false);
 
   @action
   void setUserStore(UserStore value) => userStore = value;
@@ -37,16 +53,32 @@ abstract class _HomeController with Store {
   void setLives(LiveDemonstracaoModel value) => lives = value;
 
   @action
+  void setReservas(ObservableList<ReservaModel> value) => reservas = value;
+
+  @action
+  void setCompras(ObservableList<ReservaModel> value) => compras = value;
+
+  @action
   Future<void> load() async {
     try {
       setLoading(true);
 
       setUserStore(UserFactory.fromModel(_appController.userModel!));
 
-      setLives((await _liveService.getLivesDemonstracao(userStore.id!)));
+      if (DateTime.now().difference(_ultimaAtualizacao).inMinutes > 1.5)
+        setLives((await _liveService.getLivesDemonstracao(userStore.id!)));
+
+      if (reservas == null || compras == null)
+        await carregarReservas();
     } finally {
       setLoading(false);
     }
+  }
+
+  @action
+  Future<void> carregarReservas() async {
+    setReservas((await _reservaRepository.getAllReservas(userStore.id!, limit: 10)).asObservable());
+    setCompras((await _reservaRepository.getAllCompras(userStore.id!, limit: 10)).asObservable());
   }
 
   @action

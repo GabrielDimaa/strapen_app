@@ -107,7 +107,7 @@ class _UserPageState extends ModularState<UserPage, UserController> {
                         children: [
                           Text(
                             "Bio",
-                            style: textTheme.bodyText2!.copyWith(fontSize: 18),
+                            style: textTheme.headline1!.copyWith(fontWeight: FontWeight.w600),
                           ),
                           const VerticalSizedBox(0.5),
                           Text(controller.userStore.bio ?? ""),

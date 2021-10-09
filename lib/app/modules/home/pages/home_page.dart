@@ -10,6 +10,7 @@ import 'package:strapen_app/app/shared/components/app_bar_default/app_bar_defaul
 import 'package:strapen_app/app/shared/components/loading/circular_loading.dart';
 import 'package:strapen_app/app/shared/components/padding/padding_scaffold.dart';
 import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
+import 'package:strapen_app/app/shared/components/widgets/compra_reserva_list_widget.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class HomePage extends StatefulWidget {
@@ -35,6 +36,7 @@ class _HomePageState extends State<HomePage> {
 
     return Scaffold(
       appBar: AppBarDefault(
+        backgroundColor: AppColors.background,
         title: Text("Home"),
         leadingWidget: Padding(
           padding: const EdgeInsets.only(left: 12, top: 6, bottom: 6),
@@ -83,31 +85,61 @@ class _HomePageState extends State<HomePage> {
                 return const Expanded(child: const CircularLoading());
               else
                 return Expanded(
-                  child: SingleChildScrollView(
-                    padding: const PaddingScaffold(),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const VerticalSizedBox(2.5),
-                        Visibility(
-                          visible: (controller.lives?.livesSeguindo?.length ?? 0) > 0,
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text("Seguindo", style: style),
-                              const VerticalSizedBox(2),
-                              ListLives(lives: controller.lives?.livesSeguindo ?? []),
-                            ],
+                  child: RefreshIndicator(
+                    onRefresh: controller.carregarReservas,
+                    child: Observer(
+                      builder: (_) => ListView(
+                        padding: const PaddingScaffold(),
+                        children: [
+                          const VerticalSizedBox(2.5),
+                          Visibility(
+                            visible: (controller.lives.livesSeguindo?.length ?? 0) > 0,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text("Seguindo", style: style),
+                                const VerticalSizedBox(2),
+                                ListLives(lives: controller.lives.livesSeguindo ?? []),
+                              ],
+                            ),
+                            replacement: _canalDeLives(textTheme),
                           ),
-                          replacement: _canalDeLives(textTheme),
-                        ),
-                        const VerticalSizedBox(3),
-                        Visibility(
-                          visible: (controller.lives?.livesSeguindo?.length ?? 0) > 0,
-                          child: _canalDeLives(textTheme),
-                        ),
-                        const VerticalSizedBox(3),
-                      ],
+                          Visibility(
+                            visible: (controller.lives.livesSeguindo?.length ?? 0) > 0,
+                            child: Column(
+                              children: [
+                                const VerticalSizedBox(3),
+                                _canalDeLives(textTheme),
+                              ],
+                            ),
+                          ),
+                          const VerticalSizedBox(2),
+                          if (controller.reservasExibidoPrimeiro)
+                            Column(
+                              children: [
+                                CompraReservaListWidget(
+                                  reserva: true,
+                                  list: controller.reservas ?? [],
+                                ),
+                                const VerticalSizedBox(2),
+                              ],
+                            ),
+                          CompraReservaListWidget(
+                            reserva: false,
+                            list: controller.compras ?? [],
+                          ),
+                          if (!controller.reservasExibidoPrimeiro)
+                            Column(
+                              children: [
+                                const VerticalSizedBox(2),
+                                CompraReservaListWidget(
+                                  reserva: true,
+                                  list: controller.reservas ?? [],
+                                ),
+                              ],
+                            ),
+                        ],
+                      ),
                     ),
                   ),
                 );
@@ -124,7 +156,7 @@ class _HomePageState extends State<HomePage> {
       children: [
         Text("Canal de Lives", style: textTheme.headline1!.copyWith(fontWeight: FontWeight.w600)),
         const VerticalSizedBox(2),
-        ListLives(lives: controller.lives?.livesOutros ?? []),
+        ListLives(lives: controller.lives.livesOutros ?? []),
       ],
     );
   }

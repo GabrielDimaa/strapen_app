@@ -171,7 +171,7 @@ abstract class _UserController with Store {
       setLoadingReservas(true);
 
       setReservas((await _reservaRepository.getAllReservas(userStore.id!, limit: 10)).asObservable());
-      setReservas((await _reservaRepository.getAllCompras(userStore.id!, limit: 10)).asObservable());
+      setCompras((await _reservaRepository.getAllCompras(userStore.id!, limit: 10)).asObservable());
     } finally {
       setLoadingReservas(false);
     }

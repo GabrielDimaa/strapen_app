@@ -8,6 +8,8 @@ import 'package:strapen_app/app/modules/live/repositories/ilive_repository.dart'
 import 'package:strapen_app/app/modules/live/repositories/live_repository.dart';
 import 'package:strapen_app/app/modules/live/services/ilive_service.dart';
 import 'package:strapen_app/app/modules/live/services/live_service.dart';
+import 'package:strapen_app/app/modules/reserva/repositories/ireserva_repository.dart';
+import 'package:strapen_app/app/modules/reserva/repositories/reserva_repository.dart';
 import 'package:strapen_app/app/modules/user/repositories/iseguidor_repository.dart';
 import 'package:strapen_app/app/modules/user/repositories/seguidor_repository.dart';
 
@@ -16,9 +18,10 @@ class HomeModule extends Module {
   final List<Bind> binds = [
     Bind((i) => CatalogoRepository()),
     Bind((i) => SeguidorRepository()),
+    Bind((i) => ReservaRepository()),
     Bind((i) => LiveRepository(i.get<ICatalogoRepository>(), i.get<ISeguidorRepository>())),
     Bind((i) => LiveService(i.get<ILiveRepository>())),
-    Bind((i) => HomeController(i.get<ILiveService>(), i.get<AppController>()), export: true),
+    Bind((i) => HomeController(i.get<IReservaRepository>(), i.get<ILiveService>(), i.get<AppController>()), export: true),
   ];
 
   @override
