@@ -9,9 +9,11 @@ import 'package:strapen_app/app/shared/components/app_bar_default/app_bar_defaul
 import 'package:strapen_app/app/shared/components/app_bar_default/widgets/circle_background_app_bar.dart';
 import 'package:strapen_app/app/shared/components/dialog/error_dialog.dart';
 import 'package:strapen_app/app/shared/components/loading/circular_loading.dart';
+import 'package:strapen_app/app/shared/components/loading/linear_loading.dart';
 import 'package:strapen_app/app/shared/components/padding/padding_scaffold.dart';
 import 'package:strapen_app/app/shared/components/sized_box/horizontal_sized_box.dart';
 import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
+import 'package:strapen_app/app/shared/components/widgets/compra_reserva_list_widget.dart';
 import 'package:strapen_app/app/shared/extensions/string_extension.dart';
 
 class UserPage extends StatefulWidget {
@@ -58,7 +60,6 @@ class _UserPageState extends ModularState<UserPage, UserController> {
             return SingleChildScrollView(
               padding: const PaddingScaffold(),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -163,23 +164,61 @@ class _UserPageState extends ModularState<UserPage, UserController> {
                           ),
                         ],
                       ),
-                      replacement: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Text(
-                            "Reservas",
-                            style: textTheme.bodyText2!.copyWith(fontSize: 18),
-                          ),
-                          TextButton(
-                            onPressed: () async => await controller.toReservas(),
-                            child: Row(
+                    ),
+                  ),
+                  Observer(
+                    builder: (_) => Visibility(
+                      visible: controller.isPerfilPessoal,
+                      child: Observer(
+                        builder: (_) {
+                          if (controller.loadingReservas)
+                            return SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.7,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  const VerticalSizedBox(7),
+                                  LinearLoading(visible: true),
+                                  const VerticalSizedBox(1.5),
+                                  Text(
+                                    "Carregando suas compras e reservas.",
+                                    style: Theme.of(context).textTheme.bodyText2!.copyWith(fontSize: 14, color: Colors.grey[400]),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                ],
+                              ),
+                            );
+                          else
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
-                                const Text("Ver todos"),
-                                Icon(Icons.keyboard_arrow_right),
+                                if (controller.compras.isEmpty && controller.reservas.isNotEmpty)
+                                  Column(
+                                    children: [
+                                      CompraReservaListWidget(
+                                        reserva: true,
+                                        list: controller.reservas,
+                                      ),
+                                      const VerticalSizedBox(2),
+                                    ],
+                                  ),
+                                CompraReservaListWidget(
+                                  reserva: false,
+                                  list: controller.compras,
+                                ),
+                                if (controller.compras.isNotEmpty && controller.reservas.isNotEmpty)
+                                  Column(
+                                    children: [
+                                      const VerticalSizedBox(2),
+                                      CompraReservaListWidget(
+                                        reserva: true,
+                                        list: controller.reservas,
+                                      ),
+                                    ],
+                                  ),
                               ],
-                            ),
-                          ),
-                        ],
+                            );
+                        },
                       ),
                     ),
                   ),
@@ -198,7 +237,7 @@ class _UserPageState extends ModularState<UserPage, UserController> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text("$qtd", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+          Text(qtd < 0 ? "0" : "$qtd", style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
           const VerticalSizedBox(0.3),
           Text(text, style: TextStyle(fontSize: 12)),
         ],
@@ -247,7 +286,7 @@ class _UserPageState extends ModularState<UserPage, UserController> {
               ),
             );
           } else {
-            await controller.seguirDeixarDeSeguir(context);
+            await controller.seguir(context);
           }
         } catch (e) {
           ErrorDialog.show(context: context, content: e.toString());

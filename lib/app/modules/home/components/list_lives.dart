@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:strapen_app/app/app_widget.dart';
 import 'package:strapen_app/app/modules/home/components/card_live.dart';
 import 'package:strapen_app/app/modules/home/controllers/home_controller.dart';
 import 'package:strapen_app/app/modules/live/models/live_model.dart';
 import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
+import 'package:strapen_app/app/shared/components/widgets/empty_list_horizontal_widget.dart';
 
 class ListLives extends StatelessWidget {
   final HomeController controller = Modular.get<HomeController>();
@@ -34,16 +34,9 @@ class ListLives extends StatelessWidget {
       replacement: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          SvgPicture.asset(
-            "assets/images/empty_lives.svg",
-            height: 140,
-            width: 140,
-          ),
-          const VerticalSizedBox(1.5),
-          const Text(
-            "Nenhuma Live sendo transmitida agora.\nComece uma você mesmo!",
-            textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 14),
+          EmptyListHorizontalWidget(
+            pathImage: "assets/images/empty_lives.svg",
+            message: "Nenhuma Live sendo transmitida agora.\nComece uma você mesmo!",
           ),
           const VerticalSizedBox(),
           Row(

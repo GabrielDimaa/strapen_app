@@ -84,14 +84,39 @@ class ReservaRepository implements IReservaRepository {
   }
 
   @override
-  Future<List<ReservaModel>> getAllCompras(String idUser) async {
+  Future<List<ReservaModel>> getAllCompras(String idUser, {int? limit}) async {
     try {
       QueryBuilder query = QueryBuilder<ParseObject>(ParseObject(className()))
         ..includeObject([RESERVA_USER_COLUMN, RESERVA_ANUNCIANTE_COLUMN])
         ..whereEqualTo(
           RESERVA_USER_COLUMN,
-          (ParseUser(null, null, null)..set(USER_ID_COLUMN, idUser)).toPointer(),
-        );
+          (ParseUser(null, null, null)..set(USER_ID_COLUMN, idUser)).toPointer())
+        ..orderByDescending(RESERVA_DATA_HORA_CRIADO_COLUMN);
+
+      if (limit != null) query..setLimit(limit);
+
+      ParseResponse response = await query.query();
+
+      if (!response.success) throw Exception(ParseErrorsUtils.get(response.statusCode));
+      List<ParseObject>? parseResponseList = response.results as List<ParseObject>?;
+
+      return parseResponseList?.map((e) => toModel(e)).toList() ?? [];
+    } catch(e) {
+      throw Exception(e);
+    }
+  }
+
+  @override
+  Future<List<ReservaModel>> getAllReservas(String idUser, {int? limit}) async {
+    try {
+      QueryBuilder query = QueryBuilder<ParseObject>(ParseObject(className()))
+        ..includeObject([RESERVA_USER_COLUMN, RESERVA_ANUNCIANTE_COLUMN])
+        ..whereEqualTo(
+            RESERVA_ANUNCIANTE_COLUMN,
+            (ParseUser(null, null, null)..set(USER_ID_COLUMN, idUser)).toPointer())
+        ..orderByDescending(RESERVA_DATA_HORA_CRIADO_COLUMN);
+
+      if (limit != null) query..setLimit(limit);
 
       ParseResponse response = await query.query();
 

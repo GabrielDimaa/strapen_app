@@ -58,6 +58,8 @@ flutter:
     - assets/images/concluido.png
     - assets/images/empty_produtos.svg
     - assets/images/empty_lives.svg
+    - assets/images/empty_reserva.svg
+    - assets/images/empty_compra.svg
 
   fonts:
     - family: Lexend

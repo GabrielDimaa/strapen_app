@@ -39,6 +39,7 @@ class ProdutoGridTile extends StatelessWidget {
           borderRadius: radius,
           border: Border.all(color: Colors.grey),
         ),
+        width: 140,
         padding: const EdgeInsets.all(12),
         child: Column(
           children: [
@@ -62,7 +63,12 @@ class ProdutoGridTile extends StatelessWidget {
                     if (status != null)
                       Align(
                         alignment: Alignment.centerRight,
-                        child: StatusReservaWidget(status: status!),
+                        child: Column(
+                          children: [
+                            StatusReservaWidget(status: status!),
+                            const VerticalSizedBox(0.3),
+                          ],
+                        ),
                       ),
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,

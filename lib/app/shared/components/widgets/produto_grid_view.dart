@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:strapen_app/app/shared/components/padding/padding_scaffold.dart';
 
 class ProdutoGridView extends StatelessWidget {
   final int itemCount;
@@ -20,7 +21,7 @@ class ProdutoGridView extends StatelessWidget {
       shrinkWrap: true,
       itemCount: itemCount,
       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
+        crossAxisCount: ((MediaQuery.of(context).size.width - (PaddingScaffold.value * 2)) ~/  130),
         crossAxisSpacing: 12,
         mainAxisSpacing: 12,
         childAspectRatio: aspectRatioWithStatus ? 0.61 : 0.70,

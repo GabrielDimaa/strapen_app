@@ -6,6 +6,8 @@ import 'package:strapen_app/app/modules/live/repositories/ilive_repository.dart'
 import 'package:strapen_app/app/modules/live/repositories/live_repository.dart';
 import 'package:strapen_app/app/modules/live/services/ilive_service.dart';
 import 'package:strapen_app/app/modules/live/services/live_service.dart';
+import 'package:strapen_app/app/modules/reserva/repositories/ireserva_repository.dart';
+import 'package:strapen_app/app/modules/reserva/repositories/reserva_repository.dart';
 import 'package:strapen_app/app/modules/user/constants/routes.dart';
 import 'package:strapen_app/app/modules/user/controllers/user_controller.dart';
 import 'package:strapen_app/app/modules/user/controllers/user_editar_controller.dart';
@@ -25,9 +27,10 @@ class UserModule extends Module {
     Bind((i) => UserRepository(i.get<SessionPreferences>())),
     Bind((i) => CatalogoRepository()),
     Bind((i) => SeguidorRepository()),
+    Bind((i) => ReservaRepository()),
     Bind((i) => LiveRepository(i.get<ICatalogoRepository>(), i.get<ISeguidorRepository>())),
     Bind((i) => LiveService(i.get<ILiveRepository>())),
-    Bind((i) => UserController(i.get<ISeguidorRepository>(), i.get<ILiveService>(), i.get<AppController>())),
+    Bind((i) => UserController(i.get<ISeguidorRepository>(), i.get<IReservaRepository>(), i.get<ILiveService>(), i.get<AppController>())),
     Bind((i) => UserEditarController(i.get<IUserRepository>(), i.get<AppController>())),
   ];
 
