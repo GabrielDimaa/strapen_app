@@ -95,15 +95,16 @@ abstract class _UserEditarController with Store implements IDefaultController {
         ],
       );
 
-      if (confirm)
-        await LoadingDialog.show(context, message, () async {
-          UserModel model = userStore.toModel();
+      if (confirm) {
+        UserModel model = userStore.toModel();
 
+        await LoadingDialog.show(context, message, () async {
           await _userRepository.update(model);
           _appController.setUserModel(model);
-
-          Modular.to.pop();
         });
+
+        Modular.to.pop(model);
+      }
     } catch (e) {
       rethrow;
     }

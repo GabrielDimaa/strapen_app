@@ -110,7 +110,11 @@ abstract class _UserController with Store {
 
   @action
   Future<void> toEditarPerfil() async {
-    await Modular.to.pushNamed(USER_ROUTE + USER_EDITAR_PERFIL_ROUTE);
+    UserModel? model =  await Modular.to.pushNamed(USER_ROUTE + USER_EDITAR_PERFIL_ROUTE) as UserModel?;
+
+    if (model != null) {
+      setUserStore(UserFactory.fromModel(model));
+    }
   }
 
   @action
