@@ -27,6 +27,6 @@ class ProdutoModule extends Module {
     ChildRoute(Modular.initialRoute, child: (_, args) => ProdutoListPage()),
     ChildRoute(PRODUTO_CREATE_ROUTE, child: (_, args) => ProdutoCreatePage()),
     ChildRoute(PRODUTO_SELECT_ROUTE, child: (_, args) => ProdutoSelectPage(produtos: args.data)),
-    ChildRoute(PRODUTO_INFO_ROUTE, child: (_, args) => ProdutoInfoPage(model: args.data)),
+    ChildRoute(PRODUTO_INFO_ROUTE, child: (_, args) => ProdutoInfoPage(produtoModel: args.data['produtoModel'], reservaModel: args.data['reservaModel'])),
   ];
 }

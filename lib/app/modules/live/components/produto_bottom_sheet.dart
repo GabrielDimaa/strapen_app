@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:strapen_app/app/app_widget.dart';
+import 'package:strapen_app/app/modules/live/components/user_bottom_sheet.dart';
 import 'package:strapen_app/app/modules/live/controllers/live_controller.dart';
 import 'package:strapen_app/app/modules/produto/components/produto_widget.dart';
 import 'package:strapen_app/app/modules/produto/stores/produto_store.dart';
@@ -50,6 +51,9 @@ class _ProdutoBottomSheetState extends State<ProdutoBottomSheet> {
             } catch(e) {
               ErrorDialog.show(context: context, content: e.toString());
             }
+          } : null,
+          onPressedAnunciante: !controller.isCriadorLive ? () async {
+            await UserBottomSheet.show(context: context, user: widget.produto.anunciante!);
           } : null,
         ),
       ),

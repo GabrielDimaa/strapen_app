@@ -55,6 +55,6 @@ abstract class _ProdutoListController with Store {
 
   @action
   Future<void> toProdutoInfo(ProdutoModel model) async {
-    await Modular.to.pushNamed(PRODUTO_ROUTE + PRODUTO_INFO_ROUTE, arguments: model);
+    await Modular.to.pushNamed(PRODUTO_ROUTE + PRODUTO_INFO_ROUTE, arguments: {'produtoModel': model});
   }
 }
