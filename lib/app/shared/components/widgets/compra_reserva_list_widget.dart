@@ -24,9 +24,9 @@ class CompraReservaListWidget extends StatelessWidget {
           title: reserva ? "Reservas" : "Compras",
           onPressed: () async {
             if (reserva) {
-              await Modular.to.pushNamed(RESERVA_ROUTE);
+              await Modular.to.pushNamed(RESERVA_ROUTE, arguments: reserva);
             } else {
-              await Modular.to.pushNamed(RESERVA_ROUTE);
+              await Modular.to.pushNamed(RESERVA_ROUTE, arguments: reserva);
             }
           },
         ),
@@ -76,7 +76,7 @@ class CompraReservaListWidget extends StatelessWidget {
 
   Widget _list({required List<ReservaModel> list}) {
     return SizedBox(
-      height: 240,
+      height: 250,
       child: ListView.builder(
         scrollDirection: Axis.horizontal,
         itemCount: list.length,

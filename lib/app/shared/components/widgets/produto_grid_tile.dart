@@ -44,80 +44,78 @@ class ProdutoGridTile extends StatelessWidget {
         child: Column(
           children: [
             Expanded(
-              child: SingleChildScrollView(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Align(
-                      alignment: Alignment.center,
-                      child: ClipRRect(
-                        borderRadius: radius,
-                        child: FadeInImage.memoryNetwork(
-                          placeholder: kTransparentImage,
-                          image: image,
-                          height: 110,
-                        ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Align(
+                    alignment: Alignment.center,
+                    child: ClipRRect(
+                      borderRadius: radius,
+                      child: FadeInImage.memoryNetwork(
+                        placeholder: kTransparentImage,
+                        image: image,
+                        height: 110,
                       ),
                     ),
-                    const VerticalSizedBox(),
-                    if (status != null)
-                      Align(
-                        alignment: Alignment.centerRight,
-                        child: Column(
-                          children: [
-                            StatusReservaWidget(status: status!),
-                            const VerticalSizedBox(0.3),
-                          ],
-                        ),
+                  ),
+                  const VerticalSizedBox(),
+                  if (status != null)
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: Column(
+                        children: [
+                          StatusReservaWidget(status: status!),
+                          const VerticalSizedBox(0.3),
+                        ],
                       ),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          descricao,
-                          overflow: TextOverflow.ellipsis,
-                          style: textTheme.bodyText2,
-                        ),
-                        const VerticalSizedBox(0.5),
-                        ButtonBar(
-                          buttonPadding: const EdgeInsets.all(0),
-                          alignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                if (data != null)
-                                  Text(
-                                    data!.formated,
+                    ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        descricao,
+                        overflow: TextOverflow.ellipsis,
+                        style: textTheme.bodyText2,
+                      ),
+                      const VerticalSizedBox(0.5),
+                      ButtonBar(
+                        buttonPadding: const EdgeInsets.all(0),
+                        alignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              if (data != null)
+                                Text(
+                                  data!.formated,
+                                  style: textTheme.bodyText1!.copyWith(color: Colors.grey, fontSize: 12),
+                                ),
+                              Visibility(
+                                visible: qtd != null,
+                                child: Visibility(
+                                  visible: qtd == 0,
+                                  child: Text(
+                                    "Sem unidades",
+                                    style: textTheme.bodyText1!.copyWith(color: Colors.red, fontSize: 12),
+                                  ),
+                                  replacement: Text(
+                                    "$qtd ${(qtd ?? 0) > 1 ? "unidades" : "unidade"}",
                                     style: textTheme.bodyText1!.copyWith(color: Colors.grey, fontSize: 12),
                                   ),
-                                Visibility(
-                                  visible: qtd != null,
-                                  child: Visibility(
-                                    visible: qtd == 0,
-                                    child: Text(
-                                      "Sem unidades",
-                                      style: textTheme.bodyText1!.copyWith(color: Colors.red, fontSize: 12),
-                                    ),
-                                    replacement: Text(
-                                      "$qtd ${(qtd ?? 0) > 1 ? "unidades" : "unidade"}",
-                                      style: textTheme.bodyText1!.copyWith(color: Colors.grey, fontSize: 12),
-                                    ),
-                                  ),
                                 ),
-                                if (preco != null)
-                                  Text(
-                                    preco.formatReal(),
-                                    style: textTheme.bodyText2!.copyWith(color: AppColors.primary),
-                                  ),
-                              ],
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
+                              ),
+                              if (preco != null)
+                                Text(
+                                  preco.formatReal(),
+                                  style: textTheme.bodyText2!.copyWith(color: AppColors.primary),
+                                ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
           ],

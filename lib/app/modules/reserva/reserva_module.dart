@@ -17,6 +17,6 @@ class ReservaModule extends Module {
 
   @override
   final List<ModularRoute> routes = [
-    ChildRoute(Modular.initialRoute, child: (_, args) => ReservaListPage()),
+    ChildRoute(Modular.initialRoute, child: (_, args) => ReservaListPage(reserva: args.data)),
   ];
 }

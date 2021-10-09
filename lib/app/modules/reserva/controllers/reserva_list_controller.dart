@@ -20,19 +20,26 @@ abstract class _ReservaListController with Store {
   bool loading = false;
 
   @observable
-  ObservableList<ReservaModel>? reservas;
+  bool reserva = false;
 
-  @action
-  void setReservas(ObservableList<ReservaModel>? value) => reservas = value;
+  @observable
+  ObservableList<ReservaModel>? reservas;
 
   @action
   void setLoading(bool value) => loading = value;
 
   @action
-  Future<void> load() async {
+  void setReserva(bool value) => reserva = value;
+
+  @action
+  void setReservas(ObservableList<ReservaModel>? value) => reservas = value;
+
+  @action
+  Future<void> load(bool reserva) async {
     try {
       setLoading(true);
 
+      setReserva(reserva);
       await buscarReservas();
     } finally {
       setLoading(false);
@@ -41,8 +48,10 @@ abstract class _ReservaListController with Store {
 
   @action
   Future<void> buscarReservas() async {
-    List<ReservaModel> reservas = await _reservaRepository.getAllCompras(_appController.userModel!.id!);
-    setReservas(reservas.asObservable());
+    if (reserva)
+      setReservas((await _reservaRepository.getAllReservas(_appController.userModel!.id!)).asObservable());
+    else
+      setReservas((await _reservaRepository.getAllCompras(_appController.userModel!.id!)).asObservable());
   }
 
   @action

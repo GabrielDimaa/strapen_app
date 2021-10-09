@@ -12,6 +12,10 @@ import 'package:strapen_app/app/shared/components/widgets/produto_grid_tile.dart
 import 'package:strapen_app/app/shared/components/widgets/produto_grid_view.dart';
 
 class ReservaListPage extends StatefulWidget {
+  final bool reserva;
+
+  const ReservaListPage({required this.reserva});
+
   @override
   _ReservaListPageState createState() => _ReservaListPageState();
 }
@@ -20,18 +24,20 @@ class _ReservaListPageState extends ModularState<ReservaListPage, ReservaListCon
   @override
   void initState() {
     super.initState();
-    controller.load();
+    controller.load(widget.reserva);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarDefault(title: Text("Reservas")),
+      appBar: AppBarDefault(title: Text(widget.reserva ? "Reservas" : "Compras")),
       body: Column(
         children: [
           Padding(
             padding: const PaddingScaffold(),
-            child: const Text("Aqui você poderá visualizar todos as suas reservas.\nCombine com o anunciante do produto para realizar a retirada do mesmo."),
+            child: Text(widget.reserva
+                ? "Aqui você poderá visualizar todas as suas reservas.\nCombine com o cliente do produto para realizar a retirada do mesmo."
+                : "Aqui, você poderá visualizar todas as suas compras.\nCombine com o anunciante do produto para realizar a retirada do mesmo."),
           ),
           Expanded(
             child: Padding(
@@ -41,8 +47,8 @@ class _ReservaListPageState extends ModularState<ReservaListPage, ReservaListCon
                   return const CircularLoading();
                 } else {
                   if (controller.reservas?.isEmpty ?? true) {
-                    return const EmptyListWidget(
-                      message: "Sua lista está vazia. Você pode reservar produtos enquanto assiste uma Live.",
+                    return EmptyListWidget(
+                      message: "Sua lista de ${widget.reserva ? "reservas" : "compras"} está vazia.",
                     );
                   } else {
                     return RefreshIndicator(

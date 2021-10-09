@@ -4,8 +4,9 @@ import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.d
 
 class EmptyListWidget extends StatelessWidget {
   final String? message;
+  final bool center;
 
-  const EmptyListWidget({this.message});
+  const EmptyListWidget({this.message, this.center = false});
 
   @override
   Widget build(BuildContext context) {
@@ -19,7 +20,10 @@ class EmptyListWidget extends StatelessWidget {
         const VerticalSizedBox(2),
         Visibility(
           visible: message != null,
-          child: Text(message ?? ""),
+          child: Text(
+            message ?? "",
+            textAlign: center ? TextAlign.center : null,
+          ),
         ),
       ],
     );

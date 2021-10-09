@@ -4,13 +4,13 @@ import 'package:strapen_app/app/shared/components/padding/padding_scaffold.dart'
 class ProdutoGridView extends StatelessWidget {
   final int itemCount;
   final Widget Function(BuildContext, int) itemBuilder;
-  final ScrollPhysics physics;
+  final ScrollPhysics? physics;
   final bool aspectRatioWithStatus;
 
   const ProdutoGridView({
     required this.itemCount,
     required this.itemBuilder,
-    this.physics = const NeverScrollableScrollPhysics(),
+    this.physics,
     this.aspectRatioWithStatus = false,
   });
 
@@ -24,7 +24,7 @@ class ProdutoGridView extends StatelessWidget {
         crossAxisCount: ((MediaQuery.of(context).size.width - (PaddingScaffold.value * 2)) ~/  130),
         crossAxisSpacing: 12,
         mainAxisSpacing: 12,
-        childAspectRatio: aspectRatioWithStatus ? 0.61 : 0.70,
+        childAspectRatio: aspectRatioWithStatus ? 0.60 : 0.70,
       ),
       itemBuilder: itemBuilder,
     );

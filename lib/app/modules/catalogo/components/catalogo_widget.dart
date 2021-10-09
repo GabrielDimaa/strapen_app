@@ -77,6 +77,7 @@ class CatalogoWidget extends StatelessWidget {
           const VerticalSizedBox(2),
           Observer(
             builder: (_) => ProdutoGridView(
+              physics: const NeverScrollableScrollPhysics(),
               itemCount: catalogoStore.produtos!.length,
               itemBuilder: (_, i) {
                 final ProdutoStore prod = catalogoStore.produtos![i];
