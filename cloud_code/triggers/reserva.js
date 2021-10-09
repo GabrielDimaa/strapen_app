@@ -10,7 +10,7 @@ Parse.Cloud.beforeSave("Reserva", async (request) => {
     if (result.get("quantidade") <= 0) {
         throw "Sem unidades disponíveis."
     } else if (result.get("quantidade") < produtoQtd) {
-        throw "Quantidade superior ao que está disponível para reserva.";
+        throw "Quantidade superior ao que está disponível para compra.";
     } else {
         const qtd = result.get("quantidade");
         result.set("quantidade", qtd - produtoQtd);
