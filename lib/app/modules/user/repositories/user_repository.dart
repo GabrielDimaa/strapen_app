@@ -89,6 +89,10 @@ class UserRepository implements IUserRepository {
       List<ParseFileBase> parseImage = await ParseImageUtils.save([model.foto]);
 
       ParseUser user = toParseObject(model)..set<List<ParseFileBase>>(USER_FOTO_COLUMN, parseImage);
+      user.setACL(ParseACL()
+        ..setPublicReadAccess(allowed: true)
+        ..setPublicWriteAccess(allowed: true));
+
       ParseResponse response = await user.signUp();
 
       if (!response.success) throw Exception(ParseErrorsUtils.get(response.statusCode));
