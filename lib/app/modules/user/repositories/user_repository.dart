@@ -83,24 +83,38 @@ class UserRepository implements IUserRepository {
   Future<UserModel> save(UserModel model) async {
     try {
       final String senha = model.senha!;
+      final dynamic foto = model.foto;
 
       validate(model);
 
-      List<ParseFileBase> parseImage = await ParseImageUtils.save([model.foto]);
-
-      ParseUser user = toParseObject(model)..set<List<ParseFileBase>>(USER_FOTO_COLUMN, parseImage);
+      //region Salvar usuário
+      ParseUser user = toParseObject(model);
       user.setACL(ParseACL()
         ..setPublicReadAccess(allowed: true)
         ..setPublicWriteAccess(allowed: true));
 
-      ParseResponse response = await user.signUp();
+      final ParseResponse userResponse = await user.signUp();
 
-      if (!response.success) throw Exception(ParseErrorsUtils.get(response.statusCode));
-      ParseObject parse = (response.results as List<dynamic>).first;
+      if (!userResponse.success) throw Exception(ParseErrorsUtils.get(userResponse.statusCode));
+      final ParseObject parseObjectUser = (userResponse.results as List<dynamic>).first;
 
-      model = toModel(parse);
+      model = toModel(parseObjectUser);
 
-      await saveSession(model, senha, parse.get<String>("sessionToken")!);
+      await saveSession(model, senha, parseObjectUser.get<String>("sessionToken")!);
+      //endregion
+
+      //region Salvar foto de perfil
+      List<ParseFileBase> parseImage = await ParseImageUtils.save([foto]);
+      ParseUser userWithImage = toParseObject(model)
+        ..set<List<ParseFileBase>>(USER_FOTO_COLUMN, parseImage);
+
+      final ParseResponse userWithImageResponse = await userWithImage.save();
+
+      if (!userWithImageResponse.success) throw Exception(ParseErrorsUtils.get(userWithImageResponse.statusCode));
+      final ParseObject parseObjectUserWithImage = (userWithImageResponse.results as List<dynamic>).first;
+
+      model = toModel(parseObjectUserWithImage);
+      //endregion
 
       return model;
     } catch (e) {
