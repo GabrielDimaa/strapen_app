@@ -24,7 +24,7 @@ class ProdutoGridView extends StatelessWidget {
         crossAxisCount: ((MediaQuery.of(context).size.width - (PaddingScaffold.value * 2)) ~/  130),
         crossAxisSpacing: 12,
         mainAxisSpacing: 12,
-        childAspectRatio: aspectRatioWithStatus ? 0.60 : 0.70,
+        childAspectRatio: aspectRatioWithStatus ? 0.60 : 0.68,
       ),
       itemBuilder: itemBuilder,
     );
