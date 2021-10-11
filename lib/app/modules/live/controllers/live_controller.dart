@@ -12,6 +12,7 @@ import 'package:strapen_app/app/modules/chat/models/chat_model.dart';
 import 'package:strapen_app/app/modules/chat/repositories/ichat_repository.dart';
 import 'package:strapen_app/app/modules/live/components/catalogo_bottom_sheet.dart';
 import 'package:strapen_app/app/modules/live/components/catalogo_list_bottom_sheet.dart';
+import 'package:strapen_app/app/modules/live/components/reserva_bottom_sheet.dart';
 import 'package:strapen_app/app/modules/live/constants/routes.dart';
 import 'package:strapen_app/app/modules/live/models/live_model.dart';
 import 'package:strapen_app/app/modules/live/services/ilive_service.dart';
@@ -21,6 +22,7 @@ import 'package:strapen_app/app/modules/produto/factories/produto_factory.dart';
 import 'package:strapen_app/app/modules/produto/models/produto_model.dart';
 import 'package:strapen_app/app/modules/produto/repositories/iproduto_repository.dart';
 import 'package:strapen_app/app/modules/produto/stores/produto_store.dart';
+import 'package:strapen_app/app/modules/reserva/enums/enum_status_reserva.dart';
 import 'package:strapen_app/app/modules/reserva/factories/reserva_factory.dart';
 import 'package:strapen_app/app/modules/reserva/models/reserva_model.dart';
 import 'package:strapen_app/app/modules/reserva/repositories/ireserva_repository.dart';
@@ -133,14 +135,16 @@ abstract class _LiveController extends Disposable with Store {
       await _liveService.startLive(liveModel!, cameraStore.cameraController!);
 
       catalogos.forEach((cat) {
-        produtos.addAll(cat.produtos!.map((e) => e).toList().asObservable());
+        produtos.addAll(cat.produtos!.asObservable());
       });
-
-      await _produtoRepository.startListener();
     } catch (e) {
       ErrorDialog.show(context: context, content: e.toString());
     } finally {
       setLoading(false);
+
+      //Adicionado no finally e assíncrono para não atrasar muito o início da Live.
+      _produtoRepository.startListener();
+      _reservaRepository.startListener(liveModel!.id!);
     }
   }
 
@@ -152,10 +156,9 @@ abstract class _LiveController extends Disposable with Store {
 
       await chewieStore.getInstance(this.liveModel!.playBackId!, this.liveModel!.aspectRatio!);
 
-      List<CatalogoModel> catalogos = await _liveService.getCatalogosLive(liveModel.id!);
+      catalogos = (await _liveService.getCatalogosLive(liveModel.id!)).map((e) => CatalogoFactory.fromModel(e)).toList().asObservable();
       catalogos.forEach((cat) {
-        produtos.addAll(cat.produtos?.map((e) => ProdutoFactory.fromModel(e)).toList().asObservable() ?? []);
-        this.catalogos.add(CatalogoFactory.fromModel(cat));
+        produtos.addAll(cat.produtos!.asObservable());
       });
 
       await _produtoRepository.startListener();
@@ -290,12 +293,21 @@ abstract class _LiveController extends Disposable with Store {
   }
 
   @action
+  Future<void> showReservasBottomSheet(BuildContext context) async {
+    await ReservaBottomSheet.show(context: context);
+  }
+
+  @action
   Future<void> reservarProduto(BuildContext context, ProdutoModel produto) async {
     try {
       await LoadingDialog.show(context, "Realizando reserva...", () async {
-        ReservaModel model = await _reservaRepository.save(
-          ReservaFactory.fromProdutoModel(produto)..user = appController.userModel,
-        );
+        ReservaModel model = ReservaFactory.fromProdutoModel(produto);
+        model.user = appController.userModel;
+        model.quantidade = 1;
+        model.status = EnumStatusReserva.EmAberto;
+        model.live = liveModel;
+
+        model = await _reservaRepository.save(model);
 
         if (model.id == null) throw Exception("Houve um erro ao reservar o produto!");
 
@@ -329,8 +341,8 @@ abstract class _LiveController extends Disposable with Store {
   void dispose() async {
     _produtoRepository.stopListener();
     _liveService.stopListener();
+    _reservaRepository.stopListener();
     await cameraStore.cameraController?.dispose();
-    await chewieStore.videoPlayerController?.dispose();
     chewieStore.chewieController?.dispose();
   }
 }

@@ -130,7 +130,7 @@ class _LiveCreatePageState extends State<LiveCreatePage> {
                                               final CatalogoStore cat = controller.catalogos[i];
                                               return CatalogoGridTile(
                                                 image: cat.foto,
-                                                title: cat.descricao!,
+                                                title: cat.titulo!,
                                                 subtitle: cat.dataCriado!.formated,
                                               );
                                             },

@@ -46,6 +46,7 @@ class ProdutoGridTile extends StatelessWidget {
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Align(
                     alignment: Alignment.center,
@@ -58,20 +59,20 @@ class ProdutoGridTile extends StatelessWidget {
                       ),
                     ),
                   ),
-                  const VerticalSizedBox(),
-                  if (status != null)
-                    Align(
-                      alignment: Alignment.centerRight,
-                      child: Column(
-                        children: [
-                          StatusReservaWidget(status: status!),
-                          const VerticalSizedBox(0.3),
-                        ],
-                      ),
-                    ),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      const VerticalSizedBox(),
+                      if (status != null)
+                        Align(
+                          alignment: Alignment.centerRight,
+                          child: Column(
+                            children: [
+                              StatusReservaWidget(status: status!),
+                              const VerticalSizedBox(0.3),
+                            ],
+                          ),
+                        ),
                       Text(
                         descricao,
                         overflow: TextOverflow.ellipsis,

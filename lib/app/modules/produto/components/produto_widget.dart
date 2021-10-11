@@ -186,7 +186,7 @@ class _ProdutoWidgetState extends State<ProdutoWidget> {
                       child: Padding(
                         padding: const MarginButtonWithoutScaffold(),
                         child: ElevatedButtonDefault(
-                          child: const Text("Reservar"),
+                          child: const Text("Comprar"),
                           onPressed: (widget.produtoStore.quantidade ?? 0) > 0 ? widget.onPressedReserva : null,
                         ),
                       ),
@@ -263,7 +263,7 @@ class _ProdutoWidgetState extends State<ProdutoWidget> {
                   style: textTheme.bodyText1!.copyWith(color: Colors.red, fontSize: 12),
                 ),
                 replacement: Text(
-                  "${widget.produtoStore.quantidade!} ${widget.produtoStore.quantidade! > 1 ? "unidades" : "unidade"}",
+                  "${widget.produtoStore.quantidade!} ${widget.produtoStore.quantidade! > 1 ? "unidades" : "unidade"} ${!widget.editavel ? "${widget.produtoStore.quantidade! > 1 ? "restantes" : "restante"}" : ""}",
                   style: textTheme.bodyText1!.copyWith(color: Colors.grey, fontSize: 12),
                 ),
               ),
@@ -288,7 +288,7 @@ class _ProdutoWidgetState extends State<ProdutoWidget> {
                 border: Border.all(color: AppColors.primary),
                 color: AppColors.primaryOpaci,
               ),
-              child: Text("Reservado", style: TextStyle(color: AppColors.primary)),
+              child: Text("Comprado", style: TextStyle(color: AppColors.primary)),
             ),
           ),
         ),
@@ -339,10 +339,11 @@ class _ProdutoWidgetState extends State<ProdutoWidget> {
             ),
           ],
         ),
-        Align(
-          alignment: Alignment.centerRight,
-          child: StatusReservaWidget(status: widget.reservaModel!.status!),
-        ),
+        if (widget.reservaModel?.status != null)
+          Align(
+            alignment: Alignment.centerRight,
+            child: StatusReservaWidget(status: widget.reservaModel!.status!),
+          ),
       ],
     );
   }

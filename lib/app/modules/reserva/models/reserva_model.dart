@@ -1,3 +1,4 @@
+import 'package:strapen_app/app/modules/live/models/live_model.dart';
 import 'package:strapen_app/app/modules/reserva/enums/enum_status_reserva.dart';
 import 'package:strapen_app/app/modules/user/models/user_model.dart';
 
@@ -10,6 +11,8 @@ class ReservaModel {
   int? quantidade;
   double? preco;
   List<String>? fotos;
+
+  LiveModel? live;
 
   UserModel? user;
   UserModel? anunciante;
@@ -25,6 +28,7 @@ class ReservaModel {
     this.quantidade,
     this.preco,
     this.fotos,
+    this.live,
     this.user,
     this.anunciante,
     this.status,

@@ -58,7 +58,7 @@ class _CatalogoListBottomSheetState extends State<CatalogoListBottomSheet> {
                     final CatalogoStore cat = controller.catalogos[i];
                     return CatalogoGridTile(
                       image: cat.foto,
-                      title: cat.descricao!,
+                      title: cat.titulo!,
                       subtitle: cat.dataCriado!.formated,
                       onTap: () async => await CatalogoBottomSheet.show(
                         context: widget.context,

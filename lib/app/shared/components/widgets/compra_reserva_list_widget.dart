@@ -82,18 +82,21 @@ class CompraReservaListWidget extends StatelessWidget {
         itemCount: list.length,
         itemBuilder: (_, i) {
           final ReservaModel res = list[i];
-          return ProdutoGridTile(
-            image: res.fotos!.first,
-            descricao: res.descricao!,
-            data: res.dataHoraReserva,
-            preco: res.preco! * res.quantidade!,
-            status: res.status,
-            onTap: () async {
-              await Modular.to.pushNamed(PRODUTO_ROUTE + PRODUTO_INFO_ROUTE, arguments: {
-                'produtoModel': ProdutoFactory.fromReservaModel(res),
-                'reservaModel': res,
-              });
-            },
+          return Padding(
+            padding: const EdgeInsets.only(right: 12),
+            child: ProdutoGridTile(
+              image: res.fotos!.first,
+              descricao: res.descricao!,
+              data: res.dataHoraReserva,
+              preco: res.preco! * res.quantidade!,
+              status: res.status,
+              onTap: () async {
+                await Modular.to.pushNamed(PRODUTO_ROUTE + PRODUTO_INFO_ROUTE, arguments: {
+                  'produtoModel': ProdutoFactory.fromReservaModel(res),
+                  'reservaModel': res,
+                });
+              },
+            ),
           );
         },
       ),

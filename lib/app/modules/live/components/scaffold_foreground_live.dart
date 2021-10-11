@@ -69,9 +69,18 @@ class ScaffoldForegroundLive extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 12, right: 20),
                 child: CircleButtonAppBar(
                   color: AppColors.opaci.withOpacity(0.4),
-                  child: Icon(Icons.shopping_cart),
-                  messageTooltip: "Ver catálogos",
+                  child: Icon(Icons.ballot),
+                  messageTooltip: "Catálogos",
                   onTap: () async => await controller.showCatalogoBottomSheet(this.context),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 12, right: 20),
+                child: CircleButtonAppBar(
+                  color: AppColors.opaci.withOpacity(0.4),
+                  child: Icon(Icons.shopping_cart),
+                  messageTooltip: isCriadorLive ? "Reservas" : "Compras",
+                  onTap: () async => await controller.showReservasBottomSheet(this.context),
                 ),
               ),
             ],

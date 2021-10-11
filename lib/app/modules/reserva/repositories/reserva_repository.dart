@@ -1,4 +1,10 @@
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:parse_server_sdk/parse_server_sdk.dart';
+import 'package:parse_server_sdk_flutter/parse_server_sdk.dart';
+import 'package:strapen_app/app/modules/live/constants/columns.dart';
+import 'package:strapen_app/app/modules/live/controllers/live_controller.dart';
+import 'package:strapen_app/app/modules/live/factories/live_factory.dart';
+import 'package:strapen_app/app/modules/live/repositories/live_repository.dart';
 import 'package:strapen_app/app/modules/reserva/constants/columns.dart';
 import 'package:strapen_app/app/modules/reserva/enums/enum_status_reserva.dart';
 import 'package:strapen_app/app/modules/reserva/models/reserva_model.dart';
@@ -12,6 +18,9 @@ class ReservaRepository implements IReservaRepository {
   @override
   String className() => "Reserva";
   String messageError() => "Houve um erro ao reservar o produto.";
+
+  LiveQuery? liveQuery;
+  Subscription? subscription;
 
   @override
   void validate(ReservaModel model) {
@@ -35,6 +44,10 @@ class ReservaRepository implements IReservaRepository {
       ..set<int>(RESERVA_QUANTIDADE_COLUMN, model.quantidade!)
       ..set<double>(RESERVA_PRECO_COLUMN, model.preco!)
       ..set<List>(RESERVA_FOTOS_COLUMN, model.fotos!)
+      ..set<ParseObject>(
+        RESERVA_LIVE_COLUMN,
+        ParseObject(LiveRepository(null, null).className())..set(LIVE_ID_COLUMN, model.live!.id!),
+      )
       ..set<ParseUser>(
         RESERVA_USER_COLUMN,
         ParseUser(null, null, null)..set(USER_ID_COLUMN, model.user!.id!),
@@ -56,6 +69,7 @@ class ReservaRepository implements IReservaRepository {
       e.get<int>(RESERVA_QUANTIDADE_COLUMN),
       e.get(RESERVA_PRECO_COLUMN) is int ? e.get<int>(RESERVA_PRECO_COLUMN)?.toDouble() ?? null : e.get<double>(RESERVA_PRECO_COLUMN),
       e.get<List>(RESERVA_FOTOS_COLUMN)?.map((e) => e.toString()).toList() ?? [],
+      LiveFactory.newModel()..id = e.get(RESERVA_LIVE_COLUMN).get(LIVE_ID_COLUMN),
       UserRepository(null).toModel(e.get(RESERVA_USER_COLUMN)),
       UserRepository(null).toModel(e.get(RESERVA_ANUNCIANTE_COLUMN)),
       EnumStatusReservaHelper.get(e.get<int>(RESERVA_STATUS_COLUMN) ?? 0),
@@ -72,7 +86,7 @@ class ReservaRepository implements IReservaRepository {
 
       ParseResponse response = await parseReserva.save();
 
-      if (!response.success) throw Exception(ParseErrorsUtils.get(response.statusCode));
+      if (!response.success) throw Exception(response.error?.message ?? "Erro ao comprar produto!");
       ParseObject parseResponse = (response.results as List<dynamic>).first;
 
       ReservaModel reservaModel = toModel(parseResponse);
@@ -128,4 +142,30 @@ class ReservaRepository implements IReservaRepository {
       throw Exception(e);
     }
   }
+
+  ///LiveQuery utilizado apenas para os usuários que estão transmitindo a Live.
+  Future<void> startListener(String idLive) async {
+    try {
+      if (liveQuery == null) liveQuery = LiveQuery();
+
+      if (subscription == null) {
+        final QueryBuilder query = QueryBuilder<ParseObject>(ParseObject(className()))
+          ..whereEqualTo(
+              RESERVA_LIVE_COLUMN,
+              (ParseObject(LiveRepository(null, null).className())..set(LIVE_ID_COLUMN, idLive)).toPointer());
+
+        subscription = await liveQuery!.client.subscribe(query);
+
+        subscription!.on(LiveQueryEvent.create, (value) {
+          final LiveController liveController = Modular.get<LiveController>();
+          liveController.reservas.add(toModel(value));
+        });
+      }
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  @override
+  void stopListener() => liveQuery?.client.unSubscribe(subscription!);
 }

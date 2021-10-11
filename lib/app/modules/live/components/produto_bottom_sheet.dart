@@ -6,26 +6,29 @@ import 'package:strapen_app/app/modules/live/components/user_bottom_sheet.dart';
 import 'package:strapen_app/app/modules/live/controllers/live_controller.dart';
 import 'package:strapen_app/app/modules/produto/components/produto_widget.dart';
 import 'package:strapen_app/app/modules/produto/stores/produto_store.dart';
+import 'package:strapen_app/app/modules/reserva/models/reserva_model.dart';
 import 'package:strapen_app/app/shared/components/dialog/error_dialog.dart';
 
 class ProdutoBottomSheet extends StatefulWidget {
-  final ProdutoStore produto;
   final BuildContext context;
+  final ProdutoStore produto;
+  final ReservaModel? reserva;
 
-  const ProdutoBottomSheet({required this.produto, required this.context});
+  const ProdutoBottomSheet({required this.context, required this.produto, this.reserva});
 
   @override
   _ProdutoBottomSheetState createState() => _ProdutoBottomSheetState();
 
-  static Future<void> show({required BuildContext context, required ProdutoStore produto}) async {
+  static Future<void> show({required BuildContext context, required ProdutoStore produto, ReservaModel? reserva}) async {
     return await showModalBottomSheet(
       context: context,
       backgroundColor: AppColors.background,
       isScrollControlled: true,
       useRootNavigator: true,
       builder: (_) => ProdutoBottomSheet(
-        produto: produto,
         context: context,
+        produto: produto,
+        reserva: reserva,
       ),
     );
   }
@@ -41,6 +44,7 @@ class _ProdutoBottomSheetState extends State<ProdutoBottomSheet> {
       child: Observer(
         builder: (_) => ProdutoWidget(
           produtoStore: widget.produto,
+          reservaModel: widget.reserva,
           reservadoSuccess: controller.reservas.any((e) => e.idProduto == widget.produto.id),
           onPressedReserva: !controller.isCriadorLive ? () async {
             try {
@@ -53,7 +57,7 @@ class _ProdutoBottomSheetState extends State<ProdutoBottomSheet> {
             }
           } : null,
           onPressedAnunciante: !controller.isCriadorLive ? () async {
-            await UserBottomSheet.show(context: context, user: widget.produto.anunciante!);
+            await UserBottomSheet.show(context: context, user: controller.liveModel!.user!);
           } : null,
         ),
       ),

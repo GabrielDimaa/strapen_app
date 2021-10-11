@@ -12,6 +12,7 @@ abstract class ReservaFactory {
       produtoModel.preco,
       produtoModel.fotos!.map((e) => e.toString()).toList(),
       null,
+      null,
       produtoModel.anunciante!,
       null,
       null,

@@ -1,19 +1,20 @@
 Parse.Cloud.beforeSave("Reserva", async (request) => {
-    const produtoId = request.object.get("idProduto");
-    const produtoQtd = request.object.get("quantidade");
+    const compraProdutoId = request.object.get("idProduto");
+    const compraProdutoQtd = request.object.get("quantidade");
     
     const query = new Parse.Query("Produto");
-    query.equalTo("objectId", produtoId);
+    query.equalTo("objectId", compraProdutoId);
     
     const result = await query.first();
+
+    const qtdEmEstoque = result.get("quantidade");
     
-    if (result.get("quantidade") <= 0) {
+    if (qtdEmEstoque <= 0) {
         throw "Sem unidades disponíveis."
-    } else if (result.get("quantidade") < produtoQtd) {
+    } else if (qtdEmEstoque < compraProdutoQtd) {
         throw "Quantidade superior ao que está disponível para compra.";
     } else {
-        const qtd = result.get("quantidade");
-        result.set("quantidade", qtd - produtoQtd);
+        result.set("quantidade", qtdEmEstoque - compraProdutoQtd);
 
         await result.save();
     }

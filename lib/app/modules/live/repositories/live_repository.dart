@@ -96,6 +96,7 @@ class LiveRepository implements ILiveRepository {
       QueryBuilder query = QueryBuilder<ParseObject>(ParseObject(className()))
         ..whereEqualTo(LIVE_USER_COLUMN, (ParseUser(null, null, null)
           ..set(USER_ID_COLUMN, userModel.id)).toPointer())
+        ..includeObject([LIVE_USER_COLUMN])
         ..orderByDescending(LIVE_DATA_CRIADO_COLUMN)
         ..setLimit(1);
 

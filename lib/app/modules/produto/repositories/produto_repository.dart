@@ -122,7 +122,9 @@ class ProdutoRepository implements IProdutoRepository {
         subscription!.on(LiveQueryEvent.update, (value) {
           final ProdutoModel prod = toModel(value);
 
+          //É uma lista pois pode conter o mesmo produto em mais de um catálogo, contudo estará repetido
           final List<ProdutoStore> list = controller.produtos.where((e) => e.id == prod.id).toList();
+
           //Valores serão atualizados pela instância do objeto
           list.forEach((e) {
             e.descricao = prod.descricao;
