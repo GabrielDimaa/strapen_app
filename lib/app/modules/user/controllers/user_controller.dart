@@ -129,7 +129,7 @@ abstract class _UserController with Store {
         bool seguindo = await _seguidorRepository.seguir(_appController.userModel!, userStore.toModel());
         if (seguindo) {
           setSeguindo(seguindo);
-          setCountSeguindo(countSeguindo + 1);
+          setCountSeguidores(countSeguidores + 1);
         }
       });
     } catch (_) {
@@ -144,7 +144,7 @@ abstract class _UserController with Store {
         bool seguindo = await _seguidorRepository.deixarSeguir(_appController.userModel!, userStore.toModel());
         if (seguindo) {
           setSeguindo(!seguindo);
-          setCountSeguindo(countSeguindo - 1);
+          setCountSeguidores(countSeguidores - 1);
         }
       });
     } catch (_) {

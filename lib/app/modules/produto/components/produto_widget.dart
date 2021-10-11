@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:snapping_sheet/snapping_sheet.dart';
+import 'package:strapen_app/app/app_controller.dart';
 import 'package:strapen_app/app/app_widget.dart';
 import 'package:strapen_app/app/modules/produto/stores/produto_store.dart';
 import 'package:strapen_app/app/modules/reserva/components/status_reserva_widget.dart';
@@ -22,6 +23,7 @@ class ProdutoWidget extends StatefulWidget {
   final ProdutoStore produtoStore;
   final VoidCallback? onPressedReserva;
   final VoidCallback? onPressedAnunciante;
+  final VoidCallback? onPressedCliente;
   final bool reservadoSuccess;
   final ReservaModel? reservaModel;
   final bool editavel;
@@ -30,6 +32,7 @@ class ProdutoWidget extends StatefulWidget {
     required this.produtoStore,
     this.onPressedReserva,
     this.onPressedAnunciante,
+    this.onPressedCliente,
     this.reservadoSuccess = false,
     this.reservaModel,
     this.editavel = false,
@@ -160,7 +163,7 @@ class _ProdutoWidgetState extends State<ProdutoWidget> {
                           const VerticalSizedBox(2.5),
                           const Divider(),
                           Visibility(
-                            visible: widget.onPressedAnunciante != null || widget.reservaModel != null,
+                            visible: widget.onPressedAnunciante != null || widget.reservaModel != null && widget.reservaModel?.anunciante?.id != Modular.get<AppController>().userModel!.id,
                             child: Column(
                               children: [
                                 _tileNavigation(
@@ -172,6 +175,25 @@ class _ProdutoWidgetState extends State<ProdutoWidget> {
                                       widget.onPressedAnunciante!.call();
                                     else
                                       await Modular.to.pushNamed(USER_ROUTE, arguments: widget.reservaModel!.anunciante);
+                                  },
+                                ),
+                                const Divider(),
+                              ],
+                            ),
+                          ),
+                          Visibility(
+                            visible: widget.onPressedAnunciante != null || widget.reservaModel != null && widget.reservaModel?.user?.id != Modular.get<AppController>().userModel!.id,
+                            child: Column(
+                              children: [
+                                _tileNavigation(
+                                  label: "Cliente",
+                                  onTap: () async {
+                                    //Verificação para caso seja dentro da Live, abrir em um BottomSheet
+                                    // que será passado no módulo da Live através do onPressedAnunciante()
+                                    if (widget.onPressedCliente != null)
+                                      widget.onPressedCliente!.call();
+                                    else
+                                      await Modular.to.pushNamed(USER_ROUTE, arguments: widget.reservaModel!.user);
                                   },
                                 ),
                                 const Divider(),
@@ -305,20 +327,17 @@ class _ProdutoWidgetState extends State<ProdutoWidget> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Observer(
-              builder: (_) => Row(
-                children: [
-                  Text("Quantidade:  ", style: textTheme.bodyText1),
-                  Text(
-                    qtdFormated(widget.reservaModel!.quantidade!),
-                    style: textTheme.bodyText1!.copyWith(fontWeight: FontWeight.w700),
-                  ),
-                ],
-              ),
+            Row(
+              children: [
+                Text("Quantidade:  ", style: textTheme.bodyText1),
+                Text(
+                  qtdFormated(widget.reservaModel!.quantidade!),
+                  style: textTheme.bodyText1!.copyWith(fontWeight: FontWeight.w700),
+                ),
+              ],
             ),
             const VerticalSizedBox(0.3),
-            Observer(
-              builder: (_) => Row(
+            Row(
                 children: [
                   Text("Valor unitário:  ", style: textTheme.bodyText1),
                   Text(
@@ -327,7 +346,6 @@ class _ProdutoWidgetState extends State<ProdutoWidget> {
                   ),
                 ],
               ),
-            ),
             const VerticalSizedBox(1.5),
             Text("Valor total:  ", style: textTheme.bodyText1),
             const VerticalSizedBox(0.3),

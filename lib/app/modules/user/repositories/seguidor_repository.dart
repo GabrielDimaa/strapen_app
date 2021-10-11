@@ -44,7 +44,7 @@ class SeguidorRepository implements ISeguidorRepository {
       ParseResponse response = await parseObject.save();
 
       if (!response.success) throw Exception(ParseErrorsUtils.get(response.statusCode));
-      ParseObject parseResponse = (response.results as List<dynamic>).first;
+      ParseObject parseResponse = (response.results)?.first;
 
       return parseResponse.get<String>(SEGUIDOR_ID_COLUMN) != null;
     } catch (e) {
@@ -97,7 +97,7 @@ class SeguidorRepository implements ISeguidorRepository {
       ParseResponse response = await query.query();
 
       if (!response.success) throw Exception(ParseErrorsUtils.get(response.statusCode));
-      ParseObject? parseResponse = (response.results as List<dynamic>).first;
+      ParseObject? parseResponse = (response.results)?.first;
 
       return parseResponse?.get<String>(SEGUIDOR_ID_COLUMN) != null;
     } catch (e) {

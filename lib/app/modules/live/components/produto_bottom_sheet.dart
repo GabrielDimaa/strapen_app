@@ -45,7 +45,7 @@ class _ProdutoBottomSheetState extends State<ProdutoBottomSheet> {
         builder: (_) => ProdutoWidget(
           produtoStore: widget.produto,
           reservaModel: widget.reserva,
-          reservadoSuccess: controller.reservas.any((e) => e.idProduto == widget.produto.id),
+          reservadoSuccess: !controller.isCriadorLive && controller.reservas.any((e) => e.idProduto == widget.produto.id),
           onPressedReserva: !controller.isCriadorLive ? () async {
             try {
               if (controller.liveEncerrada)
@@ -57,7 +57,10 @@ class _ProdutoBottomSheetState extends State<ProdutoBottomSheet> {
             }
           } : null,
           onPressedAnunciante: !controller.isCriadorLive ? () async {
-            await UserBottomSheet.show(context: context, user: controller.liveModel!.user!);
+            await UserBottomSheet.show(context: widget.context, user: controller.liveModel!.user!);
+          } : null,
+          onPressedCliente: controller.isCriadorLive && widget.reserva != null ? () async {
+            await UserBottomSheet.show(context: widget.context, user: widget.reserva!.user!);
           } : null,
         ),
       ),
