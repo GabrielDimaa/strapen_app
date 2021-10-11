@@ -208,7 +208,6 @@ class LiveRepository implements ILiveRepository {
           }).toList());
       }
 
-
       QueryBuilder query;
 
       if (usersId.isNotEmpty) {

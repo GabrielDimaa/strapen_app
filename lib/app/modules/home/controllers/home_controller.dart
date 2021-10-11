@@ -68,8 +68,10 @@ abstract class _HomeController with Store {
       if (DateTime.now().difference(_ultimaAtualizacao).inMinutes > 1.5)
         setLives((await _liveService.getLivesDemonstracao(userStore.id!)));
 
-      if (reservas == null || compras == null)
-        await carregarReservas();
+      if (reservas == null || compras == null) {
+        setReservas((await _reservaRepository.getAllReservas(userStore.id!, limit: 10)).asObservable());
+        setCompras((await _reservaRepository.getAllCompras(userStore.id!, limit: 10)).asObservable());
+      }
     } finally {
       setLoading(false);
     }
@@ -77,6 +79,7 @@ abstract class _HomeController with Store {
 
   @action
   Future<void> carregarReservas() async {
+    setLives((await _liveService.getLivesDemonstracao(userStore.id!)));
     setReservas((await _reservaRepository.getAllReservas(userStore.id!, limit: 10)).asObservable());
     setCompras((await _reservaRepository.getAllCompras(userStore.id!, limit: 10)).asObservable());
   }

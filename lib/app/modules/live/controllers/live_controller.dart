@@ -332,7 +332,7 @@ abstract class _LiveController extends Disposable with Store {
       );
     });
 
-    Future.delayed(Duration(seconds: 30), () {
+    Future.delayed(Duration(seconds: 25), () {
       Modular.to.navigate(START_ROUTE);
     });
   }
