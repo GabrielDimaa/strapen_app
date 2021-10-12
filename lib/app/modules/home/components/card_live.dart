@@ -52,7 +52,7 @@ class CardLive extends StatelessWidget {
                                 radius: 3,
                               ),
                               const HorizontalSizedBox(0.5),
-                              Text(
+                              const Text(
                                 "AO VIVO",
                                 style: const TextStyle(fontSize: 11, color: Colors.red, fontWeight: FontWeight.w700),
                               ),
