@@ -163,7 +163,7 @@ class _ProdutoWidgetState extends State<ProdutoWidget> {
                           const VerticalSizedBox(2.5),
                           const Divider(),
                           Visibility(
-                            visible: widget.onPressedAnunciante != null || widget.reservaModel != null && widget.reservaModel?.anunciante?.id != Modular.get<AppController>().userModel!.id,
+                            visible: widget.onPressedAnunciante != null || (widget.reservaModel != null && widget.reservaModel?.anunciante?.id != Modular.get<AppController>().userModel!.id),
                             child: Column(
                               children: [
                                 _tileNavigation(
@@ -182,7 +182,7 @@ class _ProdutoWidgetState extends State<ProdutoWidget> {
                             ),
                           ),
                           Visibility(
-                            visible: widget.onPressedAnunciante != null || widget.reservaModel != null && widget.reservaModel?.user?.id != Modular.get<AppController>().userModel!.id,
+                            visible: widget.onPressedCliente != null || (widget.reservaModel != null && widget.reservaModel!.user!.id != Modular.get<AppController>().userModel!.id),
                             child: Column(
                               children: [
                                 _tileNavigation(
@@ -331,7 +331,7 @@ class _ProdutoWidgetState extends State<ProdutoWidget> {
               children: [
                 Text("Quantidade:  ", style: textTheme.bodyText1),
                 Text(
-                  qtdFormated(widget.reservaModel!.quantidade!),
+                  qtdFormated(widget.reservaModel?.quantidade ?? 0),
                   style: textTheme.bodyText1!.copyWith(fontWeight: FontWeight.w700),
                 ),
               ],
@@ -341,7 +341,7 @@ class _ProdutoWidgetState extends State<ProdutoWidget> {
                 children: [
                   Text("Valor unitário:  ", style: textTheme.bodyText1),
                   Text(
-                    widget.reservaModel!.preco.formatReal(),
+                    widget.reservaModel?.preco.formatReal() ?? "",
                     style: textTheme.bodyText1!.copyWith(fontWeight: FontWeight.w700),
                   ),
                 ],

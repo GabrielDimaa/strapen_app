@@ -127,7 +127,7 @@ class UserRepository implements IUserRepository {
     try {
       if (id == null) throw Exception("Houve um erro ao buscar o usuário!");
 
-      QueryBuilder query = QueryBuilder<ParseObject>(ParseObject(className()))..whereEqualTo(USER_ID_COLUMN, id);
+      QueryBuilder query = QueryBuilder<ParseUser>(ParseUser(null, null, null))..whereEqualTo(USER_ID_COLUMN, id);
 
       ParseResponse response = await query.query();
 

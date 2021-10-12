@@ -92,25 +92,29 @@ class _HomePageState extends State<HomePage> {
                         padding: const PaddingScaffold(),
                         children: [
                           const VerticalSizedBox(2.5),
-                          Visibility(
-                            visible: (controller.lives.livesSeguindo?.length ?? 0) > 0,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text("Seguindo", style: style),
-                                const VerticalSizedBox(2),
-                                ListLives(lives: controller.lives.livesSeguindo ?? []),
-                              ],
+                          Observer(
+                            builder: (_) => Visibility(
+                              visible: (controller.lives.livesSeguindo?.length ?? 0) > 0,
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text("Seguindo", style: style),
+                                  const VerticalSizedBox(2),
+                                  ListLives(lives: controller.lives.livesSeguindo ?? []),
+                                ],
+                              ),
+                              replacement: _canalDeLives(textTheme),
                             ),
-                            replacement: _canalDeLives(textTheme),
                           ),
-                          Visibility(
-                            visible: (controller.lives.livesSeguindo?.length ?? 0) > 0,
-                            child: Column(
-                              children: [
-                                const VerticalSizedBox(3),
-                                _canalDeLives(textTheme),
-                              ],
+                          Observer(
+                            builder: (_) => Visibility(
+                              visible: (controller.lives.livesSeguindo?.length ?? 0) > 0,
+                              child: Column(
+                                children: [
+                                  const VerticalSizedBox(3),
+                                  _canalDeLives(textTheme),
+                                ],
+                              ),
                             ),
                           ),
                           const VerticalSizedBox(2),
@@ -156,7 +160,9 @@ class _HomePageState extends State<HomePage> {
       children: [
         Text("Canal de Lives", style: textTheme.headline1!.copyWith(fontWeight: FontWeight.w600)),
         const VerticalSizedBox(2),
-        ListLives(lives: controller.lives.livesOutros ?? []),
+        Observer(
+          builder: (_) => ListLives(lives: controller.lives.livesOutros ?? []),
+        ),
       ],
     );
   }

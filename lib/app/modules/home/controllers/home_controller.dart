@@ -3,6 +3,7 @@ import 'package:mobx/mobx.dart';
 import 'package:strapen_app/app/app_controller.dart';
 import 'package:strapen_app/app/modules/live/constants/routes.dart';
 import 'package:strapen_app/app/modules/live/models/live_demonstracao_model.dart';
+import 'package:strapen_app/app/modules/live/models/live_model.dart';
 import 'package:strapen_app/app/modules/live/services/ilive_service.dart';
 import 'package:strapen_app/app/modules/reserva/models/reserva_model.dart';
 import 'package:strapen_app/app/modules/reserva/repositories/ireserva_repository.dart';
@@ -19,11 +20,9 @@ abstract class _HomeController with Store {
   final ILiveService _liveService;
   final AppController _appController;
 
-  _HomeController(this._reservaRepository, this._liveService, this._appController) {
-    this._ultimaAtualizacao = DateTime.now();
-  }
+  _HomeController(this._reservaRepository, this._liveService, this._appController);
 
-  late final DateTime _ultimaAtualizacao;
+  DateTime? _ultimaAtualizacao;
 
   @observable
   UserStore userStore = UserFactory.newStore();
@@ -65,8 +64,10 @@ abstract class _HomeController with Store {
 
       setUserStore(UserFactory.fromModel(_appController.userModel!));
 
-      if (DateTime.now().difference(_ultimaAtualizacao).inMinutes > 1.5)
+      if (_ultimaAtualizacao == null || DateTime.now().difference(_ultimaAtualizacao!).inMinutes > 1.5) {
         setLives((await _liveService.getLivesDemonstracao(userStore.id!)));
+        _ultimaAtualizacao = DateTime.now();
+      }
 
       if (reservas == null || compras == null) {
         setReservas((await _reservaRepository.getAllReservas(userStore.id!, limit: 10)).asObservable());
@@ -96,5 +97,10 @@ abstract class _HomeController with Store {
   @action
   Future<void> toPerfil() async {
     await Modular.to.pushNamed(USER_ROUTE);
+  }
+
+  @action
+  Future<void> toAssistirLive(LiveModel liveModel) async {
+    Modular.to.navigate(LIVE_ROUTE + LIVE_ASSISTIR_ROUTE, arguments: liveModel);
   }
 }

@@ -9,9 +9,9 @@ import 'package:strapen_app/app/modules/live/models/live_demonstracao_model.dart
 import 'package:strapen_app/app/modules/live/models/live_model.dart';
 import 'package:strapen_app/app/modules/live/repositories/ilive_repository.dart';
 import 'package:strapen_app/app/modules/user/constants/columns.dart';
-import 'package:strapen_app/app/modules/user/factories/user_factory.dart';
 import 'package:strapen_app/app/modules/user/models/user_model.dart';
 import 'package:strapen_app/app/modules/user/repositories/iseguidor_repository.dart';
+import 'package:strapen_app/app/modules/user/repositories/user_repository.dart';
 import 'package:strapen_app/app/shared/extensions/string_extension.dart';
 import 'package:strapen_app/app/shared/utils/parse_errors_utils.dart';
 
@@ -61,7 +61,7 @@ class LiveRepository implements ILiveRepository {
       e.get<bool>(LIVE_FINALIZADA_COLUMN),
       e.get<double>(LIVE_ASPECT_RATIO_COLUMN),
       null,
-      UserFactory.newModel()..id = e.get(LIVE_USER_COLUMN).get<String>(USER_ID_COLUMN),
+      UserRepository(null).toModel(e.get(LIVE_USER_COLUMN)),
     );
   }
 
@@ -232,10 +232,7 @@ class LiveRepository implements ILiveRepository {
       final List<ParseObject>? parseResponse = response.results as List<ParseObject>?;
 
       if (parseResponse?.isNotEmpty ?? false)
-        livesFiltradas.livesOutros!.addAll(parseResponse!.map((e) {
-          //Busca somente o username
-          return toModel(e)..user!.username = e.get(LIVE_USER_COLUMN).get<String>(USER_USERNAME_COLUMN);
-        }).toList());
+        livesFiltradas.livesOutros!.addAll(parseResponse!.map((e) => toModel(e)).toList());
 
       return livesFiltradas;
     } catch(e) {
@@ -249,7 +246,7 @@ class LiveRepository implements ILiveRepository {
 
       if (subscription == null) {
         final QueryBuilder query = QueryBuilder<ParseObject>(ParseObject(className()))
-          ..whereEqualTo(LIVE_CATALOGO_COLUMN, idLive);
+          ..whereEqualTo(LIVE_ID_COLUMN, idLive);
 
         subscription = await liveQuery!.client.subscribe(query);
 

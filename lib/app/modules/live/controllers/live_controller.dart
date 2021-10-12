@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
+import 'package:collection/collection.dart';
 import 'package:strapen_app/app/app_controller.dart';
 import 'package:strapen_app/app/modules/catalogo/constants/routes.dart';
 import 'package:strapen_app/app/modules/catalogo/factories/catalogo_factory.dart';
@@ -27,6 +28,7 @@ import 'package:strapen_app/app/modules/reserva/factories/reserva_factory.dart';
 import 'package:strapen_app/app/modules/reserva/models/reserva_model.dart';
 import 'package:strapen_app/app/modules/reserva/repositories/ireserva_repository.dart';
 import 'package:strapen_app/app/modules/start/constants/routes.dart';
+import 'package:strapen_app/app/modules/user/models/user_model.dart';
 import 'package:strapen_app/app/modules/user/repositories/iuser_repository.dart';
 import 'package:strapen_app/app/shared/components/dialog/concluido_dialog.dart';
 import 'package:strapen_app/app/shared/components/dialog/dialog_default.dart';
@@ -73,6 +75,9 @@ abstract class _LiveController extends Disposable with Store {
   ObservableList<ReservaModel> reservas = ObservableList<ReservaModel>();
 
   @observable
+  ObservableList<UserModel> clientes = ObservableList<UserModel>();
+
+  @observable
   LiveModel? liveModel;
 
   @observable
@@ -101,6 +106,9 @@ abstract class _LiveController extends Disposable with Store {
 
   @action
   void setReservas(ObservableList<ReservaModel> value) => reservas = value;
+
+  @action
+  void setClientes(ObservableList<UserModel> value) => clientes = value;
 
   @action
   void setLiveModel(LiveModel value) => liveModel = value;
@@ -219,25 +227,29 @@ abstract class _LiveController extends Disposable with Store {
     );
 
     if (confirm ?? false) {
-      await LoadingDialog.show(context, "Finalizando...", () async {
-        try {
-          await _liveService.stopLive(liveModel!, cameraStore.cameraController!);
-        } finally {
-          await cameraStore.cameraController!.stopVideoStreaming().whenComplete(() {
-            Future.delayed(Duration(seconds: 3), () {
-              Modular.to.navigate(START_ROUTE);
-            });
-
-            showDialog(
-              context: context,
-              barrierDismissible: false,
-              builder: (_) => ConcluidoDialog(
-                message: "Sua Live foi finalizada com sucesso! Você será redirecionado para a tela inicial.",
-              ),
-            );
+      try {
+        await LoadingDialog.show(context, "Finalizando...", () async {
+          try {
+            await _liveService.stopLive(liveModel!, cameraStore.cameraController!);
+          } catch (_) {
+            rethrow;
+          }
+        });
+      } finally {
+        await cameraStore.cameraController!.stopVideoStreaming().whenComplete(() {
+          Future.delayed(Duration(seconds: 6), () {
+            Modular.to.navigate(START_ROUTE);
           });
-        }
-      });
+
+          showDialog(
+            context: context,
+            barrierDismissible: false,
+            builder: (_) => ConcluidoDialog(
+              message: "Sua Live foi finalizada com sucesso! Você será redirecionado para a tela inicial.",
+            ),
+          );
+        });
+      }
     }
   }
 
@@ -249,7 +261,7 @@ abstract class _LiveController extends Disposable with Store {
       confirm = await DialogDefault.show(
         context: context,
         title: const Text("Parar de assistir"),
-        content: const Text("Deseja parar de assistir?\nSeus produtos reservados serão mostrados no seu perfil."),
+        content: const Text("Deseja parar de assistir?\nSeus produtos comprados serão mostrados no seu perfil."),
         actions: [
           TextButton(
             child: Text("Confirmar"),
@@ -326,8 +338,10 @@ abstract class _LiveController extends Disposable with Store {
         builder: (_) => DialogDefault(
           context: context,
           title: const Text("Live Encerrada"),
-          content: const Text("A Live foi encerrada, você poderá sair ou então em alguns instantes vamos redirecionar você para a tela principal"),
-          labelButtonDefault: "Ok",
+          content: const Text("A Live foi encerrada, você poderá sair ou então em alguns instantes vamos redirecionar você para a tela principal."),
+          actions: [
+            TextButton(onPressed: () => Modular.to.navigate(START_ROUTE), child: Text("Sair")),
+          ],
         ),
       );
     });
@@ -335,6 +349,18 @@ abstract class _LiveController extends Disposable with Store {
     Future.delayed(Duration(seconds: 25), () {
       Modular.to.navigate(START_ROUTE);
     });
+  }
+
+  @action
+  Future<UserModel> getCliente(String id) async {
+    UserModel? cliente = clientes.firstWhereOrNull((e) => e.id == id);
+
+    if (cliente != null) return cliente;
+
+    cliente = await _userRepository.getById(id);
+
+    clientes.add(cliente);
+    return cliente;
   }
 
   @override

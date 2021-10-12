@@ -18,8 +18,9 @@ import 'package:strapen_app/app/shared/extensions/string_extension.dart';
 
 class UserPage extends StatefulWidget {
   final UserModel? model;
+  final bool exibirAoVivo;
 
-  const UserPage({required this.model});
+  const UserPage({required this.model, this.exibirAoVivo = true});
 
   @override
   _UserPageState createState() => _UserPageState();
@@ -70,7 +71,7 @@ class _UserPageState extends ModularState<UserPage, UserController> {
                         builder: (_) => FotoPerfilWidget(
                           foto: controller.userStore.foto,
                           radiusSize: 52,
-                          liveModel: controller.liveModel,
+                          liveModel: widget.exibirAoVivo ? controller.liveModel : null,
                           onTap: () async => await controller.toAssistirLive(),
                         ),
                       ),

@@ -11,8 +11,8 @@ abstract class MuxApi {
   static final String _baseUrlRmtp = "rtmps://global-live.mux.com:443/app/";
 
   static String urlStream(String playbackId) => "https://stream.mux.com/$playbackId.m3u8";
-  static String urlImageLive(String playbackId, {required double width, required double height}) =>
-      "https://image.mux.com/$playbackId/thumbnail.png?width=$width&$height=190&fit_mode=smartcrop&time=35";
+  static String urlImageLive(String playbackId, {required int width, required int height}) =>
+      "https://image.mux.com/$playbackId/thumbnail.png?width=$width&height=$height&fit_mode=smartcrop&time=35";
 
   static Future<Map<String, dynamic>?> post(
     String url, {

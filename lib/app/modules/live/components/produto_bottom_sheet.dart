@@ -7,6 +7,7 @@ import 'package:strapen_app/app/modules/live/controllers/live_controller.dart';
 import 'package:strapen_app/app/modules/produto/components/produto_widget.dart';
 import 'package:strapen_app/app/modules/produto/stores/produto_store.dart';
 import 'package:strapen_app/app/modules/reserva/models/reserva_model.dart';
+import 'package:strapen_app/app/modules/user/models/user_model.dart';
 import 'package:strapen_app/app/shared/components/dialog/error_dialog.dart';
 
 class ProdutoBottomSheet extends StatefulWidget {
@@ -35,7 +36,7 @@ class ProdutoBottomSheet extends StatefulWidget {
 }
 
 class _ProdutoBottomSheetState extends State<ProdutoBottomSheet> {
-  LiveController controller = Modular.get<LiveController>();
+  final LiveController controller = Modular.get<LiveController>();
 
   @override
   Widget build(BuildContext context) {
@@ -60,7 +61,8 @@ class _ProdutoBottomSheetState extends State<ProdutoBottomSheet> {
             await UserBottomSheet.show(context: widget.context, user: controller.liveModel!.user!);
           } : null,
           onPressedCliente: controller.isCriadorLive && widget.reserva != null ? () async {
-            await UserBottomSheet.show(context: widget.context, user: widget.reserva!.user!);
+            final UserModel user = await controller.getCliente(widget.reserva!.user!.id!);
+            await UserBottomSheet.show(context: widget.context, user: user);
           } : null,
         ),
       ),

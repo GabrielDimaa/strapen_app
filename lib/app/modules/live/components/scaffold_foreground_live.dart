@@ -78,7 +78,36 @@ class ScaffoldForegroundLive extends StatelessWidget {
                 padding: const EdgeInsets.only(top: 12, right: 20),
                 child: CircleButtonAppBar(
                   color: AppColors.opaci.withOpacity(0.4),
-                  child: Icon(Icons.shopping_cart),
+                  child: Observer(
+                    builder: (_) => Column(
+                      mainAxisAlignment: controller.reservas.isNotEmpty ? MainAxisAlignment.start : MainAxisAlignment.center,
+                      children: [
+                        Visibility(
+                          visible: controller.reservas.isNotEmpty,
+                          child: Padding(
+                            padding: const EdgeInsets.only(right: 10, top: 4),
+                            child: Align(
+                              alignment: Alignment.centerRight,
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 3.5, vertical: 0),
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(100),
+                                  color: AppColors.error,
+                                ),
+                                child: Observer(
+                                  builder: (_) => Text(
+                                    controller.reservas.length > 99 ? "+99" : controller.reservas.length.toString(),
+                                    style: TextStyle(fontSize: 10),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Icon(Icons.shopping_cart),
+                      ],
+                    ),
+                  ),
                   messageTooltip: isCriadorLive ? "Reservas" : "Compras",
                   onTap: () async => await controller.showReservasBottomSheet(this.context),
                 ),

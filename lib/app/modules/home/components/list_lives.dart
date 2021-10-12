@@ -27,6 +27,7 @@ class ListLives extends StatelessWidget {
             return CardLive(
               playBackId: live.playBackId!,
               username: live.user!.username!,
+              onTap: () async => await controller.toAssistirLive(live),
             );
           },
         ),

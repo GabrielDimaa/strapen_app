@@ -31,7 +31,7 @@ class _UserBottomSheetState extends State<UserBottomSheet> {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.only(top: MediaQuery.of(widget.context).padding.top),
-      child: UserPage(model: widget.user),
+      child: UserPage(model: widget.user, exibirAoVivo: false),
     );
   }
 }
