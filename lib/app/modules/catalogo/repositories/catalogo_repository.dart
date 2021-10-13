@@ -61,7 +61,9 @@ class CatalogoRepository implements ICatalogoRepository {
       ParseResponse response = await parseCatalogo.save();
 
       if (!response.success) throw Exception(ParseErrorsUtils.get(response.statusCode));
-      ParseObject parseResponse = (response.results as List<dynamic>).first;
+      ParseObject? parseResponse = (response.results)?.first;
+
+      if (parseResponse == null) throw Exception("Houve um erro ao salvar seu catálogo!");
 
       CatalogoModel catalogoResponse = toModel(parseResponse);
       model.id = catalogoResponse.id;
@@ -111,7 +113,7 @@ class CatalogoRepository implements ICatalogoRepository {
       ParseResponse response = await query.query();
 
       if (!response.success) throw Exception(ParseErrorsUtils.get(response.statusCode));
-      ParseObject? parseResponse = (response.results as List<ParseObject>?)?.first;
+      ParseObject? parseResponse = (response.results)?.first;
 
       if (parseResponse == null)
         throw Exception("Houve um erro ao buscar o catálogo.");

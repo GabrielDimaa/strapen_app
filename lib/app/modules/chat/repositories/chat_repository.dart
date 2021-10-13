@@ -55,7 +55,7 @@ class ChatRepository implements IChatRepository {
       ParseResponse response = await parseChat.save();
 
       if (!response.success) throw Exception(ParseErrorsUtils.get(response.statusCode));
-      ParseObject? parseResponse = (response.results as List<dynamic>).first;
+      ParseObject? parseResponse = (response.results)?.first;
 
       String? id = parseResponse?.get<String>(CHAT_ID_COLUMN);
 

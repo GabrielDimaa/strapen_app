@@ -23,13 +23,13 @@ class LiveRepository implements ILiveRepository {
 
   @override
   String className() => "Live";
+  String messageError = "Houve um erro ao criar sua Live.\nSe o erro persistir reinicie o aplicativo.";
 
   LiveQuery? liveQuery;
   Subscription? subscription;
 
   @override
   void validate(LiveModel model) {
-    String messageError = "Houve um erro ao criar sua Live.\nSe o erro persistir reinicie o aplicativo.";
     if (model.streamKey.isNullOrEmpty()) throw Exception(messageError);
     if (model.liveId.isNullOrEmpty()) throw Exception(messageError);
     if (model.playBackId.isNullOrEmpty()) throw Exception(messageError);
@@ -78,7 +78,9 @@ class LiveRepository implements ILiveRepository {
       ParseResponse response = await parseLive.save();
 
       if (!response.success) throw Exception(ParseErrorsUtils.get(response.statusCode));
-      ParseObject parseResponse = (response.results as List<dynamic>).first;
+      ParseObject? parseResponse = (response.results)?.first;
+
+      if (parseResponse == null) throw Exception(messageError);
 
       LiveModel liveModelResponse = toModel(parseResponse);
       model.id = liveModelResponse.id;
@@ -104,9 +106,10 @@ class LiveRepository implements ILiveRepository {
 
       if (response.result != null) {
         if (!response.success) throw Exception(ParseErrorsUtils.get(response.statusCode));
-        ParseObject parseResponse = (response.results as List<dynamic>).first;
+        ParseObject? parseResponse = (response.results)?.first;
 
-        return toModel(parseResponse);
+        if (parseResponse != null)
+          return toModel(parseResponse);
       }
 
       return null;
