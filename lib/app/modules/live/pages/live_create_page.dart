@@ -54,7 +54,7 @@ class _LiveCreatePageState extends State<LiveCreatePage> {
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             SizedBox(
-                              height: size,
+                              height: MediaQuery.of(context).size.height * 0.4,
                               width: size,
                               child: Observer(
                                 builder: (_) {
