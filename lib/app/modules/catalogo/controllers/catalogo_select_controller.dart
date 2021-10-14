@@ -1,7 +1,6 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'package:strapen_app/app/app_controller.dart';
-import 'package:strapen_app/app/modules/catalogo/constants/routes.dart';
 import 'package:strapen_app/app/modules/catalogo/factories/catalogo_factory.dart';
 import 'package:strapen_app/app/modules/catalogo/models/catalogo_model.dart';
 import 'package:strapen_app/app/modules/catalogo/repositories/icatalogo_repository.dart';
@@ -62,15 +61,5 @@ abstract class _CatalogoSelectController with Store {
     if (selecteds.isEmpty) throw Exception("Selecione pelo menos um catálogo para exibir na Live.");
 
     Modular.to.pop(selecteds.map((e) => e.toModel()).toList());
-  }
-
-  @action
-  Future<void> toCatalogoCreate() async {
-    CatalogoModel? catalogoModel = await Modular.to.pushNamed(CATALOGO_ROUTE + CATALOGO_CREATE_ROUTE);
-
-    if (catalogoModel?.id != null) {
-      if (catalogos == null) catalogos = ObservableList<CatalogoStore>();
-      catalogos!.insert(0, CatalogoFactory.fromModel(catalogoModel!));
-    }
   }
 }

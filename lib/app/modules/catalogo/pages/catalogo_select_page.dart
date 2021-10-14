@@ -2,11 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:strapen_app/app/app_widget.dart';
-import 'package:strapen_app/app/modules/catalogo/models/catalogo_model.dart';
 import 'package:strapen_app/app/modules/catalogo/controllers/catalogo_select_controller.dart';
+import 'package:strapen_app/app/modules/catalogo/models/catalogo_model.dart';
 import 'package:strapen_app/app/modules/catalogo/stores/catalogo_store.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/app_bar_default.dart';
-import 'package:strapen_app/app/shared/components/app_bar_default/widgets/circle_background_app_bar.dart';
 import 'package:strapen_app/app/shared/components/button/elevated_button_default.dart';
 import 'package:strapen_app/app/shared/components/dialog/error_dialog.dart';
 import 'package:strapen_app/app/shared/components/loading/circular_loading.dart';
@@ -42,17 +41,6 @@ class _CatalogoSelectPageState extends State<CatalogoSelectPage> {
     return Scaffold(
       appBar: AppBarDefault(
         title: Text("Catálogos"),
-        actionsWidgets: [
-          CircleButtonAppBar(
-            child: Icon(
-              Icons.playlist_add,
-              size: 28,
-              color: Colors.white,
-            ),
-            onTap: () async => await controller.toCatalogoCreate(),
-            messageTooltip: "Criar Catálogo",
-          ),
-        ],
       ),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
