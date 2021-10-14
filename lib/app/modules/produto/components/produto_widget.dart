@@ -10,7 +10,7 @@ import 'package:strapen_app/app/modules/reserva/components/status_reserva_widget
 import 'package:strapen_app/app/modules/reserva/models/reserva_model.dart';
 import 'package:strapen_app/app/modules/user/constants/routes.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/app_bar_default.dart';
-import 'package:strapen_app/app/shared/components/app_bar_default/widgets/circle_background_app_bar.dart';
+import 'package:strapen_app/app/shared/components/app_bar_default/widgets/editar_app_bar_widget.dart';
 import 'package:strapen_app/app/shared/components/button/elevated_button_default.dart';
 import 'package:strapen_app/app/shared/components/padding/magin_button_without_scaffold.dart';
 import 'package:strapen_app/app/shared/components/padding/padding_scaffold.dart';
@@ -27,6 +27,7 @@ class ProdutoWidget extends StatefulWidget {
   final bool reservadoSuccess;
   final ReservaModel? reservaModel;
   final bool editavel;
+  final VoidCallback? onPressedEditar;
 
   const ProdutoWidget({
     required this.produtoStore,
@@ -36,6 +37,7 @@ class ProdutoWidget extends StatefulWidget {
     this.reservadoSuccess = false,
     this.reservaModel,
     this.editavel = false,
+    this.onPressedEditar,
   });
 
   @override
@@ -80,17 +82,12 @@ class _ProdutoWidgetState extends State<ProdutoWidget> {
             child: AppBarDefault(
               backgroundColor: Colors.transparent,
               backgroundColorBackButton: AppColors.opaci.withOpacity(0.4),
+              onPressedBackButton: () => Modular.to.pop(widget.produtoStore.toModel()),
               actionsWidgets: [
-                Visibility(
-                  visible: widget.editavel,
-                  child: CircleButtonAppBar(
-                    color: AppColors.opaci.withOpacity(0.4),
-                    child: Icon(
-                      Icons.edit,
-                      color: Colors.white,
-                    ),
-                    messageTooltip: "Editar",
-                  ),
+                EditarAppBarWidget(
+                  visible: widget.editavel && widget.onPressedEditar != null,
+                  onTap: widget.onPressedEditar,
+                  backgroundColor: AppColors.opaci.withOpacity(0.4),
                 ),
               ],
             ),
@@ -338,14 +335,14 @@ class _ProdutoWidgetState extends State<ProdutoWidget> {
             ),
             const VerticalSizedBox(0.3),
             Row(
-                children: [
-                  Text("Valor unitário:  ", style: textTheme.bodyText1),
-                  Text(
-                    widget.reservaModel?.preco.formatReal() ?? "",
-                    style: textTheme.bodyText1!.copyWith(fontWeight: FontWeight.w700),
-                  ),
-                ],
-              ),
+              children: [
+                Text("Valor unitário:  ", style: textTheme.bodyText1),
+                Text(
+                  widget.reservaModel?.preco.formatReal() ?? "",
+                  style: textTheme.bodyText1!.copyWith(fontWeight: FontWeight.w700),
+                ),
+              ],
+            ),
             const VerticalSizedBox(1.5),
             Text("Valor total:  ", style: textTheme.bodyText1),
             const VerticalSizedBox(0.3),

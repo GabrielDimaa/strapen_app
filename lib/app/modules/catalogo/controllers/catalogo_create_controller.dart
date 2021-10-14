@@ -59,7 +59,7 @@ abstract class _CatalogoCreateController with Store {
         model = await _catalogoRepository.save(catalogoStore.toModel(), produtosBeforeUpdate);
       });
 
-      if (model == null) throw Exception("Houve um erro ao salvar o produto!");
+      if (model == null) throw Exception("Houve um erro ao salvar o catálogo!");
 
       Modular.to.pop(model!);
     } catch (_) {

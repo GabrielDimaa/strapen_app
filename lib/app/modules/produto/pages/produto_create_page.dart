@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
+import 'package:collection/collection.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -9,8 +10,10 @@ import 'package:strapen_app/app/app_widget.dart';
 import 'package:strapen_app/app/modules/produto/components/photo.dart';
 import 'package:strapen_app/app/modules/produto/components/photo_miniature.dart';
 import 'package:strapen_app/app/modules/produto/controllers/produto_create_controller.dart';
+import 'package:strapen_app/app/modules/produto/factories/produto_factory.dart';
+import 'package:strapen_app/app/modules/produto/models/produto_model.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/app_bar_default.dart';
-import 'package:strapen_app/app/shared/components/app_bar_default/widgets/circle_background_app_bar.dart';
+import 'package:strapen_app/app/shared/components/app_bar_default/widgets/remover_app_bar_widget.dart';
 import 'package:strapen_app/app/shared/components/bottom_sheet/bottom_sheet_image_picker.dart';
 import 'package:strapen_app/app/shared/components/button/elevated_button_default.dart';
 import 'package:strapen_app/app/shared/components/dialog/error_dialog.dart';
@@ -20,8 +23,13 @@ import 'package:strapen_app/app/shared/components/sized_box/horizontal_sized_box
 import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
 import 'package:strapen_app/app/shared/components/text_input/text_input_default.dart';
 import 'package:strapen_app/app/shared/components/widgets/text_field_qtd.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class ProdutoCreatePage extends StatefulWidget {
+  final ProdutoModel? produto;
+
+  const ProdutoCreatePage({this.produto});
+
   @override
   _ProdutoCreatePageState createState() => _ProdutoCreatePageState();
 }
@@ -47,6 +55,7 @@ class _ProdutoCreatePageState extends ModularState<ProdutoCreatePage, ProdutoCre
   void initState() {
     super.initState();
 
+    if (widget.produto != null) controller.setProdutoStore(ProdutoFactory.fromModel(widget.produto!));
     controller.setInitPage(_updateControllers);
     controller.load();
   }
@@ -66,12 +75,9 @@ class _ProdutoCreatePageState extends ModularState<ProdutoCreatePage, ProdutoCre
         title: Text("Produto"),
         backgroundColor: AppColors.background,
         actionsWidgets: [
-          CircleButtonAppBar(
-            messageTooltip: "Remover",
-            child: Icon(
-              Icons.delete,
-              color: Colors.white,
-            ),
+          RemoverAppBarWidget(
+            onTap: () async => await controller.remover(context),
+            visible: widget.produto != null,
           ),
         ],
       ),
@@ -85,18 +91,12 @@ class _ProdutoCreatePageState extends ModularState<ProdutoCreatePage, ProdutoCre
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Observer(
-                      builder: (_) {
-                        File? image;
-                        if (controller.produtoStore.fotos.isNotEmpty)
-                          image = controller.produtoStore.fotos.first;
-
-                        return Photo(
-                          onTap: () async => await _showBottomSheet(),
-                          image: image,
-                        );
-                      }
-                    ),
+                    Observer(builder: (_) {
+                      return Photo(
+                        onTap: () async => await _showBottomSheet(),
+                        image: controller.produtoStore.fotos.firstOrNull,
+                      );
+                    }),
                     const VerticalSizedBox(),
                     Text(
                       "A primeira foto adicionada, será a foto principal do seu produto.",
@@ -119,7 +119,12 @@ class _ProdutoCreatePageState extends ModularState<ProdutoCreatePage, ProdutoCre
                                       children: [
                                         const HorizontalSizedBox(0.7),
                                         PhotoMiniature(
-                                          image: Image.file(e).image,
+                                          image: e is File
+                                              ? Image.file(e).image
+                                              : FadeInImage.memoryNetwork(
+                                                  placeholder: kTransparentImage,
+                                                  image: e,
+                                                ).image,
                                           onTapRemove: () => controller.produtoStore.fotos.remove(e),
                                         )
                                       ],
@@ -181,7 +186,7 @@ class _ProdutoCreatePageState extends ModularState<ProdutoCreatePage, ProdutoCre
                               enabled: !controller.loading,
                               onChanged: (value) {
                                 if (value.isNotEmpty) {
-                                    controller.produtoStore.setQuantidade(int.parse(value));
+                                  controller.produtoStore.setQuantidade(int.parse(value));
                                 }
                               },
                               onSubmitted: (_) => _focusChange(
@@ -194,7 +199,7 @@ class _ProdutoCreatePageState extends ModularState<ProdutoCreatePage, ProdutoCre
                           const VerticalSizedBox(2.5),
                           Observer(
                             builder: (_) => TextFormField(
-                              decoration: InputDecorationDefault(label: "Preço", prefixText: "R\$ "),
+                              decoration: InputDecorationDefault(label: "Preço unitário", prefixText: "R\$ "),
                               controller: _precoController,
                               validator: InputPrecoValidator().validate,
                               textInputAction: TextInputAction.done,
@@ -220,7 +225,7 @@ class _ProdutoCreatePageState extends ModularState<ProdutoCreatePage, ProdutoCre
               ),
             ),
             ElevatedButtonDefault(
-              child: Text("Salvar produto"),
+              child: Text("Salvar"),
               onPressed: () async {
                 try {
                   if (_formKey.currentState!.validate()) {

@@ -2,10 +2,11 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:strapen_app/app/app_widget.dart';
+import 'package:transparent_image/transparent_image.dart';
 
 class Photo extends StatelessWidget {
   final VoidCallback? onTap;
-  final File? image;
+  final dynamic image;
 
   Photo({this.onTap, this.image});
 
@@ -25,7 +26,10 @@ class Photo extends StatelessWidget {
           child: image != null
               ? ClipRRect(
                   borderRadius: _borderRadius,
-                  child: Image.file(image!),
+                  child: image is File ? Image.file(image!) : FadeInImage.memoryNetwork(
+                    placeholder: kTransparentImage,
+                    image: image,
+                  ),
                 )
               : Padding(
                   padding: const EdgeInsets.all(16.0),

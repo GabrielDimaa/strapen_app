@@ -62,8 +62,9 @@ class _CriarCatalogoWidgetState extends State<CriarCatalogoWidget> {
                               controller.catalogoStore.foto,
                               height: 126,
                               width: 126,
-                            ) : Image.network(
-                              controller.catalogoStore.foto,
+                            ) : FadeInImage.memoryNetwork(
+                              placeholder: kTransparentImage,
+                              image: controller.catalogoStore.foto,
                               height: 126,
                               width: 126,
                             ),

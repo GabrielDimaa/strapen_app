@@ -79,6 +79,20 @@ class ProdutoRepository implements IProdutoRepository {
     }
   }
 
+  @override
+  Future<bool> delete(ProdutoModel model) async {
+    try {
+      if (model.id == null) throw Exception("Houve um erro ao remover seu produto!");
+
+      final ParseObject parseCatalogo = ParseObject(className());
+      ParseResponse response = await parseCatalogo.delete(id: model.id!);
+
+      return response.success;
+    } catch(e) {
+      throw Exception(e);
+    }
+  }
+
   Future<List<ProdutoModel>?> getByUser(String? id) async {
     try {
       if (id == null) throw Exception("Houve um erro ao buscar seus produtos, tente novamente.\nSe o erro persistir, reinicie o aplicativo.");

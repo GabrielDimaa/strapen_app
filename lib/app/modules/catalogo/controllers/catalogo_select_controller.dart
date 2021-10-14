@@ -58,7 +58,7 @@ abstract class _CatalogoSelectController with Store {
 
   @action
   void save() {
-    List<CatalogoStore> selecteds = catalogos?.where((e) => e.selected).toList() ?? [];
+    List<CatalogoStore> selecteds = catalogos?.where((e) => e.selected && (e.produtos?.isNotEmpty ?? false)).toList() ?? [];
     if (selecteds.isEmpty) throw Exception("Selecione pelo menos um catálogo para exibir na Live.");
 
     Modular.to.pop(selecteds.map((e) => e.toModel()).toList());

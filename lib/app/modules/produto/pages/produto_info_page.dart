@@ -34,8 +34,10 @@ class _ProdutoInfoPageState extends ModularState<ProdutoInfoPage, ProdutoInfoCon
       backgroundColor: AppColors.background.withOpacity(0.6),
       body: Observer(
         builder: (_) => ProdutoWidget(
+          editavel: controller.editavel,
           produtoStore: controller.produtoStore!,
           reservaModel: controller.reservaModel,
+          onPressedEditar: () async => await controller.editarCatalogo(),
         ),
       ),
     );

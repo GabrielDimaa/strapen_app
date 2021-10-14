@@ -55,6 +55,17 @@ abstract class _ProdutoListController with Store {
 
   @action
   Future<void> toProdutoInfo(ProdutoModel model) async {
-    await Modular.to.pushNamed(PRODUTO_ROUTE + PRODUTO_INFO_ROUTE, arguments: {'produtoModel': model});
+    ProdutoModel? produto = await Modular.to.pushNamed(PRODUTO_ROUTE + PRODUTO_INFO_ROUTE, arguments: {'produtoModel': model});
+    if (produto != null) {
+      if (produto.id == null)
+        await atualizarListaProdutos();
+      else {
+        ProdutoModel catalogoParaAlterar = produtos!.firstWhere((e) => e.id == produto.id);
+
+        int position = produtos!.indexOf(catalogoParaAlterar);
+        produtos!.removeAt(position);
+        produtos!.insert(position, produto);
+      }
+    }
   }
 }
