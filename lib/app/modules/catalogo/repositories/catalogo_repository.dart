@@ -45,10 +45,16 @@ class CatalogoRepository implements ICatalogoRepository {
     );
   }
 
+  ///Contém os produtos antes de atualizar, dessa forma se tiver mudança nos produtos do catálogo
+  ///deverá ser removido os produtos que não contiver na nova lista.
   @override
-  Future<CatalogoModel> save(CatalogoModel model) async {
+  Future<CatalogoModel> save(CatalogoModel model, List<ProdutoModel>? produtos) async {
     try {
       validate(model);
+
+      //Verifica se existe produtos removidos da nova lista do catálogo
+      if (produtos != null && model.id != null)
+        await _removeRelation(produtos, model);
 
       List<ParseFileBase> parseImagem = await ParseImageUtils.save([model.foto]);
 
@@ -72,6 +78,20 @@ class CatalogoRepository implements ICatalogoRepository {
 
       return model;
     } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  @override
+  Future<bool> delete(CatalogoModel model) async {
+    try {
+      if (model.id == null) throw Exception("Houve um erro ao remover seu catálogo!");
+
+      final ParseObject parseCatalogo = ParseObject(className());
+      ParseResponse response = await parseCatalogo.delete(id: model.id!);
+
+      return response.success;
+    } catch(e) {
       throw Exception(e);
     }
   }
@@ -150,5 +170,25 @@ class CatalogoRepository implements ICatalogoRepository {
     } catch(e) {
       throw Exception(e);
     }
+  }
+
+  Future<void> _removeRelation(List<ProdutoModel> produtos, CatalogoModel catalogo) async {
+    List<ProdutoModel> produtosParaRemover = [];
+    produtos.forEach((e) {
+      if (!catalogo.produtos!.any((prod) => prod.id == e.id))
+        produtosParaRemover.add(e);
+    });
+
+    if (produtosParaRemover.isEmpty) return;
+
+    final ParseObject parse = ParseObject(className())..set(CATALOGO_ID_COLUMN, catalogo.id);
+
+    parse.removeRelation(
+      CATALOGO_PRODUTO_COLUMN,
+      produtosParaRemover.map((e) {
+        return ParseObject(ProdutoRepository().className())..objectId = e.id;
+      }).toList());
+
+    await parse.update();
   }
 }

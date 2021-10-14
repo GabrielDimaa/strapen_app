@@ -7,7 +7,7 @@ import 'package:strapen_app/app/modules/catalogo/factories/catalogo_factory.dart
 import 'package:strapen_app/app/modules/catalogo/models/catalogo_model.dart';
 import 'package:strapen_app/app/modules/produto/stores/produto_store.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/app_bar_default.dart';
-import 'package:strapen_app/app/shared/components/app_bar_default/widgets/circle_background_app_bar.dart';
+import 'package:strapen_app/app/shared/components/app_bar_default/widgets/editar_app_bar_widget.dart';
 import 'package:strapen_app/app/shared/components/loading/circular_loading.dart';
 
 class CatalogoInfoPage extends StatefulWidget {
@@ -32,11 +32,10 @@ class _CatalogoInfoPageState extends ModularState<CatalogoInfoPage, CatalogoInfo
     return Scaffold(
       appBar: AppBarDefault(
         title: Text("Catálogo"),
+        onPressedBackButton: () => Modular.to.pop(controller.catalogoStore!.toModel()),
         actionsWidgets: [
-          CircleButtonAppBar(
-            child: Icon(Icons.edit, color: Colors.white),
-            onTap: () {},
-            messageTooltip: "Editar",
+          EditarAppBarWidget(
+            onTap: () async => await controller.editarCatalogo()
           ),
         ],
       ),

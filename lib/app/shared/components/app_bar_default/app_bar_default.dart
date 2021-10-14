@@ -13,6 +13,7 @@ class AppBarDefault extends AppBar {
   final Color? backgroundColorBackButton;
   final Color? iconColor;
   final double? leadingSize;
+  final VoidCallback? onPressedBackButton;
 
   AppBarDefault({
     this.title,
@@ -24,6 +25,7 @@ class AppBarDefault extends AppBar {
     this.backgroundColorBackButton,
     this.iconColor,
     this.leadingSize,
+    this.onPressedBackButton,
   }) : super(
     leadingWidth: leadingSize ?? 90,
     toolbarHeight: bottomWidgets == null ? 78 : 126,
@@ -45,6 +47,7 @@ class AppBarDefault extends AppBar {
           BackButtonDefault(
             backgroundColor: backgroundColorBackButton,
             iconColor: iconColor,
+            onPressed: onPressedBackButton,
           )
       ],
     ) : leadingWidget,

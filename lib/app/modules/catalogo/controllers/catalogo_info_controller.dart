@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
+import 'package:strapen_app/app/modules/catalogo/constants/routes.dart';
 import 'package:strapen_app/app/modules/catalogo/factories/catalogo_factory.dart';
 import 'package:strapen_app/app/modules/catalogo/models/catalogo_model.dart';
 import 'package:strapen_app/app/modules/catalogo/repositories/icatalogo_repository.dart';
@@ -39,6 +41,17 @@ abstract class _CatalogoInfoController with Store {
       ErrorDialog.show(context: context, content: e.toString());
     } finally {
       setLoading(false);
+    }
+  }
+
+  @action
+  Future<void> editarCatalogo() async {
+    CatalogoModel? catalogo = await Modular.to.pushNamed(CATALOGO_ROUTE + CATALOGO_CREATE_ROUTE, arguments: catalogoStore!.toModel());
+    if (catalogo != null) {
+      if (catalogo.id == null)
+        Modular.to.pop(catalogo);
+      else
+        setCatalogoStore(CatalogoFactory.fromModel(catalogo));
     }
   }
 }

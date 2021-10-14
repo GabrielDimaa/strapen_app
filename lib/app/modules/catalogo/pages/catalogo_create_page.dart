@@ -2,15 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:strapen_app/app/modules/catalogo/components/criar_catalogo_widget.dart';
 import 'package:strapen_app/app/modules/catalogo/controllers/catalogo_create_controller.dart';
+import 'package:strapen_app/app/modules/catalogo/models/catalogo_model.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/app_bar_default.dart';
-import 'package:strapen_app/app/shared/components/app_bar_default/widgets/circle_background_app_bar.dart';
+import 'package:strapen_app/app/shared/components/app_bar_default/widgets/remover_app_bar_widget.dart';
 
 class CatalogoCreatePage extends StatefulWidget {
+  final CatalogoModel? catalogo;
+
+  const CatalogoCreatePage({this.catalogo});
+
   @override
   _CatalogoCreatePageState createState() => _CatalogoCreatePageState();
 }
 
 class _CatalogoCreatePageState extends ModularState<CatalogoCreatePage, CatalogoCreateController> {
+  @override
+  void initState() {
+    super.initState();
+    controller.load(widget.catalogo);
+  }
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -20,10 +31,9 @@ class _CatalogoCreatePageState extends ModularState<CatalogoCreatePage, Catalogo
         appBar: AppBarDefault(
           title: const Text("Catálogo"),
           actionsWidgets: [
-            CircleButtonAppBar(
-              child: Icon(Icons.delete, color: Colors.white),
-              onTap: () {},
-              messageTooltip: "Remover",
+            RemoverAppBarWidget(
+              onTap: () async => await controller.remover(context),
+              visible: widget.catalogo != null,
             ),
           ],
           bottomWidgets: const TabBar(

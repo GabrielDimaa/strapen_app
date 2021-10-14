@@ -30,7 +30,7 @@ class CatalogoModule extends Module {
   @override
   final List<ModularRoute> routes = [
     ChildRoute(Modular.initialRoute, child: (_, args) => CatalogoListPage()),
-    ChildRoute(CATALOGO_CREATE_ROUTE, child: (_, args) => CatalogoCreatePage()),
+    ChildRoute(CATALOGO_CREATE_ROUTE, child: (_, args) => CatalogoCreatePage(catalogo: args.data)),
     ChildRoute(CATALOGO_SELECT_ROUTE, child: (_, args) => CatalogoSelectPage(catalogos: args.data)),
     ChildRoute(CATALOGO_INFO_ROUTE, child: (_, args) => CatalogoInfoPage(model: args.data)),
   ];

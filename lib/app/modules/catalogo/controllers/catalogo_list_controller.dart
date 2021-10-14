@@ -22,6 +22,9 @@ abstract class _CatalogoListController with Store {
   bool loading = false;
 
   @action
+  void setCatalogos(ObservableList<CatalogoModel>? value) => catalogos = value;
+
+  @action
   void setLoading(bool value) => loading = value;
 
   @action
@@ -44,7 +47,7 @@ abstract class _CatalogoListController with Store {
 
   @action
   Future<void> toCatalogoCreate() async {
-    CatalogoModel? catalogoModel = await Modular.to.pushNamed(CATALOGO_ROUTE + CATALOGO_CREATE_ROUTE) as CatalogoModel?;
+    CatalogoModel? catalogoModel = await Modular.to.pushNamed(CATALOGO_ROUTE + CATALOGO_CREATE_ROUTE);
     if (catalogoModel?.id != null) {
       if (catalogos == null)
         await atualizarListaCatalogos();
@@ -55,6 +58,18 @@ abstract class _CatalogoListController with Store {
 
   @action
   Future<void> toCatalogoInfo(CatalogoModel model) async {
-    await Modular.to.pushNamed(CATALOGO_ROUTE + CATALOGO_INFO_ROUTE, arguments: model);
+    CatalogoModel? catalogo = await Modular.to.pushNamed(CATALOGO_ROUTE + CATALOGO_INFO_ROUTE, arguments: model);
+    if (catalogo != null) {
+      if (catalogo.id == null)
+        await atualizarListaCatalogos();
+      else {
+        CatalogoModel catalogoParaAlterar = catalogos!.firstWhere((e) => e.id == catalogo.id);
+        int position = catalogos!.indexOf(catalogoParaAlterar);
+        catalogo.dataCriado = catalogoParaAlterar.dataCriado;
+
+        catalogos!.removeAt(position);
+        catalogos!.insert(position, catalogo);
+      }
+    }
   }
 }

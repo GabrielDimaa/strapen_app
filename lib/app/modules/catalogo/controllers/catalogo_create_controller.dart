@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:ui';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,15 +12,15 @@ import 'package:strapen_app/app/modules/catalogo/stores/catalogo_store.dart';
 import 'package:strapen_app/app/modules/produto/constants/routes.dart';
 import 'package:strapen_app/app/modules/produto/factories/produto_factory.dart';
 import 'package:strapen_app/app/modules/produto/models/produto_model.dart';
+import 'package:strapen_app/app/shared/components/dialog/dialog_default.dart';
 import 'package:strapen_app/app/shared/components/dialog/loading_dialog.dart';
-import 'package:strapen_app/app/shared/interfaces/default_controller_interface.dart';
 import 'package:strapen_app/app/shared/utils/image_picker_utils.dart';
 
 part 'catalogo_create_controller.g.dart';
 
 class CatalogoCreateController = _CatalogoCreateController with _$CatalogoCreateController;
 
-abstract class _CatalogoCreateController with Store implements IDefaultController {
+abstract class _CatalogoCreateController with Store {
   final ICatalogoRepository _catalogoRepository;
   final AppController _appController;
 
@@ -33,17 +32,21 @@ abstract class _CatalogoCreateController with Store implements IDefaultControlle
   @observable
   bool loading = false;
 
-  @override
-  VoidCallback? initPage;
+  List<ProdutoModel>? produtosBeforeUpdate;
+
+  @action
+  void setCatalogoStore(CatalogoStore value) => catalogoStore = value;
 
   @action
   void setLoading(bool value) => loading = value;
 
-  @override
-  void setInitPage(VoidCallback function) => initPage = function;
-
   @action
-  Future<void> load() async {}
+  Future<void> load(CatalogoModel? catalogo) async {
+    if (catalogo != null) {
+      setCatalogoStore(CatalogoFactory.fromModel(catalogo));
+      produtosBeforeUpdate = catalogo.produtos;
+    }
+  }
 
   @action
   Future<void> save(BuildContext context) async {
@@ -53,10 +56,12 @@ abstract class _CatalogoCreateController with Store implements IDefaultControlle
       await LoadingDialog.show(context, "Salvando catálogo...", () async {
         catalogoStore.setUser(_appController.userModel);
 
-        model = await _catalogoRepository.save(catalogoStore.toModel());
+        model = await _catalogoRepository.save(catalogoStore.toModel(), produtosBeforeUpdate);
       });
 
-      Modular.to.pop(model ?? CatalogoFactory.newModel());
+      if (model == null) throw Exception("Houve um erro ao salvar o produto!");
+
+      Modular.to.pop(model!);
     } catch (_) {
       rethrow;
     }
@@ -78,5 +83,29 @@ abstract class _CatalogoCreateController with Store implements IDefaultControlle
     if (produtosModel != null) {
       catalogoStore.setProdutos(produtosModel.map((e) => ProdutoFactory.fromModel(e)).toList().asObservable());
     }
+  }
+
+  @action
+  Future<void> remover(BuildContext context) async {
+    bool confirm = await DialogDefault.show(
+      context: context,
+      title: const Text("Remover"),
+      content: const Text("Deseja remover esse catálogo?\nOs produtos contidos nele, não serão removidos."),
+      actions: [
+        TextButton(
+          child: const Text("Confirmar"),
+          onPressed: () async {
+            bool success = false;
+            await LoadingDialog.show(context, "Removendo catálogo...", () async {
+              success = await _catalogoRepository.delete(catalogoStore.toModel());
+            });
+            Modular.to.pop(success);
+          },
+        ),
+      ],
+    );
+
+    //new model para quando receber o objeto identiicar que foi excluído.
+    if (confirm) Modular.to.pop(CatalogoFactory.newModel());
   }
 }

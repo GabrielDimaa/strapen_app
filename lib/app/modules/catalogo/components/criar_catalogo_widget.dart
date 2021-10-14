@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -56,7 +58,11 @@ class _CriarCatalogoWidgetState extends State<CriarCatalogoWidget> {
                     child: controller.catalogoStore.foto != null
                         ? ClipRRect(
                             borderRadius: BorderRadius.circular(16),
-                            child: Image.file(
+                            child: controller.catalogoStore.foto is File ? Image.file(
+                              controller.catalogoStore.foto,
+                              height: 126,
+                              width: 126,
+                            ) : Image.network(
                               controller.catalogoStore.foto,
                               height: 126,
                               width: 126,
@@ -97,7 +103,7 @@ class _CriarCatalogoWidgetState extends State<CriarCatalogoWidget> {
         Padding(
           padding: const MarginButtonWithoutScaffold(),
           child: ElevatedButtonDefault(
-            child: Text("Salvar catálogo"),
+            child: Text("Salvar"),
             onPressed: () async {
               try {
                 await controller.save(context);
