@@ -103,9 +103,12 @@ abstract class _RegistroController with Store {
       setLoading(true);
 
       UserModel model = userStore.toModel();
-      model = await _userRepository.save(model);
+      model = await _userRepository.save(model, withFoto: false);
 
       userStore.id = model.id;
+
+      model.foto = userStore.foto;
+      model = await _userRepository.saveFoto(model);
 
       _appController.setUserModel(model);
 

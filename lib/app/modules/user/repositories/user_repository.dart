@@ -80,18 +80,21 @@ class UserRepository implements IUserRepository {
   }
 
   @override
-  Future<UserModel> save(UserModel model) async {
+  Future<UserModel> save(UserModel model, {bool withFoto = true}) async {
     try {
       final String senha = model.senha!;
-      final dynamic foto = model.foto;
 
       validate(model);
 
-      //region Salvar usuário
       ParseUser user = toParseObject(model);
       user.setACL(ParseACL()
         ..setPublicReadAccess(allowed: true)
         ..setPublicWriteAccess(allowed: true));
+
+      if (withFoto) {
+        List<ParseFileBase> parseImage = await ParseImageUtils.save([model.foto]);
+        user.set<List<ParseFileBase>>(USER_FOTO_COLUMN, parseImage);
+      }
 
       final ParseResponse userResponse = await user.signUp();
 
@@ -101,23 +104,27 @@ class UserRepository implements IUserRepository {
       model = toModel(parseObjectUser);
 
       await saveSession(model, senha, parseObjectUser.get<String>("sessionToken")!);
-      //endregion
-
-      //region Salvar foto de perfil
-      List<ParseFileBase> parseImage = await ParseImageUtils.save([foto]);
-      ParseUser userWithImage = toParseObject(model)
-        ..set<List<ParseFileBase>>(USER_FOTO_COLUMN, parseImage);
-
-      final ParseResponse userWithImageResponse = await userWithImage.save();
-
-      if (!userWithImageResponse.success) throw Exception(ParseErrorsUtils.get(userWithImageResponse.statusCode));
-      final ParseObject parseObjectUserWithImage = (userWithImageResponse.results as List<dynamic>).first;
-
-      model = toModel(parseObjectUserWithImage);
-      //endregion
 
       return model;
     } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  @override
+  Future<UserModel> saveFoto(UserModel model) async {
+    try {
+      List<ParseFileBase> parseImage = await ParseImageUtils.save([model.foto]);
+      ParseUser parseUser = toParseObject(model)
+        ..set<List<ParseFileBase>>(USER_FOTO_COLUMN, parseImage);
+
+      final ParseResponse response = await parseUser.save();
+
+      if (!response.success) throw Exception(ParseErrorsUtils.get(response.statusCode));
+      final ParseObject parseObject = (response.results as List<dynamic>).first;
+
+      return toModel(parseObject);
+    } catch(e) {
       throw Exception(e);
     }
   }
