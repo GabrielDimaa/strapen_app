@@ -9,41 +9,46 @@ import 'package:strapen_app/app/shared/components/widgets/produto_grid_tile.dart
 
 import 'empty_list_horizontal_widget.dart';
 
-class CompraReservaListWidget extends StatelessWidget {
+class CompraReservaListWidget extends StatefulWidget {
   final List<ReservaModel> list;
   final bool reserva;
 
   const CompraReservaListWidget({required this.list, required this.reserva});
 
   @override
+  _CompraReservaListWidgetState createState() => _CompraReservaListWidgetState();
+}
+
+class _CompraReservaListWidgetState extends State<CompraReservaListWidget> {
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         _headerList(
           context: context,
-          title: reserva ? "Reservas" : "Compras",
+          title: widget.reserva ? "Reservas" : "Compras",
           onPressed: () async {
-            if (reserva) {
-              await Modular.to.pushNamed(RESERVA_ROUTE, arguments: reserva);
+            if (widget.reserva) {
+              await Modular.to.pushNamed(RESERVA_ROUTE, arguments: widget.reserva);
             } else {
-              await Modular.to.pushNamed(RESERVA_ROUTE, arguments: reserva);
+              await Modular.to.pushNamed(RESERVA_ROUTE, arguments: widget.reserva);
             }
           },
         ),
         const VerticalSizedBox(0.5),
-        if (reserva)
+        if (widget.reserva)
           Visibility(
-            visible: list.isNotEmpty,
-            child: _list(list: list),
+            visible: widget.list.isNotEmpty,
+            child: _list(list: widget.list),
             replacement: EmptyListHorizontalWidget(
               pathImage: "assets/images/empty_reserva.svg",
               message: "Nenhuma reserva realizada.\nCrie uma Live para os usuários reservarem seus produtos!",
             ),
           ),
-        if (!reserva)
+        if (!widget.reserva)
           Visibility(
-            visible: list.isNotEmpty,
-            child: _list(list: list),
+            visible: widget.list.isNotEmpty,
+            child: _list(list: widget.list),
             replacement: EmptyListHorizontalWidget(
               pathImage: "assets/images/empty_compra.svg",
               message: "Nenhuma compra realizada.\nAssista alguma Live para comprar produtos!",
@@ -91,10 +96,13 @@ class CompraReservaListWidget extends StatelessWidget {
               preco: res.preco! * res.quantidade!,
               status: res.status,
               onTap: () async {
-                await Modular.to.pushNamed(PRODUTO_ROUTE + PRODUTO_INFO_ROUTE, arguments: {
+                final ReservaModel? reserva = await Modular.to.pushNamed(PRODUTO_ROUTE + PRODUTO_INFO_ROUTE, arguments: {
                   'produtoModel': ProdutoFactory.fromReservaModel(res),
                   'reservaModel': res,
                 });
+                if (reserva != null) {
+                  setState(() => res.status = reserva.status);
+                }
               },
             ),
           );

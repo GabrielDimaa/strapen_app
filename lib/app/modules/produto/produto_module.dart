@@ -11,15 +11,18 @@ import 'package:strapen_app/app/modules/produto/pages/produto_list_page.dart';
 import 'package:strapen_app/app/modules/produto/pages/produto_select_page.dart';
 import 'package:strapen_app/app/modules/produto/repositories/iproduto_repository.dart';
 import 'package:strapen_app/app/modules/produto/repositories/produto_repository.dart';
+import 'package:strapen_app/app/modules/reserva/repositories/ireserva_repository.dart';
+import 'package:strapen_app/app/modules/reserva/repositories/reserva_repository.dart';
 
 class ProdutoModule extends Module {
   @override
   final List<Bind> binds = [
     Bind((i) => ProdutoRepository()),
+    Bind((i) => ReservaRepository()),
     Bind((i) => ProdutoListController(i.get<IProdutoRepository>(), i.get<AppController>())),
     Bind((i) => ProdutoCreateController(i.get<IProdutoRepository>(), i.get<AppController>())),
     Bind((i) => ProdutoSelectController(i.get<IProdutoRepository>(), i.get<AppController>())),
-    Bind((i) => ProdutoInfoController()),
+    Bind((i) => ProdutoInfoController(i.get<IReservaRepository>(), i.get<AppController>())),
   ];
 
   @override

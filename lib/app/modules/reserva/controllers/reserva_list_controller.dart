@@ -55,10 +55,10 @@ abstract class _ReservaListController with Store {
   }
 
   @action
-  Future<void> toProdutoInfoPage(ReservaModel model) async {
-    await Modular.to.pushNamed(PRODUTO_ROUTE + PRODUTO_INFO_ROUTE, arguments: {
+  Future<ReservaModel?> toProdutoInfoPage(ReservaModel model) async {
+    return await Modular.to.pushNamed(PRODUTO_ROUTE + PRODUTO_INFO_ROUTE, arguments: {
       'produtoModel': ProdutoFactory.fromReservaModel(model),
       'reservaModel': model,
-    });
+    }) as ReservaModel?;
   }
 }

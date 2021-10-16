@@ -52,7 +52,7 @@ class LiveModule extends Module {
           i.get<ICatalogoRepository>(),
           i.get<IReservaRepository>(),
         )),
-    Bind((i) => ProdutoInfoController()),
+    Bind((i) => ProdutoInfoController(i.get<IReservaRepository>(), i.get<AppController>())),
     Bind((i) => UserController(i.get<ISeguidorRepository>(), i.get<IReservaRepository>(), i.get<ILiveService>(), i.get<AppController>())),
     Bind((i) => CatalogoSelectController(i.get<ICatalogoRepository>(), i.get<AppController>())),
   ];

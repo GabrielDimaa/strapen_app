@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:strapen_app/app/app_widget.dart';
 import 'package:strapen_app/app/modules/produto/components/produto_widget.dart';
@@ -18,13 +17,15 @@ class ProdutoInfoPage extends StatefulWidget {
   _ProdutoInfoPageState createState() => _ProdutoInfoPageState();
 }
 
-class _ProdutoInfoPageState extends ModularState<ProdutoInfoPage, ProdutoInfoController> {
+class _ProdutoInfoPageState extends State<ProdutoInfoPage> {
+  final ProdutoInfoController controller = Modular.get<ProdutoInfoController>();
+
   @override
   void initState() {
     super.initState();
+
     if (widget.reservaModel != null)
       controller.setReservaModel(widget.reservaModel);
-
     controller.setProdutoStore(ProdutoFactory.fromModel(widget.produtoModel));
   }
 
@@ -32,14 +33,7 @@ class _ProdutoInfoPageState extends ModularState<ProdutoInfoPage, ProdutoInfoCon
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: AppColors.background.withOpacity(0.6),
-      body: Observer(
-        builder: (_) => ProdutoWidget(
-          editavel: controller.editavel,
-          produtoStore: controller.produtoStore!,
-          reservaModel: controller.reservaModel,
-          onPressedEditar: () async => await controller.editarCatalogo(),
-        ),
-      ),
+      body: ProdutoWidget(),
     );
   }
 }

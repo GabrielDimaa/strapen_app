@@ -6,8 +6,15 @@ class OutlinedButtonDefault extends StatelessWidget {
   final Function()? onPressed;
   final Color? primary;
   final Color? borderColor;
+  final EdgeInsets? padding;
 
-  const OutlinedButtonDefault({required this.child, this.onPressed, this.primary, this.borderColor});
+  const OutlinedButtonDefault({
+    required this.child,
+    this.onPressed,
+    this.primary,
+    this.borderColor,
+    this.padding,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -18,6 +25,7 @@ class OutlinedButtonDefault extends StatelessWidget {
         onPressed: onPressed,
         style: OutlinedButton.styleFrom(
           primary: primary,
+          padding: padding,
           side: borderColor != null ? BorderSide(
             color: borderColor!,
           ) : null,

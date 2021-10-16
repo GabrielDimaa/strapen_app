@@ -3,48 +3,32 @@ import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:snapping_sheet/snapping_sheet.dart';
-import 'package:strapen_app/app/app_controller.dart';
 import 'package:strapen_app/app/app_widget.dart';
-import 'package:strapen_app/app/modules/produto/stores/produto_store.dart';
+import 'package:strapen_app/app/modules/produto/components/button_cancelar_widget.dart';
+import 'package:strapen_app/app/modules/produto/controllers/produto_info_controller.dart';
 import 'package:strapen_app/app/modules/reserva/components/status_reserva_widget.dart';
-import 'package:strapen_app/app/modules/reserva/models/reserva_model.dart';
-import 'package:strapen_app/app/modules/user/constants/routes.dart';
+import 'package:strapen_app/app/modules/reserva/enums/enum_status_reserva.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/app_bar_default.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/widgets/editar_app_bar_widget.dart';
 import 'package:strapen_app/app/shared/components/button/elevated_button_default.dart';
+import 'package:strapen_app/app/shared/components/button/outlined_button_default.dart';
+import 'package:strapen_app/app/shared/components/dialog/error_dialog.dart';
 import 'package:strapen_app/app/shared/components/padding/magin_button_without_scaffold.dart';
 import 'package:strapen_app/app/shared/components/padding/padding_scaffold.dart';
+import 'package:strapen_app/app/shared/components/sized_box/horizontal_sized_box.dart';
 import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
 import 'package:strapen_app/app/shared/components/widgets/snap_bottom_sheet.dart';
 import 'package:strapen_app/app/shared/extensions/double_extension.dart';
 import 'package:transparent_image/transparent_image.dart';
 
 class ProdutoWidget extends StatefulWidget {
-  final ProdutoStore produtoStore;
-  final VoidCallback? onPressedReserva;
-  final VoidCallback? onPressedAnunciante;
-  final VoidCallback? onPressedCliente;
-  final bool reservadoSuccess;
-  final ReservaModel? reservaModel;
-  final bool editavel;
-  final VoidCallback? onPressedEditar;
-
-  const ProdutoWidget({
-    required this.produtoStore,
-    this.onPressedReserva,
-    this.onPressedAnunciante,
-    this.onPressedCliente,
-    this.reservadoSuccess = false,
-    this.reservaModel,
-    this.editavel = false,
-    this.onPressedEditar,
-  });
-
   @override
   _ProdutoWidgetState createState() => _ProdutoWidgetState();
 }
 
 class _ProdutoWidgetState extends State<ProdutoWidget> {
+  final ProdutoInfoController controller = Modular.get<ProdutoInfoController>();
+
   int currentImage = 0;
 
   void setCurrentImage(int value) => setState(() => currentImage = value);
@@ -63,14 +47,14 @@ class _ProdutoWidgetState extends State<ProdutoWidget> {
               Observer(
                 builder: (_) => CarouselSlider(
                   options: CarouselOptions(
-                    autoPlay: widget.produtoStore.fotos.length > 1,
-                    scrollPhysics: widget.produtoStore.fotos.length <= 1 ? NeverScrollableScrollPhysics() : null,
+                    autoPlay: controller.produtoStore!.fotos.length > 1,
+                    scrollPhysics: controller.produtoStore!.fotos.length <= 1 ? NeverScrollableScrollPhysics() : null,
                     viewportFraction: 1,
                     aspectRatio: 1,
                     autoPlayInterval: const Duration(seconds: 10),
                     onPageChanged: (index, _) => setCurrentImage(index),
                   ),
-                  items: widget.produtoStore.fotos.map((e) {
+                  items: controller.produtoStore!.fotos.map((e) {
                     return FadeInImage.memoryNetwork(placeholder: kTransparentImage, image: e);
                   }).toList(),
                 ),
@@ -82,12 +66,19 @@ class _ProdutoWidgetState extends State<ProdutoWidget> {
             child: AppBarDefault(
               backgroundColor: Colors.transparent,
               backgroundColorBackButton: AppColors.opaci.withOpacity(0.4),
-              onPressedBackButton: () => Modular.to.pop(widget.produtoStore.toModel()),
+              onPressedBackButton: () {
+                if (controller.reservaModel != null && !controller.hasLive && !controller.editavel)
+                  Modular.to.pop(controller.reservaModel!);
+                else
+                  Modular.to.pop(controller.produtoStore!.toModel());
+              },
               actionsWidgets: [
-                EditarAppBarWidget(
-                  visible: widget.editavel && widget.onPressedEditar != null,
-                  onTap: widget.onPressedEditar,
-                  backgroundColor: AppColors.opaci.withOpacity(0.4),
+                Observer(
+                  builder: (_) => EditarAppBarWidget(
+                    visible: controller.editavel,
+                    onTap: () async => await controller.editarProduto(),
+                    backgroundColor: AppColors.opaci.withOpacity(0.4),
+                  ),
                 ),
               ],
             ),
@@ -108,7 +99,7 @@ class _ProdutoWidgetState extends State<ProdutoWidget> {
           children: [
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
-              children: widget.produtoStore.fotos.asMap().entries.map((e) => _itemIndicator(e.key == currentImage)).toList(),
+              children: controller.produtoStore!.fotos.asMap().entries.map((e) => _itemIndicator(e.key == currentImage)).toList(),
             ),
             const VerticalSizedBox(1),
             Expanded(
@@ -133,15 +124,17 @@ class _ProdutoWidgetState extends State<ProdutoWidget> {
                         children: [
                           Observer(
                             builder: (_) => Text(
-                              widget.produtoStore.descricao!,
+                              controller.produtoStore!.descricao!,
                               style: textTheme.headline1!.copyWith(fontWeight: FontWeight.w600),
                             ),
                           ),
                           const VerticalSizedBox(),
-                          Visibility(
-                            visible: widget.reservaModel == null,
-                            child: _infoProdutoParaReservar(textTheme: textTheme),
-                            replacement: _infoProdutoReservado(textTheme: textTheme),
+                          Observer(
+                            builder: (_) => Visibility(
+                              visible: controller.reservaModel == null,
+                              child: _infoProdutoParaReservar(textTheme: textTheme),
+                              replacement: _infoProdutoReservado(textTheme: textTheme),
+                            ),
                           ),
                           const VerticalSizedBox(2.5),
                           const Divider(),
@@ -153,60 +146,102 @@ class _ProdutoWidgetState extends State<ProdutoWidget> {
                           const VerticalSizedBox(),
                           Observer(
                             builder: (_) => Text(
-                              widget.produtoStore.descricaoDetalhada!,
+                              controller.produtoStore!.descricaoDetalhada!,
                               style: textTheme.bodyText1,
                             ),
                           ),
                           const VerticalSizedBox(2.5),
                           const Divider(),
-                          Visibility(
-                            visible: widget.onPressedAnunciante != null || (widget.reservaModel != null && widget.reservaModel?.anunciante?.id != Modular.get<AppController>().userModel!.id),
-                            child: Column(
-                              children: [
-                                _tileNavigation(
-                                  label: "Anunciante",
-                                  onTap: () async {
-                                    //Verificação para caso seja dentro da Live, abrir em um BottomSheet
-                                    // que será passado no módulo da Live através do onPressedAnunciante()
-                                    if (widget.onPressedAnunciante != null)
-                                      widget.onPressedAnunciante!.call();
-                                    else
-                                      await Modular.to.pushNamed(USER_ROUTE, arguments: widget.reservaModel!.anunciante);
-                                  },
-                                ),
-                                const Divider(),
-                              ],
+                          Observer(
+                            builder: (_) => Visibility(
+                              visible: controller.anuncianteVisible,
+                              child: Column(
+                                children: [
+                                  _tileNavigation(
+                                    label: "Anunciante",
+                                    onTap: () async => await controller.verAnunciante(),
+                                  ),
+                                  const Divider(),
+                                ],
+                              ),
                             ),
                           ),
-                          Visibility(
-                            visible: widget.onPressedCliente != null || (widget.reservaModel != null && widget.reservaModel!.user!.id != Modular.get<AppController>().userModel!.id),
-                            child: Column(
-                              children: [
-                                _tileNavigation(
-                                  label: "Cliente",
-                                  onTap: () async {
-                                    //Verificação para caso seja dentro da Live, abrir em um BottomSheet
-                                    // que será passado no módulo da Live através do onPressedAnunciante()
-                                    if (widget.onPressedCliente != null)
-                                      widget.onPressedCliente!.call();
-                                    else
-                                      await Modular.to.pushNamed(USER_ROUTE, arguments: widget.reservaModel!.user);
-                                  },
-                                ),
-                                const Divider(),
-                              ],
+                          Observer(
+                            builder: (_) => Visibility(
+                              visible: controller.clienteVisible,
+                              child: Column(
+                                children: [
+                                  _tileNavigation(
+                                    label: "Cliente",
+                                    onTap: () async => await controller.verCliente(),
+                                  ),
+                                  const Divider(),
+                                ],
+                              ),
                             ),
                           ),
                         ],
                       ),
                     ),
-                    Visibility(
-                      visible: widget.onPressedReserva != null,
-                      child: Padding(
-                        padding: const MarginButtonWithoutScaffold(),
-                        child: ElevatedButtonDefault(
-                          child: const Text("Comprar"),
-                          onPressed: (widget.produtoStore.quantidade ?? 0) > 0 ? widget.onPressedReserva : null,
+                    Observer(
+                      builder: (_) => Visibility(
+                        visible: controller.comprarEnabled,
+                        child: Padding(
+                          padding: const MarginButtonWithoutScaffold(),
+                          child: ElevatedButtonDefault(
+                            child: const Text("Comprar"),
+                            onPressed: (controller.produtoStore?.quantidade ?? 0) > 0 ? () async => await controller.reservar() : null,
+                          ),
+                        ),
+                      ),
+                    ),
+                    Observer(
+                      builder: (_) => Visibility(
+                        visible: controller.statusVisible,
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Visibility(
+                                  visible: controller.cancelarVisible,
+                                  child: ButtonCancelarWidget(
+                                    onPressed: () async {
+                                      try {
+                                        await controller.alterarStatus(context, EnumStatusReserva.Cancelado);
+                                      } catch (e) {
+                                        ErrorDialog.show(context: context, content: e.toString());
+                                      }
+                                    },
+                                  ),
+                                ),
+                              ),
+                              Observer(
+                                builder: (_) => Visibility(
+                                  visible: controller.finalizarVisible && controller. cancelarVisible,
+                                  child: const HorizontalSizedBox(),
+                                ),
+                              ),
+                              Expanded(
+                                child: Observer(
+                                  builder: (_) => Visibility(
+                                    visible: controller.finalizarVisible,
+                                    child: OutlinedButtonDefault(
+                                      child: const Text("Finalizar"),
+                                      padding: const EdgeInsets.all(12),
+                                      onPressed: () async {
+                                        try {
+                                          await controller.alterarStatus(context, EnumStatusReserva.Finalizado);
+                                        } catch (e) {
+                                          ErrorDialog.show(context: context, content: e.toString());
+                                        }
+                                      },
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
@@ -276,13 +311,13 @@ class _ProdutoWidgetState extends State<ProdutoWidget> {
           children: [
             Observer(
               builder: (_) => Visibility(
-                visible: widget.produtoStore.quantidade == 0,
+                visible: controller.produtoStore?.quantidade == 0,
                 child: Text(
                   "Sem unidades",
                   style: textTheme.bodyText1!.copyWith(color: Colors.red, fontSize: 12),
                 ),
                 replacement: Text(
-                  "${widget.produtoStore.quantidade!} ${widget.produtoStore.quantidade! > 1 ? "unidades" : "unidade"} ${!widget.editavel ? "${widget.produtoStore.quantidade! > 1 ? "restantes" : "restante"}" : ""}",
+                  controller.textQtd,
                   style: textTheme.bodyText1!.copyWith(color: Colors.grey, fontSize: 12),
                 ),
               ),
@@ -290,24 +325,26 @@ class _ProdutoWidgetState extends State<ProdutoWidget> {
             const VerticalSizedBox(0.3),
             Observer(
               builder: (_) => Text(
-                widget.produtoStore.preco!.formatReal(),
+                controller.produtoStore!.preco!.formatReal(),
                 style: textTheme.bodyText2!.copyWith(color: AppColors.primary, fontSize: 18, fontWeight: FontWeight.w600),
               ),
             ),
           ],
         ),
-        Visibility(
-          visible: widget.reservadoSuccess,
-          child: Align(
-            alignment: Alignment.centerRight,
-            child: Container(
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(24),
-                border: Border.all(color: AppColors.primary),
-                color: AppColors.primaryOpaci,
+        Observer(
+          builder: (_) => Visibility(
+            visible: controller.reservado,
+            child: Align(
+              alignment: Alignment.centerRight,
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(24),
+                  border: Border.all(color: AppColors.primary),
+                  color: AppColors.primaryOpaci,
+                ),
+                child: Text("Comprado", style: TextStyle(color: AppColors.primary)),
               ),
-              child: Text("Comprado", style: TextStyle(color: AppColors.primary)),
             ),
           ),
         ),
@@ -327,9 +364,11 @@ class _ProdutoWidgetState extends State<ProdutoWidget> {
             Row(
               children: [
                 Text("Quantidade:  ", style: textTheme.bodyText1),
-                Text(
-                  qtdFormated(widget.reservaModel?.quantidade ?? 0),
-                  style: textTheme.bodyText1!.copyWith(fontWeight: FontWeight.w700),
+                Observer(
+                  builder: (_) => Text(
+                    qtdFormated(controller.reservaModel?.quantidade ?? 0),
+                    style: textTheme.bodyText1!.copyWith(fontWeight: FontWeight.w700),
+                  ),
                 ),
               ],
             ),
@@ -337,9 +376,11 @@ class _ProdutoWidgetState extends State<ProdutoWidget> {
             Row(
               children: [
                 Text("Valor unitário:  ", style: textTheme.bodyText1),
-                Text(
-                  widget.reservaModel?.preco.formatReal() ?? "",
-                  style: textTheme.bodyText1!.copyWith(fontWeight: FontWeight.w700),
+                Observer(
+                  builder: (_) => Text(
+                    controller.reservaModel?.preco.formatReal() ?? "",
+                    style: textTheme.bodyText1!.copyWith(fontWeight: FontWeight.w700),
+                  ),
                 ),
               ],
             ),
@@ -348,16 +389,18 @@ class _ProdutoWidgetState extends State<ProdutoWidget> {
             const VerticalSizedBox(0.3),
             Observer(
               builder: (_) => Text(
-                widget.produtoStore.preco!.formatReal(),
+                controller.produtoStore!.preco!.formatReal(),
                 style: textTheme.bodyText2!.copyWith(color: AppColors.primary, fontSize: 18, fontWeight: FontWeight.w600),
               ),
             ),
           ],
         ),
-        if (widget.reservaModel?.status != null)
+        if (controller.reservaModel?.status != null)
           Align(
             alignment: Alignment.centerRight,
-            child: StatusReservaWidget(status: widget.reservaModel!.status!),
+            child: Observer(
+              builder: (_) => StatusReservaWidget(status: controller.reservaModel!.status!),
+            ),
           ),
       ],
     );

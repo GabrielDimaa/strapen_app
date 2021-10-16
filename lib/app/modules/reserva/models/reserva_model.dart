@@ -34,4 +34,21 @@ class ReservaModel {
     this.status,
     this.dataHoraReserva,
   );
+
+  ReservaModel clone() {
+    return ReservaModel(
+      this.id,
+      this.idProduto,
+      this.descricao,
+      this.descricaoDetalhada,
+      this.quantidade,
+      this.preco,
+      this.fotos,
+      this.live,
+      this.user,
+      this.anunciante,
+      this.status,
+      this.dataHoraReserva,
+    );
+  }
 }

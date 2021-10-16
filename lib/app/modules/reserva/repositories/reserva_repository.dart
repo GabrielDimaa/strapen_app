@@ -86,12 +86,31 @@ class ReservaRepository implements IReservaRepository {
 
       ParseResponse response = await parseReserva.save();
 
-      if (!response.success) throw Exception(response.error?.message ?? "Erro ao comprar produto!");
+      if (!response.success) throw Exception(response.error?.message ?? "Não foi possível completar a compra desse produto!");
       ParseObject parseResponse = (response.results as List<dynamic>).first;
 
       ReservaModel reservaModel = toModel(parseResponse);
 
       return reservaModel;
+    } catch(e) {
+      throw Exception(e);
+    }
+  }
+
+  @override
+  Future<bool> alterarStatus(ReservaModel model) async {
+    try {
+      if (model.id == null) throw Exception("Houve um erro ao tentar alterar o status do pedido!");
+
+      ParseObject parseReserva = ParseObject(className());
+      parseReserva.set<String>(RESERVA_ID_COLUMN, model.id!);
+      parseReserva.set<int>(RESERVA_STATUS_COLUMN, EnumStatusReservaHelper.getValue(model.status!));
+
+      final ParseResponse response = await parseReserva.save();
+
+      if (!response.success) throw Exception(response.error?.message ?? "Não foi possível alterar o status!");
+
+      return response.success;
     } catch(e) {
       throw Exception(e);
     }

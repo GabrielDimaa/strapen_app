@@ -64,7 +64,10 @@ class _ReservaListPageState extends ModularState<ReservaListPage, ReservaListCon
                             data: res.dataHoraReserva,
                             preco: res.preco! * res.quantidade!,
                             status: res.status,
-                            onTap: () async => await controller.toProdutoInfoPage(res),
+                            onTap: () async {
+                              final ReservaModel? reserva = await controller.toProdutoInfoPage(res);
+                              if (reserva != null) setState(() => res.status = reserva.status);
+                            },
                           );
                         },
                       ),
