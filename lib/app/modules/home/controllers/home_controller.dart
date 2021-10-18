@@ -79,10 +79,16 @@ abstract class _HomeController with Store {
   }
 
   @action
-  Future<void> carregarReservas() async {
-    setLives((await _liveService.getLivesDemonstracao(userStore.id!)));
-    setReservas((await _reservaRepository.getAllReservas(userStore.id!, limit: 10)).asObservable());
-    setCompras((await _reservaRepository.getAllCompras(userStore.id!, limit: 10)).asObservable());
+  Future<void> atualizarHome() async {
+    try {
+      setLoading(true);
+
+      setLives((await _liveService.getLivesDemonstracao(userStore.id!)));
+      setReservas((await _reservaRepository.getAllReservas(userStore.id!, limit: 10)).asObservable());
+      setCompras((await _reservaRepository.getAllCompras(userStore.id!, limit: 10)).asObservable());
+    } finally {
+      setLoading(false);
+    }
   }
 
   @action

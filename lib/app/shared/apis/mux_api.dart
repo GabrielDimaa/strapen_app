@@ -12,7 +12,7 @@ abstract class MuxApi {
 
   static String urlStream(String playbackId) => "https://stream.mux.com/$playbackId.m3u8";
   static String urlImageLive(String playbackId, {required int width, required int height}) =>
-      "https://image.mux.com/$playbackId/thumbnail.png?width=$width&height=$height&fit_mode=smartcrop&time=35";
+      "https://image.mux.com/$playbackId/thumbnail.png?width=$width&height=$height&fit_mode=smartcrop&time=10";
 
   static Future<Map<String, dynamic>?> post(
     String url, {

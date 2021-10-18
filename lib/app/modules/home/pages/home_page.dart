@@ -86,7 +86,7 @@ class _HomePageState extends State<HomePage> {
               else
                 return Expanded(
                   child: RefreshIndicator(
-                    onRefresh: controller.carregarReservas,
+                    onRefresh: controller.atualizarHome,
                     child: Observer(
                       builder: (_) => ListView(
                         padding: const PaddingScaffold(),

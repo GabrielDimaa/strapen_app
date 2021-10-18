@@ -32,7 +32,7 @@ class AppWidget extends StatelessWidget with ModoRetratoLess {
         textTheme: TextTheme(
           headline1: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w500, fontFamily: 'Lexend'),
           headline2: TextStyle(color: Colors.white, fontSize: 34, fontWeight: FontWeight.w600, fontFamily: 'Lexend'),
-          headline3: TextStyle(color: Colors.white, fontSize: 42, fontWeight: FontWeight.w500, fontFamily: 'Lexend'),
+          headline3: TextStyle(color: Colors.white, fontSize: 42, fontWeight: FontWeight.w600, fontFamily: 'Lexend'),
           headline4: TextStyle(color: Colors.white, fontSize: 46, fontWeight: FontWeight.w600, fontFamily: 'Lexend'),
           headline5: TextStyle(color: Colors.white, fontSize: 50, fontWeight: FontWeight.w500, fontFamily: 'Lexend'),
           bodyText1: TextStyle(color: Colors.white, fontSize: 14, fontWeight: FontWeight.w400, fontFamily: 'Lexend'),
