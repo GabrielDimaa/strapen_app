@@ -16,7 +16,6 @@ dependencies:
   brasil_fields: ^1.1.4
   carousel_slider: ^4.0.0
   chewie: ^1.2.2
-  connectivity_plus: ^1.0.8
   cupertino_icons: ^1.0.3
   dio: ^4.0.0
   flutter_dotenv: ^5.0.2

@@ -11,5 +11,4 @@ abstract class IUserRepository implements IRepository<UserModel> {
   Future<void> updateFirstLive(String id);
   Future<void> updateSenha(UserModel model);
   Future<UserModel?> fetchSearch(String text);
-  Future<void> seguirUser(UserModel text);
 }

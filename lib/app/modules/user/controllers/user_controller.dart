@@ -156,7 +156,7 @@ abstract class _UserController with Store {
     setCountSeguidores(await _seguidorRepository.getCountSeguidores(userStore.id!));
     setCountSeguindo(await _seguidorRepository.getCountSeguindo(userStore.id!));
     setCountLive(await _liveService.getCountLives(userStore.id!));
-    setSeguindo(await _seguidorRepository.estaSeguindo(_appController.userModel!, userStore.toModel()));
+    setSeguindo(await _seguidorRepository.isSeguindo(_appController.userModel!, userStore.toModel()));
   }
 
   Future<void> _carregarReservas() async {

@@ -3,6 +3,7 @@ import 'package:strapen_app/app/modules/user/constants/columns.dart';
 import 'package:strapen_app/app/modules/user/models/seguidor_model.dart';
 import 'package:strapen_app/app/modules/user/models/user_model.dart';
 import 'package:strapen_app/app/modules/user/repositories/iseguidor_repository.dart';
+import 'package:strapen_app/app/shared/utils/connectivity_utils.dart';
 import 'package:strapen_app/app/shared/utils/parse_errors_utils.dart';
 
 class SeguidorRepository implements ISeguidorRepository {
@@ -31,6 +32,8 @@ class SeguidorRepository implements ISeguidorRepository {
   @override
   Future<bool> seguir(UserModel user, UserModel seguirUser) async {
     try {
+      await ConnectivityUtils.hasInternet();
+
       ParseObject parseObject = ParseObject(className())
         ..set<ParseUser>(
           SEGUIDOR_USER_COLUMN,
@@ -55,6 +58,8 @@ class SeguidorRepository implements ISeguidorRepository {
   @override
   Future<bool> deixarSeguir(UserModel user, UserModel seguirUser) async {
     try {
+      await ConnectivityUtils.hasInternet();
+
       final QueryBuilder<ParseObject> query = QueryBuilder(ParseObject(className()));
       query
         ..whereEqualTo(
@@ -81,8 +86,10 @@ class SeguidorRepository implements ISeguidorRepository {
     }
   }
 
-  Future<bool> estaSeguindo(UserModel user, UserModel seguirUser) async {
+  Future<bool> isSeguindo(UserModel user, UserModel seguirUser) async {
     try {
+      await ConnectivityUtils.hasInternet();
+
       final QueryBuilder<ParseObject> query = QueryBuilder(ParseObject(className()));
       query
         ..whereEqualTo(
@@ -108,6 +115,8 @@ class SeguidorRepository implements ISeguidorRepository {
   ///Retorna apenas os ids dos usuários
   @override
   Future<List<String>> getAllSeguindo(String idUser) async {
+    await ConnectivityUtils.hasInternet();
+
     QueryBuilder querySeguindo = QueryBuilder<ParseObject>(ParseObject(SeguidorRepository().className()))
       ..whereEqualTo(
         SEGUIDOR_USER_COLUMN,
@@ -125,6 +134,8 @@ class SeguidorRepository implements ISeguidorRepository {
   @override
   Future<int> getCountSeguidores(String idUser) async {
     try {
+      await ConnectivityUtils.hasInternet();
+
       final QueryBuilder<ParseObject> query = QueryBuilder(ParseObject(className()));
       query
         ..whereEqualTo(
@@ -144,6 +155,8 @@ class SeguidorRepository implements ISeguidorRepository {
   @override
   Future<int> getCountSeguindo(String idUser) async {
     try {
+      await ConnectivityUtils.hasInternet();
+
       final QueryBuilder<ParseObject> query = QueryBuilder(ParseObject(className()));
       query
         ..whereEqualTo(

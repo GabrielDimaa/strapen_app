@@ -12,6 +12,7 @@ import 'package:strapen_app/app/modules/reserva/repositories/ireserva_repository
 import 'package:strapen_app/app/modules/user/constants/columns.dart';
 import 'package:strapen_app/app/modules/user/repositories/user_repository.dart';
 import 'package:strapen_app/app/shared/extensions/string_extension.dart';
+import 'package:strapen_app/app/shared/utils/connectivity_utils.dart';
 import 'package:strapen_app/app/shared/utils/parse_errors_utils.dart';
 
 class ReservaRepository implements IReservaRepository {
@@ -80,6 +81,7 @@ class ReservaRepository implements IReservaRepository {
   @override
   Future<ReservaModel> save(ReservaModel model) async {
     try {
+      await ConnectivityUtils.hasInternet();
       validate(model);
 
       ParseObject parseReserva = toParseObject(model);
@@ -100,6 +102,8 @@ class ReservaRepository implements IReservaRepository {
   @override
   Future<bool> alterarStatus(ReservaModel model) async {
     try {
+      await ConnectivityUtils.hasInternet();
+
       if (model.id == null) throw Exception("Houve um erro ao tentar alterar o status do pedido!");
 
       ParseObject parseReserva = ParseObject(className());
@@ -119,6 +123,8 @@ class ReservaRepository implements IReservaRepository {
   @override
   Future<List<ReservaModel>> getAllCompras(String idUser, {int? limit}) async {
     try {
+      await ConnectivityUtils.hasInternet();
+
       QueryBuilder query = QueryBuilder<ParseObject>(ParseObject(className()))
         ..includeObject([RESERVA_USER_COLUMN, RESERVA_ANUNCIANTE_COLUMN])
         ..whereEqualTo(
@@ -142,6 +148,8 @@ class ReservaRepository implements IReservaRepository {
   @override
   Future<List<ReservaModel>> getAllReservas(String idUser, {int? limit}) async {
     try {
+      await ConnectivityUtils.hasInternet();
+
       QueryBuilder query = QueryBuilder<ParseObject>(ParseObject(className()))
         ..includeObject([RESERVA_USER_COLUMN, RESERVA_ANUNCIANTE_COLUMN])
         ..whereEqualTo(
@@ -168,10 +176,12 @@ class ReservaRepository implements IReservaRepository {
       if (liveQuery == null) liveQuery = LiveQuery();
 
       if (subscription == null) {
+        await ConnectivityUtils.hasInternet();
+
         final QueryBuilder query = QueryBuilder<ParseObject>(ParseObject(className()))
           ..whereEqualTo(
-              RESERVA_LIVE_COLUMN,
-              (ParseObject(LiveRepository(null, null).className())..set(LIVE_ID_COLUMN, idLive)).toPointer());
+            RESERVA_LIVE_COLUMN,
+            (ParseObject(LiveRepository(null, null).className())..set(LIVE_ID_COLUMN, idLive)).toPointer());
 
         subscription = await liveQuery!.client.subscribe(query);
 

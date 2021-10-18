@@ -7,6 +7,7 @@ import 'package:strapen_app/app/modules/user/repositories/iuser_repository.dart'
 import 'package:strapen_app/app/shared/config/preferences/session_preferences.dart';
 import 'package:strapen_app/app/shared/config/preferences/session_preferences_model.dart';
 import 'package:strapen_app/app/shared/extensions/string_extension.dart';
+import 'package:strapen_app/app/shared/utils/connectivity_utils.dart';
 import 'package:strapen_app/app/shared/utils/parse_errors_utils.dart';
 import 'package:strapen_app/app/shared/utils/parse_images_utils.dart';
 
@@ -84,6 +85,7 @@ class UserRepository implements IUserRepository {
     try {
       final String senha = model.senha!;
 
+      await ConnectivityUtils.hasInternet();
       validate(model);
 
       ParseUser user = toParseObject(model);
@@ -114,6 +116,8 @@ class UserRepository implements IUserRepository {
   @override
   Future<UserModel> saveFoto(UserModel model) async {
     try {
+      await ConnectivityUtils.hasInternet();
+
       List<ParseFileBase> parseImage = await ParseImageUtils.save([model.foto]);
       ParseUser parseUser = toParseObject(model)
         ..set<List<ParseFileBase>>(USER_FOTO_COLUMN, parseImage);
@@ -132,6 +136,8 @@ class UserRepository implements IUserRepository {
   @override
   Future<UserModel> getById(String? id) async {
     try {
+      await ConnectivityUtils.hasInternet();
+
       if (id == null) throw Exception("Houve um erro ao buscar o usuário!");
 
       QueryBuilder query = QueryBuilder<ParseUser>(ParseUser(null, null, null))..whereEqualTo(USER_ID_COLUMN, id);
@@ -150,6 +156,8 @@ class UserRepository implements IUserRepository {
   @override
   Future<void> update(UserModel model) async {
     try {
+      await ConnectivityUtils.hasInternet();
+
       if (model.id == null) throw Exception("Houve um erro ao atualizar seus dados.");
 
       List<ParseFileBase> parseImage = await ParseImageUtils.save([model.foto]);
@@ -175,6 +183,8 @@ class UserRepository implements IUserRepository {
   @override
   Future<bool> existsData(String column, String data, String messageError) async {
     try {
+      await ConnectivityUtils.hasInternet();
+
       final QueryBuilder<ParseObject> query = QueryBuilder(ParseUser.forQuery());
       query..whereEqualTo(column, data);
 
@@ -193,6 +203,8 @@ class UserRepository implements IUserRepository {
   @override
   Future<void> updateFirstLive(String id) async {
     try {
+      await ConnectivityUtils.hasInternet();
+
       final ParseObject parseObject = ParseUser(null, null, null)
         ..objectId = id
         ..set<bool>(USER_FIST_LIVE_COLUMN, false);
@@ -208,6 +220,8 @@ class UserRepository implements IUserRepository {
   @override
   Future<void> updateSenha(UserModel model) async {
     try {
+      await ConnectivityUtils.hasInternet();
+
       if (model.id == null || model.senha.isNullOrEmpty()) throw Exception("Houve um erro ao alterar sua senha.");
 
       final ParseObject parseObject = ParseUser(null, null, null)
@@ -227,6 +241,8 @@ class UserRepository implements IUserRepository {
   @override
   Future<UserModel?> fetchSearch(String text) async {
     try {
+      await ConnectivityUtils.hasInternet();
+
       final QueryBuilder<ParseObject> query = QueryBuilder(ParseUser.forQuery());
       query.whereContains(USER_NOME_COLUMN, text.toLowerCase(), caseSensitive: false);
       query.whereNotEqualTo(USER_ID_COLUMN, Modular.get<AppController>().userModel!.id);
@@ -241,15 +257,6 @@ class UserRepository implements IUserRepository {
 
       return null;
     } catch (e) {
-      throw Exception(e);
-    }
-  }
-
-  @override
-  Future<void> seguirUser(UserModel text) async {
-    try {
-
-    } catch(e) {
       throw Exception(e);
     }
   }

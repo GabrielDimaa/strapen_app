@@ -5,6 +5,7 @@ import 'package:strapen_app/app/modules/user/models/user_model.dart';
 import 'package:strapen_app/app/modules/user/repositories/iuser_repository.dart';
 import 'package:strapen_app/app/shared/config/preferences/session_preferences.dart';
 import 'package:strapen_app/app/shared/extensions/string_extension.dart';
+import 'package:strapen_app/app/shared/utils/connectivity_utils.dart';
 import 'package:strapen_app/app/shared/utils/parse_errors_utils.dart';
 
 class AuthRepository implements IAuthRepository {
@@ -22,6 +23,7 @@ class AuthRepository implements IAuthRepository {
   @override
   Future<UserModel?> login(AuthModel model) async {
     try {
+      await ConnectivityUtils.hasInternet();
       validate(model);
 
       final String senha = model.senha!;
@@ -45,6 +47,8 @@ class AuthRepository implements IAuthRepository {
   @override
   Future<bool> logout(AuthModel model, {bool deleteSession = true}) async {
     try {
+      await ConnectivityUtils.hasInternet();
+
       final user = ParseUser(null, model.senha, model.email);
       var response = await user.logout();
 
@@ -61,6 +65,8 @@ class AuthRepository implements IAuthRepository {
 
   @override
   Future<bool> checkSession(AuthModel model) async {
+    await ConnectivityUtils.hasInternet();
+
     ParseResponse? response = await ParseUser.getCurrentUserFromServer(model.sessionToken!);
 
     if (!(response?.success ?? false)) {

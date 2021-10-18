@@ -13,6 +13,7 @@ import 'package:strapen_app/app/modules/user/models/user_model.dart';
 import 'package:strapen_app/app/modules/user/repositories/iseguidor_repository.dart';
 import 'package:strapen_app/app/modules/user/repositories/user_repository.dart';
 import 'package:strapen_app/app/shared/extensions/string_extension.dart';
+import 'package:strapen_app/app/shared/utils/connectivity_utils.dart';
 import 'package:strapen_app/app/shared/utils/parse_errors_utils.dart';
 
 class LiveRepository implements ILiveRepository {
@@ -68,6 +69,7 @@ class LiveRepository implements ILiveRepository {
   @override
   Future<LiveModel> save(LiveModel model) async {
     try {
+      await ConnectivityUtils.hasInternet();
       validate(model);
 
       ParseObject parseLive = toParseObject(model);
@@ -93,6 +95,8 @@ class LiveRepository implements ILiveRepository {
 
   Future<LiveModel?> isAovivo(UserModel userModel) async {
     try {
+      await ConnectivityUtils.hasInternet();
+
       if (userModel.id == null) throw Exception("Houve um erro, tente novamente.\nSe o erro persistir, reinicie o aplicativo.");
 
       QueryBuilder query = QueryBuilder<ParseObject>(ParseObject(className()))
@@ -138,6 +142,8 @@ class LiveRepository implements ILiveRepository {
   @override
   Future<List<CatalogoModel>> getCatalogosLive(String idLive) async {
     try {
+      await ConnectivityUtils.hasInternet();
+
       QueryBuilder query = QueryBuilder<ParseObject>(ParseObject(_catalogoRepository!.className()))
         ..whereRelatedTo(LIVE_CATALOGO_COLUMN, className(), idLive);
 
@@ -164,6 +170,8 @@ class LiveRepository implements ILiveRepository {
   @override
   Future<int> getCountLives(String idUser) async {
     try {
+      await ConnectivityUtils.hasInternet();
+
       final QueryBuilder<ParseObject> query = QueryBuilder(ParseObject(className()));
       query
         ..whereEqualTo(
@@ -184,6 +192,8 @@ class LiveRepository implements ILiveRepository {
   @override
   Future<LiveDemonstracaoModel> getLivesDemonstracao(String idUser) async {
     try {
+      await ConnectivityUtils.hasInternet();
+
       LiveDemonstracaoModel livesFiltradas = LiveDemonstracaoModel([], []);
       List<String> usersId = await _seguidorRepository!.getAllSeguindo(idUser);
 
@@ -248,6 +258,8 @@ class LiveRepository implements ILiveRepository {
       if (liveQuery == null) liveQuery = LiveQuery();
 
       if (subscription == null) {
+        await ConnectivityUtils.hasInternet();
+
         final QueryBuilder query = QueryBuilder<ParseObject>(ParseObject(className()))
           ..whereEqualTo(LIVE_ID_COLUMN, idLive);
 

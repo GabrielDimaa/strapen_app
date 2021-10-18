@@ -7,6 +7,7 @@ import 'package:strapen_app/app/modules/produto/models/produto_model.dart';
 import 'package:strapen_app/app/modules/produto/repositories/produto_repository.dart';
 import 'package:strapen_app/app/modules/user/repositories/user_repository.dart';
 import 'package:strapen_app/app/shared/extensions/string_extension.dart';
+import 'package:strapen_app/app/shared/utils/connectivity_utils.dart';
 import 'package:strapen_app/app/shared/utils/parse_errors_utils.dart';
 import 'package:strapen_app/app/shared/utils/parse_images_utils.dart';
 
@@ -50,6 +51,7 @@ class CatalogoRepository implements ICatalogoRepository {
   @override
   Future<CatalogoModel> save(CatalogoModel model, List<ProdutoModel>? produtos) async {
     try {
+      await ConnectivityUtils.hasInternet();
       validate(model);
 
       //Verifica se existe produtos removidos da nova lista do catálogo
@@ -85,6 +87,8 @@ class CatalogoRepository implements ICatalogoRepository {
   @override
   Future<bool> delete(CatalogoModel model) async {
     try {
+      await ConnectivityUtils.hasInternet();
+
       if (model.id == null) throw Exception("Houve um erro ao remover seu catálogo!");
 
       final ParseObject parseCatalogo = ParseObject(className());
@@ -99,6 +103,8 @@ class CatalogoRepository implements ICatalogoRepository {
   @override
   Future<List<CatalogoModel>?> getByUser(String? idUser) async {
     try {
+      await ConnectivityUtils.hasInternet();
+
       if (idUser == null) throw Exception("Houve um erro ao buscar seus catálogo, tente novamente.\nSe o erro persistir, reinicie o aplicativo.");
 
       QueryBuilder query = QueryBuilder<ParseObject>(ParseObject(className()))
@@ -123,6 +129,8 @@ class CatalogoRepository implements ICatalogoRepository {
   @override
   Future<CatalogoModel> getById(String? id) async {
     try {
+      await ConnectivityUtils.hasInternet();
+
       if (id == null) throw Exception("Houve um erro, tente novamente.\nSe o erro persistir, reinicie o aplicativo.");
 
       QueryBuilder query = QueryBuilder<ParseObject>(ParseObject(className()))
@@ -150,6 +158,8 @@ class CatalogoRepository implements ICatalogoRepository {
   @override
   Future<List<ProdutoModel>> getProdutosCatalogo(String? idCatalogo) async {
     try {
+      await ConnectivityUtils.hasInternet();
+
       if (idCatalogo == null) throw Exception("Houve um erro, tente novamente.\nSe o erro persistir, reinicie o aplicativo.");
 
       QueryBuilder query = QueryBuilder<ParseObject>(ParseObject(ProdutoRepository().className()))
@@ -173,22 +183,26 @@ class CatalogoRepository implements ICatalogoRepository {
   }
 
   Future<void> _removeRelation(List<ProdutoModel> produtos, CatalogoModel catalogo) async {
-    List<ProdutoModel> produtosParaRemover = [];
-    produtos.forEach((e) {
-      if (!catalogo.produtos!.any((prod) => prod.id == e.id))
-        produtosParaRemover.add(e);
-    });
+    try {
+      List<ProdutoModel> produtosParaRemover = [];
+      produtos.forEach((e) {
+        if (!catalogo.produtos!.any((prod) => prod.id == e.id))
+          produtosParaRemover.add(e);
+      });
 
-    if (produtosParaRemover.isEmpty) return;
+      if (produtosParaRemover.isEmpty) return;
 
-    final ParseObject parse = ParseObject(className())..set(CATALOGO_ID_COLUMN, catalogo.id);
+      final ParseObject parse = ParseObject(className())..set(CATALOGO_ID_COLUMN, catalogo.id);
 
-    parse.removeRelation(
-      CATALOGO_PRODUTO_COLUMN,
-      produtosParaRemover.map((e) {
-        return ParseObject(ProdutoRepository().className())..objectId = e.id;
-      }).toList());
+      parse.removeRelation(
+        CATALOGO_PRODUTO_COLUMN,
+        produtosParaRemover.map((e) {
+          return ParseObject(ProdutoRepository().className())..objectId = e.id;
+        }).toList());
 
-    await parse.update();
+      await parse.update();
+    } catch (e) {
+      throw Exception(e);
+    }
   }
 }

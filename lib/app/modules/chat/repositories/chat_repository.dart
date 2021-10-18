@@ -8,6 +8,7 @@ import 'package:strapen_app/app/modules/live/repositories/live_repository.dart';
 import 'package:strapen_app/app/modules/user/constants/columns.dart';
 import 'package:strapen_app/app/modules/user/repositories/user_repository.dart';
 import 'package:strapen_app/app/shared/extensions/string_extension.dart';
+import 'package:strapen_app/app/shared/utils/connectivity_utils.dart';
 import 'package:strapen_app/app/shared/utils/parse_errors_utils.dart';
 
 class ChatRepository implements IChatRepository {
@@ -49,6 +50,7 @@ class ChatRepository implements IChatRepository {
 
   Future<void> sendComentario(ChatModel model) async {
     try {
+      await ConnectivityUtils.hasInternet();
       validate(model);
 
       ParseObject parseChat = toParseObject(model);

@@ -10,6 +10,7 @@ import 'package:strapen_app/app/modules/produto/stores/produto_store.dart';
 import 'package:strapen_app/app/modules/user/constants/columns.dart';
 import 'package:strapen_app/app/modules/user/factories/user_factory.dart';
 import 'package:strapen_app/app/shared/extensions/string_extension.dart';
+import 'package:strapen_app/app/shared/utils/connectivity_utils.dart';
 import 'package:strapen_app/app/shared/utils/parse_errors_utils.dart';
 import 'package:strapen_app/app/shared/utils/parse_images_utils.dart';
 
@@ -62,6 +63,7 @@ class ProdutoRepository implements IProdutoRepository {
   @override
   Future<ProdutoModel?> save(ProdutoModel model) async {
     try {
+      await ConnectivityUtils.hasInternet();
       validate(model);
 
       List<ParseFileBase> parseImages = await ParseImageUtils.save(model.fotos!);
@@ -82,6 +84,8 @@ class ProdutoRepository implements IProdutoRepository {
   @override
   Future<bool> delete(ProdutoModel model) async {
     try {
+      await ConnectivityUtils.hasInternet();
+
       if (model.id == null) throw Exception("Houve um erro ao remover seu produto!");
 
       final ParseObject parseCatalogo = ParseObject(className());
@@ -95,6 +99,8 @@ class ProdutoRepository implements IProdutoRepository {
 
   Future<List<ProdutoModel>?> getByUser(String? id) async {
     try {
+      await ConnectivityUtils.hasInternet();
+
       if (id == null) throw Exception("Houve um erro ao buscar seus produtos, tente novamente.\nSe o erro persistir, reinicie o aplicativo.");
 
       QueryBuilder query = QueryBuilder<ParseObject>(ParseObject(className()))
@@ -124,6 +130,8 @@ class ProdutoRepository implements IProdutoRepository {
       if (liveQuery == null) liveQuery = LiveQuery();
 
       if (subscription == null) {
+        await ConnectivityUtils.hasInternet();
+
         final QueryBuilder<ParseObject> query = QueryBuilder<ParseObject>.or(
           ParseObject(className()),
           controller.produtos.map<QueryBuilder<ParseObject>>((prod) {
