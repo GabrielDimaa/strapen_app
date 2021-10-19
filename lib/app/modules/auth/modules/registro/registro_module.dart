@@ -28,7 +28,7 @@ class RegistroModule extends Module {
     ChildRoute(REGISTRO3_ROUTE, child: (_, args) => RegistroPage3()),
     ChildRoute(REGISTRO4_ROUTE, child: (_, args) => RegistroPage4()),
     ChildRoute(REGISTRO5_ROUTE, child: (_, args) => RegistroPage5()),
-    ChildRoute(REGISTRO6_ROUTE, child: (_, args) => RegistroPage6()),
+    ChildRoute(REGISTRO6_ROUTE, child: (_, args) => RegistroPage6(model: args.data)),
     ChildRoute(REGISTRO7_ROUTE, child: (_, args) => RegistroPage7()),
     ChildRoute(REGISTRO_CONCLUIDO_ROUTE, child: (_, args) => RegistroConcluidoPage()),
   ];

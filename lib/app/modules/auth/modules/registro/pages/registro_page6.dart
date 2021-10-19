@@ -4,18 +4,33 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:strapen_app/app/app_widget.dart';
 import 'package:strapen_app/app/modules/auth/modules/registro/components/registro_widget.dart';
 import 'package:strapen_app/app/modules/auth/modules/registro/controllers/registro_controller.dart';
+import 'package:strapen_app/app/modules/user/factories/user_factory.dart';
+import 'package:strapen_app/app/modules/user/models/user_model.dart';
 import 'package:strapen_app/app/shared/components/bottom_sheet/bottom_sheet_image_picker.dart';
 import 'package:strapen_app/app/shared/components/dialog/error_dialog.dart';
 import 'package:strapen_app/app/shared/components/sized_box/horizontal_sized_box.dart';
 import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
 
 class RegistroPage6 extends StatefulWidget {
+  final UserModel? model;
+
+  const RegistroPage6({this.model});
+
   @override
   _RegistroPage6State createState() => _RegistroPage6State();
 }
 
 class _RegistroPage6State extends State<RegistroPage6> {
   final RegistroController controller = Modular.get<RegistroController>();
+
+  @override
+  void initState() {
+    super.initState();
+
+    //Caso seja != de null é por que está sendo um update
+    if (widget.model != null)
+      controller.userStore = UserFactory.fromModel(widget.model!);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -88,7 +103,10 @@ class _RegistroPage6State extends State<RegistroPage6> {
         try {
           if (controller.userStore.foto == null) throw Exception("Nenhuma foto selecionada.");
 
-          await controller.nextPage(7);
+          if (widget.model != null)
+            await controller.salvarFoto(context);
+          else
+            await controller.nextPage(7);
         } catch (e) {
           ErrorDialog.show(context: context, content: e.toString());
         }

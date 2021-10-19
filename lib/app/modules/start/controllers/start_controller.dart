@@ -1,5 +1,8 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
+import 'package:strapen_app/app/app_controller.dart';
+import 'package:strapen_app/app/modules/auth/constants/routes.dart';
+import 'package:strapen_app/app/modules/auth/modules/registro/constants/routes.dart';
 import 'package:strapen_app/app/modules/catalogo/constants/routes.dart';
 import 'package:strapen_app/app/modules/configuracoes/constants/routes.dart';
 import 'package:strapen_app/app/modules/home/constants/routes.dart';
@@ -19,7 +22,13 @@ abstract class _StartController with Store {
   void setPage(int value) => page = value;
 
   @action
-  void toInit() => Modular.to.navigate(START_ROUTE + HOME_ROUTE);
+  void toInit() {
+    if (Modular.get<AppController>().userModel?.foto != null) {
+      Modular.to.navigate(START_ROUTE + HOME_ROUTE);
+    } else {
+      Modular.to.navigate(AUTH_ROUTE + REGISTRO_ROUTE + REGISTRO6_ROUTE, arguments: Modular.get<AppController>().userModel);
+    }
+  }
 
   @action
   void toHome() {

@@ -5,6 +5,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'package:strapen_app/app/app_controller.dart';
 import 'package:strapen_app/app/modules/auth/constants/routes.dart';
+import 'package:strapen_app/app/modules/auth/modules/registro/components/foto_dialog.dart';
 import 'package:strapen_app/app/modules/auth/modules/registro/constants/routes.dart';
 import 'package:strapen_app/app/modules/start/constants/routes.dart';
 import 'package:strapen_app/app/modules/user/factories/user_factory.dart';
@@ -98,19 +99,41 @@ abstract class _RegistroController with Store {
   }
 
   @action
-  Future<void> finalizarCadastro() async {
+  Future<void> finalizarCadastro(BuildContext context) async {
     try {
       setLoading(true);
 
       UserModel model = userStore.toModel();
       model = await _userRepository.save(model, withFoto: false);
+      _appController.setUserModel(model);
+      //Seta o usuário no appController após ser salvo
 
       userStore.id = model.id;
-
       model.foto = userStore.foto;
-      model = await _userRepository.saveFoto(model);
 
-      _appController.setUserModel(model);
+      try {
+        model = await _userRepository.saveFoto(model);
+
+        //Seta a foto recém salva
+        _appController.userModel!.foto = model.foto;
+
+        Modular.to.navigate(AUTH_ROUTE + REGISTRO_ROUTE + REGISTRO_CONCLUIDO_ROUTE);
+      } catch (e) {
+        setLoading(false);
+        await FotoDialog.show(context);
+      }
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  @action
+  Future<void> salvarFoto(BuildContext context) async {
+    try {
+      setLoading(true);
+
+      final UserModel model = await _userRepository.saveFoto(userStore.toModel());
+      _appController.setUserModel(userStore.toModel()..foto = model.foto);
 
       Modular.to.navigate(AUTH_ROUTE + REGISTRO_ROUTE + REGISTRO_CONCLUIDO_ROUTE);
     } finally {

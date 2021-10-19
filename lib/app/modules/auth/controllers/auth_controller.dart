@@ -56,5 +56,7 @@ abstract class _AuthController with Store {
   void esqueceuSenha() {}
 
   @action
-  void registrar() => Modular.to.pushNamed(AUTH_ROUTE + REGISTRO_ROUTE);
+  void registrar() {
+    if (!loading) Modular.to.pushNamed(AUTH_ROUTE + REGISTRO_ROUTE);
+  }
 }

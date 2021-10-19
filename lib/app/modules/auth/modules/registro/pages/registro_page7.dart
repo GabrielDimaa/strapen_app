@@ -18,30 +18,31 @@ class _RegistroPage7State extends State<RegistroPage7> {
   @override
   Widget build(BuildContext context) {
     return RegistroWidget(
-        title: "Informe uma senha!",
-        subtitle: "Escolha uma senha com pelo menos 8 caracteres.",
-        children: [
-          FormSenhaWidget(
-            formKey: _formKey,
-            enabled: !controller.loading,
-            onSavedSenha: controller.userStore.setSenha,
-            onSavedConfirmarSenha: controller.userStore.setConfirmarSenha,
-          ),
-        ],
-        descriptionButton: "Finalizar cadastro",
-        onPressed: () async {
-          await controller.onSavedForm(
-            context,
-            _formKey,
-            () async {
-              try {
-                await controller.finalizarCadastro();
-              } catch (e) {
-                ErrorDialog.show(context: context, content: e.toString());
-              }
-            },
-          );
-        });
+      title: "Informe uma senha!",
+      subtitle: "Escolha uma senha com pelo menos 8 caracteres.",
+      children: [
+        FormSenhaWidget(
+          formKey: _formKey,
+          enabled: !controller.loading,
+          onSavedSenha: controller.userStore.setSenha,
+          onSavedConfirmarSenha: controller.userStore.setConfirmarSenha,
+        ),
+      ],
+      descriptionButton: "Finalizar cadastro",
+      onPressed: () async {
+        await controller.onSavedForm(
+          context,
+          _formKey,
+          () async {
+            try {
+              await controller.finalizarCadastro(context);
+            } catch (e) {
+              ErrorDialog.show(context: context, content: e.toString());
+            }
+          },
+        );
+      },
+    );
   }
 
   @override
