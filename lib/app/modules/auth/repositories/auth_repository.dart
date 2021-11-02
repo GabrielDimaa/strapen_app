@@ -1,9 +1,11 @@
 import 'package:parse_server_sdk/parse_server_sdk.dart';
 import 'package:strapen_app/app/modules/auth/models/auth_model.dart';
 import 'package:strapen_app/app/modules/auth/repositories/iauth_repository.dart';
+import 'package:strapen_app/app/modules/user/constants/columns.dart';
 import 'package:strapen_app/app/modules/user/models/user_model.dart';
 import 'package:strapen_app/app/modules/user/repositories/iuser_repository.dart';
 import 'package:strapen_app/app/shared/config/preferences/session_preferences.dart';
+import 'package:strapen_app/app/shared/exceptions/email_exception.dart';
 import 'package:strapen_app/app/shared/extensions/string_extension.dart';
 import 'package:strapen_app/app/shared/utils/connectivity_utils.dart';
 import 'package:strapen_app/app/shared/utils/parse_errors_utils.dart';
@@ -34,11 +36,16 @@ class AuthRepository implements IAuthRepository {
       if (!response.success) throw Exception(ParseErrorsUtils.get(response.statusCode));
       ParseObject parse = response.result;
 
+      if (!(parse.get<bool>(USER_EMAIL_VERIFIED_COLUMN) ?? false))
+        throw EmailException("E-mail ainda não foi verificado!\nConfira sua caixa de entrada e verifique o E-mail.");
+
       UserModel userModel = _userRepository.toModel(parse);
 
       await _userRepository.saveSession(userModel, senha, parse.get<String>("sessionToken")!);
 
       return userModel;
+    } on EmailException catch (e) {
+      throw EmailException(e.toString());
     } catch (e) {
       throw Exception(e);
     }

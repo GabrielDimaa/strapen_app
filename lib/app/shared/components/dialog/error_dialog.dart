@@ -12,11 +12,15 @@ class ErrorDialog extends StatefulWidget {
     required String content,
     String? title,
     List<Widget>? actions,
+    Color? backgroundColor,
+    Color? colorAction,
   }) async {
     return await DialogDefault.show(
       title: Text(title ?? "Algo deu errado..."),
       context: context,
       actions: actions,
+      backgroundColor: backgroundColor,
+      colorAction: colorAction,
       labelButtonDefault: "Ok",
       content: ErrorDialog(
         context: context,

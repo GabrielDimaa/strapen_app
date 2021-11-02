@@ -10,6 +10,8 @@ class DialogDefault extends StatefulWidget {
   final Widget? title;
   final String? labelButtonDefault;
   final List<Widget>? actions;
+  final Color? backgroundColor;
+  final Color? colorAction;
 
   const DialogDefault({
     required this.context,
@@ -17,6 +19,8 @@ class DialogDefault extends StatefulWidget {
     this.title,
     this.labelButtonDefault,
     this.actions,
+    this.backgroundColor,
+    this.colorAction,
   });
 
   static show({
@@ -25,6 +29,8 @@ class DialogDefault extends StatefulWidget {
     Widget? title,
     String? labelButtonDefault,
     List<Widget>? actions,
+    Color? backgroundColor,
+    Color? colorAction,
   }) async {
     return await showDialog(
       context: context,
@@ -35,6 +41,8 @@ class DialogDefault extends StatefulWidget {
           title: title,
           labelButtonDefault: labelButtonDefault,
           actions: actions,
+          backgroundColor: backgroundColor,
+          colorAction: colorAction,
         );
       },
     );
@@ -47,6 +55,7 @@ class _DialogDefaultState extends State<DialogDefault> {
     return AlertDialog(
       title: widget.title,
       content: widget.content,
+      backgroundColor: widget.backgroundColor,
       actions: [
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8),
@@ -54,7 +63,13 @@ class _DialogDefaultState extends State<DialogDefault> {
             mainAxisSize: MainAxisSize.max,
             mainAxisAlignment: MainAxisAlignment.end,
             children: [
-              TextButton(onPressed: () => Modular.to.pop(false), child: Text(widget.labelButtonDefault ?? "Cancelar")),
+              TextButton(
+                onPressed: () => Modular.to.pop(false),
+                child: Text(
+                  widget.labelButtonDefault ?? "Cancelar",
+                  style: TextStyle(color: widget.colorAction),
+                ),
+              ),
             ]..addAll(widget.actions ?? []),
           ),
         ),

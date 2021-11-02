@@ -12,6 +12,7 @@ const String USER_CEP_COLUMN = "cep";
 const String USER_CIDADE_COLUMN = "cidade";
 const String USER_FOTO_COLUMN = "foto";
 const String USER_FIST_LIVE_COLUMN = "firstLive";
+const String USER_EMAIL_VERIFIED_COLUMN = "emailVerified";
 
 ///Seguidor
 const String SEGUIDOR_ID_COLUMN = "objectId";

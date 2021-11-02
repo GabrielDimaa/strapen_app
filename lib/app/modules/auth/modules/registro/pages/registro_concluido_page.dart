@@ -3,6 +3,7 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:strapen_app/app/app_widget.dart';
 import 'package:strapen_app/app/modules/auth/modules/registro/controllers/registro_controller.dart';
 import 'package:strapen_app/app/shared/components/button/elevated_button_default.dart';
+import 'package:strapen_app/app/shared/components/dialog/error_dialog.dart';
 import 'package:strapen_app/app/shared/components/image/vetor.dart';
 import 'package:strapen_app/app/shared/components/padding/padding_scaffold.dart';
 import 'package:strapen_app/app/shared/components/scaffold/scaffold_gradiente.dart';
@@ -36,21 +37,40 @@ class _RegistroConcluidoPageState extends State<RegistroConcluidoPage> {
                   ),
                   const VerticalSizedBox(2),
                   Text(
-                    "Você concluiu o cadastro de sua conta. Estamos preparando sua autenticação para o uso do Strapen.",
+                    "Antes de iniciar, confirme seu e-mail para utilizar o Strapen.",
                     textAlign: TextAlign.start,
                     style: textTheme.headline1,
                   ),
-                  const VerticalSizedBox(3),
+                  const VerticalSizedBox(3.5),
                   Vetor(path: "assets/images/mulher_mexendo_mural.png"),
                 ],
               ),
             ),
           ),
+          TextButton(
+            child: Text("Reenviar e-mail"),
+            onPressed: () async => await controller.reenviarEmail(context),
+            style: TextButton.styleFrom(
+              primary: Colors.white,
+            ),
+          ),
+          const VerticalSizedBox(),
           ElevatedButtonDefault(
             child: Text("Iniciar"),
             primary: Colors.white,
             onPrimary: AppColors.primary,
-            onPressed: controller.toHome,
+            onPressed: () async {
+              try {
+                await controller.toHome(context);
+              } catch (e) {
+                ErrorDialog.show(
+                  context: context,
+                  content: e.toString(),
+                  backgroundColor: AppColors.primary,
+                  colorAction: Colors.white,
+                );
+              }
+            },
           ),
         ],
       ),

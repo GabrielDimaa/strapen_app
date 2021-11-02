@@ -15,7 +15,7 @@ class AuthModule extends Module {
   final List<Bind> binds = [
     Bind((i) => UserRepository(i.get<SessionPreferences>())),
     Bind((i) => AuthRepository(i.get<IUserRepository>(), i.get<SessionPreferences>())),
-    Bind((i) => AuthController(i.get<IAuthRepository>(), i.get<AppController>())),
+    Bind((i) => AuthController(i.get<IAuthRepository>(), i.get<IUserRepository>(), i.get<AppController>())),
   ];
 
   @override

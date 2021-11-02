@@ -201,6 +201,40 @@ class UserRepository implements IUserRepository {
   }
 
   @override
+  Future<bool> verificarEmail(String idUser) async {
+    try {
+      await ConnectivityUtils.hasInternet();
+
+      final QueryBuilder query = QueryBuilder<ParseUser>(ParseUser(null, null, null))
+        ..whereEqualTo(USER_ID_COLUMN, idUser);
+
+      final ParseResponse response = await query.query();
+
+      if (!response.success) throw Exception(ParseErrorsUtils.get(response.statusCode));
+      ParseObject? parse = (response.results as List<dynamic>).first;
+
+      if (!(parse?.get<bool>(USER_EMAIL_VERIFIED_COLUMN) ?? false))
+        throw Exception("E-mail ainda não foi verificado!");
+
+      return parse?.get<bool>(USER_EMAIL_VERIFIED_COLUMN) ?? false;
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  @override
+  Future<void> reenviarEmail(String email) async {
+    try {
+      await ConnectivityUtils.hasInternet();
+
+      final ParseUser parseUser = ParseUser(null, null, email);
+      await parseUser.verificationEmailRequest();
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
+  @override
   Future<void> updateFirstLive(String id) async {
     try {
       await ConnectivityUtils.hasInternet();

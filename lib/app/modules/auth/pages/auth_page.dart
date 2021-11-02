@@ -142,7 +142,7 @@ class _AuthPageState extends ModularState<AuthPage, AuthController> {
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
 
-                    await controller.login();
+                    await controller.login(context);
                   }
                 } catch(e) {
                   ErrorDialog.show(context: context, content: e.toString());
