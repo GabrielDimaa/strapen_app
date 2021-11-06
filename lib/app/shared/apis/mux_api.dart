@@ -7,8 +7,8 @@ import 'package:strapen_app/app/modules/live/models/live_model.dart';
 import 'package:strapen_app/app/shared/apis/dio_default.dart';
 
 abstract class MuxApi {
-  static final String _baseUrl = "https://api.mux.com/video/v1/live-streams/";
-  static final String _baseUrlRmtp = "rtmps://global-live.mux.com:443/app/";
+  static const String _baseUrl = "https://api.mux.com/video/v1/live-streams/";
+  static const String _baseUrlRmtp = "rtmps://global-live.mux.com:443/app/";
 
   static String urlStream(String playbackId) => "https://stream.mux.com/$playbackId.m3u8";
   static String urlImageLive(String playbackId, {required int width, required int height}) =>
