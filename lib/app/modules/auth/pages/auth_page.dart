@@ -90,6 +90,7 @@ class _AuthPageState extends ModularState<AuthPage, AuthController> {
                                   textInputAction: TextInputAction.done,
                                   onFieldSubmitted: (_) => _senhaFocus.unfocus(),
                                   onSaved: controller.authStore.setSenha,
+                                  validate: false,
                                   onPressed: () => controller.setVisible(!controller.visible),
                                 ),
                               ),

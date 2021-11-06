@@ -5,7 +5,7 @@ abstract class ISessionPreferences {
   Future<void> save(SessionPreferencesModel dto);
   Future<SessionPreferencesModel> get();
   Future<void> delete();
-  Future<void> updateSenha(String senha);
+  Future<void> deleteSenha();
 }
 
 class SessionPreferences implements ISessionPreferences {
@@ -62,9 +62,9 @@ class SessionPreferences implements ISessionPreferences {
   }
 
   @override
-  Future<void> updateSenha(String senha) async {
+  Future<void> deleteSenha() async {
     await _checkPreferences();
 
-    _sharedPreferences!.setString(_senha, senha);
+    _sharedPreferences!.remove(_senha);
   }
 }

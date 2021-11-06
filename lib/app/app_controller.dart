@@ -30,7 +30,9 @@ abstract class _AppController with Store {
     try {
       SessionPreferencesModel sessionModel = await _sessionPreferences.get();
 
-      if (sessionModel.isNull) {
+      if (sessionModel.withoutSenha) {
+        Modular.to.navigate(AUTH_ROUTE);
+      } else if (sessionModel.isNull) {
         Modular.to.navigate(APRESENTACAO_ROUTE);
       } else {
         AuthModel authModel = AuthModel(sessionModel.email, sessionModel.senha, sessionModel.sessionToken);

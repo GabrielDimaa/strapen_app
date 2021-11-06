@@ -8,6 +8,7 @@ import 'package:strapen_app/app/modules/auth/modules/registro/constants/routes.d
 import 'package:strapen_app/app/modules/auth/repositories/iauth_repository.dart';
 import 'package:strapen_app/app/modules/auth/stores/auth_store.dart';
 import 'package:strapen_app/app/modules/start/constants/routes.dart';
+import 'package:strapen_app/app/modules/user/constants/routes.dart';
 import 'package:strapen_app/app/modules/user/models/user_model.dart';
 import 'package:strapen_app/app/modules/user/repositories/iuser_repository.dart';
 import 'package:strapen_app/app/shared/exceptions/email_exception.dart';
@@ -60,7 +61,9 @@ abstract class _AuthController with Store {
   }
 
   @action
-  void esqueceuSenha() {}
+  void esqueceuSenha() async {
+    Modular.to.pushNamed(USER_ROUTE + USER_SENHA_ROUTE);
+  }
 
   @action
   void registrar() {

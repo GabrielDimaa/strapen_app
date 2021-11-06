@@ -252,21 +252,21 @@ class UserRepository implements IUserRepository {
   }
 
   @override
-  Future<void> updateSenha(UserModel model) async {
+  Future<void> esqueceuSenha(String? email) async {
     try {
       await ConnectivityUtils.hasInternet();
 
-      if (model.id == null || model.senha.isNullOrEmpty()) throw Exception("Houve um erro ao alterar sua senha.");
+      if (email.isNullOrEmpty()) throw Exception("Insira um e-mail");
 
-      final ParseObject parseObject = ParseUser(null, null, null)
-        ..objectId = model.id
-        ..set<String>(USER_SENHA_COLUMN, model.senha!);
+      if (email.isNullOrEmpty()) throw Exception("Houve um erro ao enviar e-mail.");
 
-      final ParseResponse response = await parseObject.save();
+      final ParseUser parseUser = ParseUser(null, null, email);
 
-      await _sessionPreferences!.updateSenha(model.senha!);
+      final ParseResponse response = await parseUser.requestPasswordReset();
 
       if (!response.success) throw Exception(ParseErrorsUtils.get(response.statusCode));
+
+      await _sessionPreferences!.deleteSenha();
     } catch (e) {
       throw Exception(e);
     }

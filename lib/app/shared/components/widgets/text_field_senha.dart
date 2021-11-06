@@ -13,6 +13,7 @@ class TextFieldSenha extends StatelessWidget {
   final FocusNode? focusNode;
   final Function(String)? onFieldSubmitted;
   final TextInputAction? textInputAction;
+  final bool validate;
 
   const TextFieldSenha({
     required this.controller,
@@ -25,6 +26,7 @@ class TextFieldSenha extends StatelessWidget {
     this.focusNode,
     this.onFieldSubmitted,
     this.textInputAction,
+    this.validate = true,
   });
 
   @override
@@ -44,7 +46,7 @@ class TextFieldSenha extends StatelessWidget {
       controller: controller,
       obscureText: !visible,
       enabled: enabled,
-      validator: InputSenhaValidator().validate,
+      validator: validate ? InputSenhaValidator().validate : null,
       onSaved: onSaved,
       onChanged: onChanged,
       focusNode: focusNode,

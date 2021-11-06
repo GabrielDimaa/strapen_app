@@ -14,7 +14,7 @@ import 'package:strapen_app/app/modules/user/controllers/user_editar_controller.
 import 'package:strapen_app/app/modules/user/pages/user_dados_pessoais_page.dart';
 import 'package:strapen_app/app/modules/user/pages/user_editar_perfil_page.dart';
 import 'package:strapen_app/app/modules/user/pages/user_page.dart';
-import 'package:strapen_app/app/modules/user/pages/user_senha_page.dart';
+import 'package:strapen_app/app/modules/user/pages/user_esqueceu_senha_page.dart';
 import 'package:strapen_app/app/modules/user/repositories/iseguidor_repository.dart';
 import 'package:strapen_app/app/modules/user/repositories/iuser_repository.dart';
 import 'package:strapen_app/app/modules/user/repositories/seguidor_repository.dart';
@@ -39,6 +39,6 @@ class UserModule extends Module {
     ChildRoute(USER_ROUTE, child: (_, args) => UserPage(model: args.data)),
     ChildRoute(USER_EDITAR_PERFIL_ROUTE, child: (_, args) => UserEditarPerfilPage()),
     ChildRoute(USER_DADOS_PESSOAIS_ROUTE, child: (_, args) => UserDadosPessoaisPage()),
-    ChildRoute(USER_SENHA_ROUTE, child: (_, args) => UserSenhaPage()),
+    ChildRoute(USER_SENHA_ROUTE, child: (_, args) => UserEsqueceuSenhaPage()),
   ];
 }

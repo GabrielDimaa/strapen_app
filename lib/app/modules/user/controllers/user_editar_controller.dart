@@ -55,26 +55,24 @@ abstract class _UserEditarController with Store implements IDefaultController {
   }
 
   @action
-  Future<void> salvarNovaSenha(BuildContext context) async {
+  Future<void> esqueceuSenha(BuildContext context) async {
     try {
-      bool confirm = await DialogDefault.show(
-        context: context,
-        title: const Text("Alterar senha"),
-        content: const Text("Confirme para alterar sua senha."),
-        actions: [
-          TextButton(
-            child: const Text("Confirmar"),
-            onPressed: () => Modular.to.pop(true),
-          ),
-        ],
-      );
+      bool success = false;
 
-      if (confirm)
-        await LoadingDialog.show(context, "Salvando nova senha...", () async {
-          await _userRepository.updateSenha(userStore.toModel());
+      await LoadingDialog.show(context, "Enviando e-mail...", () async {
+        await _userRepository.esqueceuSenha(userStore.email!);
 
-          Modular.to.pop();
-        });
+        success = true;
+      });
+
+      if (success) {
+        await DialogDefault.show(
+          context: context,
+          title: const Text("E-mail enviado"),
+          content: const Text("Confira as instruções de redefinição de senha enviadas no e-mail."),
+          labelButtonDefault: "Ok",
+        );
+      }
     } catch (e) {
       rethrow;
     }
