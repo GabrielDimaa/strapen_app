@@ -47,9 +47,7 @@ class AppWidget extends StatelessWidget with ModoRetratoLess {
           elevation: 0,
           centerTitle: true,
           backgroundColor: Colors.transparent,
-          textTheme: TextTheme(
-            headline6: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w500, fontFamily: 'Lexend'),
-          ),
+          titleTextStyle: TextStyle(color: Colors.white, fontSize: 22, fontWeight: FontWeight.w500, fontFamily: 'Lexend'),
           iconTheme: IconThemeData(
             color: AppColors.primary,
             size: 22,
