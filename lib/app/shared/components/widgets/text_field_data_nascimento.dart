@@ -26,7 +26,7 @@ class TextFieldDataNascimento extends StatelessWidget {
     bool clear = false;
     return TextFormField(
       decoration: InputDecorationDefault(
-        label: "Data de nascimento",
+        labelText: "Data de nascimento",
         sufixIcon: Visibility(
           visible: sufixIconVisible,
           child: IconButton(

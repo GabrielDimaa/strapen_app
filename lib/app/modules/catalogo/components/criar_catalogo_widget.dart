@@ -132,7 +132,7 @@ class _CriarCatalogoWidgetState extends State<CriarCatalogoWidget> {
           children: [
             const VerticalSizedBox(),
             TextField(
-              decoration: InputDecorationDefault(label: 'Título'),
+              decoration: InputDecorationDefault(labelText: 'Título'),
               controller: textController,
               textCapitalization: TextCapitalization.sentences,
               autofocus: true,
@@ -166,7 +166,7 @@ class _CriarCatalogoWidgetState extends State<CriarCatalogoWidget> {
           children: [
             const VerticalSizedBox(),
             TextField(
-              decoration: InputDecorationDefault(label: 'Descrição'),
+              decoration: InputDecorationDefault(labelText: 'Descrição'),
               controller: textController,
               textCapitalization: TextCapitalization.sentences,
               autofocus: true,

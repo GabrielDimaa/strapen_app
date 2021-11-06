@@ -47,7 +47,7 @@ class _RegistroPage2State extends State<RegistroPage2> {
                 Observer(
                   builder: (_) => TextFormField(
                     decoration: InputDecorationDefault(
-                      label: "E-mail",
+                      labelText: "E-mail",
                       prefixIcon: Icon(Icons.email, color: Colors.grey[200]),
                     ),
                     controller: _emailController,
@@ -64,7 +64,7 @@ class _RegistroPage2State extends State<RegistroPage2> {
                 Observer(
                   builder: (_) => TextFormField(
                     decoration: InputDecorationDefault(
-                      label: "Telefone",
+                      labelText: "Telefone",
                       prefixIcon: Icon(Icons.contact_phone, color: Colors.grey[200]),
                     ),
                     controller: _telefoneController,

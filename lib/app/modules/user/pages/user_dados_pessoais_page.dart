@@ -24,12 +24,10 @@ class UserDadosPessoaisPage extends StatefulWidget {
 class _UserDadosPessoaisPageState extends ModularState<UserDadosPessoaisPage, UserEditarController> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  final TextEditingController _emailController = TextEditingController();
   final TextEditingController _dataNascimentoController = TextEditingController();
   final TextEditingController _cepController = TextEditingController();
   final TextEditingController _cidadeController = TextEditingController();
   final TextEditingController _cpfCnpjController = TextEditingController();
-  final FocusNode _emailFocus = FocusNode();
   final FocusNode _dataNascimentoFocus = FocusNode();
   final FocusNode _cepFocus = FocusNode();
   final FocusNode _cidadeFocus = FocusNode();
@@ -44,7 +42,6 @@ class _UserDadosPessoaisPageState extends ModularState<UserDadosPessoaisPage, Us
   }
 
   void _updateControllers() {
-    _emailController.text = controller.userStore.email ?? "";
     _dataNascimentoController.text = controller.userStore.dataNascimento?.formated ?? "";
     _cepController.text = controller.userStore.cep ?? "";
     _cidadeController.text = controller.userStore.cidade ?? "";
@@ -80,24 +77,7 @@ class _UserDadosPessoaisPageState extends ModularState<UserDadosPessoaisPage, Us
                                 Observer(
                                   builder: (_) => TextFormField(
                                     decoration: InputDecorationDefault(
-                                      label: "E-mail",
-                                      prefixIcon: Icon(Icons.email, color: Colors.grey[200]),
-                                    ),
-                                    controller: _emailController,
-                                    keyboardType: TextInputType.emailAddress,
-                                    validator: InputEmailValidator().validate,
-                                    enabled: !controller.loading,
-                                    textInputAction: TextInputAction.next,
-                                    onSaved: controller.userStore.setEmail,
-                                    focusNode: _emailFocus,
-                                    onFieldSubmitted: (_) => controller.focusChange(context, _emailFocus, _cepFocus),
-                                  ),
-                                ),
-                                const VerticalSizedBox(2),
-                                Observer(
-                                  builder: (_) => TextFormField(
-                                    decoration: InputDecorationDefault(
-                                      label: "CEP",
+                                      labelText: "CEP",
                                     ),
                                     controller: _cepController,
                                     keyboardType: TextInputType.number,
@@ -118,7 +98,7 @@ class _UserDadosPessoaisPageState extends ModularState<UserDadosPessoaisPage, Us
                                 const VerticalSizedBox(2),
                                 Observer(
                                   builder: (_) => TextFormField(
-                                    decoration: InputDecorationDefault(label: "Cidade"),
+                                    decoration: InputDecorationDefault(labelText: "Cidade"),
                                     controller: _cidadeController,
                                     validator: InputValidatorDefault().validate,
                                     textCapitalization: TextCapitalization.sentences,
@@ -185,7 +165,6 @@ class _UserDadosPessoaisPageState extends ModularState<UserDadosPessoaisPage, Us
   }
 
   void unfocusAll() {
-    _emailFocus.unfocus();
     _dataNascimentoFocus.unfocus();
     _cepFocus.unfocus();
     _cpfCnpjFocus.unfocus();
@@ -194,12 +173,10 @@ class _UserDadosPessoaisPageState extends ModularState<UserDadosPessoaisPage, Us
   @override
   void dispose() {
     super.dispose();
-    _emailController.dispose();
     _dataNascimentoController.dispose();
     _cepController.dispose();
     _cidadeController.dispose();
     _cpfCnpjController.dispose();
-    _emailFocus.dispose();
     _dataNascimentoFocus.dispose();
     _cepFocus.dispose();
     _cidadeFocus.dispose();

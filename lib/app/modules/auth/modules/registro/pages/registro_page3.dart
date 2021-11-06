@@ -45,7 +45,7 @@ class _RegistroPage3State extends State<RegistroPage3> {
               Observer(
                 builder: (_) => TextFormField(
                   decoration: InputDecorationDefault(
-                    label: "CEP",
+                    labelText: "CEP",
                   ),
                   controller: _cepController,
                   keyboardType: TextInputType.number,
@@ -66,7 +66,7 @@ class _RegistroPage3State extends State<RegistroPage3> {
               const VerticalSizedBox(2),
               Observer(
                 builder: (_) => TextFormField(
-                  decoration: InputDecorationDefault(label: "Cidade"),
+                  decoration: InputDecorationDefault(labelText: "Cidade"),
                   controller: _cidadeController,
                   validator: InputValidatorDefault().validate,
                   textCapitalization: TextCapitalization.sentences,

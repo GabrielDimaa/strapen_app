@@ -38,7 +38,7 @@ class _RegistroPage5State extends State<RegistroPage5> {
             child: Observer(
               builder: (_) => TextFormField(
                 decoration: InputDecorationDefault(
-                  label: "Nome de usuário",
+                  labelText: "Nome de usuário",
                   prefixText: "@",
                 ),
                 controller: _usernameController,

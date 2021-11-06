@@ -31,7 +31,7 @@ class TextFieldSenha extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextFormField(
       decoration: InputDecorationDefault(
-        label: label,
+        labelText: label,
         prefixIcon: Icon(Icons.lock, color: Colors.grey[200]),
         sufixIcon: IconButton(
           onPressed: onPressed,

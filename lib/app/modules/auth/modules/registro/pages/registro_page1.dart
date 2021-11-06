@@ -35,7 +35,7 @@ class _RegistroPage1State extends State<RegistroPage1> {
               Observer(
                 builder: (_) => TextFormField(
                   decoration: InputDecorationDefault(
-                    label: "Nome completo",
+                    labelText: "Nome completo",
                   ),
                   controller: _nomeController,
                   validator: InputValidatorDefault().validate,

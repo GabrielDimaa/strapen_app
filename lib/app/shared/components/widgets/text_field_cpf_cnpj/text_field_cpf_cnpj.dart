@@ -67,7 +67,7 @@ class TextFieldCpfCnpj extends StatelessWidget {
         const VerticalSizedBox(),
         Observer(
           builder: (_) => TextFormField(
-            decoration: InputDecorationDefault(label: controller.isCpf ? "CPF" : "CNPJ"),
+            decoration: InputDecorationDefault(labelText: controller.isCpf ? "CPF" : "CNPJ"),
             controller: textController,
             keyboardType: TextInputType.number,
             validator: InputCpfCnpjValidator(isCnpj: !controller.isCpf).validate,

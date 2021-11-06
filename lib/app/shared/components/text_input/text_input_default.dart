@@ -2,18 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:strapen_app/app/app_widget.dart';
 
 class InputDecorationDefault extends InputDecoration {
-  final String label;
+  final String labelText;
   final String? prefixText;
   final Widget? prefixIcon;
   final Widget? sufixIcon;
 
   InputDecorationDefault({
-    required this.label,
+    required this.labelText,
     this.prefixText,
     this.prefixIcon,
     this.sufixIcon,
   }) : super(
-    labelText: label,
+    labelText: labelText,
     prefixText: prefixText,
     prefixStyle: TextStyle(color: AppColors.primary),
     prefixIcon: prefixIcon != null

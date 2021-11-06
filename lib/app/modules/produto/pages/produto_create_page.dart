@@ -143,7 +143,7 @@ class _ProdutoCreatePageState extends ModularState<ProdutoCreatePage, ProdutoCre
                         children: [
                           Observer(
                             builder: (_) => TextFormField(
-                              decoration: InputDecorationDefault(label: "Descrição"),
+                              decoration: InputDecorationDefault(labelText: "Descrição"),
                               controller: _descricaoController,
                               validator: InputValidatorDefault().validate,
                               textCapitalization: TextCapitalization.sentences,
@@ -161,7 +161,7 @@ class _ProdutoCreatePageState extends ModularState<ProdutoCreatePage, ProdutoCre
                           const VerticalSizedBox(1.5),
                           Observer(
                             builder: (_) => TextFormField(
-                              decoration: InputDecorationDefault(label: "Descrição detalhada"),
+                              decoration: InputDecorationDefault(labelText: "Descrição detalhada"),
                               controller: _descricaoDetalhadaController,
                               validator: InputValidatorDefault().validate,
                               textCapitalization: TextCapitalization.sentences,
@@ -199,7 +199,7 @@ class _ProdutoCreatePageState extends ModularState<ProdutoCreatePage, ProdutoCre
                           const VerticalSizedBox(2.5),
                           Observer(
                             builder: (_) => TextFormField(
-                              decoration: InputDecorationDefault(label: "Preço unitário", prefixText: "R\$ "),
+                              decoration: InputDecorationDefault(labelText: "Preço unitário", prefixText: "R\$ "),
                               controller: _precoController,
                               validator: InputPrecoValidator().validate,
                               textInputAction: TextInputAction.done,

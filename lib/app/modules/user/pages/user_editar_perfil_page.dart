@@ -82,7 +82,7 @@ class _UserEditarPerfilPageState extends ModularState<UserEditarPerfilPage, User
                         children: [
                           Observer(
                             builder: (_) => TextFormField(
-                              decoration: InputDecorationDefault(label: "Nome completo"),
+                              decoration: InputDecorationDefault(labelText: "Nome completo"),
                               controller: _nomeController,
                               validator: InputValidatorDefault().validate,
                               textCapitalization: TextCapitalization.sentences,
@@ -97,7 +97,7 @@ class _UserEditarPerfilPageState extends ModularState<UserEditarPerfilPage, User
                           const VerticalSizedBox(2),
                           Observer(
                             builder: (_) => TextFormField(
-                              decoration: InputDecorationDefault(label: "Telefone"),
+                              decoration: InputDecorationDefault(labelText: "Telefone"),
                               controller: _telefoneController,
                               keyboardType: TextInputType.phone,
                               validator: InputTelefoneValidator().validate,
@@ -118,7 +118,7 @@ class _UserEditarPerfilPageState extends ModularState<UserEditarPerfilPage, User
                           Observer(
                             builder: (_) => TextFormField(
                               decoration: InputDecorationDefault(
-                                label: "Nome de usuário",
+                                labelText: "Nome de usuário",
                                 prefixText: "@",
                               ),
                               controller: _usernameController,

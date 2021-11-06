@@ -64,7 +64,7 @@ class _AuthPageState extends ModularState<AuthPage, AuthController> {
                               Observer(
                                 builder: (_) => TextFormField(
                                   decoration: InputDecorationDefault(
-                                    label: "E-mail",
+                                    labelText: "E-mail",
                                     prefixIcon: Icon(Icons.email, color: Colors.grey[200]),
                                   ),
                                   controller: _emailController,
