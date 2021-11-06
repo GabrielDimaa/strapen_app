@@ -118,7 +118,7 @@ class _UserPageState extends ModularState<UserPage, UserController> {
                   ),
                   const VerticalSizedBox(1.5),
                   ButtonBar(
-                    alignment: MainAxisAlignment.center,
+                    alignment: MainAxisAlignment.spaceBetween,
                     overflowDirection: VerticalDirection.down,
                     overflowButtonSpacing: 12,
                     children: [
@@ -234,7 +234,7 @@ class _UserPageState extends ModularState<UserPage, UserController> {
 
   Widget _itemBar({required int qtd, required String text}) {
     return SizedBox(
-      width: 66,
+      width: 76,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
