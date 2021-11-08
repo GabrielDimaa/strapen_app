@@ -1,6 +1,6 @@
 name: strapen_app
 description: Strapen um aplicativo para gerenciamento de Live Shop.
-version: 1.0.0+1
+version: 1.0.0+2
 publish_to: none
 
 environment:

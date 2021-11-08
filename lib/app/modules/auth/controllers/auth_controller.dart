@@ -61,8 +61,8 @@ abstract class _AuthController with Store {
   }
 
   @action
-  void esqueceuSenha() async {
-    Modular.to.pushNamed(USER_ROUTE + USER_SENHA_ROUTE);
+  Future<void> esqueceuSenha() async {
+    await Modular.to.pushNamed(USER_ROUTE + USER_SENHA_ROUTE);
   }
 
   @action
