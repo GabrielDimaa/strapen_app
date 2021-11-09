@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:strapen_app/app/app_widget.dart';
 import 'package:strapen_app/app/modules/catalogo/components/catalogo_widget.dart';
+import 'package:strapen_app/app/modules/catalogo/controllers/catalogo_info_controller.dart';
 import 'package:strapen_app/app/modules/catalogo/stores/catalogo_store.dart';
 import 'package:strapen_app/app/modules/live/components/produto_bottom_sheet.dart';
 import 'package:strapen_app/app/modules/produto/stores/produto_store.dart';
@@ -27,6 +29,19 @@ class CatalogoBottomSheet extends StatefulWidget {
 }
 
 class _CatalogoBottomSheetState extends State<CatalogoBottomSheet> {
+  final CatalogoInfoController catalogoInfoController = Modular.get<CatalogoInfoController>();
+
+  @override
+  void initState() {
+    super.initState();
+    _init();
+  }
+
+  void _init() {
+    catalogoInfoController.setCatalogoStore(widget.catalogo);
+    catalogoInfoController.setProdutoFunction((ProdutoStore prod) async => await produto(prod));
+  }
+
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -37,18 +52,17 @@ class _CatalogoBottomSheetState extends State<CatalogoBottomSheet> {
             title: const Text("Catálogo"),
           ),
           Expanded(
-            child: CatalogoWidget(
-              catalogoStore: widget.catalogo,
-              onPressedProduto: (ProdutoStore produto) async {
-                await ProdutoBottomSheet.show(
-                  context: widget.context,
-                  produto: produto,
-                );
-              },
-            ),
+            child: CatalogoWidget(),
           ),
         ],
       ),
+    );
+  }
+
+  Future<void> produto(ProdutoStore produto) async {
+    await ProdutoBottomSheet.show(
+      context: widget.context,
+      produto: produto,
     );
   }
 }

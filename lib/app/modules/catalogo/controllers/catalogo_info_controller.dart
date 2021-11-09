@@ -6,6 +6,7 @@ import 'package:strapen_app/app/modules/catalogo/factories/catalogo_factory.dart
 import 'package:strapen_app/app/modules/catalogo/models/catalogo_model.dart';
 import 'package:strapen_app/app/modules/catalogo/repositories/icatalogo_repository.dart';
 import 'package:strapen_app/app/modules/catalogo/stores/catalogo_store.dart';
+import 'package:strapen_app/app/modules/produto/stores/produto_store.dart';
 import 'package:strapen_app/app/shared/components/dialog/error_dialog.dart';
 
 part 'catalogo_info_controller.g.dart';
@@ -23,11 +24,17 @@ abstract class _CatalogoInfoController with Store {
   @observable
   bool loading = false;
 
+  @observable
+  Function? produtoFunction;
+
   @action
   void setCatalogoStore(CatalogoStore? value) => catalogoStore = value;
 
   @action
   void setLoading(bool value) => loading = value;
+
+  @action
+  void setProdutoFunction(Function? value) => produtoFunction = value;
 
   @action
   Future<void> load(BuildContext context) async {

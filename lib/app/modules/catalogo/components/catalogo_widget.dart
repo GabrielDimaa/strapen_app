@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:strapen_app/app/app_widget.dart';
-import 'package:strapen_app/app/modules/catalogo/stores/catalogo_store.dart';
+import 'package:strapen_app/app/modules/catalogo/controllers/catalogo_info_controller.dart';
 import 'package:strapen_app/app/modules/produto/stores/produto_store.dart';
 import 'package:strapen_app/app/shared/components/padding/padding_scaffold.dart';
 import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
@@ -9,16 +10,13 @@ import 'package:strapen_app/app/shared/components/widgets/produto_grid_tile.dart
 import 'package:strapen_app/app/shared/components/widgets/produto_grid_view.dart';
 import 'package:transparent_image/transparent_image.dart';
 
-class CatalogoWidget extends StatelessWidget {
-  final CatalogoStore catalogoStore;
-  final Function(ProdutoStore) onPressedProduto;
-  final bool isLive;
+class CatalogoWidget extends StatefulWidget {
+  @override
+  State<CatalogoWidget> createState() => _CatalogoWidgetState();
+}
 
-  const CatalogoWidget({
-    required this.catalogoStore,
-    required this.onPressedProduto,
-    this.isLive = false,
-  });
+class _CatalogoWidgetState extends State<CatalogoWidget> {
+  final CatalogoInfoController controller = Modular.get<CatalogoInfoController>();
 
   @override
   Widget build(BuildContext context) {
@@ -35,7 +33,7 @@ class CatalogoWidget extends StatelessWidget {
               child: Observer(
                 builder: (_) => FadeInImage.memoryNetwork(
                   placeholder: kTransparentImage,
-                  image: catalogoStore.foto,
+                  image: controller.catalogoStore!.foto,
                   height: 180,
                   width: 180,
                 ),
@@ -44,26 +42,13 @@ class CatalogoWidget extends StatelessWidget {
           ),
           const VerticalSizedBox(3),
           Observer(
-            builder: (_) => _title(context: context, label: catalogoStore.titulo!),
+            builder: (_) => _title(context: context, label: controller.catalogoStore!.titulo!),
           ),
           const VerticalSizedBox(),
           Observer(
             builder: (_) => Text(
-              catalogoStore.descricao!,
+              controller.catalogoStore!.descricao!,
               style: Theme.of(context).textTheme.bodyText1,
-            ),
-          ),
-          const VerticalSizedBox(),
-          Visibility(
-            visible: isLive,
-            child: ListTile(
-              title: Text("Anunciante"),
-              contentPadding: const EdgeInsets.all(0),
-              onTap: () {},
-              trailing: const Icon(
-                Icons.arrow_forward_ios,
-                size: 16,
-              ),
             ),
           ),
           const VerticalSizedBox(1.5),
@@ -78,16 +63,16 @@ class CatalogoWidget extends StatelessWidget {
           Observer(
             builder: (_) => ProdutoGridView(
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: catalogoStore.produtos!.length,
+              itemCount: controller.catalogoStore!.produtos!.length,
               itemBuilder: (_, i) {
-                final ProdutoStore prod = catalogoStore.produtos![i];
+                final ProdutoStore prod = controller.catalogoStore!.produtos![i];
                 return Observer(
                   builder: (_) => ProdutoGridTile(
                     image: prod.fotos.first,
                     descricao: prod.descricao!,
                     preco: prod.preco!,
                     qtd: prod.quantidade!,
-                    onTap: () => onPressedProduto.call(prod),
+                    onTap: () => controller.produtoFunction!.call(prod),
                   ),
                 );
               },

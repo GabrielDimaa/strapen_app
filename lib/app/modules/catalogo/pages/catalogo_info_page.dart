@@ -5,7 +5,6 @@ import 'package:strapen_app/app/modules/catalogo/components/catalogo_widget.dart
 import 'package:strapen_app/app/modules/catalogo/controllers/catalogo_info_controller.dart';
 import 'package:strapen_app/app/modules/catalogo/factories/catalogo_factory.dart';
 import 'package:strapen_app/app/modules/catalogo/models/catalogo_model.dart';
-import 'package:strapen_app/app/modules/produto/stores/produto_store.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/app_bar_default.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/widgets/editar_app_bar_widget.dart';
 import 'package:strapen_app/app/shared/components/loading/circular_loading.dart';
@@ -19,7 +18,9 @@ class CatalogoInfoPage extends StatefulWidget {
   _CatalogoInfoPageState createState() => _CatalogoInfoPageState();
 }
 
-class _CatalogoInfoPageState extends ModularState<CatalogoInfoPage, CatalogoInfoController> {
+class _CatalogoInfoPageState extends State<CatalogoInfoPage> {
+  final CatalogoInfoController controller = Modular.get<CatalogoInfoController>();
+
   @override
   void initState() {
     super.initState();
@@ -34,9 +35,7 @@ class _CatalogoInfoPageState extends ModularState<CatalogoInfoPage, CatalogoInfo
         title: Text("Catálogo"),
         onPressedBackButton: () => Modular.to.pop(controller.catalogoStore!.toModel()),
         actionsWidgets: [
-          EditarAppBarWidget(
-            onTap: () async => await controller.editarCatalogo()
-          ),
+          EditarAppBarWidget(onTap: () async => await controller.editarCatalogo()),
         ],
       ),
       body: Observer(
@@ -45,10 +44,7 @@ class _CatalogoInfoPageState extends ModularState<CatalogoInfoPage, CatalogoInfo
             return CircularLoading();
           } else {
             return Observer(
-              builder: (_) => CatalogoWidget(
-                catalogoStore: controller.catalogoStore!,
-                onPressedProduto: (ProdutoStore produtoModel) {},
-              ),
+              builder: (_) => CatalogoWidget(),
             );
           }
         },
