@@ -256,8 +256,6 @@ class UserRepository implements IUserRepository {
     try {
       await ConnectivityUtils.hasInternet();
 
-      if (email.isNullOrEmpty()) throw Exception("Insira um e-mail");
-
       if (email.isNullOrEmpty()) throw Exception("Houve um erro ao enviar e-mail.");
 
       final ParseUser parseUser = ParseUser(null, null, email);
