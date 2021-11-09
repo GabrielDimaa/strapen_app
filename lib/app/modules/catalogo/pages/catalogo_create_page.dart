@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:strapen_app/app/modules/catalogo/components/catalogo_widget.dart';
 import 'package:strapen_app/app/modules/catalogo/components/criar_catalogo_widget.dart';
 import 'package:strapen_app/app/modules/catalogo/controllers/catalogo_create_controller.dart';
+import 'package:strapen_app/app/modules/catalogo/controllers/catalogo_info_controller.dart';
 import 'package:strapen_app/app/modules/catalogo/models/catalogo_model.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/app_bar_default.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/widgets/remover_app_bar_widget.dart';
@@ -16,10 +18,14 @@ class CatalogoCreatePage extends StatefulWidget {
 }
 
 class _CatalogoCreatePageState extends ModularState<CatalogoCreatePage, CatalogoCreateController> {
+  final CatalogoInfoController catalogoInfoController = Modular.get<CatalogoInfoController>();
+
   @override
   void initState() {
     super.initState();
+
     controller.load(widget.catalogo);
+    catalogoInfoController.setCatalogoStore(controller.catalogoStore);
   }
 
   @override
@@ -46,7 +52,7 @@ class _CatalogoCreatePageState extends ModularState<CatalogoCreatePage, Catalogo
         body: TabBarView(
           children: [
             CriarCatalogoWidget(),
-            Center(child: Text("Ainda não implementado")),
+            CatalogoWidget(),
           ],
         ),
       ),

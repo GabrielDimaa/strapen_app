@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -30,24 +32,45 @@ class _CatalogoWidgetState extends State<CatalogoWidget> {
             alignment: Alignment.center,
             child: ClipRRect(
               borderRadius: BorderRadius.circular(16),
-              child: Observer(
-                builder: (_) => FadeInImage.memoryNetwork(
-                  placeholder: kTransparentImage,
-                  image: controller.catalogoStore!.foto,
-                  height: 180,
-                  width: 180,
-                ),
-              ),
+              child: Observer(builder: (_) {
+                if (controller.catalogoStore?.foto == null) {
+                  return Ink(
+                    height: 180,
+                    width: 180,
+                    decoration: BoxDecoration(color: AppColors.opaci, borderRadius: BorderRadius.circular(16)),
+                    child: Padding(
+                      padding: const EdgeInsets.all(16.0),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [Icon(Icons.add_photo_alternate, size: 78), Text("Adicione foto do seu produto.")],
+                      ),
+                    ),
+                  );
+                } else {
+                  return controller.catalogoStore!.foto is File
+                      ? Image.file(
+                          controller.catalogoStore!.foto,
+                          height: 180,
+                          width: 180,
+                        )
+                      : FadeInImage.memoryNetwork(
+                          placeholder: kTransparentImage,
+                          image: controller.catalogoStore!.foto,
+                          height: 180,
+                          width: 180,
+                        );
+                }
+              }),
             ),
           ),
           const VerticalSizedBox(3),
           Observer(
-            builder: (_) => _title(context: context, label: controller.catalogoStore!.titulo!),
+            builder: (_) => _title(context: context, label: controller.catalogoStore?.titulo ?? "Sem título"),
           ),
           const VerticalSizedBox(),
           Observer(
             builder: (_) => Text(
-              controller.catalogoStore!.descricao!,
+              controller.catalogoStore?.descricao ?? "Sem descrição",
               style: Theme.of(context).textTheme.bodyText1,
             ),
           ),
@@ -63,7 +86,7 @@ class _CatalogoWidgetState extends State<CatalogoWidget> {
           Observer(
             builder: (_) => ProdutoGridView(
               physics: const NeverScrollableScrollPhysics(),
-              itemCount: controller.catalogoStore!.produtos!.length,
+              itemCount: controller.catalogoStore?.produtos?.length ?? 0,
               itemBuilder: (_, i) {
                 final ProdutoStore prod = controller.catalogoStore!.produtos![i];
                 return Observer(
