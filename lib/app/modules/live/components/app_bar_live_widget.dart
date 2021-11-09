@@ -24,7 +24,7 @@ class AppBarLiveWidget extends StatelessWidget with PreferredSizeWidget {
         children: [
           const HorizontalSizedBox(),
           Container(
-            padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 12),
+            padding: const EdgeInsets.symmetric(vertical: 6, horizontal: 10),
             decoration: BoxDecoration(
               color: Colors.red.withOpacity(0.1),
               borderRadius: BorderRadius.circular(36),
@@ -46,13 +46,13 @@ class AppBarLiveWidget extends StatelessWidget with PreferredSizeWidget {
                       const HorizontalSizedBox(0.5),
                       Text(
                         "AO VIVO",
-                        style: const TextStyle(color: Colors.red, fontWeight: FontWeight.w700),
+                        style: const TextStyle(color: Colors.red, fontSize: 15, fontWeight: FontWeight.w700),
                       ),
                     ],
                   ),
                   replacement: const Text(
                     "ENCERRADA",
-                    style: TextStyle(color: Colors.red, fontWeight: FontWeight.w700),
+                    style: TextStyle(color: Colors.red, fontSize: 15, fontWeight: FontWeight.w700),
                   ),
                 );
               }

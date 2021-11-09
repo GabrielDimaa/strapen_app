@@ -1,5 +1,6 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:strapen_app/app/app_controller.dart';
+import 'package:strapen_app/app/modules/catalogo/controllers/catalogo_info_controller.dart';
 import 'package:strapen_app/app/modules/catalogo/controllers/catalogo_select_controller.dart';
 import 'package:strapen_app/app/modules/catalogo/repositories/catalogo_repository.dart';
 import 'package:strapen_app/app/modules/catalogo/repositories/icatalogo_repository.dart';
@@ -52,6 +53,7 @@ class LiveModule extends Module {
           i.get<ICatalogoRepository>(),
           i.get<IReservaRepository>(),
         )),
+    Bind((i) => CatalogoInfoController(i.get<ICatalogoRepository>())),
     Bind((i) => ProdutoInfoController(i.get<IReservaRepository>(), i.get<AppController>())),
     Bind((i) => UserController(i.get<ISeguidorRepository>(), i.get<IReservaRepository>(), i.get<ILiveService>(), i.get<AppController>())),
     Bind((i) => CatalogoSelectController(i.get<ICatalogoRepository>(), i.get<AppController>())),
