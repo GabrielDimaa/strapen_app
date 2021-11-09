@@ -28,7 +28,7 @@ class AppBarDefault extends AppBar {
     this.onPressedBackButton,
   }) : super(
     leadingWidth: leadingSize ?? 90,
-    toolbarHeight: bottomWidgets == null ? 78 : 126,
+    toolbarHeight: 78,
     title: title,
     centerTitle: centerTitle,
     backgroundColor: backgroundColor ?? AppColors.background,

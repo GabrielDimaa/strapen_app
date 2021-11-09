@@ -52,7 +52,10 @@ class _CatalogoCreatePageState extends ModularState<CatalogoCreatePage, Catalogo
         body: TabBarView(
           children: [
             CriarCatalogoWidget(),
-            CatalogoWidget(),
+            Padding(
+              padding: const EdgeInsets.only(top: 12),
+              child: CatalogoWidget(),
+            ),
           ],
         ),
       ),

@@ -42,7 +42,10 @@ class _CatalogoWidgetState extends State<CatalogoWidget> {
                       padding: const EdgeInsets.all(16.0),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [Icon(Icons.add_photo_alternate, size: 78), Text("Adicione foto do seu produto.")],
+                        children: [
+                          Icon(Icons.photo, size: 78),
+                          Text("Adicione foto ao seu catálogo."),
+                        ],
                       ),
                     ),
                   );
