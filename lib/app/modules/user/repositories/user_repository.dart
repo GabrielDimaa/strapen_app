@@ -159,10 +159,12 @@ class UserRepository implements IUserRepository {
       await ConnectivityUtils.hasInternet();
 
       if (model.id == null) throw Exception("Houve um erro ao atualizar seus dados.");
+      //Seta null, pois se enviar o e-mail para o parse, será necessário verificar o e-mail novamente.
+      model.email = null;
 
       List<ParseFileBase> parseImage = await ParseImageUtils.save([model.foto]);
-
       ParseUser user = toParseObject(model)..set<List<ParseFileBase>>(USER_FOTO_COLUMN, parseImage);
+
       ParseResponse response = await user.save();
 
       if (!response.success) throw Exception(ParseErrorsUtils.get(response.statusCode));
@@ -171,7 +173,7 @@ class UserRepository implements IUserRepository {
       await _sessionPreferences!.save(SessionPreferencesModel(
         model.id,
         model.username,
-        model.email,
+        session.email,
         session.senha,
         session.sessionToken,
       ));
