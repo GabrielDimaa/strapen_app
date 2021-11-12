@@ -5,6 +5,7 @@ import 'package:strapen_app/app/app_widget.dart';
 import 'package:strapen_app/app/modules/auth/controllers/auth_controller.dart';
 import 'package:strapen_app/app/shared/components/button/elevated_button_default.dart';
 import 'package:strapen_app/app/shared/components/dialog/error_dialog.dart';
+import 'package:strapen_app/app/shared/components/dialog/sair_dialog.dart';
 import 'package:strapen_app/app/shared/components/form/validator.dart';
 import 'package:strapen_app/app/shared/components/loading/linear_loading.dart';
 import 'package:strapen_app/app/shared/components/padding/padding_scaffold.dart';
@@ -29,129 +30,134 @@ class _AuthPageState extends ModularState<AuthPage, AuthController> {
   @override
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
-    return Scaffold(
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  _header(),
-                  Text(
-                    "Strapen",
-                    style: textTheme.headline2!.copyWith(color: AppColors.primary),
-                    textAlign: TextAlign.center,
-                  ),
-                  Padding(
-                    padding: PaddingScaffold(),
-                    child: Column(
-                      children: [
-                        const VerticalSizedBox(),
-                        Text(
-                          "Faça login agora para assistir ou criar Lives com seu catálogo de produtos.",
-                          style: textTheme.bodyText2,
-                        ),
-                        const VerticalSizedBox(1.5),
-                        Observer(
-                          builder: (_) => LinearLoading(visible: controller.loading),
-                        ),
-                        const VerticalSizedBox(1.5),
-                        Form(
-                          key: _formKey,
-                          child: Column(
-                            children: [
-                              Observer(
-                                builder: (_) => TextFormField(
-                                  decoration: InputDecorationDefault(
-                                    labelText: "E-mail",
-                                    prefixIcon: Icon(Icons.email, color: Colors.grey[200]),
+    return WillPopScope(
+      onWillPop: () async {
+        return await SairDialog.show(context);
+      },
+      child: Scaffold(
+        body: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    _header(),
+                    Text(
+                      "Strapen",
+                      style: textTheme.headline2!.copyWith(color: AppColors.primary),
+                      textAlign: TextAlign.center,
+                    ),
+                    Padding(
+                      padding: PaddingScaffold(),
+                      child: Column(
+                        children: [
+                          const VerticalSizedBox(),
+                          Text(
+                            "Faça login agora para assistir ou criar Lives com seu catálogo de produtos.",
+                            style: textTheme.bodyText2,
+                          ),
+                          const VerticalSizedBox(1.5),
+                          Observer(
+                            builder: (_) => LinearLoading(visible: controller.loading),
+                          ),
+                          const VerticalSizedBox(1.5),
+                          Form(
+                            key: _formKey,
+                            child: Column(
+                              children: [
+                                Observer(
+                                  builder: (_) => TextFormField(
+                                    decoration: InputDecorationDefault(
+                                      labelText: "E-mail",
+                                      prefixIcon: Icon(Icons.email, color: Colors.grey[200]),
+                                    ),
+                                    controller: _emailController,
+                                    keyboardType: TextInputType.emailAddress,
+                                    validator: InputEmailValidator().validate,
+                                    enabled: !controller.loading,
+                                    onSaved: controller.authStore.setEmail,
+                                    textInputAction: TextInputAction.next,
+                                    focusNode: _emailFocus,
+                                    onFieldSubmitted: (_) {
+                                      _emailFocus.unfocus();
+                                      FocusScope.of(context).requestFocus(_senhaFocus);
+                                    },
                                   ),
-                                  controller: _emailController,
-                                  keyboardType: TextInputType.emailAddress,
-                                  validator: InputEmailValidator().validate,
-                                  enabled: !controller.loading,
-                                  onSaved: controller.authStore.setEmail,
-                                  textInputAction: TextInputAction.next,
-                                  focusNode: _emailFocus,
-                                  onFieldSubmitted: (_) {
-                                    _emailFocus.unfocus();
-                                    FocusScope.of(context).requestFocus(_senhaFocus);
-                                  },
                                 ),
-                              ),
-                              const VerticalSizedBox(1.5),
-                              Observer(
-                                builder: (_) => TextFieldSenha(
-                                  controller: _senhaController,
-                                  visible: controller.visible,
-                                  enabled: !controller.loading,
-                                  focusNode: _senhaFocus,
-                                  textInputAction: TextInputAction.done,
-                                  onFieldSubmitted: (_) => _senhaFocus.unfocus(),
-                                  onSaved: controller.authStore.setSenha,
-                                  validate: false,
-                                  onPressed: () => controller.setVisible(!controller.visible),
+                                const VerticalSizedBox(1.5),
+                                Observer(
+                                  builder: (_) => TextFieldSenha(
+                                    controller: _senhaController,
+                                    visible: controller.visible,
+                                    enabled: !controller.loading,
+                                    focusNode: _senhaFocus,
+                                    textInputAction: TextInputAction.done,
+                                    onFieldSubmitted: (_) => _senhaFocus.unfocus(),
+                                    onSaved: controller.authStore.setSenha,
+                                    validate: false,
+                                    onPressed: () => controller.setVisible(!controller.visible),
+                                  ),
                                 ),
+                              ],
+                            ),
+                          ),
+                          Align(
+                            alignment: Alignment.centerRight,
+                            child: TextButton(
+                              child: Text(
+                                "Esqueceu a senha?",
+                                style: textTheme.bodyText2!.copyWith(fontSize: 14),
                               ),
+                              onPressed: controller.esqueceuSenha,
+                            ),
+                          ),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text("Não possui uma conta?", style: textTheme.bodyText2!.copyWith(fontSize: 14)),
+                              TextButton(
+                                child: Text(
+                                  "Registrar-se",
+                                  style: textTheme.bodyText1!.copyWith(
+                                    color: AppColors.primary,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                onPressed: controller.registrar,
+                              )
                             ],
                           ),
-                        ),
-                        Align(
-                          alignment: Alignment.centerRight,
-                          child: TextButton(
-                            child: Text(
-                              "Esqueceu a senha?",
-                              style: textTheme.bodyText2!.copyWith(fontSize: 14),
-                            ),
-                            onPressed: controller.esqueceuSenha,
-                          ),
-                        ),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Text("Não possui uma conta?", style: textTheme.bodyText2!.copyWith(fontSize: 14)),
-                            TextButton(
-                              child: Text(
-                                "Registrar-se",
-                                style: textTheme.bodyText1!.copyWith(
-                                  color: AppColors.primary,
-                                  fontWeight: FontWeight.w600,
-                                ),
-                              ),
-                              onPressed: controller.registrar,
-                            )
-                          ],
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(
-              bottom: PaddingScaffold.value,
-              left: PaddingScaffold.value,
-              right: PaddingScaffold.value,
-            ),
-            child: ElevatedButtonDefault(
-              child: Text("Entrar"),
-              onPressed: !controller.loading ? () async {
-                try {
-                  if (_formKey.currentState!.validate()) {
-                    _formKey.currentState!.save();
+            Padding(
+              padding: const EdgeInsets.only(
+                bottom: PaddingScaffold.value,
+                left: PaddingScaffold.value,
+                right: PaddingScaffold.value,
+              ),
+              child: ElevatedButtonDefault(
+                child: Text("Entrar"),
+                onPressed: !controller.loading ? () async {
+                  try {
+                    if (_formKey.currentState!.validate()) {
+                      _formKey.currentState!.save();
 
-                    await controller.login(context);
+                      await controller.login(context);
+                    }
+                  } catch(e) {
+                    ErrorDialog.show(context: context, content: e.toString());
                   }
-                } catch(e) {
-                  ErrorDialog.show(context: context, content: e.toString());
-                }
-              } : () {}
+                } : () {}
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

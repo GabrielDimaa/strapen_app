@@ -6,7 +6,6 @@ import 'package:strapen_app/app/modules/catalogo/factories/catalogo_factory.dart
 import 'package:strapen_app/app/modules/catalogo/models/catalogo_model.dart';
 import 'package:strapen_app/app/modules/catalogo/repositories/icatalogo_repository.dart';
 import 'package:strapen_app/app/modules/catalogo/stores/catalogo_store.dart';
-import 'package:strapen_app/app/modules/produto/stores/produto_store.dart';
 import 'package:strapen_app/app/shared/components/dialog/error_dialog.dart';
 
 part 'catalogo_info_controller.g.dart';

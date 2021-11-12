@@ -4,6 +4,7 @@ import 'package:strapen_app/app/app_widget.dart';
 import 'package:strapen_app/app/modules/auth/modules/registro/controllers/registro_controller.dart';
 import 'package:strapen_app/app/shared/components/button/elevated_button_default.dart';
 import 'package:strapen_app/app/shared/components/dialog/error_dialog.dart';
+import 'package:strapen_app/app/shared/components/dialog/sair_dialog.dart';
 import 'package:strapen_app/app/shared/components/image/vetor.dart';
 import 'package:strapen_app/app/shared/components/padding/padding_scaffold.dart';
 import 'package:strapen_app/app/shared/components/scaffold/scaffold_gradiente.dart';
@@ -21,6 +22,9 @@ class _RegistroConcluidoPageState extends State<RegistroConcluidoPage> {
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
     return ScaffoldGradiente(
+      onWillPop: () async {
+        return await SairDialog.show(context, backgroundColor: AppColors.primary);
+      },
       padding: const PaddingScaffold(),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,

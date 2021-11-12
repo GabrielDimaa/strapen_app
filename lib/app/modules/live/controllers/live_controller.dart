@@ -206,7 +206,7 @@ abstract class _LiveController extends Disposable with Store {
       _userRepository.updateFirstLive(model.user!.id!);
       appController.userModel!.firstLive = false;
 
-      Modular.to.navigate(LIVE_ROUTE + LIVE_TRANSMITIR_ROUTE, arguments: cameraStore.currentCamera!.lensDirection);
+      Modular.to.pushNamed(LIVE_ROUTE + LIVE_TRANSMITIR_ROUTE, arguments: cameraStore.currentCamera!.lensDirection);
     });
   }
 

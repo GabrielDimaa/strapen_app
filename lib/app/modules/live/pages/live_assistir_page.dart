@@ -27,40 +27,46 @@ class _LiveAssistirPageState extends State<LiveAssistirPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Observer(
-        builder: (_) {
-          if (controller.loading)
-            return const CircularLoading();
-          else {
-            return Stack(
-              children: [
-                Stack(
-                  children: [
-                    ClipRRect(
-                      borderRadius: BorderRadius.circular(16),
-                      child: Observer(
-                        builder: (_) => Column(
-                          children: [
-                            AspectRatio(
-                              aspectRatio: controller.liveModel!.aspectRatio!,
-                              child: Chewie(controller: controller.chewieStore.chewieController!),
-                            ),
-                          ],
+    return WillPopScope(
+      onWillPop: () async {
+        await controller.stopWatch(context);
+        return false;
+      },
+      child: SafeArea(
+        child: Observer(
+          builder: (_) {
+            if (controller.loading)
+              return const CircularLoading();
+            else {
+              return Stack(
+                children: [
+                  Stack(
+                    children: [
+                      ClipRRect(
+                        borderRadius: BorderRadius.circular(16),
+                        child: Observer(
+                          builder: (_) => Column(
+                            children: [
+                              AspectRatio(
+                                aspectRatio: controller.liveModel!.aspectRatio!,
+                                child: Chewie(controller: controller.chewieStore.chewieController!),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
-                    ),
-                    ScaffoldForegroundLive(
-                      isCriadorLive: false,
-                      aspectRatio: controller.liveModel!.aspectRatio!,
-                      context: context,
-                    ),
-                  ],
-                ),
-              ],
-            );
-          }
-        },
+                      ScaffoldForegroundLive(
+                        isCriadorLive: false,
+                        aspectRatio: controller.liveModel!.aspectRatio!,
+                        context: context,
+                      ),
+                    ],
+                  ),
+                ],
+              );
+            }
+          },
+        ),
       ),
     );
   }

@@ -15,6 +15,8 @@ part 'start_controller.g.dart';
 class StartController = _StartController with _$StartController;
 
 abstract class _StartController with Store {
+  List<int> orderNavigation = [HOME_PAGE];
+
   @observable
   int page = HOME_PAGE;
 
@@ -34,7 +36,9 @@ abstract class _StartController with Store {
   void toHome() {
     if (page != HOME_PAGE) {
       setPage(HOME_PAGE);
-      Modular.to.navigate(START_ROUTE + HOME_ROUTE);
+      orderNavigation.add(HOME_PAGE);
+
+      toRoute(START_ROUTE + HOME_ROUTE);
     }
   }
 
@@ -42,7 +46,9 @@ abstract class _StartController with Store {
   void toProduto() {
     if (page != PRODUTO_PAGE) {
       setPage(PRODUTO_PAGE);
-      Modular.to.navigate(START_ROUTE + PRODUTO_ROUTE);
+      orderNavigation.add(PRODUTO_PAGE);
+
+      toRoute(START_ROUTE + PRODUTO_ROUTE);
     }
   }
 
@@ -50,7 +56,9 @@ abstract class _StartController with Store {
   void toCatalogo() {
     if (page != CATALOGO_PAGE) {
       setPage(CATALOGO_PAGE);
-      Modular.to.navigate(START_ROUTE + CATALOGO_ROUTE);
+      orderNavigation.add(CATALOGO_PAGE);
+
+      toRoute(START_ROUTE + CATALOGO_ROUTE);
     }
   }
 
@@ -58,7 +66,16 @@ abstract class _StartController with Store {
   void toConfiguracoes() {
     if (page != CONFIGURACOES_PAGE) {
       setPage(CONFIGURACOES_PAGE);
-      Modular.to.navigate(START_ROUTE + CONFIGURACOES_ROUTE);
+      orderNavigation.add(CONFIGURACOES_PAGE);
+
+      toRoute(START_ROUTE + CONFIGURACOES_ROUTE);
     }
+  }
+
+  void toRoute(String route) {
+    Modular.to.pushNamed(route).then((_) {
+      orderNavigation.removeLast();
+      setPage(orderNavigation.last);
+    });
   }
 }

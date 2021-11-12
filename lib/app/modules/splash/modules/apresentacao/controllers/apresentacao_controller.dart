@@ -11,7 +11,7 @@ class ApresentacaoController = _ApresentacaoController with _$ApresentacaoContro
 abstract class _ApresentacaoController with Store {
   @action
   void toNextApresentacao() {
-    Modular.to.navigate(APRESENTACAO_ROUTE + APRESENTACAO_CONTA_ROUTE);
+    Modular.to.pushNamed(APRESENTACAO_ROUTE + APRESENTACAO_CONTA_ROUTE);
   }
 
   @action

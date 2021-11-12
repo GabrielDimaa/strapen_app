@@ -24,48 +24,54 @@ class _LiveTransmitirPageState extends State<LiveTransmitirPage> {
   Widget build(BuildContext context) {
     final TextTheme textTheme = Theme.of(context).textTheme;
 
-    return SafeArea(
-      child: Observer(
-        builder: (_) {
-          if (controller.loading) {
-            return const CircularLoading();
-          } else {
-            return Stack(
-              children: [
-                Observer(
-                  builder: (_) {
-                    if (!(controller.cameraStore.cameraController?.value.isInitialized ?? false)) {
-                      return Center(
-                        child: Text(
-                          "Permita o Strapen acessar sua câmera para iniciar a Live.",
-                          style: textTheme.bodyText2,
-                          textAlign: TextAlign.center,
-                        ),
-                      );
-                    } else {
-                      return Stack(
-                        children: [
-                          ClipRRect(
-                            borderRadius: BorderRadius.circular(16),
-                            child: AspectRatio(
-                              aspectRatio: controller.cameraStore.cameraController!.value.aspectRatio,
-                              child: CameraPreview(controller.cameraStore.cameraController!),
+    return WillPopScope(
+      onWillPop: () async {
+        await controller.stopLive(context);
+        return false;
+      },
+      child: SafeArea(
+        child: Observer(
+          builder: (_) {
+            if (controller.loading) {
+              return const CircularLoading();
+            } else {
+              return Stack(
+                children: [
+                  Observer(
+                    builder: (_) {
+                      if (!(controller.cameraStore.cameraController?.value.isInitialized ?? false)) {
+                        return Center(
+                          child: Text(
+                            "Permita o Strapen acessar sua câmera para iniciar a Live.",
+                            style: textTheme.bodyText2,
+                            textAlign: TextAlign.center,
+                          ),
+                        );
+                      } else {
+                        return Stack(
+                          children: [
+                            ClipRRect(
+                              borderRadius: BorderRadius.circular(16),
+                              child: AspectRatio(
+                                aspectRatio: controller.cameraStore.cameraController!.value.aspectRatio,
+                                child: CameraPreview(controller.cameraStore.cameraController!),
+                              ),
                             ),
-                          ),
-                          ScaffoldForegroundLive(
-                            isCriadorLive: true,
-                            aspectRatio: controller.cameraStore.cameraController!.value.aspectRatio,
-                            context: context,
-                          ),
-                        ],
-                      );
-                    }
-                  },
-                ),
-              ],
-            );
-          }
-        },
+                            ScaffoldForegroundLive(
+                              isCriadorLive: true,
+                              aspectRatio: controller.cameraStore.cameraController!.value.aspectRatio,
+                              context: context,
+                            ),
+                          ],
+                        );
+                      }
+                    },
+                  ),
+                ],
+              );
+            }
+          },
+        ),
       ),
     );
   }
