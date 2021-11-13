@@ -206,7 +206,7 @@ abstract class _LiveController extends Disposable with Store {
       _userRepository.updateFirstLive(model.user!.id!);
       appController.userModel!.firstLive = false;
 
-      Modular.to.pushNamed(LIVE_ROUTE + LIVE_TRANSMITIR_ROUTE, arguments: cameraStore.currentCamera!.lensDirection);
+      Modular.to.pushNamed(LIVE_ROUTE + LIVE_TRANSMITIR_ROUTE);
     });
   }
 
@@ -240,7 +240,8 @@ abstract class _LiveController extends Disposable with Store {
 
         await cameraStore.cameraController!.stopVideoStreaming().whenComplete(() {
           Future.delayed(Duration(seconds: 6), () {
-            Modular.to.navigate(START_ROUTE);
+            Modular.to.popUntil(ModalRoute.withName(START_ROUTE));
+            return;
           });
 
           showDialog(

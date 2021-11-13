@@ -15,60 +15,53 @@ class ConfiguracoesPage extends StatefulWidget {
 class _ConfiguracoesPageState extends ModularState<ConfiguracoesPage, ConfiguracoesController> {
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () async {
-        Modular.to.localPath;
-        Modular.to.path;
-        return true;
-      },
-      child: Scaffold(
-        appBar: AppBarDefault(
-          title: Text("Configurações"),
-        ),
-        body: Padding(
-          padding: const PaddingScaffold(),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Expanded(
-                child: ListView(
-                  shrinkWrap: true,
-                  children: [
-                    _itemList(
-                      icon: Icons.person,
-                      label: "Meu perfil",
-                      onTap: () async => await controller.toMeuPerfil(),
-                    ),
-                    _itemList(
-                      icon: Icons.phonelink_lock,
-                      label: "Editar dados pessoais",
-                      onTap: () async => await controller.toEditarDadosPessoais(),
-                    ),
-                    _itemList(
-                      icon: Icons.lock,
-                      label: "Alterar senha",
-                      onTap: () async => await controller.toAlterarSenha(),
-                    ),
-                  ],
-                ),
+    return Scaffold(
+      appBar: AppBarDefault(
+        title: Text("Configurações"),
+      ),
+      body: Padding(
+        padding: const PaddingScaffold(),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              child: ListView(
+                shrinkWrap: true,
+                children: [
+                  _itemList(
+                    icon: Icons.person,
+                    label: "Meu perfil",
+                    onTap: () async => await controller.toMeuPerfil(),
+                  ),
+                  _itemList(
+                    icon: Icons.phonelink_lock,
+                    label: "Editar dados pessoais",
+                    onTap: () async => await controller.toEditarDadosPessoais(),
+                  ),
+                  _itemList(
+                    icon: Icons.lock,
+                    label: "Alterar senha",
+                    onTap: () async => await controller.toAlterarSenha(),
+                  ),
+                ],
               ),
-              OutlinedButtonDefault(
-                onPressed: () async => await controller.logout(context),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(Icons.logout, color: AppColors.primary),
-                    const HorizontalSizedBox(1.5),
-                    Text(
-                      "Sair",
-                      style: Theme.of(context).textTheme.button!.copyWith(color: AppColors.primary),
-                    ),
-                  ],
-                ),
+            ),
+            OutlinedButtonDefault(
+              onPressed: () async => await controller.logout(context),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.logout, color: AppColors.primary),
+                  const HorizontalSizedBox(1.5),
+                  Text(
+                    "Sair",
+                    style: Theme.of(context).textTheme.button!.copyWith(color: AppColors.primary),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

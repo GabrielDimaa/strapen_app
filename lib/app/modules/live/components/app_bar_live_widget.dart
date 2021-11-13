@@ -31,7 +31,7 @@ class AppBarLiveWidget extends StatelessWidget with PreferredSizeWidget {
             ),
             child: Observer(
               builder: (_) {
-                if (controller.liveEncerrada) {
+                if (controller.liveEncerrada && !controller.isCriadorLive) {
                   controller.showDialogInformarLiveEncerrada(context);
                 }
 
