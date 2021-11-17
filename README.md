@@ -19,7 +19,7 @@
 </p>
 
 <h4 align="center"> 
-  🤳 Strapen | ⏳ EM DESENVOLVIMENTO 🧪
+  🤳 Strapen | ⏳ EM PRODUÇÃO 🧪
 </h4>
 
 ## 💻 Sobre o projeto
