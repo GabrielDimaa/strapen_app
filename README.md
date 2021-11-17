@@ -19,7 +19,7 @@
 </p>
 
 <h4 align="center"> 
-  🤳 Strapen | ⏳ EM PRODUÇÃO 🧪
+  🤳 Strapen | ⏳ <a href="https://play.google.com/store/apps/details?id=com.strapen_app.strapen_app" target="_blank">EM PRODUÇÃO</a> 🧪
 </h4>
 
 ## 💻 Sobre o projeto
