@@ -239,7 +239,7 @@ abstract class _LiveController extends Disposable with Store {
         setLiveEncerrada(true);
 
         await cameraStore.cameraController!.stopVideoStreaming().whenComplete(() {
-          Future.delayed(Duration(seconds: 6), () {
+          Future.delayed(Duration(seconds: 5), () {
             Modular.to.popUntil(ModalRoute.withName(START_ROUTE));
             return;
           });

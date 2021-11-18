@@ -8,8 +8,9 @@ import 'package:strapen_app/app/shared/components/sized_box/horizontal_sized_box
 class TextFieldChatWidget extends StatelessWidget {
   final Function(String?) sendComentario;
   final bool loading;
+  final bool enabled;
 
-  TextFieldChatWidget({required this.sendComentario, required this.loading});
+  TextFieldChatWidget({required this.sendComentario, required this.loading, required this.enabled});
 
   final TextEditingController controller = TextEditingController();
   final FocusNode focus = FocusNode();
@@ -32,6 +33,7 @@ class TextFieldChatWidget extends StatelessWidget {
               child: TextField(
                 controller: controller,
                 focusNode: focus,
+                enabled: enabled && !loading,
                 textInputAction: TextInputAction.done,
                 onSubmitted: (_) => focus.unfocus(),
                 textCapitalization: TextCapitalization.sentences,
@@ -48,9 +50,11 @@ class TextFieldChatWidget extends StatelessWidget {
           const HorizontalSizedBox(),
           InkWell(
             onTap: () {
-              sendComentario.call(controller.text);
-              controller.clear();
-              focus.unfocus();
+              if (enabled && !loading) {
+                sendComentario.call(controller.text);
+                controller.clear();
+                focus.unfocus();
+              }
             },
             borderRadius: radius,
             child: Ink(

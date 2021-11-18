@@ -270,7 +270,7 @@ class LiveRepository implements ILiveRepository {
 
           final LiveModel model = toModel(value);
           //Inserido o delay considerando o delay da Live
-          Future.delayed(Duration(seconds: 12), () {
+          Future.delayed(Duration(milliseconds: 8500), () {
             liveController.setLiveEncerrada(model.finalizada ?? false);
           });
         });
