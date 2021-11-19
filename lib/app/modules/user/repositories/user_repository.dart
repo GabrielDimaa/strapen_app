@@ -118,6 +118,10 @@ class UserRepository implements IUserRepository {
     try {
       await ConnectivityUtils.hasInternet();
 
+      if (model.id == null) throw Exception("Houve um erro ao atualizar seus dados.");
+      //Seta null, pois se enviar o e-mail para o parse, será necessário verificar o e-mail novamente.
+      model.email = null;
+
       List<ParseFileBase> parseImage = await ParseImageUtils.save([model.foto]);
       ParseUser parseUser = toParseObject(model)
         ..set<List<ParseFileBase>>(USER_FOTO_COLUMN, parseImage);

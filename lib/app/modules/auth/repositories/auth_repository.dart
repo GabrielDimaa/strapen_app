@@ -5,6 +5,7 @@ import 'package:strapen_app/app/modules/user/constants/columns.dart';
 import 'package:strapen_app/app/modules/user/models/user_model.dart';
 import 'package:strapen_app/app/modules/user/repositories/iuser_repository.dart';
 import 'package:strapen_app/app/shared/config/preferences/session_preferences.dart';
+import 'package:strapen_app/app/shared/config/preferences/session_preferences_model.dart';
 import 'package:strapen_app/app/shared/exceptions/email_exception.dart';
 import 'package:strapen_app/app/shared/extensions/string_extension.dart';
 import 'package:strapen_app/app/shared/utils/connectivity_utils.dart';
@@ -52,17 +53,26 @@ class AuthRepository implements IAuthRepository {
   }
 
   @override
-  Future<bool> logout(AuthModel model, {bool deleteSession = true}) async {
+  Future<bool> logout(AuthModel? model, {bool deleteSession = true}) async {
     try {
       await ConnectivityUtils.hasInternet();
 
-      final user = ParseUser(null, model.senha, model.email);
-      var response = await user.logout();
+      if (model == null) {
+        SessionPreferencesModel session = await _sessionPreferences.get();
 
-      if (!response.success) throw Exception(ParseErrorsUtils.get(response.statusCode));
+        if (session.senha != null && session.email != null)
+          model = AuthModel(session.email, session.senha, session.sessionToken);
+      }
 
-      if (deleteSession)
-        await _sessionPreferences.delete();
+      if (model != null) {
+        final user = ParseUser(null, model.senha, model.email);
+        var response = await user.logout();
+
+        if (!response.success) throw Exception(ParseErrorsUtils.get(response.statusCode));
+
+        if (deleteSession)
+          await _sessionPreferences.delete();
+      }
 
       return true;
     } catch (e) {

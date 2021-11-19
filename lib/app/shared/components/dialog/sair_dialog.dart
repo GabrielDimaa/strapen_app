@@ -37,14 +37,14 @@ class _SairDialogState extends State<SairDialog> {
                 onPressed: () => Modular.to.pop(false),
                 child: Text(
                   "Cancelar",
-                  style: TextStyle(color: Colors.white),
+                  style: widget.backgroundColor != null ? TextStyle(color: Colors.white) : null,
                 ),
               ),
               TextButton(
                 onPressed: () => Modular.to.pop(true),
                 child: Text(
                   "Sair",
-                  style: TextStyle(color: Colors.white),
+                  style: widget.backgroundColor != null ? TextStyle(color: Colors.white) : null,
                 ),
               ),
             ],

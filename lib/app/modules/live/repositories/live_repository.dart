@@ -255,11 +255,11 @@ class LiveRepository implements ILiveRepository {
 
   Future<void> startListener(String idLive) async {
     try {
+      await ConnectivityUtils.hasInternet();
+
       if (liveQuery == null) liveQuery = LiveQuery();
 
       if (subscription == null) {
-        await ConnectivityUtils.hasInternet();
-
         final QueryBuilder query = QueryBuilder<ParseObject>(ParseObject(className()))
           ..whereEqualTo(LIVE_ID_COLUMN, idLive);
 

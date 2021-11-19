@@ -142,6 +142,9 @@ abstract class _LiveController extends Disposable with Store {
 
       await _liveService.startLive(liveModel!, cameraStore.cameraController!);
 
+      await _produtoRepository.startListener();
+      await _reservaRepository.startListener(liveModel!.id!);
+
       catalogos.forEach((cat) {
         produtos.addAll(cat.produtos!.asObservable());
       });
@@ -149,10 +152,6 @@ abstract class _LiveController extends Disposable with Store {
       ErrorDialog.show(context: context, content: e.toString());
     } finally {
       setLoading(false);
-
-      //Adicionado no finally e assíncrono para não atrasar muito o início da Live.
-      _produtoRepository.startListener();
-      _reservaRepository.startListener(liveModel!.id!);
     }
   }
 

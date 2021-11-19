@@ -125,13 +125,13 @@ class ProdutoRepository implements IProdutoRepository {
   @override
   Future<void> startListener() async {
     try {
+      await ConnectivityUtils.hasInternet();
+
       final LiveController controller = Modular.get<LiveController>();
 
       if (liveQuery == null) liveQuery = LiveQuery();
 
       if (subscription == null) {
-        await ConnectivityUtils.hasInternet();
-
         final QueryBuilder<ParseObject> query = QueryBuilder<ParseObject>.or(
           ParseObject(className()),
           controller.produtos.map<QueryBuilder<ParseObject>>((prod) {

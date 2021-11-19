@@ -173,11 +173,11 @@ class ReservaRepository implements IReservaRepository {
   ///LiveQuery utilizado apenas para os usuários que estão transmitindo a Live.
   Future<void> startListener(String idLive) async {
     try {
+      await ConnectivityUtils.hasInternet();
+
       if (liveQuery == null) liveQuery = LiveQuery();
 
       if (subscription == null) {
-        await ConnectivityUtils.hasInternet();
-
         final QueryBuilder query = QueryBuilder<ParseObject>(ParseObject(className()))
           ..whereEqualTo(
             RESERVA_LIVE_COLUMN,

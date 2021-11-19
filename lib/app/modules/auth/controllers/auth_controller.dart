@@ -53,7 +53,7 @@ abstract class _AuthController with Store {
       }
     } on EmailException catch (_) {
       EmailVerifiedDialog.show(context);
-    } catch(_) {
+    } catch (_) {
       rethrow;
     } finally {
       setLoading(false);
@@ -66,8 +66,11 @@ abstract class _AuthController with Store {
   }
 
   @action
-  void registrar() {
-    if (!loading) Modular.to.pushNamed(AUTH_ROUTE + REGISTRO_ROUTE);
+  Future<void> registrar() async {
+    if (!loading) {
+      await _authRepository.logout(null);
+      Modular.to.pushNamed(AUTH_ROUTE + REGISTRO_ROUTE);
+    }
   }
 
   @action
