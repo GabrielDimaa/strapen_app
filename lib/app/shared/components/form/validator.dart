@@ -1,3 +1,4 @@
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:strapen_app/app/shared/extensions/string_extension.dart';
 
 const String _messageErrorDefault = "Campo obrigatório!";
@@ -100,11 +101,9 @@ class InputCpfCnpjValidator implements IInputValidator {
   String? validate(String? value) {
     if (value.isNullOrEmpty()) return _messageErrorDefault;
 
-    String cpfCnpj = value.extrairNum();
-
-    if (isCnpj && cpfCnpj.length != 14)
+    if (isCnpj && !UtilBrasilFields.isCNPJValido(value))
       return messageError();
-    else if (!isCnpj && cpfCnpj.length != 11)
+    else if (!isCnpj && !UtilBrasilFields.isCPFValido(value))
       return messageError();
 
     return null;

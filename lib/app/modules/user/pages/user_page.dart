@@ -1,3 +1,4 @@
+import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
@@ -93,7 +94,7 @@ class _UserPageState extends ModularState<UserPage, UserController> {
                               const VerticalSizedBox(0.5),
                               Observer(builder: (_) => Text(controller.userStore.nome!, overflow: TextOverflow.fade)),
                               const VerticalSizedBox(0.5),
-                              Observer(builder: (_) => Text(controller.userStore.telefone!)),
+                              Observer(builder: (_) => Text(UtilBrasilFields.obterTelefone(controller.userStore.telefone!))),
                             ],
                           ),
                         ),

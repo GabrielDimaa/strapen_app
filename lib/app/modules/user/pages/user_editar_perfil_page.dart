@@ -39,7 +39,7 @@ class _UserEditarPerfilPageState extends ModularState<UserEditarPerfilPage, User
 
   void _updateControllers() {
     _nomeController.text = controller.userStore.nome ?? "";
-    _telefoneController.text = controller.userStore.telefone ?? "";
+    _telefoneController.text = controller.userStore.telefone.notIsNullOrEmpty() ? UtilBrasilFields.obterTelefone(controller.userStore.telefone!) : "";
     _usernameController.text = controller.userStore.username ?? "";
   }
 

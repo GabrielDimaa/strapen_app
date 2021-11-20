@@ -50,7 +50,7 @@ class _TextFieldEnderecoState extends State<TextFieldEndereco> {
   void initState() {
     super.initState();
 
-    _cepController.text = widget.cep ?? "";
+    _cepController.text = widget.cep.notIsNullOrEmpty() ? UtilBrasilFields.obterCep(widget.cep!) : "";
     _cidadeController.text = widget.cidade ?? "";
     _cidade = widget.cidade ?? "";
   }

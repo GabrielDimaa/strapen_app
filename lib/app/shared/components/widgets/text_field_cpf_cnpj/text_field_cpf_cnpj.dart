@@ -8,10 +8,9 @@ import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.d
 import 'package:strapen_app/app/shared/components/text_input/text_input_default.dart';
 import 'package:strapen_app/app/shared/components/widgets/text_field_cpf_cnpj/cpf_cnpj_controller.dart';
 import 'package:strapen_app/app/shared/components/widgets/text_field_cpf_cnpj/radio_button_widget.dart';
+import 'package:strapen_app/app/shared/extensions/string_extension.dart';
 
-class TextFieldCpfCnpj extends StatelessWidget {
-  final CpfCnpjController controller = CpfCnpjController();
-
+class TextFieldCpfCnpj extends StatefulWidget {
   final bool enabled;
   final TextEditingController textController;
   final Function(String?) onSaved;
@@ -27,6 +26,27 @@ class TextFieldCpfCnpj extends StatelessWidget {
   });
 
   @override
+  State<TextFieldCpfCnpj> createState() => _TextFieldCpfCnpjState();
+}
+
+class _TextFieldCpfCnpjState extends State<TextFieldCpfCnpj> {
+  final CpfCnpjController controller = CpfCnpjController();
+
+  @override
+  void initState() {
+    super.initState();
+
+    controller.setIsCpf(!(widget.textController.text.length > 11));
+
+    if (widget.textController.text.notIsNullOrEmpty()) {
+      if (UtilBrasilFields.isCPFValido(widget.textController.text))
+        widget.textController.text = UtilBrasilFields.obterCpf(widget.textController.text);
+      else if (UtilBrasilFields.isCNPJValido(widget.textController.text))
+        widget.textController.text = UtilBrasilFields.obterCnpj(widget.textController.text);
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Column(
       children: [
@@ -36,13 +56,13 @@ class TextFieldCpfCnpj extends StatelessWidget {
             Observer(builder: (_) {
               void Function() onTap = () {
                 controller.setIsCpf(true);
-                textController.clear();
+                widget.textController.clear();
               };
 
               return RadioButtonWidget(
                 title: "CPF",
-                onTap: enabled ? onTap : null,
-                onChaged: (bool? value) => enabled ? onTap.call() : null,
+                onTap: widget.enabled ? onTap : null,
+                onChaged: (bool? value) => widget.enabled ? onTap.call() : null,
                 value: controller.isCpf,
                 groupValue: true,
               );
@@ -51,13 +71,13 @@ class TextFieldCpfCnpj extends StatelessWidget {
             Observer(builder: (_) {
               void Function() onTap = () {
                 controller.setIsCpf(false);
-                textController.clear();
+                widget.textController.clear();
               };
 
               return RadioButtonWidget(
                 title: "CNPJ",
-                onTap: enabled ? onTap : null,
-                onChaged: (bool? value) => enabled ? onTap.call() : null,
+                onTap: widget.enabled ? onTap : null,
+                onChaged: (bool? value) => widget.enabled ? onTap.call() : null,
                 value: controller.isCpf,
                 groupValue: false,
               );
@@ -68,14 +88,14 @@ class TextFieldCpfCnpj extends StatelessWidget {
         Observer(
           builder: (_) => TextFormField(
             decoration: InputDecorationDefault(labelText: controller.isCpf ? "CPF" : "CNPJ"),
-            controller: textController,
+            controller: widget.textController,
             keyboardType: TextInputType.number,
             validator: InputCpfCnpjValidator(isCnpj: !controller.isCpf).validate,
             textInputAction: TextInputAction.done,
-            enabled: enabled,
-            focusNode: focusNode,
-            onFieldSubmitted: onFieldSubmitted,
-            onSaved: onSaved,
+            enabled: widget.enabled,
+            focusNode: widget.focusNode,
+            onFieldSubmitted: widget.onFieldSubmitted,
+            onSaved: widget.onSaved,
             inputFormatters: [
               FilteringTextInputFormatter.digitsOnly,
               controller.isCpf ? CpfInputFormatter() : CnpjInputFormatter(),

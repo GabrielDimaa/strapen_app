@@ -31,7 +31,7 @@ class _RegistroPage2State extends State<RegistroPage2> {
     super.initState();
 
     _emailController.text = controller.userStore.email ?? "";
-    _telefoneController.text = controller.userStore.telefone ?? "";
+    _telefoneController.text = controller.userStore.telefone.notIsNullOrEmpty() ? UtilBrasilFields.obterTelefone(controller.userStore.telefone!) : "";
   }
 
   @override
