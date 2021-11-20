@@ -1,20 +1,17 @@
-import 'package:brasil_fields/brasil_fields.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_mobx/flutter_mobx.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:strapen_app/app/modules/user/components/user_header.dart';
 import 'package:strapen_app/app/modules/user/controllers/user_editar_controller.dart';
 import 'package:strapen_app/app/shared/components/app_bar_default/app_bar_default.dart';
 import 'package:strapen_app/app/shared/components/dialog/error_dialog.dart';
-import 'package:strapen_app/app/shared/components/form/validator.dart';
 import 'package:strapen_app/app/shared/components/padding/padding_scaffold.dart';
 import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
-import 'package:strapen_app/app/shared/components/text_input/text_input_default.dart';
 import 'package:strapen_app/app/shared/components/widgets/text_field_cpf_cnpj/text_field_cpf_cnpj.dart';
 import 'package:strapen_app/app/shared/components/widgets/text_field_data_nascimento.dart';
-import 'package:strapen_app/app/shared/extensions/string_extension.dart';
+import 'package:strapen_app/app/shared/components/widgets/text_field_endereco.dart';
 import 'package:strapen_app/app/shared/extensions/datetime_extension.dart';
+import 'package:strapen_app/app/shared/extensions/string_extension.dart';
 
 class UserDadosPessoaisPage extends StatefulWidget {
   @override
@@ -25,26 +22,34 @@ class _UserDadosPessoaisPageState extends ModularState<UserDadosPessoaisPage, Us
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   final TextEditingController _dataNascimentoController = TextEditingController();
-  final TextEditingController _cepController = TextEditingController();
-  final TextEditingController _cidadeController = TextEditingController();
   final TextEditingController _cpfCnpjController = TextEditingController();
   final FocusNode _dataNascimentoFocus = FocusNode();
-  final FocusNode _cepFocus = FocusNode();
-  final FocusNode _cidadeFocus = FocusNode();
   final FocusNode _cpfCnpjFocus = FocusNode();
+
+  TextFieldEndereco? textFieldEndereco;
 
   @override
   void initState() {
     super.initState();
 
-    controller.setInitPage(_updateControllers);
+    controller.setInitPage(() {
+      _updateControllers();
+      textFieldEndereco = TextFieldEndereco(
+        cep: controller.userStore.cep ?? "",
+        cidade: controller.userStore.cidade ?? "",
+        onSavedCep: (String? value) {
+          controller.userStore.setCep(value.extrairNum());
+        },
+        onSavedCidade: (String? value) {
+          controller.userStore.setCidade(value);
+        },
+      );
+    });
     controller.load();
   }
 
   void _updateControllers() {
     _dataNascimentoController.text = controller.userStore.dataNascimento?.formated ?? "";
-    _cepController.text = controller.userStore.cep ?? "";
-    _cidadeController.text = controller.userStore.cidade ?? "";
     _cpfCnpjController.text = controller.userStore.cpfCnpj ?? "";
   }
 
@@ -70,45 +75,13 @@ class _UserDadosPessoaisPageState extends ModularState<UserDadosPessoaisPage, Us
                           UserHeader(
                             title: "Seus dados pessoais são privados, ninguém poderá ter acesso à eles.",
                           ),
+                          Observer(
+                            builder: (_) => textFieldEndereco!,
+                          ),
                           Form(
                             key: _formKey,
                             child: Column(
                               children: [
-                                Observer(
-                                  builder: (_) => TextFormField(
-                                    decoration: InputDecorationDefault(
-                                      labelText: "CEP",
-                                    ),
-                                    controller: _cepController,
-                                    keyboardType: TextInputType.number,
-                                    validator: InputCepValidator().validate,
-                                    enabled: !controller.loading,
-                                    textInputAction: TextInputAction.next,
-                                    focusNode: _cepFocus,
-                                    onFieldSubmitted: (_) => controller.focusChange(context, _cepFocus, _cidadeFocus),
-                                    onSaved: (String? value) {
-                                      controller.userStore.setCep(value.extrairNum());
-                                    },
-                                    inputFormatters: [
-                                      FilteringTextInputFormatter.digitsOnly,
-                                      CepInputFormatter(),
-                                    ],
-                                  ),
-                                ),
-                                const VerticalSizedBox(2),
-                                Observer(
-                                  builder: (_) => TextFormField(
-                                    decoration: InputDecorationDefault(labelText: "Cidade"),
-                                    controller: _cidadeController,
-                                    validator: InputValidatorDefault().validate,
-                                    textCapitalization: TextCapitalization.sentences,
-                                    enabled: !controller.loading,
-                                    onSaved: controller.userStore.setCidade,
-                                    textInputAction: TextInputAction.next,
-                                    focusNode: _cidadeFocus,
-                                    onFieldSubmitted: (_) => controller.focusChange(context, _cidadeFocus, _dataNascimentoFocus),
-                                  ),
-                                ),
                                 const VerticalSizedBox(2),
                                 Observer(
                                   builder: (_) => TextFieldDataNascimento(
@@ -145,8 +118,12 @@ class _UserDadosPessoaisPageState extends ModularState<UserDadosPessoaisPage, Us
                     onPressed: () async {
                       unfocusAll();
                       try {
-                        if (_formKey.currentState!.validate()) {
+                        if (!textFieldEndereco!.cepValid) throw Exception("Cep inválido!");
+                        textFieldEndereco!.unFocus();
+
+                        if (_formKey.currentState!.validate() && textFieldEndereco!.formKey.currentState!.validate()) {
                           _formKey.currentState!.save();
+                          textFieldEndereco!.formKey.currentState!.save();
 
                           await controller.update(context, "Salvando dados pessoais...");
                         }
@@ -166,20 +143,16 @@ class _UserDadosPessoaisPageState extends ModularState<UserDadosPessoaisPage, Us
 
   void unfocusAll() {
     _dataNascimentoFocus.unfocus();
-    _cepFocus.unfocus();
+    textFieldEndereco!.unFocus();
     _cpfCnpjFocus.unfocus();
   }
 
   @override
   void dispose() {
-    super.dispose();
     _dataNascimentoController.dispose();
-    _cepController.dispose();
-    _cidadeController.dispose();
     _cpfCnpjController.dispose();
     _dataNascimentoFocus.dispose();
-    _cepFocus.dispose();
-    _cidadeFocus.dispose();
     _cpfCnpjFocus.dispose();
+    super.dispose();
   }
 }
