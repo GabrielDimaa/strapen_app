@@ -10,15 +10,16 @@ abstract class IInputValidator {
 
 class InputValidatorDefault implements IInputValidator {
   final String? campo;
+  final String? message;
 
-  InputValidatorDefault({this.campo});
+  InputValidatorDefault({this.campo, this.message});
 
   @override
   String messageError() => "";
 
   @override
   String? validate(String? value) {
-    if (value.isNullOrEmpty()) return _messageErrorDefault;
+    if (value.isNullOrEmpty()) return message ?? _messageErrorDefault;
 
     return null;
   }

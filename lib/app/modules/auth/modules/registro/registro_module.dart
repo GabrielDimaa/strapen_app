@@ -10,6 +10,7 @@ import 'package:strapen_app/app/modules/auth/modules/registro/pages/registro_pag
 import 'package:strapen_app/app/modules/auth/modules/registro/pages/registro_page5.dart';
 import 'package:strapen_app/app/modules/auth/modules/registro/pages/registro_page6.dart';
 import 'package:strapen_app/app/modules/auth/modules/registro/pages/registro_page7.dart';
+import 'package:strapen_app/app/modules/auth/modules/registro/pages/registro_page8.dart';
 import 'package:strapen_app/app/modules/user/repositories/user_repository.dart';
 import 'package:strapen_app/app/modules/user/repositories/iuser_repository.dart';
 import 'package:strapen_app/app/shared/config/preferences/session_preferences.dart';
@@ -28,8 +29,9 @@ class RegistroModule extends Module {
     ChildRoute(REGISTRO3_ROUTE, child: (_, args) => RegistroPage3()),
     ChildRoute(REGISTRO4_ROUTE, child: (_, args) => RegistroPage4()),
     ChildRoute(REGISTRO5_ROUTE, child: (_, args) => RegistroPage5()),
-    ChildRoute(REGISTRO6_ROUTE, child: (_, args) => RegistroPage6(model: args.data)),
-    ChildRoute(REGISTRO7_ROUTE, child: (_, args) => RegistroPage7()),
+    ChildRoute(REGISTRO6_ROUTE, child: (_, args) => RegistroPage6()),
+    ChildRoute(REGISTRO7_ROUTE, child: (_, args) => RegistroPage7(model: args.data)),
+    ChildRoute(REGISTRO8_ROUTE, child: (_, args) => RegistroPage8()),
     ChildRoute(REGISTRO_CONCLUIDO_ROUTE, child: (_, args) => RegistroConcluidoPage()),
   ];
 }

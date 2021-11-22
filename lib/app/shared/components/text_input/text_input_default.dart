@@ -6,14 +6,17 @@ class InputDecorationDefault extends InputDecoration {
   final String? prefixText;
   final Widget? prefixIcon;
   final Widget? sufixIcon;
+  final bool? alignLabelWithHint;
 
   InputDecorationDefault({
     required this.labelText,
     this.prefixText,
     this.prefixIcon,
     this.sufixIcon,
+    this.alignLabelWithHint = false,
   }) : super(
     labelText: labelText,
+    alignLabelWithHint: alignLabelWithHint,
     prefixText: prefixText,
     prefixStyle: TextStyle(color: AppColors.primary),
     prefixIcon: prefixIcon != null
