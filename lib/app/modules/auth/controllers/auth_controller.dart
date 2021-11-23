@@ -68,7 +68,7 @@ abstract class _AuthController with Store {
   @action
   Future<void> registrar() async {
     if (!loading) {
-      await _authRepository.logout(null);
+      await _authRepository.logout();
       Modular.to.pushNamed(AUTH_ROUTE + REGISTRO_ROUTE);
     }
   }

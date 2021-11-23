@@ -53,7 +53,7 @@ class AuthRepository implements IAuthRepository {
   }
 
   @override
-  Future<bool> logout(AuthModel? model, {bool deleteSession = true}) async {
+  Future<bool> logout({AuthModel? model, bool deleteSession = true}) async {
     try {
       await ConnectivityUtils.hasInternet();
 
@@ -87,7 +87,7 @@ class AuthRepository implements IAuthRepository {
     ParseResponse? response = await ParseUser.getCurrentUserFromServer(model.sessionToken!);
 
     if (!(response?.success ?? false)) {
-      await logout(model, deleteSession: false);
+      await logout(model: model, deleteSession: false);
 
       UserModel? userModel = await login(model);
 

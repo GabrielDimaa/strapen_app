@@ -2,18 +2,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'package:strapen_app/app/modules/auth/constants/routes.dart';
+import 'package:strapen_app/app/modules/auth/repositories/iauth_repository.dart';
 import 'package:strapen_app/app/modules/user/constants/routes.dart';
 import 'package:strapen_app/app/shared/components/dialog/dialog_default.dart';
-import 'package:strapen_app/app/shared/config/preferences/session_preferences.dart';
+import 'package:strapen_app/app/shared/components/dialog/loading_dialog.dart';
 
 part 'configuracoes_controller.g.dart';
 
 class ConfiguracoesController = _ConfiguracoesController with _$ConfiguracoesController;
 
 abstract class _ConfiguracoesController with Store {
-  final SessionPreferences _sessionPreferences;
+  final IAuthRepository _authRepository;
 
-  _ConfiguracoesController(this._sessionPreferences);
+  _ConfiguracoesController(this._authRepository);
 
   @action
   Future<void> toMeuPerfil() async {
@@ -40,8 +41,13 @@ abstract class _ConfiguracoesController with Store {
         TextButton(
           child: Text("Confirmar"),
           onPressed: () async {
-            await _sessionPreferences.delete();
-            Modular.to.navigate(AUTH_ROUTE);
+            try {
+              await LoadingDialog.show(context, "Saindo...", () async {
+                await _authRepository.logout();
+              });
+            } finally {
+              Modular.to.navigate(AUTH_ROUTE);
+            }
           },
         ),
       ],

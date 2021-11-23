@@ -14,6 +14,7 @@ import 'package:strapen_app/app/shared/components/padding/padding_scaffold.dart'
 import 'package:strapen_app/app/shared/components/sized_box/horizontal_sized_box.dart';
 import 'package:strapen_app/app/shared/components/sized_box/vertical_sized_box.dart';
 import 'package:strapen_app/app/shared/components/text_input/text_input_default.dart';
+import 'package:strapen_app/app/shared/components/widgets/text_field_bio.dart';
 import 'package:strapen_app/app/shared/extensions/string_extension.dart';
 
 class UserEditarPerfilPage extends StatefulWidget {
@@ -26,9 +27,11 @@ class _UserEditarPerfilPageState extends ModularState<UserEditarPerfilPage, User
   final TextEditingController _nomeController = TextEditingController();
   final TextEditingController _telefoneController = TextEditingController();
   final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _bioController = TextEditingController();
   final FocusNode _nomeFocus = FocusNode();
   final FocusNode _telefoneFocus = FocusNode();
   final FocusNode _usernameFocus = FocusNode();
+  final FocusNode _bioFocus = FocusNode();
 
   @override
   void initState() {
@@ -41,6 +44,7 @@ class _UserEditarPerfilPageState extends ModularState<UserEditarPerfilPage, User
     _nomeController.text = controller.userStore.nome ?? "";
     _telefoneController.text = controller.userStore.telefone.notIsNullOrEmpty() ? UtilBrasilFields.obterTelefone(controller.userStore.telefone!) : "";
     _usernameController.text = controller.userStore.username ?? "";
+    _bioController.text = controller.userStore.bio ?? "";
   }
 
   @override
@@ -122,15 +126,28 @@ class _UserEditarPerfilPageState extends ModularState<UserEditarPerfilPage, User
                                 prefixText: "@",
                               ),
                               controller: _usernameController,
-                              textInputAction: TextInputAction.done,
+                              textInputAction: TextInputAction.next,
                               textCapitalization: TextCapitalization.sentences,
                               enabled: !controller.loading,
                               focusNode: _usernameFocus,
-                              onFieldSubmitted: (_) => _usernameFocus.unfocus(),
+                              onFieldSubmitted: (_) => controller.focusChange(context, _usernameFocus, _bioFocus),
                               validator: InputUserNameValidator().validate,
                               onSaved: (String? value) => controller.userStore.setUserName(value),
                             ),
                           ),
+                          const VerticalSizedBox(2),
+                          Observer(
+                            builder: (_) => TextFieldBio(
+                              controller: _bioController,
+                              bio: controller.userStore.bio,
+                              enabled: !controller.loading,
+                              focusNode: _bioFocus,
+                              validate: false,
+                              onFieldSubmitted: (_) => _bioFocus.unfocus(),
+                              onSaved: controller.userStore.setBio,
+                            ),
+                          ),
+                          const VerticalSizedBox(1.5),
                         ],
                       ),
                     ),
@@ -175,6 +192,7 @@ class _UserEditarPerfilPageState extends ModularState<UserEditarPerfilPage, User
     _nomeFocus.unfocus();
     _usernameFocus.unfocus();
     _usernameFocus.unfocus();
+    _bioFocus.unfocus();
   }
 
   @override
@@ -183,8 +201,10 @@ class _UserEditarPerfilPageState extends ModularState<UserEditarPerfilPage, User
     _nomeController.dispose();
     _telefoneController.dispose();
     _usernameController.dispose();
+    _bioController.dispose();
     _nomeFocus.dispose();
     _telefoneFocus.dispose();
     _usernameFocus.dispose();
+    _bioFocus.dispose();
   }
 }

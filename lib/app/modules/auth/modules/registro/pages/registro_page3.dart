@@ -2,8 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:strapen_app/app/modules/auth/modules/registro/components/registro_widget.dart';
 import 'package:strapen_app/app/modules/auth/modules/registro/controllers/registro_controller.dart';
-import 'package:strapen_app/app/shared/components/form/validator.dart';
-import 'package:strapen_app/app/shared/components/text_input/text_input_default.dart';
+import 'package:strapen_app/app/shared/components/widgets/text_field_bio.dart';
 
 class RegistroPage3 extends StatefulWidget {
   @override
@@ -31,22 +30,13 @@ class _RegistroPage3State extends State<RegistroPage3> {
       children: [
         Form(
           key: _formKey,
-          child: TextFormField(
-            decoration: InputDecorationDefault(
-              labelText: "Bio",
-              alignLabelWithHint: true,
-            ),
+          child: TextFieldBio(
             controller: _bioController,
-            keyboardType: TextInputType.emailAddress,
-            validator: InputValidatorDefault(message: "Campo Bio não pode estar vazio.").validate,
+            bio: controller.userStore.bio,
             enabled: !controller.loading,
-            textInputAction: TextInputAction.next,
-            onSaved: controller.userStore.setEmail,
             focusNode: _bioFocus,
-            minLines: 2,
-            maxLines: 6,
-            maxLength: 200,
             onFieldSubmitted: (_) => _bioFocus.unfocus(),
+            onSaved: controller.userStore.setBio,
           ),
         ),
       ],
@@ -62,7 +52,9 @@ class _RegistroPage3State extends State<RegistroPage3> {
       extraButton: TextButton(
         child: Text("Pular"),
         onPressed: () async {
+          _bioController.clear();
           _bioFocus.unfocus();
+          controller.userStore.setBio(null);
           await controller.nextPage(4);
         },
       ),

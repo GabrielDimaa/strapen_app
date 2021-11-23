@@ -102,22 +102,6 @@ class _UserPageState extends ModularState<UserPage, UserController> {
                     ],
                   ),
                   const VerticalSizedBox(1.5),
-                  Observer(
-                    builder: (_) => Visibility(
-                      visible: controller.userStore.bio.notIsNullOrEmpty(),
-                      child: Column(
-                        children: [
-                          Text(
-                            "Bio",
-                            style: textTheme.headline1!.copyWith(fontWeight: FontWeight.w600),
-                          ),
-                          const VerticalSizedBox(0.5),
-                          Text(controller.userStore.bio ?? ""),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const VerticalSizedBox(1.5),
                   ButtonBar(
                     alignment: MainAxisAlignment.spaceBetween,
                     overflowDirection: VerticalDirection.down,
@@ -153,6 +137,26 @@ class _UserPageState extends ModularState<UserPage, UserController> {
                         ),
                       ),
                     ],
+                  ),
+                  const VerticalSizedBox(1.5),
+                  Align(
+                    alignment: Alignment.centerLeft,
+                    child: Observer(
+                      builder: (_) => Visibility(
+                        visible: controller.userStore.bio.notIsNullOrEmpty(),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              "Bio",
+                              style: textTheme.headline1!.copyWith(fontWeight: FontWeight.w600),
+                            ),
+                            const VerticalSizedBox(0.5),
+                            Text(controller.userStore.bio ?? ""),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
                   const VerticalSizedBox(2),
                   Observer(
