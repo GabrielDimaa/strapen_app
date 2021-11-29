@@ -186,12 +186,15 @@ class UserRepository implements IUserRepository {
   }
 
   @override
-  Future<bool> existsData(String column, String data, String messageError) async {
+  Future<bool> existsData(String column, String data, String messageError, {String? id}) async {
     try {
       await ConnectivityUtils.hasInternet();
 
       final QueryBuilder<ParseObject> query = QueryBuilder(ParseUser.forQuery());
       query..whereEqualTo(column, data);
+
+      if (id != null)
+        query.whereNotEqualTo(USER_ID_COLUMN, id);
 
       final ParseResponse response = await query.query();
 

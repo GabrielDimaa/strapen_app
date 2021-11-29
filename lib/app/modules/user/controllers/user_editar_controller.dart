@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:mobx/mobx.dart';
 import 'package:strapen_app/app/app_controller.dart';
+import 'package:strapen_app/app/modules/user/constants/columns.dart';
 import 'package:strapen_app/app/modules/user/factories/user_factory.dart';
 import 'package:strapen_app/app/modules/user/models/user_model.dart';
 import 'package:strapen_app/app/modules/user/repositories/iuser_repository.dart';
@@ -79,7 +80,7 @@ abstract class _UserEditarController with Store implements IDefaultController {
   }
 
   @action
-  Future<void> update(BuildContext context, String message) async {
+  Future<void> update(BuildContext context, String message, Function? fieldsValid) async {
     try {
       bool confirm = await DialogDefault.show(
         context: context,
@@ -97,6 +98,8 @@ abstract class _UserEditarController with Store implements IDefaultController {
         UserModel model = userStore.toModel();
 
         await LoadingDialog.show(context, message, () async {
+          await fieldsValid?.call();
+
           await _userRepository.update(model);
           _appController.setUserModel(model);
         });
@@ -106,6 +109,21 @@ abstract class _UserEditarController with Store implements IDefaultController {
     } catch (e) {
       rethrow;
     }
+  }
+
+  @action
+  Future<void> existsCpfCnpj() async {
+    await _userRepository.existsData(USER_CPFCNPJ_COLUMN, userStore.cpfCnpj!, "Já existe esse CPF ou CNPJ cadastrado no Strapen.", id: userStore.id);
+  }
+
+  @action
+  Future<void> existsTelefone() async {
+    await _userRepository.existsData(USER_TELEFONE_COLUMN, userStore.telefone!, "Já existe esse número de telefone cadastrado no Strapen.", id: userStore.id);
+  }
+
+  @action
+  Future<void> existsUsername() async {
+    await _userRepository.existsData(USER_USERNAME_COLUMN, userStore.username!, "Nome de usuário já está em uso.", id: userStore.id);
   }
 
   @action

@@ -165,7 +165,14 @@ class _UserEditarPerfilPageState extends ModularState<UserEditarPerfilPage, User
                   if (_formKey.currentState!.validate()) {
                     _formKey.currentState!.save();
 
-                    await controller.update(context, "Salvando perfil...");
+                    await controller.update(context, "Salvando perfil...", () async {
+                      try {
+                        await controller.existsTelefone();
+                        await controller.existsUsername();
+                      } catch (e) {
+                        rethrow;
+                      }
+                    });
                   }
                 } catch (e) {
                   ErrorDialog.show(context: context, content: e.toString());

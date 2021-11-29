@@ -125,7 +125,7 @@ class _UserDadosPessoaisPageState extends ModularState<UserDadosPessoaisPage, Us
                           _formKey.currentState!.save();
                           textFieldEndereco!.formKey.currentState!.save();
 
-                          await controller.update(context, "Salvando dados pessoais...");
+                          await controller.update(context, "Salvando dados pessoais...", () async => controller.existsCpfCnpj());
                         }
                       } catch (e) {
                         ErrorDialog.show(context: context, content: e.toString());
