@@ -123,8 +123,7 @@ class UserRepository implements IUserRepository {
       model.email = null;
 
       List<ParseFileBase> parseImage = await ParseImageUtils.save([model.foto]);
-      ParseUser parseUser = toParseObject(model)
-        ..set<List<ParseFileBase>>(USER_FOTO_COLUMN, parseImage);
+      ParseUser parseUser = toParseObject(model)..set<List<ParseFileBase>>(USER_FOTO_COLUMN, parseImage);
 
       final ParseResponse response = await parseUser.save();
 
@@ -132,7 +131,7 @@ class UserRepository implements IUserRepository {
       final ParseObject parseObject = (response.results as List<dynamic>).first;
 
       return toModel(parseObject);
-    } catch(e) {
+    } catch (e) {
       throw Exception(e);
     }
   }
@@ -211,16 +210,14 @@ class UserRepository implements IUserRepository {
     try {
       await ConnectivityUtils.hasInternet();
 
-      final QueryBuilder query = QueryBuilder<ParseUser>(ParseUser(null, null, null))
-        ..whereEqualTo(USER_ID_COLUMN, idUser);
+      final QueryBuilder query = QueryBuilder<ParseUser>(ParseUser(null, null, null))..whereEqualTo(USER_ID_COLUMN, idUser);
 
       final ParseResponse response = await query.query();
 
       if (!response.success) throw Exception(ParseErrorsUtils.get(response.statusCode));
       ParseObject? parse = (response.results as List<dynamic>).first;
 
-      if (!(parse?.get<bool>(USER_EMAIL_VERIFIED_COLUMN) ?? false))
-        throw Exception("E-mail ainda não foi verificado!");
+      if (!(parse?.get<bool>(USER_EMAIL_VERIFIED_COLUMN) ?? false)) throw Exception("E-mail ainda não foi verificado!");
 
       return parse?.get<bool>(USER_EMAIL_VERIFIED_COLUMN) ?? false;
     } catch (e) {
@@ -281,8 +278,13 @@ class UserRepository implements IUserRepository {
     try {
       await ConnectivityUtils.hasInternet();
 
-      final QueryBuilder<ParseObject> query = QueryBuilder(ParseUser.forQuery());
-      query.whereContains(USER_NOME_COLUMN, text.toLowerCase(), caseSensitive: false);
+      final ParseObject parseObject = ParseUser.forQuery();
+
+      final QueryBuilder<ParseObject> query = QueryBuilder.or(parseObject, [
+        QueryBuilder(parseObject)..whereContains(USER_NOME_COLUMN, text.toLowerCase(), caseSensitive: false),
+        QueryBuilder(parseObject)..whereContains(USER_USERNAME_COLUMN, text.toLowerCase(), caseSensitive: false),
+      ]);
+
       query.whereNotEqualTo(USER_ID_COLUMN, Modular.get<AppController>().userModel!.id);
       query.setLimit(30);
 
