@@ -48,7 +48,7 @@ class ScaffoldForegroundLive extends StatelessWidget {
                     padding: const EdgeInsets.only(bottom: 8),
                     child: TextFieldChatWidget(
                       loading: controller.loadingSendComentario,
-                      enabled: controller.liveEncerrada,
+                      enabled: !controller.liveEncerrada,
                       sendComentario: (String? comentario) {
                         try {
                           controller.sendComentario(comentario);

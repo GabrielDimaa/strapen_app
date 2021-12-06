@@ -275,7 +275,7 @@ abstract class _LiveController extends Disposable with Store {
       );
     }
 
-    if (confirm) Modular.to.navigate(START_ROUTE);
+    if (confirm) Modular.to.popUntil(ModalRoute.withName(START_ROUTE));
   }
 
   @action
@@ -334,22 +334,22 @@ abstract class _LiveController extends Disposable with Store {
 
   @action
   Future<void> showDialogInformarLiveEncerrada(BuildContext context) async {
-    Future.delayed(Duration(seconds: 10), () {
+    Future.delayed(Duration(seconds: 6), () {
       showDialog(
         context: context,
+        barrierDismissible: false,
         builder: (_) => DialogDefault(
           context: context,
           title: const Text("Live Encerrada"),
-          content: const Text("A Live foi encerrada, você poderá sair ou então em alguns instantes vamos redirecionar você para a tela principal."),
+          content: const Text("A Live foi encerrada, deseja retornar para a tela principal?"),
           actions: [
-            TextButton(onPressed: () => Modular.to.navigate(START_ROUTE), child: Text("Sair")),
+            TextButton(
+              onPressed: () => Modular.to.popUntil(ModalRoute.withName(START_ROUTE)),
+              child: Text("Sair"),
+            ),
           ],
         ),
       );
-    });
-
-    Future.delayed(Duration(seconds: 25), () {
-      Modular.to.navigate(START_ROUTE);
     });
   }
 

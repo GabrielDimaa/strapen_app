@@ -119,7 +119,7 @@ abstract class _UserController with Store {
 
   @action
   Future<void> toAssistirLive() async {
-    Modular.to.navigate(LIVE_ROUTE + LIVE_ASSISTIR_ROUTE, arguments: liveModel);
+    Modular.to.pushNamed(LIVE_ROUTE + LIVE_ASSISTIR_ROUTE, arguments: liveModel);
   }
 
   @action

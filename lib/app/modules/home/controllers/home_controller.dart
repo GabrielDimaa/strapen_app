@@ -107,6 +107,6 @@ abstract class _HomeController with Store {
 
   @action
   Future<void> toAssistirLive(LiveModel liveModel) async {
-    Modular.to.navigate(LIVE_ROUTE + LIVE_ASSISTIR_ROUTE, arguments: liveModel);
+    Modular.to.pushNamed(LIVE_ROUTE + LIVE_ASSISTIR_ROUTE, arguments: liveModel);
   }
 }

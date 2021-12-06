@@ -31,9 +31,11 @@ class DialogDefault extends StatefulWidget {
     List<Widget>? actions,
     Color? backgroundColor,
     Color? colorAction,
+    bool barrierDismissible = true,
   }) async {
     return await showDialog(
       context: context,
+      barrierDismissible: barrierDismissible,
       builder: (context) {
         return DialogDefault(
           context: context,
